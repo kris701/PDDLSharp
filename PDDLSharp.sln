@@ -3,21 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLSharp", "PDDLSharp\PDDLSharp.csproj", "{852F2E90-7DFF-4F27-988B-64D61863853F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{1100B4CA-FE6E-4494-91A6-8C1B867FE108}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{1100B4CA-FE6E-4494-91A6-8C1B867FE108}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools", "Tools\Tools.csproj", "{954A8E05-81F4-403A-9346-E9CBF8EE3348}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools", "Tools\Tools.csproj", "{954A8E05-81F4-403A-9346-E9CBF8EE3348}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contextualisers", "Contextualisers\Contextualisers.csproj", "{B37DF253-9A79-4732-8831-EE66D318FE83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErrorListeners", "ErrorListeners\ErrorListeners.csproj", "{D0B21DE2-2DA6-47CA-9EA3-F4EF92D62DCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorListeners", "ErrorListeners\ErrorListeners.csproj", "{D0B21DE2-2DA6-47CA-9EA3-F4EF92D62DCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analysers", "Analysers\Analysers.csproj", "{5D211AB2-1E3B-4D00-9CAC-4A50FB1E582D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analysers", "Analysers\Analysers.csproj", "{5D211AB2-1E3B-4D00-9CAC-4A50FB1E582D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASTGenerator", "ASTGenerator\ASTGenerator.csproj", "{6540CDF6-CF28-4149-B55B-DD2A61AB184A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASTGenerator", "ASTGenerator\ASTGenerator.csproj", "{6540CDF6-CF28-4149-B55B-DD2A61AB184A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parsers", "Parsers\Parsers.csproj", "{123A2A13-5DBB-41A3-80C6-FD4D85901984}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers", "Parsers\Parsers.csproj", "{123A2A13-5DBB-41A3-80C6-FD4D85901984}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{852F2E90-7DFF-4F27-988B-64D61863853F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{852F2E90-7DFF-4F27-988B-64D61863853F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{852F2E90-7DFF-4F27-988B-64D61863853F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{852F2E90-7DFF-4F27-988B-64D61863853F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1100B4CA-FE6E-4494-91A6-8C1B867FE108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1100B4CA-FE6E-4494-91A6-8C1B867FE108}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1100B4CA-FE6E-4494-91A6-8C1B867FE108}.Release|Any CPU.ActiveCfg = Release|Any CPU
