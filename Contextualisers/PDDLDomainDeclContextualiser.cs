@@ -23,6 +23,7 @@ namespace PDDL.Contextualisers
             InsertDefaultPredicates(decl);
             DecorateAllTypesWithInheritence(decl);
             DecorateActionParameters(decl);
+            DecorateDurativeActionParameters(decl);
             DecorateAxiomVars(decl);
         }
 
@@ -30,15 +31,16 @@ namespace PDDL.Contextualisers
         {
             if (decl.Predicates != null)
             {
-                decl.Predicates.Predicates.Add(
-                    new PredicateExp(
-                        new ASTNode(), 
-                        decl.Predicates, 
-                        "=", 
-                        new List<NameExp>() { 
-                            new NameExp(new ASTNode(), decl.Predicates, "l"),
-                            new NameExp(new ASTNode(), decl.Predicates, "r")
-                        }));
+                if (!decl.Predicates.Predicates.Any(x => x.Name == "="))
+                    decl.Predicates.Predicates.Add(
+                        new PredicateExp(
+                            new ASTNode(), 
+                            decl.Predicates, 
+                            "=", 
+                            new List<NameExp>() { 
+                                new NameExp(new ASTNode(), decl.Predicates, "?l"),
+                                new NameExp(new ASTNode(), decl.Predicates, "?r")
+                            }));
             }
         }
 
@@ -72,6 +74,21 @@ namespace PDDL.Contextualisers
                     foreach(var param in act.Parameters.Values)
                     {
                         ReplaceNameExpTypeWith(act.Preconditions, param);
+                        ReplaceNameExpTypeWith(act.Effects, param);
+                    }
+                }
+            }
+        }
+
+        private void DecorateDurativeActionParameters(DomainDecl decl)
+        {
+            if (decl.DurativeActions != null)
+            {
+                foreach (var act in decl.DurativeActions)
+                {
+                    foreach (var param in act.Parameters.Values)
+                    {
+                        ReplaceNameExpTypeWith(act.Condition, param);
                         ReplaceNameExpTypeWith(act.Effects, param);
                     }
                 }

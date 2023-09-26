@@ -71,7 +71,7 @@ namespace PDDL.CodeGenerators.Visitors
         {
             string retStr = "";
             foreach (var type in node.Constants)
-                retStr += $" {Visit(type)}{Environment.NewLine}";
+                retStr += $" {Visit(type)}{Environment.NewLine}".Replace("(","").Replace(")","");
             return $"(:constants{retStr}){Environment.NewLine}";
         }
 
@@ -111,7 +111,7 @@ namespace PDDL.CodeGenerators.Visitors
         {
             string retStr = "";
             foreach (var type in node.Values)
-                retStr += $" {Visit(type)}";
+                retStr += $" {Visit(type)}".Replace("(","").Replace(")","");
             return $"({retStr})";
         }
 
@@ -127,7 +127,7 @@ namespace PDDL.CodeGenerators.Visitors
         {
             var reqStr = "";
             foreach (var requirement in node.Requirements)
-                reqStr += $" {Visit(requirement)}";
+                reqStr += $" {requirement.Name}";
             return $"(:requirements{reqStr}){Environment.NewLine}";
         }
 
@@ -143,7 +143,20 @@ namespace PDDL.CodeGenerators.Visitors
         {
             string retStr = "";
             foreach (var type in node.Types)
-                retStr += $" {Visit(type)}{Environment.NewLine}";
+            {
+                if (type.SuperTypes.Count > 0)
+                {
+                    string typeList = "";
+                    foreach (var superType in type.SuperTypes)
+                        typeList += $"{superType} ";
+
+                    retStr += $" {Visit(type)} - {typeList}{Environment.NewLine}";
+                }
+                else
+                {
+                    retStr += $" {Visit(type)}{Environment.NewLine}";
+                }
+            }
             return $"(:types{retStr}){Environment.NewLine}";
         }
     }

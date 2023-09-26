@@ -31,9 +31,9 @@ namespace PDDL.Models
             Parent = parent;
         }
 
-        public HashSet<INamedNode> FindNames(string name)
+        public List<INamedNode> FindNames(string name)
         {
-            HashSet<INamedNode> returnSet = new HashSet<INamedNode>();
+            List<INamedNode> returnSet = new List<INamedNode>();
             List<PropertyInfo> myPropertyInfo = this.GetType().GetProperties().ToList();
             if (this is INamedNode node)
                 if (node.Name == name)
@@ -55,9 +55,9 @@ namespace PDDL.Models
             return returnSet;
         }
 
-        public HashSet<T> FindTypes<T>()
+        public List<T> FindTypes<T>()
         {
-            HashSet<T> returnSet = new HashSet<T>();
+            List<T> returnSet = new List<T>();
             List<PropertyInfo> myPropertyInfo = this.GetType().GetProperties().ToList();
             if (this is T self)
                 returnSet.Add(self);
@@ -88,7 +88,8 @@ namespace PDDL.Models
 
         public override int GetHashCode()
         {
-            return Start.GetHashCode() + End.GetHashCode() + Line.GetHashCode();
+            return 50;
+            //return Start.GetHashCode() + End.GetHashCode() + Line.GetHashCode();
         }
 
         public override bool Equals(object? obj)
@@ -97,7 +98,9 @@ namespace PDDL.Models
                 return false;
             if (obj is not INode)
                 return false;
-            return obj.GetHashCode() == GetHashCode();
+            var hash1 = obj.GetHashCode();
+            var hash2 = GetHashCode();
+            return hash1 == hash2;
         }
     }
 }

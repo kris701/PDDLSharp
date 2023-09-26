@@ -20,5 +20,21 @@ namespace PDDL.Models
             Domain = domain;
             Problem = problem;
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+            if (obj is not PDDLDecl)
+                return false;
+            var hash1 = obj.GetHashCode();
+            var hash2 = GetHashCode();
+            return hash1 == hash2;
+        }
+
+        public override int GetHashCode()
+        {
+            return Domain.GetHashCode() ^ Problem.GetHashCode();
+        }
     }
 }

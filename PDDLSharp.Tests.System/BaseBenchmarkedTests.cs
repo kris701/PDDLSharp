@@ -12,11 +12,13 @@ namespace PDDL.PDDLSharp.Tests.System
     public class BaseBenchmarkedTests
     {
         public static long MaxFileSize = 10000;
+        public static long MaxProblemsPrDomain = 5;
         public static Dictionary<string, List<string>> _testDict = new Dictionary<string, List<string>>();
 
         public static async Task Setup()
         {
             await BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
+            Random rnd = new Random();
             List<string> validDomains = new List<string>();
             foreach (var path in Directory.GetDirectories(BenchmarkFetcher.OutputPath))
             {
@@ -31,10 +33,12 @@ namespace PDDL.PDDLSharp.Tests.System
                     if (!_testDict.ContainsKey(domainFile))
                     {
                         _testDict.Add(domainFile, new List<string>());
-                        foreach (var problem in Directory.GetFiles(domainPath))
+                        foreach (var problem in Directory.GetFiles(domainPath).OrderBy(x => rnd.Next()))
                         {
-                            if (problem != domainFile && problem.EndsWith(".pddl"))
+                            if (problem != domainFile && problem.EndsWith(".pddl") && new FileInfo(problem).Length < MaxFileSize)
                                 _testDict[domainFile].Add(problem);
+                            if (_testDict[domainFile].Count >= MaxProblemsPrDomain)
+                                break;
                         }
                     }
                 }

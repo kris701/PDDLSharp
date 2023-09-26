@@ -28,6 +28,7 @@ namespace PDDL.Models.Domain
         {
             Actions = new List<ActionDecl>();
             Axioms = new List<AxiomDecl>();
+            DurativeActions = new List<DurativeActionDecl>();
         }
 
         public override int GetHashCode()

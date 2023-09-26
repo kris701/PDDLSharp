@@ -59,7 +59,7 @@ namespace PDDL.CodeGenerators.Visitors
         {
             string retStr = "";
             foreach (var type in node.Objs)
-                retStr += $" {Visit((dynamic)type)}{Environment.NewLine}";
+                retStr += $" {Visit((dynamic)type)}{Environment.NewLine}".Replace("(","").Replace(")","");
             return $"(:objects{retStr}){Environment.NewLine}";
         }
 

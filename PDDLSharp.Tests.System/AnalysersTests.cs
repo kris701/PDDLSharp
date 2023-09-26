@@ -64,17 +64,14 @@ namespace PDDL.PDDLSharp.Tests.System
             Random rnd = new Random();
 
             // ACT
-            foreach (var problem in problems.OrderBy(x => rnd.Next()))
+            foreach (var problem in problems)
             {
-                if (new FileInfo(problem).Length < MaxFileSize)
-                {
-                    Trace.WriteLine($"   Parsing problem: {problem}");
-                    var decl = parser.ParseProblem(problem);
-                    contextualiser.Contexturalise(decl);
-                    analyser.PostAnalyse(decl);
-                    Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
-                    listener.Errors.Clear();
-                }
+                Trace.WriteLine($"   Parsing problem: {problem}");
+                var decl = parser.ParseProblem(problem);
+                contextualiser.Contexturalise(decl);
+                analyser.PostAnalyse(decl);
+                Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+                listener.Errors.Clear();
             }
 
             // ASSERT
@@ -92,22 +89,18 @@ namespace PDDL.PDDLSharp.Tests.System
             IPDDLParser parser = GetParser(domain, listener);
             IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
             IAnalyser<PDDLDecl> analyser = new PDDLDeclAnalyser(listener);
-            Random rnd = new Random();
 
             // ACT
-            foreach (var problem in problems.OrderBy(x => rnd.Next()))
+            foreach (var problem in problems)
             {
-                if (new FileInfo(problem).Length < MaxFileSize)
-                {
-                    Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseDomain(domain);
-                    var problemDecl = parser.ParseProblem(problem);
-                    var decl = new PDDLDecl(domainDecl, problemDecl);
-                    contextualiser.Contexturalise(decl);
-                    analyser.PostAnalyse(decl);
-                    Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
-                    listener.Errors.Clear();
-                }
+                Trace.WriteLine($"   Parsing problem: {problem}");
+                var domainDecl = parser.ParseDomain(domain);
+                var problemDecl = parser.ParseProblem(problem);
+                var decl = new PDDLDecl(domainDecl, problemDecl);
+                contextualiser.Contexturalise(decl);
+                analyser.PostAnalyse(decl);
+                Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+                listener.Errors.Clear();
             }
 
             // ASSERT

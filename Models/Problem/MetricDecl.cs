@@ -21,7 +21,7 @@ namespace PDDL.Models.Problem
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() + MetricExp.GetHashCode();
+            return base.GetHashCode() + MetricType.GetHashCode() + MetricExp.GetHashCode();
         }
 
         public override IEnumerator<INode> GetEnumerator()

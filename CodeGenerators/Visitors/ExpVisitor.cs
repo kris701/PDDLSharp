@@ -30,24 +30,28 @@ namespace PDDL.CodeGenerators.Visitors
 
         public string Visit(NotExp node)
         {
-            return $"(not {node.Child})";
+            return $"(not {Visit((dynamic)node.Child)})";
         }
 
         public string Visit(NumericExp node)
         {
-            return $"({node.Name} {node.Arg1} {node.Arg2})";
+            var numericValue = $"{Visit((dynamic)node.Arg2)}".Replace("(","").Replace(")","");
+            return $"({node.Name} {Visit((dynamic)node.Arg1)} {numericValue})";
         }
 
         public string Visit(OrExp node)
         {
-            return $"(or {node.Option1} {node.Option2})";
+            return $"(or {Visit((dynamic)node.Option1)} {Visit((dynamic)node.Option2)})";
         }
 
         public string Visit(PredicateExp node)
         {
             var paramRetStr = "";
             foreach (var arg in node.Arguments)
-                paramRetStr += $" {arg}";
+            {
+                var argStr = $"{Visit((dynamic)arg)}".Replace("(","").Replace(")","");
+                paramRetStr += $" {argStr}";
+            }
             return $"({node.Name}{paramRetStr})";
         }
 

@@ -25,11 +25,6 @@ namespace PDDL.Models.Tests
             };
             yield return new object[]
             {
-                new NameExp(new ASTNode(1, 10, "(abc)", "abc"), null, "abc"),
-                new NameExp(new ASTNode(1, 5, "(abc)", "abc"), null, "abc")
-            };
-            yield return new object[]
-            {
                 new NameExp(new ASTNode(), null, "abc", new TypeExp(new ASTNode(), null, "type")),
                 new NameExp(new ASTNode(), null, "abc", new TypeExp(new ASTNode(), null, "type 2"))
             };

@@ -13,8 +13,8 @@ namespace PDDL.Models
         public int End { get; set; }
         public int Line { get; set; }
 
-        public HashSet<INamedNode> FindNames(string name);
-        public HashSet<T> FindTypes<T>();
+        public List<INamedNode> FindNames(string name);
+        public List<T> FindTypes<T>();
         public int GetHashCode();
     }
 }
