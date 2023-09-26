@@ -12,9 +12,9 @@ namespace PDDLSharp.Models.Expressions
     public class NameExp : BaseNode, IExp, INamedNode
     {
         public string Name { get; set; }
-        public TypeExp? Type { get; set; }
+        public TypeExp Type { get; set; }
 
-        public NameExp(ASTNode node, INode? parent, string name, TypeExp? type) : base(node, parent)
+        public NameExp(ASTNode node, INode? parent, string name, TypeExp type) : base(node, parent)
         {
             Name = name;
             Type = type;
@@ -28,9 +28,7 @@ namespace PDDLSharp.Models.Expressions
 
         public override int GetHashCode()
         {
-            if (Type != null)
-                return Name.GetHashCode() + base.GetHashCode() + Type.GetHashCode();
-            return Name.GetHashCode() + base.GetHashCode();
+            return Name.GetHashCode() + base.GetHashCode() + Type.GetHashCode();
         }
     }
 }

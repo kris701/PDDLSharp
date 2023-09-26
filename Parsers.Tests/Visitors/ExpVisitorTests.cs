@@ -49,8 +49,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitAndNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitAndNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(AndExp));
@@ -68,8 +67,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitAndNode(node, null, listener, out exp);
+            IExp? exp = new ExpVisitor().TryVisitAndNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -88,8 +86,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitAndNode(node, null, listener, out exp);
+            IExp? exp = new ExpVisitor().TryVisitAndNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -113,8 +110,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitNumericNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitNumericNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(NumericExp));
@@ -130,8 +126,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitOrNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitOrNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(OrExp));
@@ -151,8 +146,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitOrNode(node, null, listener, out exp);
+            IExp? exp = new ExpVisitor().TryVisitOrNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -171,8 +165,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitOrNode(node, null, listener, out exp);
+            IExp? exp = new ExpVisitor().TryVisitOrNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -188,8 +181,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitNotNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitNotNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(NotExp));
@@ -207,8 +199,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitNotNode(node, null, listener, out exp);
+            IExp? exp = new ExpVisitor().TryVisitNotNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -227,8 +218,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitNotNode(node, null, listener, out exp);
+            IExp? exp = new ExpVisitor().TryVisitNotNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -245,8 +235,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitPredicateNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitPredicateNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(PredicateExp));
@@ -264,8 +253,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitPredicateNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitPredicateNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(PredicateExp));
@@ -284,8 +272,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitPredicateNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitPredicateNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(PredicateExp));
@@ -311,8 +298,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitPredicateNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitPredicateNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(PredicateExp));
@@ -334,8 +320,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitNameNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitNameNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(NameExp));
@@ -352,8 +337,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitNameNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitNameNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(NameExp));
@@ -372,8 +356,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IExp exp;
-            new ExpVisitor().TryVisitNameNode(node, null, null, out exp);
+            IExp? exp = new ExpVisitor().TryVisitNameNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(NameExp));

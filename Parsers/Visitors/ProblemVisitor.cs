@@ -15,30 +15,23 @@ namespace PDDLSharp.Parsers.Visitors
     {
         public IDecl Visit(ASTNode node, INode parent, IErrorListener listener)
         {
-            IDecl returnNode = null;
-            if (TryVisitProblemDeclNode(node, parent, listener, out returnNode))
-                return returnNode;
-            else if (TryVisitProblemNameNode(node, parent, listener, out returnNode))
-                return returnNode;
-            else if (TryVisitDomainRefNameNode(node, parent, listener, out returnNode))
-                return returnNode;
-            else if (TryVisitObjectsNode(node, parent, listener, out returnNode))
-                return returnNode;
-            else if (TryVisitInitsNode(node, parent, listener, out returnNode))
-                return returnNode;
-            else if (TryVisitGoalNode(node, parent, listener, out returnNode))
-                return returnNode;
-            else if (TryVisitMetricNode(node, parent, listener, out returnNode))
-                return returnNode;
+            IDecl? returnNode;
+            if ((returnNode = TryVisitProblemDeclNode(node, parent, listener)) != null) return returnNode;
+            if ((returnNode = TryVisitProblemNameNode(node, parent, listener)) != null) return returnNode;
+            if ((returnNode = TryVisitDomainRefNameNode(node, parent, listener)) != null) return returnNode;
+            if ((returnNode = TryVisitObjectsNode(node, parent, listener)) != null) return returnNode;
+            if ((returnNode = TryVisitInitsNode(node, parent, listener)) != null) return returnNode;
+            if ((returnNode = TryVisitGoalNode(node, parent, listener)) != null) return returnNode;
+            if ((returnNode = TryVisitMetricNode(node, parent, listener)) != null) return returnNode;
 
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
-            return default;
+            return returnNode;
         }
 
-        public bool TryVisitProblemDeclNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public IDecl? TryVisitProblemDeclNode(ASTNode node, INode parent, IErrorListener listener)
         {
             if (IsOfValidNodeType(node.InnerContent, "define"))
             {
@@ -48,135 +41,107 @@ namespace PDDLSharp.Parsers.Visitors
                     foreach (var child in node.Children)
                     {
                         var visited = Visit(child, returnProblem, listener);
-                        if (visited is ProblemNameDecl name)
-                            returnProblem.Name = name;
-                        else if (visited is DomainNameRefDecl domainName)
-                            returnProblem.DomainName = domainName;
-                        else if (visited is ObjectsDecl objects)
-                            returnProblem.Objects = objects;
-                        else if (visited is InitDecl inits)
-                            returnProblem.Init = inits;
-                        else if (visited is GoalDecl goal)
-                            returnProblem.Goal = goal;
-                        else if (visited is MetricDecl metric)
-                            returnProblem.Metric = metric;
+
+                        switch (visited)
+                        {
+                            case ProblemNameDecl d: returnProblem.Name = d; break;
+                            case DomainNameRefDecl d: returnProblem.DomainName = d; break;
+                            case ObjectsDecl d: returnProblem.Objects = d; break;
+                            case InitDecl d: returnProblem.Init = d; break;
+                            case GoalDecl d: returnProblem.Goal = d; break;
+                            case MetricDecl d: returnProblem.Metric = d; break;
+                        }
                     }
-                    decl = returnProblem;
-                    return true;
+                    return returnProblem;
                 }
             }
-            decl = null;
-            return false;
+            return null;
         }
 
-        public bool TryVisitProblemNameNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public IDecl? TryVisitProblemNameNode(ASTNode node, INode parent, IErrorListener listener)
         {
-            if (IsOfValidNodeType(node.InnerContent, "problem"))
+            if (IsOfValidNodeType(node.InnerContent, "problem") &&
+                DoesContentContainNLooseChildren(node, "problem", 1, listener))
             {
-                if (DoesContentContainNLooseChildren(node, "problem", 1, listener))
-                {
-                    var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "problem");
-                    decl = new ProblemNameDecl(node, parent, name);
-                    return true;
-                }
+                var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "problem");
+                return new ProblemNameDecl(node, parent, name);
             }
-            decl = null;
-            return false;
+            return null;
         }
 
-        public bool TryVisitDomainRefNameNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public IDecl? TryVisitDomainRefNameNode(ASTNode node, INode parent, IErrorListener listener)
         {
-            if (IsOfValidNodeType(node.InnerContent, ":domain"))
+            if (IsOfValidNodeType(node.InnerContent, ":domain") &&
+                DoesContentContainNLooseChildren(node, ":domain", 1, listener))
             {
-                if (DoesContentContainNLooseChildren(node, ":domain", 1, listener))
-                {
-                    var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":domain");
-                    decl = new DomainNameRefDecl(node, parent, name);
-                    return true;
-                }
+                var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":domain");
+                return new DomainNameRefDecl(node, parent, name);
             }
-            decl = null;
-            return false;
+            return null;
         }
 
-        public bool TryVisitObjectsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public IDecl? TryVisitObjectsNode(ASTNode node, INode parent, IErrorListener listener)
         {
-            if (IsOfValidNodeType(node.InnerContent, ":objects"))
+            if (IsOfValidNodeType(node.InnerContent, ":objects") &&
+                DoesNodeHaveSpecificChildCount(node, ":objects", 0, listener))
             {
-                if (DoesNodeHaveSpecificChildCount(node, ":objects", 0, listener))
-                {
-                    var newObjs = new ObjectsDecl(node, parent, new List<NameExp>());
+                var newObjs = new ObjectsDecl(node, parent, new List<NameExp>());
 
-                    var parseStr = node.InnerContent.Substring(node.InnerContent.IndexOf(":objects") + ":objects".Length);
-                    newObjs.Objs = LooseParseString<NameExp>(node, newObjs, ":objects", parseStr, listener);
+                var parseStr = node.InnerContent.Substring(node.InnerContent.IndexOf(":objects") + ":objects".Length);
+                newObjs.Objs = LooseParseString<NameExp>(node, newObjs, ":objects", parseStr, listener);
 
-                    decl = newObjs;
-                    return true;
-                }
+                return newObjs;
             }
-            decl = null;
-            return false;
+            return null;
         }
 
-        public bool TryVisitInitsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public IDecl? TryVisitInitsNode(ASTNode node, INode parent, IErrorListener listener)
         {
-            if (IsOfValidNodeType(node.InnerContent, ":init"))
+            if (IsOfValidNodeType(node.InnerContent, ":init") &&
+                DoesNotContainStrayCharacters(node, ":init", listener))
             {
-                if (DoesNotContainStrayCharacters(node, ":init", listener))
-                {
-                    var newInit = new InitDecl(node, parent, new List<IExp>());
-                    var preds = ParseAsList<PredicateExp>(node, newInit, listener, false);
-                    var nums = ParseAsList<NumericExp>(node, newInit, listener, false);
-                    newInit.Predicates.AddRange(preds);
-                    newInit.Predicates.AddRange(nums);
-                    decl = newInit;
-                    return true;
-                }
+                var newInit = new InitDecl(node, parent, new List<IExp>());
+                var preds = ParseAsList<PredicateExp>(node, newInit, listener, false);
+                var nums = ParseAsList<NumericExp>(node, newInit, listener, false);
+                newInit.Predicates.AddRange(preds);
+                newInit.Predicates.AddRange(nums);
+                return newInit;
             }
-            decl = null;
-            return false;
+            return null;
         }
 
-        public bool TryVisitGoalNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public IDecl? TryVisitGoalNode(ASTNode node, INode parent, IErrorListener listener)
         {
-            if (IsOfValidNodeType(node.InnerContent, ":goal"))
+            if (IsOfValidNodeType(node.InnerContent, ":goal") &&
+                DoesNodeHaveSpecificChildCount(node, ":goal", 1, listener) &&
+                DoesNotContainStrayCharacters(node, ":goal", listener))
             {
-                if (DoesNodeHaveSpecificChildCount(node, ":goal", 1, listener) &&
-                    DoesNotContainStrayCharacters(node, ":goal", listener))
-                {
-                    var newGoal = new GoalDecl(node, parent, null);
-                    newGoal.GoalExp = new ExpVisitor().Visit(node.Children[0], newGoal, listener);
-                    decl = newGoal;
-                    return true;
-                }
+                var newGoal = new GoalDecl(node, parent, null);
+                newGoal.GoalExp = new ExpVisitor().Visit(node.Children[0], newGoal, listener);
+                return newGoal;
             }
-            decl = null;
-            return false;
+            return null;
         }
 
         private static HashSet<string> MetricNodeTypes = new HashSet<string>()
         {
             "maximize", "minimize"
         };
-        public bool TryVisitMetricNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public IDecl? TryVisitMetricNode(ASTNode node, INode parent, IErrorListener listener)
         {
-            if (IsOfValidNodeType(node.InnerContent, ":metric"))
+            if (IsOfValidNodeType(node.InnerContent, ":metric") &&
+                DoesNodeHaveSpecificChildCount(node, ":metric", 1, listener) &&
+                DoesContentContainNLooseChildren(node, ":metric", 1, listener))
             {
-                if (DoesNodeHaveSpecificChildCount(node, ":metric", 1, listener) &&
-                    DoesContentContainNLooseChildren(node, ":metric", 1, listener))
+                var metricType = node.InnerContent.Substring(node.InnerContent.IndexOf(":metric") + ":metric".Length).Trim();
+                if (MetricNodeTypes.Contains(metricType))
                 {
-                    var metricType = node.InnerContent.Substring(node.InnerContent.IndexOf(":metric") + ":metric".Length).Trim();
-                    if (MetricNodeTypes.Contains(metricType))
-                    {
-                        var newMetric = new MetricDecl(node, parent, metricType, null);
-                        newMetric.MetricExp = new ExpVisitor().Visit(node.Children[0], newMetric, listener);
-                        decl = newMetric;
-                        return true;
-                    }
+                    var newMetric = new MetricDecl(node, parent, metricType, null);
+                    newMetric.MetricExp = new ExpVisitor().Visit(node.Children[0], newMetric, listener);
+                    return newMetric;
                 }
             }
-            decl = null;
-            return false;
+            return null;
         }
     }
 }

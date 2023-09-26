@@ -13,6 +13,14 @@ namespace PDDLSharp.Parsers.Visitors
 {
     public abstract class BaseVisitor
     {
+        internal static string ReplaceRangeWithSpaces(string text, int from, int to)
+        {
+            var newText = text.Substring(0, from);
+            newText += new string(' ', to - from);
+            newText += text.Substring(to);
+            return newText;
+        }
+
         internal static bool DoesNotContainStrayCharacters(ASTNode node, string targetName, IErrorListener listener)
         {
             if (node.InnerContent.Replace(targetName, "").Trim() != "")

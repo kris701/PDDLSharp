@@ -12,14 +12,14 @@ namespace PDDLSharp.Models.Domain
 {
     public class DomainDecl : BaseWalkableNode, IDecl
     {
-        public DomainNameDecl Name { get; set; }
-        public RequirementsDecl Requirements { get; set; }
-        public ExtendsDecl Extends { get; set; }
-        public TimelessDecl Timeless { get; set; }
-        public TypesDecl Types { get; set; }
-        public ConstantsDecl Constants { get; set; }
-        public PredicatesDecl Predicates { get; set; }
-        public FunctionsDecl Functions { get; set; }
+        public DomainNameDecl? Name { get; set; }
+        public RequirementsDecl? Requirements { get; set; }
+        public ExtendsDecl? Extends { get; set; }
+        public TimelessDecl? Timeless { get; set; }
+        public TypesDecl? Types { get; set; }
+        public ConstantsDecl? Constants { get; set; }
+        public PredicatesDecl? Predicates { get; set; }
+        public FunctionsDecl? Functions { get; set; }
         public List<ActionDecl> Actions { get; set; }
         public List<DurativeActionDecl> DurativeActions { get; set; }
         public List<AxiomDecl> Axioms { get; set; }
