@@ -50,21 +50,5 @@ namespace PDDL.Models.Expressions
                     hash *= type.GetHashCode();
             return hash;
         }
-
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            var result = new HashSet<INamedNode>();
-            if (Name == name)
-                result.Add(this);
-            return result;
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            return res;
-        }
     }
 }

@@ -23,26 +23,6 @@ namespace PDDL.Models.Domain
             Implies = implies;
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            HashSet<INamedNode> res = new HashSet<INamedNode>();
-            res.AddRange(Vars.FindNames(name));
-            res.AddRange(Context.FindNames(name));
-            res.AddRange(Implies.FindNames(name));
-            return res;
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            res.AddRange(Vars.FindTypes<T>());
-            res.AddRange(Context.FindTypes<T>());
-            res.AddRange(Implies.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

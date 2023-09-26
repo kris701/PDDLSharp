@@ -24,29 +24,6 @@ namespace PDDL.Models.Domain
             Effects = effects;
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            HashSet<INamedNode> res = new HashSet<INamedNode>();
-            if (Name == name)
-                res.Add(this);
-            foreach (var param in Parameters)
-                res.AddRange(param.FindNames(name));
-            res.AddRange(Preconditions.FindNames(name));
-            res.AddRange(Effects.FindNames(name));
-            return res;
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            res.AddRange(Parameters.FindTypes<T>());
-            res.AddRange(Preconditions.FindTypes<T>());
-            res.AddRange(Effects.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

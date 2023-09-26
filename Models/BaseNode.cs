@@ -1,7 +1,10 @@
 ﻿using PDDL.Models.AST;
+using PDDL.Tools;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,8 +31,60 @@ namespace PDDL.Models
             Parent = parent;
         }
 
-        public abstract HashSet<INamedNode> FindNames(string name);
-        public abstract HashSet<T> FindTypes<T>();
+        public HashSet<INamedNode> FindNames(string name)
+        {
+            HashSet<INamedNode> returnSet = new HashSet<INamedNode>();
+            List<PropertyInfo> myPropertyInfo = this.GetType().GetProperties().ToList();
+            if (this is INamedNode node)
+                if (node.Name == name)
+                    returnSet.Add(node);
+            foreach (var prop in myPropertyInfo)
+            {
+                if (prop.Name.ToUpper() != "PARENT")
+                {
+                    var value = prop.GetValue(this, null);
+                    if (value is INode valueNode)
+                        returnSet.AddRange(valueNode.FindNames(name));
+                    else if (value != null && IsList(value))
+                        if (value is IEnumerable enu)
+                            foreach (var innerValueNode in enu)
+                                if (innerValueNode is INode actualInnerValueNode)
+                                    returnSet.AddRange(actualInnerValueNode.FindNames(name));
+                }
+            }
+            return returnSet;
+        }
+
+        public HashSet<T> FindTypes<T>()
+        {
+            HashSet<T> returnSet = new HashSet<T>();
+            List<PropertyInfo> myPropertyInfo = this.GetType().GetProperties().ToList();
+            if (this is T self)
+                returnSet.Add(self);
+            foreach (var prop in myPropertyInfo)
+            {
+                if (prop.Name.ToUpper() != "PARENT")
+                {
+                    var value = prop.GetValue(this, null);
+                    if (value is INode valueNode)
+                        returnSet.AddRange(valueNode.FindTypes<T>());
+                    else if (value != null && IsList(value))
+                        if (value is IEnumerable enu)
+                            foreach (var innerValueNode in enu)
+                                if (innerValueNode is INode actualInnerValueNode)
+                                    returnSet.AddRange(actualInnerValueNode.FindTypes<T>());
+                }
+            }
+            return returnSet;
+        }
+
+        private bool IsList(object o)
+        {
+            if (o == null) return false;
+            return o is IList &&
+                   o.GetType().IsGenericType &&
+                   o.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>));
+        }
 
         public override int GetHashCode()
         {

@@ -26,28 +26,6 @@ namespace PDDL.Models.Domain
             Duration = duration;
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            HashSet<INamedNode> res = new HashSet<INamedNode>();
-            if (Name == name)
-                res.Add(this);
-            res.AddRange(Parameters.FindNames(name));
-            res.AddRange(Condition.FindNames(name));
-            res.AddRange(Effects.FindNames(name));
-            return res;
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            res.AddRange(Parameters.FindTypes<T>());
-            res.AddRange(Condition.FindTypes<T>());
-            res.AddRange(Effects.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

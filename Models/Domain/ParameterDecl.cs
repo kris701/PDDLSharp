@@ -19,22 +19,6 @@ namespace PDDL.Models.Domain
             Values = values;
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            HashSet<INamedNode> res = new HashSet<INamedNode>();
-            foreach (var param in Values)
-                res.AddRange(param.FindNames(name));
-            return res;
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            foreach (var param in Values)
-                res.AddRange(param.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

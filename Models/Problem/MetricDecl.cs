@@ -24,20 +24,6 @@ namespace PDDL.Models.Problem
             return $"(:metric {MetricType} {MetricExp})";
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            return MetricExp.FindNames(name);
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            res.AddRange(MetricExp.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() + MetricExp.GetHashCode();

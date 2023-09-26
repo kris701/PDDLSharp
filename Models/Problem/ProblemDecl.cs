@@ -19,48 +19,6 @@ namespace PDDL.Models.Problem
 
         public ProblemDecl(ASTNode node) : base(node, null) { }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            HashSet<INamedNode> res = new HashSet<INamedNode>();
-
-            if (Name != null)
-                res.AddRange(Name.FindNames(name));
-            if (DomainName != null)
-                res.AddRange(DomainName.FindNames(name));
-            if (Objects != null)
-                res.AddRange(Objects.FindNames(name));
-            if (Init != null)
-                res.AddRange(Init.FindNames(name));
-            if (Goal != null)
-                res.AddRange(Goal.FindNames(name));
-            if (Metric != null)
-                res.AddRange(Metric.FindNames(name));
-
-            return res;
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-
-            if (Name != null)
-                res.AddRange(Name.FindTypes<T>());
-            if (DomainName != null)
-                res.AddRange(DomainName.FindTypes<T>());
-            if (Objects != null)
-                res.AddRange(Objects.FindTypes<T>());
-            if (Init != null)
-                res.AddRange(Init.FindTypes<T>());
-            if (Goal != null)
-                res.AddRange(Goal.FindTypes<T>());
-            if (Metric != null)
-                res.AddRange(Metric.FindTypes<T>());
-
-            return res;
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

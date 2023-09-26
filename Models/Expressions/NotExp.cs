@@ -22,20 +22,6 @@ namespace PDDL.Models.Expressions
             return $"(not {Child})";
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            return Child.FindNames(name);
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            res.AddRange(Child.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() * Child.GetHashCode();

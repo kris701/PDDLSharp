@@ -26,24 +26,6 @@ namespace PDDL.Models.Domain
             return $"(:timeless{retStr})";
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            HashSet<INamedNode> res = new HashSet<INamedNode>();
-            foreach (var item in Items)
-                res.AddRange(item.FindNames(name));
-            return res;
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            foreach (var item in Items)
-                res.AddRange(item.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

@@ -23,20 +23,6 @@ namespace PDDL.Models.Problem
             return $"(:goal {GoalExp})";
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            return GoalExp.FindNames(name);
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            res.AddRange(GoalExp.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() + GoalExp.GetHashCode();

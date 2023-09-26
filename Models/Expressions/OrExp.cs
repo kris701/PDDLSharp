@@ -25,24 +25,6 @@ namespace PDDL.Models.Expressions
             return $"(or {Option1} {Option2})";
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            HashSet<INamedNode> res = new HashSet<INamedNode>();
-            res.AddRange(Option1.FindNames(name));
-            res.AddRange(Option2.FindNames(name));
-            return res;
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            res.AddRange(Option1.FindTypes<T>());
-            res.AddRange(Option2.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() * Option1.GetHashCode() * Option2.GetHashCode();

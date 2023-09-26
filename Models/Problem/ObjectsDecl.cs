@@ -26,24 +26,6 @@ namespace PDDL.Models.Problem
             return $"(:objects{retStr})";
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            HashSet<INamedNode> res = new HashSet<INamedNode>();
-            foreach (var obj in Objs)
-                res.AddRange(obj.FindNames(name));
-            return res;
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            foreach (var obj in Objs)
-                res.AddRange(obj.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

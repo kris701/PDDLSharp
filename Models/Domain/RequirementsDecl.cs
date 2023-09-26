@@ -26,23 +26,6 @@ namespace PDDL.Models.Domain
             return $"(:requirements{reqStr})";
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            HashSet<INamedNode> res = new HashSet<INamedNode>();
-            foreach (var requirement in Requirements)
-                res.AddRange(requirement.FindNames(name));
-            return res;
-        }
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            foreach (var req in Requirements)
-                res.AddRange(req.FindTypes<T>());
-            return res;
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

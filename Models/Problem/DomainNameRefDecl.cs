@@ -22,21 +22,6 @@ namespace PDDL.Models.Problem
             return $"(:domain {Name})";
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            if (Name == name)
-                return new HashSet<INamedNode>() { this };
-            return new HashSet<INamedNode>();
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            return res;
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() + Name.GetHashCode();

@@ -35,26 +35,6 @@ namespace PDDL.Models.Expressions
             return hash;
         }
 
-        public override HashSet<INamedNode> FindNames(string name)
-        {
-            HashSet<INamedNode> res = new HashSet<INamedNode>();
-            if (Name == name)
-                res.Add(this);
-            foreach (var arg in Arguments)
-                res.AddRange(arg.FindNames(name));
-            return res;
-        }
-
-        public override HashSet<T> FindTypes<T>()
-        {
-            HashSet<T> res = new HashSet<T>();
-            if (this is T v)
-                res.Add(v);
-            foreach (var arg in Arguments)
-                res.AddRange(arg.FindTypes<T>());
-            return res;
-        }
-
         public override IEnumerator<INode> GetEnumerator()
         {
             return Arguments.GetEnumerator();
