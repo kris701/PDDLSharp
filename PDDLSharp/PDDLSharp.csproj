@@ -1,18 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Analysers\Analysers.csproj" />
+    <ProjectReference Include="..\ASTGenerators\ASTGenerators.csproj" />
+    <ProjectReference Include="..\CodeGenerators\CodeGenerators.csproj" />
+    <ProjectReference Include="..\Contextualisers\Contextualisers.csproj" />
+    <ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
 
 </Project>

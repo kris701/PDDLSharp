@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASTGenerators", "ASTGenerat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers", "Parsers\Parsers.csproj", "{123A2A13-5DBB-41A3-80C6-FD4D85901984}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASTGenerators.Tests", "ASTGenerators.Tests\ASTGenerators.Tests.csproj", "{CDE823EF-0C28-4D56-B8B4-9B3D520464EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASTGenerators.Tests", "ASTGenerators.Tests\ASTGenerators.Tests.csproj", "{CDE823EF-0C28-4D56-B8B4-9B3D520464EA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contextualisers.Tests", "Contextualisers.Tests\Contextualisers.Tests.csproj", "{121214B0-7DFD-4B32-A642-2EF5B8808C52}"
 EndProject
@@ -29,7 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDDLSharp.Tests.System", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerators", "CodeGenerators\CodeGenerators.csproj", "{902EB2E1-CEBD-47FC-9274-07446F7B6ED1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerators.Tests", "CodeGenerators.Tests\CodeGenerators.Tests.csproj", "{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerators.Tests", "CodeGenerators.Tests\CodeGenerators.Tests.csproj", "{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLSharp", "PDDLSharp\PDDLSharp.csproj", "{2025C675-7610-4EFE-92A2-40ACED7D68FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2025C675-7610-4EFE-92A2-40ACED7D68FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2025C675-7610-4EFE-92A2-40ACED7D68FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2025C675-7610-4EFE-92A2-40ACED7D68FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2025C675-7610-4EFE-92A2-40ACED7D68FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
