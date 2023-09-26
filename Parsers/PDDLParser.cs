@@ -21,10 +21,9 @@ namespace PDDL.Parsers
     {
         public IErrorListener Listener { get; }
 
-        public PDDLParser()
+        public PDDLParser(IErrorListener listener)
         {
-            Listener = new ErrorListener();
-            Listener.ThrowIfTypeAbove = ParseErrorType.Warning;
+            Listener = listener;
         }
 
         public PDDLDecl Parse(string domainFile, string problemFile)

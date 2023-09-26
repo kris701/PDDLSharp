@@ -14,7 +14,7 @@ namespace PDDL.ErrorListeners
         public ErrorListener()
         {
             Errors = new List<ParseError>();
-            ThrowIfTypeAbove = ParseErrorType.None;
+            ThrowIfTypeAbove = ParseErrorType.Warning;
         }
 
         public void AddError(ParseError err)
@@ -22,6 +22,15 @@ namespace PDDL.ErrorListeners
             Errors.Add(err);
             if (Errors.Any(x => x.Type > ThrowIfTypeAbove))
                 throw new ParseException(Errors);
+        }
+
+        public int CountErrorsOfTypeOrAbove(ParseErrorType type)
+        {
+            int count = 0;
+            foreach(var error in Errors)
+                if (error.Type >= type)
+                    count++;
+            return count;
         }
     }
 }

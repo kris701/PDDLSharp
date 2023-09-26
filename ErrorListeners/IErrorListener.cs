@@ -8,8 +8,9 @@ namespace PDDL.ErrorListeners
 {
     public interface IErrorListener
     {
-        ParseErrorType ThrowIfTypeAbove { get; set; }
-        List<ParseError> Errors { get; }
-        void AddError(ParseError err);
+        public ParseErrorType ThrowIfTypeAbove { get; set; }
+        public List<ParseError> Errors { get; }
+        public void AddError(ParseError err);
+        public int CountErrorsOfTypeOrAbove(ParseErrorType type);
     }
 }
