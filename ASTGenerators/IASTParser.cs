@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.ASTGenerator
+namespace PDDL.ASTGenerators
 {
     public interface IASTParser<T>
     {

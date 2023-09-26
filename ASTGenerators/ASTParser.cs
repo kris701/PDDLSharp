@@ -7,7 +7,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.ASTGenerator
+namespace PDDL.ASTGenerators
 {
     public class ASTParser : IASTParser<ASTNode>
     {

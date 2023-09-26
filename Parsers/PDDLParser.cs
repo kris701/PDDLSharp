@@ -12,7 +12,7 @@ using PDDL.Models;
 using PDDL.Models.Domain;
 using PDDL.Models.Problem;
 using PDDL.Models.AST;
-using PDDL.ASTGenerator;
+using PDDL.ASTGenerators;
 using PDDL.Contextualisers;
 
 namespace PDDL.Parsers

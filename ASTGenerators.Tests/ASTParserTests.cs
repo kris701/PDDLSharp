@@ -1,6 +1,6 @@
 using PDDL.Models.AST;
 
-namespace PDDL.ASTGenerator.Tests
+namespace PDDL.ASTGenerators.Tests
 {
     [TestClass]
     public class ASTParserTests
