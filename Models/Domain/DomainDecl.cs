@@ -24,6 +24,12 @@ namespace PDDL.Models.Domain
         public List<DurativeActionDecl> DurativeActions { get; set; }
         public List<AxiomDecl> Axioms { get; set; }
 
+        public DomainDecl(ASTNode node) : base(node, null)
+        {
+            Actions = new List<ActionDecl>();
+            Axioms = new List<AxiomDecl>();
+        }
+
         public bool ContainsType(string target)
         {
             if (target == "")
@@ -105,11 +111,6 @@ namespace PDDL.Models.Domain
             return res;
         }
 
-        public DomainDecl(ASTNode node) : base(node, null) {
-            Actions = new List<ActionDecl>();
-            Axioms = new List<AxiomDecl>();
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
@@ -143,7 +144,7 @@ namespace PDDL.Models.Domain
             return hash;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is DomainDecl exp)
                 return exp.GetHashCode() == GetHashCode();

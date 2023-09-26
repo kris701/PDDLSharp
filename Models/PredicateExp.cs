@@ -8,7 +8,7 @@ using PDDL.Tools;
 
 namespace PDDL.Models
 {
-    public class PredicateExp : BaseWalkableNode, IExp, ICloneable, INamedNode
+    public class PredicateExp : BaseWalkableNode, IExp, INamedNode
     {
         public string Name { get; set; }
         public List<NameExp> Arguments { get; set; }
@@ -35,21 +35,13 @@ namespace PDDL.Models
             return hash;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is PredicateExp exp) 
             { 
                 return exp.GetHashCode() == GetHashCode();
             }
             return false;
-        }
-
-        public object Clone()
-        {
-            var newPredicateExp = new PredicateExp(new ASTNode(Start, End, Line), Parent, Name, new List<NameExp>());
-            foreach (var arg in Arguments)
-                newPredicateExp.Arguments.Add(new NameExp(new ASTNode(arg.Start, arg.End, arg.Line), newPredicateExp, arg.Name));
-            return newPredicateExp;
         }
 
         public override HashSet<INamedNode> FindNames(string name)

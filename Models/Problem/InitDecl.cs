@@ -51,7 +51,7 @@ namespace PDDL.Models.Problem
             return hash;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is InitDecl exp)
                 return exp.GetHashCode() == GetHashCode();

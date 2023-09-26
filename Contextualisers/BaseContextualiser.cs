@@ -44,30 +44,6 @@ namespace PDDL.Contextualisers
             return 0;
         }
 
-        internal void GetPredicatesInExp(IExp exp, List<PredicateExp> truePredicates, List<PredicateExp> falsePredicates, bool isNegated = false)
-        {
-            if (exp is AndExp and)
-                foreach (var child in and.Children)
-                    GetPredicatesInExp(child, truePredicates, falsePredicates, isNegated);
-            else if (exp is NotExp not)
-                GetPredicatesInExp(not.Child, truePredicates, falsePredicates, !isNegated);
-            else if (exp is OrExp or)
-            {
-                GetPredicatesInExp(or.Option1, truePredicates, falsePredicates, isNegated);
-                GetPredicatesInExp(or.Option2, truePredicates, falsePredicates, isNegated);
-            }
-            else
-            {
-                if (exp is PredicateExp pred)
-                {
-                    if (isNegated)
-                        falsePredicates.Add(pred.Clone() as PredicateExp);
-                    else
-                        truePredicates.Add(pred.Clone() as PredicateExp);
-                }
-            }
-        }
-
         internal bool DoesExpContainNodeType<U>(IExp exp)
         {
             if (exp is AndExp and)

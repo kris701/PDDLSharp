@@ -31,7 +31,7 @@ namespace PDDL.Models
             return base.GetHashCode() + Name.GetHashCode() + Arg1.GetHashCode() + Arg2.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NumericExp exp)
             {

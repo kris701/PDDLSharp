@@ -51,7 +51,7 @@ namespace PDDL.Models.Domain
             return hash;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is TimelessDecl exp)
                 return exp.GetHashCode() == GetHashCode();

@@ -13,15 +13,6 @@ namespace PDDL.Models.Domain
     public class AxiomDecl : BaseWalkableNode, IDecl
     {
         public ParameterDecl Vars { get; set; }
-        public NameExp GetParameterOrConstant(string name)
-        {
-            var concrete = Vars.Values.SingleOrDefault(x => x.Name == name);
-            if (concrete == null)
-                if (Parent is DomainDecl domain)
-                    if (domain.Constants != null)
-                        return domain.Constants.Constants.SingleOrDefault(x => x.Name == name);
-            return concrete;
-        }
         public IExp Context { get; set; }
         public IExp Implies { get; set; }
 
@@ -61,7 +52,7 @@ namespace PDDL.Models.Domain
             return hash;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is AxiomDecl exp)
                 return exp.GetHashCode() == GetHashCode();

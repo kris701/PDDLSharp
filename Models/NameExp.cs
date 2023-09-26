@@ -12,21 +12,21 @@ namespace PDDL.Models
     public class NameExp : BaseNode, IExp, ICloneable, INamedNode
     {
         public string Name { get; set; }
-        public TypeExp Type { get; set; }
+        public TypeExp? Type { get; set; }
 
-        public NameExp(ASTNode node, INode parent, string name, TypeExp type) : base(node, parent)
+        public NameExp(ASTNode node, INode? parent, string name, TypeExp? type) : base(node, parent)
         {
             Name = name;
             Type = type;
         }
 
-        public NameExp(ASTNode node, INode parent, string name) : base(node, parent) 
+        public NameExp(ASTNode node, INode? parent, string name) : base(node, parent) 
         {
             Name = name;
             Type = new TypeExp(node, this, "");
         }
 
-        public NameExp(ASTNode node, INode parent) : base(node, parent)
+        public NameExp(ASTNode node, INode? parent) : base(node, parent)
         {
             Name = "";
             Type = null;
@@ -47,7 +47,7 @@ namespace PDDL.Models
             return Name.GetHashCode() + base.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NameExp exp)
             {

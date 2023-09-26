@@ -12,9 +12,6 @@ namespace PDDL.Models.Problem
     {
         public string Name { get; set; }
 
-        // Context
-        public DomainDecl DomainReference { get; internal set; }
-
         public DomainNameRefDecl(ASTNode node, INode parent, string name) : base(node, parent)
         {
             Name = name;
@@ -45,7 +42,7 @@ namespace PDDL.Models.Problem
             return base.GetHashCode() + Name.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is DomainNameRefDecl exp)
                 return exp.GetHashCode() == GetHashCode();

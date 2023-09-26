@@ -13,16 +13,6 @@ namespace PDDL.Models.Problem
     {
         public IExp GoalExp { get; set; }
 
-        // Context
-        public int PredicateCount { get; set; }
-        public List<PredicateExp> TruePredicates { get; set; }
-        public List<PredicateExp> FalsePredicates { get; set; }
-        public bool DoesContainOr { get; set; }
-        public bool DoesContainAnd { get; set; }
-        public bool DoesContainNot { get; set; }
-        public bool DoesContainPredicates { get; set; }
-        public bool DoesContainNames { get; set; }
-
         public GoalDecl(ASTNode node, INode parent, IExp goalExp) : base(node, parent)
         {
             GoalExp = goalExp;
@@ -52,7 +42,7 @@ namespace PDDL.Models.Problem
             return base.GetHashCode() + GoalExp.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is GoalDecl exp)
                 return exp.GetHashCode() == GetHashCode();

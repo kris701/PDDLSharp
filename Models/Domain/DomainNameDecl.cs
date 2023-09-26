@@ -41,7 +41,7 @@ namespace PDDL.Models.Domain
             return base.GetHashCode() + Name.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is DomainNameDecl exp)
                 return exp.GetHashCode() == GetHashCode();

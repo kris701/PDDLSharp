@@ -243,7 +243,7 @@ namespace PDDL.Analysers
                 int index = 0;
                 foreach (var arg in pred.Arguments)
                 {
-                    var argOrCons = action.GetParameterOrConstant(arg.Name);
+                    var argOrCons = GetParameterOrConstant(action, arg.Name);
                     if (argOrCons == null)
                     {
                         Listener.AddError(new ParseError(
@@ -256,7 +256,7 @@ namespace PDDL.Analysers
                     else if (argOrCons.Name != arg.Name && !arg.Type.IsTypeOf(argOrCons.Type.Name))
                     {
                         Listener.AddError(new ParseError(
-                            $"Predicate has an invalid argument type! Expected a '{action.GetParameterOrConstant(arg.Name).Name}' but got a '{arg.Type}'",
+                            $"Predicate has an invalid argument type! Expected a '{GetParameterOrConstant(action, arg.Name).Name}' but got a '{arg.Type}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             arg.Line,
@@ -265,6 +265,15 @@ namespace PDDL.Analysers
                     index++;
                 }
             }
+        }
+        private NameExp GetParameterOrConstant(ActionDecl action, string name)
+        {
+            var concrete = action.Parameters.Values.SingleOrDefault(x => x.Name == name);
+            if (concrete == null)
+                if (action.Parent is DomainDecl domain)
+                    if (domain.Constants != null)
+                        return domain.Constants.Constants.SingleOrDefault(x => x.Name == name);
+            return concrete;
         }
         private void CheckTypeMatchForAxioms(DomainDecl domain)
         {
@@ -311,10 +320,10 @@ namespace PDDL.Analysers
                 int index = 0;
                 foreach (var arg in pred.Arguments)
                 {
-                    if (!arg.Type.IsTypeOf(axiom.GetParameterOrConstant(arg.Name).Type.Name))
+                    if (!arg.Type.IsTypeOf(GetParameterOrConstant(axiom, arg.Name).Type.Name))
                     {
                         Listener.AddError(new ParseError(
-                            $"Predicate has an invalid argument type! Expected a '{axiom.GetParameterOrConstant(arg.Name).Name}' but got a '{arg.Type}'",
+                            $"Predicate has an invalid argument type! Expected a '{GetParameterOrConstant(axiom, arg.Name).Name}' but got a '{arg.Type}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             arg.Line,
@@ -324,7 +333,15 @@ namespace PDDL.Analysers
                 }
             }
         }
-
+        public NameExp GetParameterOrConstant(AxiomDecl axi, string name)
+        {
+            var concrete = axi.Vars.Values.SingleOrDefault(x => x.Name == name);
+            if (concrete == null)
+                if (axi.Parent is DomainDecl domain)
+                    if (domain.Constants != null)
+                        return domain.Constants.Constants.SingleOrDefault(x => x.Name == name);
+            return concrete;
+        }
         private void CheckForValidTypesInConstants(DomainDecl domain)
         {
             if (domain.Constants != null)

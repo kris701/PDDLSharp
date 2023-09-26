@@ -9,12 +9,12 @@ namespace PDDL.Models
 {
     public abstract class BaseNode : INode
     {
-        public INode Parent { get; }
+        public INode? Parent { get; }
         public int Start { get; set; }
         public int End { get; set; }
         public int Line { get; set; }
 
-        public BaseNode(ASTNode node, INode parent)
+        public BaseNode(ASTNode node, INode? parent)
         {
             Line = -1;
             Start = -1;

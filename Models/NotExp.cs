@@ -41,7 +41,7 @@ namespace PDDL.Models
             return base.GetHashCode() * Child.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NotExp exp)
             {

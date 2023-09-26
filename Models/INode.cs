@@ -8,7 +8,7 @@ namespace PDDL.Models
 {
     public interface INode
     {
-        INode Parent { get; }
+        INode? Parent { get; }
         int Start { get; set; }
         int End { get; set; }
         int Line { get; set; }

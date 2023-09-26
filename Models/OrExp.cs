@@ -48,7 +48,7 @@ namespace PDDL.Models
             return base.GetHashCode() * Option1.GetHashCode() * Option2.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is OrExp exp)
             {

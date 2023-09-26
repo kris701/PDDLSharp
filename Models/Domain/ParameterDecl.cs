@@ -18,7 +18,7 @@ namespace PDDL.Models.Domain
             Values = values;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is ParameterDecl exp)
                 return exp.GetHashCode() == GetHashCode();

@@ -43,7 +43,7 @@ namespace PDDL.Models.Problem
             return base.GetHashCode() + MetricExp.GetHashCode();
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is MetricDecl exp)
                 return exp.GetHashCode() == GetHashCode();

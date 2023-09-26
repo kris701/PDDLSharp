@@ -50,7 +50,7 @@ namespace PDDL.Models.Domain
             return hash;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is RequirementsDecl exp)
                 return exp.GetHashCode() == GetHashCode();

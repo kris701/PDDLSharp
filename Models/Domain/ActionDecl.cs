@@ -13,15 +13,6 @@ namespace PDDL.Models.Domain
         public string Name { get; set; }
 
         public ParameterDecl Parameters { get; set; }
-        public NameExp GetParameterOrConstant(string name)
-        {
-            var concrete = Parameters.Values.SingleOrDefault(x => x.Name == name);
-            if (concrete == null)
-                if (Parent is DomainDecl domain)
-                    if (domain.Constants != null)
-                        return domain.Constants.Constants.SingleOrDefault(x => x.Name == name);
-            return concrete;
-        }
         public IExp Preconditions { get; set; }
         public IExp Effects { get; set; }
 
@@ -66,7 +57,7 @@ namespace PDDL.Models.Domain
             return hash;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is ActionDecl exp)
                 return exp.GetHashCode() == GetHashCode();
