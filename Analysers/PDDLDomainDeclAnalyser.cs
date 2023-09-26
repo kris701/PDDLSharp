@@ -223,7 +223,7 @@ namespace PDDLSharp.Analysers
                         if (!ContainsType(domain, param.Type.Name))
                         {
                             Listener.AddError(new ParseError(
-                                $"Parameter contains unknow type: {arg.Type.Name}",
+                                $"Parameter contains unknow type: {param.Type.Name}",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 param.Line,
