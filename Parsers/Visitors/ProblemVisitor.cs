@@ -1,14 +1,14 @@
-﻿using ErrorListeners;
-using Models;
-using Models.AST;
-using Models.Problem;
+﻿using PDDL.ErrorListeners;
+using PDDL.Models;
+using PDDL.Models.AST;
+using PDDL.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parsers.Visitors
+namespace PDDL.Parsers.Visitors
 {
     public class ProblemVisitor : BaseVisitor, IVisitor<ASTNode, INode, IDecl>
     {
@@ -33,8 +33,7 @@ namespace Parsers.Visitors
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
-                ParseErrorLevel.Parsing,
-                ParserErrorCode.UnknownNode));
+                ParseErrorLevel.Parsing));
             return default;
         }
 

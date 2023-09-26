@@ -1,4 +1,4 @@
-﻿using Models.AST;
+﻿using PDDL.Models.AST;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Models
+namespace PDDL.Models
 {
     public abstract class BaseWalkableNode : BaseNode, IWalkable
     {

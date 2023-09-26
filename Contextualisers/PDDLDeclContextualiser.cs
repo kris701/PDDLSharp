@@ -1,28 +1,32 @@
-﻿using ErrorListeners;
-using Models;
-using Models.Domain;
-using Models.Problem;
+﻿using PDDL.ErrorListeners;
+using PDDL.Models;
+using PDDL.Models.Domain;
+using PDDL.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contextualisers
+namespace PDDL.Contextualisers
 {
     public class PDDLDeclContextualiser : BaseContextualiser<PDDLDecl>
     {
-        public override void Contexturalise(PDDLDecl decl, IErrorListener listener)
+        public PDDLDeclContextualiser(IErrorListener listener) : base(listener)
         {
-            IContextualiser<DomainDecl> domainContextualiser = new PDDLDomainDeclContextualiser();
-            domainContextualiser.Contexturalise(decl.Domain, listener);
-            IContextualiser<ProblemDecl> problemContextualiser = new PDDLProblemDeclContextualiser();
-            problemContextualiser.Contexturalise(decl.Problem, listener);
-
-            DecorateAllTypesWithInheritence(decl.Domain, decl.Problem, listener);
         }
 
-        private void DecorateAllTypesWithInheritence(DomainDecl domain, ProblemDecl problem, IErrorListener listener)
+        public override void Contexturalise(PDDLDecl decl)
+        {
+            IContextualiser<DomainDecl> domainContextualiser = new PDDLDomainDeclContextualiser(Listener);
+            domainContextualiser.Contexturalise(decl.Domain);
+            IContextualiser<ProblemDecl> problemContextualiser = new PDDLProblemDeclContextualiser(Listener);
+            problemContextualiser.Contexturalise(decl.Problem);
+
+            DecorateAllTypesWithInheritence(decl.Domain, decl.Problem);
+        }
+
+        private void DecorateAllTypesWithInheritence(DomainDecl domain, ProblemDecl problem)
         {
             if (domain.Types != null)
             {

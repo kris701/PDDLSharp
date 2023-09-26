@@ -1,6 +1,6 @@
-﻿using ErrorListeners;
-using Models;
-using Models.Domain;
+﻿using PDDL.ErrorListeners;
+using PDDL.Models;
+using PDDL.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,82 +8,85 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
 
-namespace PDDLParser.Analysers
+namespace PDDL.Analysers
 {
     public class PDDLDomainDeclAnalyser : IAnalyser<DomainDecl>
     {
-        public void PostAnalyse(DomainDecl decl, IErrorListener listener)
+        public IErrorListener Listener { get; }
+
+        public PDDLDomainDeclAnalyser(IErrorListener listener)
         {
-            // Basics
-            CheckForBasicDomain(decl, listener);
-
-            // Declare Checking
-            CheckForUndeclaredPredicates(decl, listener);
-            CheckForUnusedPredicates(decl, listener);
-            CheckForUnusedTypes(decl, listener);
-            CheckForUnusedActionParameters(decl, listener);
-            CheckForUnusedAxiomParameters(decl, listener);
-
-            // Types
-            CheckForValidTypesInPredicates(decl, listener);
-            CheckForValidTypesInConstants(decl, listener);
-            CheckTypeMatchForActions(decl, listener);
-            CheckTypeMatchForAxioms(decl, listener);
-
-            // Unique Name Checking
-            CheckForUniquePredicateNames(decl, listener);
-            CheckForUniquePredicateParameterNames(decl, listener);
-            CheckForUniqueActionNames(decl, listener);
-            CheckForUniqueActionParameterNames(decl, listener);
-            CheckForUniqueAxiomParameterNames(decl, listener);
-
-            // Validity Checking
-            CheckActionUsesValidPredicates(decl, listener);
-            CheckAxiomUsesValidPredicates(decl, listener);
+            Listener = listener;
         }
 
-        public void PreAnalyse(string text, IErrorListener listener)
+        public void PostAnalyse(DomainDecl decl)
+        {
+            // Basics
+            CheckForBasicDomain(decl);
+
+            // Declare Checking
+            CheckForUndeclaredPredicates(decl);
+            CheckForUnusedPredicates(decl);
+            CheckForUnusedTypes(decl);
+            CheckForUnusedActionParameters(decl);
+            CheckForUnusedAxiomParameters(decl);
+
+            // Types
+            CheckForValidTypesInPredicates(decl);
+            CheckForValidTypesInConstants(decl);
+            CheckTypeMatchForActions(decl);
+            CheckTypeMatchForAxioms(decl);
+
+            // Unique Name Checking
+            CheckForUniquePredicateNames(decl);
+            CheckForUniquePredicateParameterNames(decl);
+            CheckForUniqueActionNames(decl);
+            CheckForUniqueActionParameterNames(decl);
+            CheckForUniqueAxiomParameterNames(decl);
+
+            // Validity Checking
+            CheckActionUsesValidPredicates(decl);
+            CheckAxiomUsesValidPredicates(decl);
+        }
+
+        public void PreAnalyse(string text)
         {
             throw new NotImplementedException();
         }
 
-        private void CheckForBasicDomain(DomainDecl domain, IErrorListener listener)
+        private void CheckForBasicDomain(DomainDecl domain)
         {
             if (domain.Predicates == null)
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"Missing predicates declaration.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Predicates != null && domain.Predicates.Predicates.Count == 0)
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"No predicates defined.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Actions == null)
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Actions != null && domain.Actions.Count == 0)
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
         }
 
-        private void CheckForUndeclaredPredicates(DomainDecl domain, IErrorListener listener)
+        private void CheckForUndeclaredPredicates(DomainDecl domain)
         {
             if (domain.Predicates != null)
             {
@@ -97,34 +100,32 @@ namespace PDDLParser.Analysers
                 foreach(var pred in allPreds)
                 {
                     if (!simplePredNames.Contains(pred.Name))
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Undefined predicate! '{pred}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.UseOfUndeclaredPredicate,
                             pred.Line,
                             pred.Start));
                 }
             }
         }
-        private void CheckForUnusedPredicates(DomainDecl domain, IErrorListener listener)
+        private void CheckForUnusedPredicates(DomainDecl domain)
         {
             if (domain.Predicates != null)
             {
                 foreach (var predicate in domain.Predicates.Predicates)
                 {
                     if (domain.FindNames(predicate.Name).Count == 1)
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Unused predicate detected '{predicate}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.UnusedPredicate,
                             predicate.Line,
                             predicate.Start));
                 }
             }
         }
-        private void CheckForUnusedTypes(DomainDecl domain, IErrorListener listener)
+        private void CheckForUnusedTypes(DomainDecl domain)
         {
             if (domain.Types != null)
             {
@@ -132,17 +133,16 @@ namespace PDDLParser.Analysers
                 foreach (var type in domain.Types.Types)
                 {
                     if (allTypes.Count(x => x.Name == type.Name) == 1)
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Unused type detected '{type}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.UnusedPredicate,
                             type.Line,
                             type.Start));
                 }
             }
         }
-        private void CheckForUnusedActionParameters(DomainDecl domain, IErrorListener listener)
+        private void CheckForUnusedActionParameters(DomainDecl domain)
         {
             if (domain.Actions != null)
             {
@@ -150,17 +150,16 @@ namespace PDDLParser.Analysers
                 {
                     foreach (var param in act.Parameters.Values)
                         if (act.FindNames(param.Name).Count == 0)
-                            listener.AddError(new ParseError(
+                            Listener.AddError(new ParseError(
                                 $"Unused action parameter found '{param.Name}'",
                                 ParseErrorType.Message,
                                 ParseErrorLevel.Analyser,
-                                ParserErrorCode.UnusedParameter,
                                 param.Line,
                                 param.Start));
                 }
             }
         }
-        private void CheckForUnusedAxiomParameters(DomainDecl domain, IErrorListener listener)
+        private void CheckForUnusedAxiomParameters(DomainDecl domain)
         {
             if (domain.Axioms != null)
             {
@@ -168,18 +167,17 @@ namespace PDDLParser.Analysers
                 {
                     foreach (var param in axi.Vars.Values)
                         if (axi.FindNames(param.Name).Count == 0)
-                            listener.AddError(new ParseError(
+                            Listener.AddError(new ParseError(
                                 $"Unused axiom variable found '{param.Name}'",
                                 ParseErrorType.Message,
                                 ParseErrorLevel.Analyser,
-                                ParserErrorCode.UnusedParameter,
                                 param.Line,
                                 param.Start));
                 }
             }
         }
 
-        private void CheckForValidTypesInPredicates(DomainDecl domain, IErrorListener listener)
+        private void CheckForValidTypesInPredicates(DomainDecl domain)
         {
             if (domain.Predicates != null)
             {
@@ -189,11 +187,10 @@ namespace PDDLParser.Analysers
                     {
                         if (!domain.ContainsType(arg.Type.Name))
                         {
-                            listener.AddError(new ParseError(
+                            Listener.AddError(new ParseError(
                                 $"Predicate arguments contains unknown type!",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
-                                ParserErrorCode.UnknownType,
                                 arg.Line,
                                 arg.Start));
                         }
@@ -201,7 +198,7 @@ namespace PDDLParser.Analysers
                 }
             }
         }
-        private void CheckTypeMatchForActions(DomainDecl domain, IErrorListener listener)
+        private void CheckTypeMatchForActions(DomainDecl domain)
         {
             if (domain.Actions != null)
             {
@@ -211,36 +208,35 @@ namespace PDDLParser.Analysers
                     {
                         if (!domain.ContainsType(param.Type.Name))
                         {
-                            listener.AddError(new ParseError(
+                            Listener.AddError(new ParseError(
                                 $"Parameter contains unknow type!",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
-                                ParserErrorCode.UnknownType,
                                 param.Line,
                                 param.Start));
                         }
                     }
 
-                    CheckForValidTypesInAction(act.Preconditions, domain, act, listener);
-                    CheckForValidTypesInAction(act.Effects, domain, act, listener);
+                    CheckForValidTypesInAction(act.Preconditions, domain, act);
+                    CheckForValidTypesInAction(act.Effects, domain, act);
                 }
             }
         }
-        private void CheckForValidTypesInAction(IExp node, DomainDecl domain, ActionDecl action, IErrorListener listener)
+        private void CheckForValidTypesInAction(IExp node, DomainDecl domain, ActionDecl action)
         {
             if (node is AndExp and)
             {
                 foreach (var child in and.Children)
-                    CheckForValidTypesInAction(child, domain, action, listener);
+                    CheckForValidTypesInAction(child, domain, action);
             }
             else if (node is OrExp or)
             {
-                CheckForValidTypesInAction(or.Option1, domain, action, listener);
-                CheckForValidTypesInAction(or.Option2, domain, action, listener);
+                CheckForValidTypesInAction(or.Option1, domain, action);
+                CheckForValidTypesInAction(or.Option2, domain, action);
             }
             else if (node is NotExp not)
             {
-                CheckForValidTypesInAction(not.Child, domain, action, listener);
+                CheckForValidTypesInAction(not.Child, domain, action);
             }
             else if (node is PredicateExp pred)
             {
@@ -250,21 +246,19 @@ namespace PDDLParser.Analysers
                     var argOrCons = action.GetParameterOrConstant(arg.Name);
                     if (argOrCons == null)
                     {
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Arguments does not match the predicate definition!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.InvalidPredicateType,
                             arg.Line,
                             arg.Start));
                     }
                     else if (argOrCons.Name != arg.Name && !arg.Type.IsTypeOf(argOrCons.Type.Name))
                     {
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Predicate has an invalid argument type! Expected a '{action.GetParameterOrConstant(arg.Name).Name}' but got a '{arg.Type}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.TypeMissmatch,
                             arg.Line,
                             arg.Start));
                     }
@@ -272,7 +266,7 @@ namespace PDDLParser.Analysers
                 }
             }
         }
-        private void CheckTypeMatchForAxioms(DomainDecl domain, IErrorListener listener)
+        private void CheckTypeMatchForAxioms(DomainDecl domain)
         {
             if (domain.Axioms != null)
             {
@@ -282,36 +276,35 @@ namespace PDDLParser.Analysers
                     {
                         if (!domain.ContainsType(param.Type.Name))
                         {
-                            listener.AddError(new ParseError(
+                            Listener.AddError(new ParseError(
                                 $"Parameter contains unknow type!",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
-                                ParserErrorCode.UnknownType,
                                 param.Line,
                                 param.Start));
                         }
                     }
 
-                    CheckForValidTypesInAxiom(axi.Context, domain, axi, listener);
-                    CheckForValidTypesInAxiom(axi.Implies, domain, axi, listener);
+                    CheckForValidTypesInAxiom(axi.Context, domain, axi);
+                    CheckForValidTypesInAxiom(axi.Implies, domain, axi);
                 }
             }
         }
-        private void CheckForValidTypesInAxiom(IExp node, DomainDecl domain, AxiomDecl axiom, IErrorListener listener)
+        private void CheckForValidTypesInAxiom(IExp node, DomainDecl domain, AxiomDecl axiom)
         {
             if (node is AndExp and)
             {
                 foreach (var child in and.Children)
-                    CheckForValidTypesInAxiom(child, domain, axiom, listener);
+                    CheckForValidTypesInAxiom(child, domain, axiom);
             }
             else if (node is OrExp or)
             {
-                CheckForValidTypesInAxiom(or.Option1, domain, axiom, listener);
-                CheckForValidTypesInAxiom(or.Option2, domain, axiom, listener);
+                CheckForValidTypesInAxiom(or.Option1, domain, axiom);
+                CheckForValidTypesInAxiom(or.Option2, domain, axiom);
             }
             else if (node is NotExp not)
             {
-                CheckForValidTypesInAxiom(not.Child, domain, axiom, listener);
+                CheckForValidTypesInAxiom(not.Child, domain, axiom);
             }
             else if (node is PredicateExp pred)
             {
@@ -320,11 +313,10 @@ namespace PDDLParser.Analysers
                 {
                     if (!arg.Type.IsTypeOf(axiom.GetParameterOrConstant(arg.Name).Type.Name))
                     {
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Predicate has an invalid argument type! Expected a '{axiom.GetParameterOrConstant(arg.Name).Name}' but got a '{arg.Type}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.TypeMissmatch,
                             arg.Line,
                             arg.Start));
                     }
@@ -333,7 +325,7 @@ namespace PDDLParser.Analysers
             }
         }
 
-        private void CheckForValidTypesInConstants(DomainDecl domain, IErrorListener listener)
+        private void CheckForValidTypesInConstants(DomainDecl domain)
         {
             if (domain.Constants != null)
             {
@@ -341,11 +333,10 @@ namespace PDDLParser.Analysers
                 {
                     if (!domain.ContainsType(cons.Type.Name))
                     {
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Constant contains unknown type!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.UnknownType,
                             cons.Line,
                             cons.Start));
                     }
@@ -353,7 +344,7 @@ namespace PDDLParser.Analysers
             }
         }
 
-        private void CheckForUniquePredicateNames(DomainDecl domain, IErrorListener listener)
+        private void CheckForUniquePredicateNames(DomainDecl domain)
         {
             if (domain.Predicates != null)
             {
@@ -362,11 +353,10 @@ namespace PDDLParser.Analysers
                 {
                     if (predicates.Contains(predicate.Name))
                     {
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                                 $"Multiple declarations of predicates with the same name '{predicate.Name}'",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
-                                ParserErrorCode.MultipleDeclarationsOfPredicate,
                                 predicate.Line,
                                 predicate.Start));
                     }
@@ -374,7 +364,7 @@ namespace PDDLParser.Analysers
                 }
             }
         }
-        private void CheckForUniquePredicateParameterNames(DomainDecl domain, IErrorListener listener)
+        private void CheckForUniquePredicateParameterNames(DomainDecl domain)
         {
             if (domain.Predicates != null)
             {
@@ -385,11 +375,10 @@ namespace PDDLParser.Analysers
                     {
                         if (parameterNames.Contains(param.Name))
                         {
-                            listener.AddError(new ParseError(
+                            Listener.AddError(new ParseError(
                                 $"Multiple declarations of arguments with the same name '{param.Name}' in the predicate '{predicate.Name}'",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
-                                ParserErrorCode.MultipleDeclarationsOfParameter,
                                 param.Line,
                                 param.Start));
                         }
@@ -398,7 +387,7 @@ namespace PDDLParser.Analysers
                 }
             }
         }
-        private void CheckForUniqueActionNames(DomainDecl domain, IErrorListener listener)
+        private void CheckForUniqueActionNames(DomainDecl domain)
         {
             if (domain.Actions != null)
             {
@@ -407,11 +396,10 @@ namespace PDDLParser.Analysers
                 {
                     if (actions.Contains(act.Name))
                     {
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Multiple declarations of actions with the same name '{act.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.MultipleDeclarationsOfActions,
                             act.Line,
                             act.Start));
                     }
@@ -419,7 +407,7 @@ namespace PDDLParser.Analysers
                 }
             }
         }
-        private void CheckForUniqueActionParameterNames(DomainDecl domain, IErrorListener listener)
+        private void CheckForUniqueActionParameterNames(DomainDecl domain)
         {
             if (domain.Actions != null)
             {
@@ -430,11 +418,10 @@ namespace PDDLParser.Analysers
                     {
                         if (parameterNames.Contains(param.Name))
                         {
-                            listener.AddError(new ParseError(
+                            Listener.AddError(new ParseError(
                                     $"Multiple declarations of arguments with the same name '{param.Name}' in the action '{action.Name}'",
                                     ParseErrorType.Error,
                                     ParseErrorLevel.Analyser,
-                                    ParserErrorCode.MultipleDeclarationsOfParameter,
                                     param.Line,
                                     param.Start));
                         }
@@ -443,7 +430,7 @@ namespace PDDLParser.Analysers
                 }
             }
         }
-        private void CheckForUniqueAxiomParameterNames(DomainDecl domain, IErrorListener listener)
+        private void CheckForUniqueAxiomParameterNames(DomainDecl domain)
         {
             if (domain.Axioms != null)
             {
@@ -454,11 +441,10 @@ namespace PDDLParser.Analysers
                     {
                         if (parameterNames.Contains(param.Name))
                         {
-                            listener.AddError(new ParseError(
+                            Listener.AddError(new ParseError(
                                     $"Multiple declarations of arguments with the same name '{param.Name}' in axiom",
                                     ParseErrorType.Error,
                                     ParseErrorLevel.Analyser,
-                                    ParserErrorCode.MultipleDeclarationsOfParameter,
                                     param.Line,
                                     param.Start));
                         }
@@ -468,43 +454,43 @@ namespace PDDLParser.Analysers
             }
         }
 
-        private void CheckActionUsesValidPredicates(DomainDecl domain, IErrorListener listener)
+        private void CheckActionUsesValidPredicates(DomainDecl domain)
         {
             if (domain.Actions != null && domain.Predicates != null)
             {
                 foreach (var action in domain.Actions)
                 {
-                    CheckExpUsesPredicates(action.Preconditions, domain.Predicates.Predicates, listener, domain);
-                    CheckExpUsesPredicates(action.Effects, domain.Predicates.Predicates, listener, domain);
+                    CheckExpUsesPredicates(action.Preconditions, domain.Predicates.Predicates, domain);
+                    CheckExpUsesPredicates(action.Effects, domain.Predicates.Predicates, domain);
                 }
             }
         }
-        private void CheckAxiomUsesValidPredicates(DomainDecl domain, IErrorListener listener)
+        private void CheckAxiomUsesValidPredicates(DomainDecl domain)
         {
             if (domain.Axioms != null && domain.Predicates != null)
             {
                 foreach (var axiom in domain.Axioms)
                 {
-                    CheckExpUsesPredicates(axiom.Context, domain.Predicates.Predicates, listener, domain);
-                    CheckExpUsesPredicates(axiom.Implies, domain.Predicates.Predicates, listener, domain);
+                    CheckExpUsesPredicates(axiom.Context, domain.Predicates.Predicates, domain);
+                    CheckExpUsesPredicates(axiom.Implies, domain.Predicates.Predicates, domain);
                 }
             }
         }
-        private void CheckExpUsesPredicates(IExp node, List<PredicateExp> predicates, IErrorListener listener, DomainDecl domain)
+        private void CheckExpUsesPredicates(IExp node, List<PredicateExp> predicates, DomainDecl domain)
         {
             if (node is AndExp and)
             {
                 foreach (var child in and.Children)
-                    CheckExpUsesPredicates(child, predicates, listener, domain);
+                    CheckExpUsesPredicates(child, predicates, domain);
             }
             else if (node is OrExp or)
             {
-                CheckExpUsesPredicates(or.Option1, predicates, listener, domain);
-                CheckExpUsesPredicates(or.Option2, predicates, listener, domain);
+                CheckExpUsesPredicates(or.Option1, predicates, domain);
+                CheckExpUsesPredicates(or.Option2, predicates, domain);
             }
             else if (node is NotExp not)
             {
-                CheckExpUsesPredicates(not.Child, predicates, listener, domain);
+                CheckExpUsesPredicates(not.Child, predicates, domain);
             }
             else if (node is PredicateExp pred)
             {
@@ -534,19 +520,17 @@ namespace PDDLParser.Analysers
                 if (!any)
                 {
                     if (wasTypeMissmatch)
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Used predicate '{pred.Name}' did not match the type definitions from the parameters!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.TypeMissmatch,
                             pred.Line,
                             pred.Start));
                     else
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Undeclared predicate used '{pred.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.UseOfUndeclaredPredicate,
                             pred.Line,
                             pred.Start));
                 }

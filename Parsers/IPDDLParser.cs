@@ -1,20 +1,21 @@
-﻿using ErrorListeners;
-using Models;
+﻿using PDDL.ErrorListeners;
+using PDDL.Models;
+using PDDL.Models.Domain;
+using PDDL.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parsers
+namespace PDDL.Parsers
 {
     public interface IPDDLParser
     {
         IErrorListener Listener { get; }
-        bool Contextualise { get; set; }
-        bool Analyse { get; set; }
 
-        PDDLDecl Parse(string domainFile = null, string problemFile = null);
-        PDDLDecl TryParse(string domainFile = null, string problemFile = null);
+        PDDLDecl Parse(string domainFile, string problemFile);
+        DomainDecl ParseDomain(string domainFile);
+        ProblemDecl ParseProblem(string problemFile);
     }
 }

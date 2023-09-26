@@ -1,13 +1,13 @@
-﻿using Models.AST;
-using Models.Domain;
+﻿using PDDL.Models.AST;
+using PDDL.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Tools;
+using PDDL.Tools;
 
-namespace Models
+namespace PDDL.Models
 {
     public class NameExp : BaseNode, IExp, ICloneable, INamedNode
     {

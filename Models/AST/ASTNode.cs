@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.AST
+namespace PDDL.Models.AST
 {
     public class ASTNode
     {

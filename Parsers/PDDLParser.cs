@@ -1,137 +1,76 @@
-﻿using Parsers.Visitors;
+﻿using PDDL.Parsers.Visitors;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDLParser.Analysers;
 using System.Xml.Linq;
-using ErrorListeners;
-using Tools;
-using Models;
-using Models.Domain;
-using Models.Problem;
-using Models.AST;
-using ASTGenerator;
-using Contextualisers;
+using PDDL.ErrorListeners;
+using PDDL.Tools;
+using PDDL.Models;
+using PDDL.Models.Domain;
+using PDDL.Models.Problem;
+using PDDL.Models.AST;
+using PDDL.ASTGenerator;
+using PDDL.Contextualisers;
 
-namespace Parsers
+namespace PDDL.Parsers
 {
     public class PDDLParser : IPDDLParser
     {
         public IErrorListener Listener { get; }
-        public bool Contextualise { get; set; }
-        public bool Analyse { get; set; }
 
-        public PDDLParser(bool contextualise = true, bool analyse = true)
+        public PDDLParser()
         {
             Listener = new ErrorListener();
             Listener.ThrowIfTypeAbove = ParseErrorType.Warning;
-            Contextualise = contextualise;
-            Analyse = analyse;
         }
 
-        public PDDLDecl TryParse(string domainFile = null, string problemFile = null)
+        public PDDLDecl Parse(string domainFile, string problemFile)
         {
-            try
-            {
-                return Parse(domainFile, problemFile);
-            }
-            catch { return new PDDLDecl(null, null); }
-        }
-
-        public PDDLDecl Parse(string domainFile = null, string problemFile = null)
-        {
-            var decl = new PDDLDecl(
+            return new PDDLDecl(
                 ParseDomain(domainFile),
                 ParseProblem(problemFile));
-
-            if (Contextualise)
-            {
-                if (domainFile != null && problemFile != null)
-                {
-                    IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser();
-                    contextualiser.Contexturalise(decl, Listener);
-                }
-                else if (domainFile != null)
-                {
-                    IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser();
-                    contextualiser.Contexturalise(decl.Domain, Listener);
-                }
-                else if (problemFile != null)
-                {
-                    IContextualiser<ProblemDecl> contextualiser = new PDDLProblemDeclContextualiser();
-                    contextualiser.Contexturalise(decl.Problem, Listener);
-                }
-            }
-
-            if (Analyse)
-            {
-                if (domainFile != null && problemFile != null)
-                {
-                    IAnalyser<PDDLDecl> pddlAnalyser = new PDDLDeclAnalyser();
-                    pddlAnalyser.PostAnalyse(decl, Listener);
-                }
-                else if (domainFile != null)
-                {
-                    IAnalyser<DomainDecl> domainAnalyser = new PDDLDomainDeclAnalyser();
-                    domainAnalyser.PostAnalyse(decl.Domain, Listener);
-                }
-                else if (problemFile != null)
-                {
-                    IAnalyser<ProblemDecl> problemAnalyser = new PDDLProblemDeclAnalyser();
-                    problemAnalyser.PostAnalyse(decl.Problem, Listener);
-                }
-            }
-
-
-            return decl;
         }
 
-        private DomainDecl ParseDomain(string parseFile)
+        public DomainDecl ParseDomain(string domainFile)
         {
-            if (parseFile == null)
-                return new DomainDecl(new ASTNode());
-
-            if (!PDDLFileHelper.IsFileDomain(parseFile))
+            if (!PDDLFileHelper.IsFileDomain(domainFile))
                 Listener.AddError(new ParseError(
                     $"Attempted file to parse was not a domain file!",
                     ParseErrorType.Error,
-                    ParseErrorLevel.PreParsing,
-                    ParserErrorCode.FileNotDomain));
+                    ParseErrorLevel.PreParsing));
 
-            var absAST = ParseAsASTTree(parseFile, Listener);
+            var absAST = ParseAsASTTree(domainFile, Listener);
 
             IVisitor<ASTNode, INode, IDecl> visitor = new DomainVisitor();
             var returnDomain = visitor.Visit(absAST, null, Listener);
-            return returnDomain as DomainDecl;
+            if (returnDomain is DomainDecl decl)
+                return decl;
+            return new DomainDecl(new ASTNode());
         }
 
-        private ProblemDecl ParseProblem(string parseFile)
+        public ProblemDecl ParseProblem(string problemFile)
         {
-            if (parseFile == null)
-                return new ProblemDecl(new ASTNode());
-
-            if (!PDDLFileHelper.IsFileProblem(parseFile))
+            if (!PDDLFileHelper.IsFileProblem(problemFile))
                 Listener.AddError(new ParseError(
                     $"Attempted file to parse was not a problem file!",
                     ParseErrorType.Error,
-                    ParseErrorLevel.PreParsing,
-                    ParserErrorCode.FileNotProblem));
+                    ParseErrorLevel.PreParsing));
 
-            var absAST = ParseAsASTTree(parseFile, Listener);
+            var absAST = ParseAsASTTree(problemFile, Listener);
 
             IVisitor<ASTNode, INode, IDecl> visitor = new ProblemVisitor();
             var returnProblem = visitor.Visit(absAST, null, Listener);
-            return returnProblem as ProblemDecl;
+            if (returnProblem is ProblemDecl decl)
+                return decl;
+            return new ProblemDecl(new ASTNode());
         }
 
         private ASTNode ParseAsASTTree(string path, IErrorListener listener)
         {
             var text = ReadDataAsString(path, listener);
-            var analyser = new GeneralPreAnalyser();
-            analyser.PreAnalyse(text, listener);
 
             IASTParser<ASTNode> astParser = new ASTParser();
             var absAST = astParser.Parse(text);
@@ -145,8 +84,7 @@ namespace Parsers
                 listener.AddError(new ParseError(
                     $"Could not find the file to parse: '{path}'",
                     ParseErrorType.Error,
-                    ParseErrorLevel.PreParsing,
-                    ParserErrorCode.FileNotFound));
+                    ParseErrorLevel.PreParsing));
             }
             var text = File.ReadAllText(path);
             text = ReplaceSpecialCharacters(text);

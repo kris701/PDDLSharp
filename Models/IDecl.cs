@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models
+namespace PDDL.Models
 {
     public interface IDecl : INode
     {

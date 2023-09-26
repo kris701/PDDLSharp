@@ -1,13 +1,13 @@
-﻿using Models.AST;
+﻿using PDDL.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Tools;
+using PDDL.Tools;
 
-namespace Models.Domain
+namespace PDDL.Models.Domain
 {
     public class PredicatesDecl : BaseWalkableNode, IDecl
     {

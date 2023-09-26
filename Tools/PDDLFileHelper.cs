@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tools
+namespace PDDL.Tools
 {
     public static class PDDLFileHelper
     {

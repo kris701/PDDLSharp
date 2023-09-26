@@ -1,107 +1,107 @@
-﻿using ErrorListeners;
-using Models;
-using Models.Problem;
+﻿using PDDL.ErrorListeners;
+using PDDL.Models;
+using PDDL.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Analysers
+namespace PDDL.Analysers
 {
     public class PDDLProblemDeclAnalyser : IAnalyser<ProblemDecl>
     {
-        public void PostAnalyse(ProblemDecl decl, IErrorListener listener)
-        {   
-            // Basics
-            CheckForBasicProblem(decl, listener);
+        public IErrorListener Listener { get; }
 
-            // Declare Checking
-            CheckDeclaredVsUsedObjects(decl, listener);
-
-            // Unique Name Checking
-            CheckForUniqueObjectNames(decl, listener);
-
-            // Validity Checking
-            CheckForValidGoal(decl, listener);
+        public PDDLProblemDeclAnalyser(IErrorListener listener)
+        {
+            Listener = listener;
         }
 
-        public void PreAnalyse(string text, IErrorListener listener)
+        public void PostAnalyse(ProblemDecl decl)
+        {   
+            // Basics
+            CheckForBasicProblem(decl);
+
+            // Declare Checking
+            CheckDeclaredVsUsedObjects(decl);
+
+            // Unique Name Checking
+            CheckForUniqueObjectNames(decl);
+
+            // Validity Checking
+            CheckForValidGoal(decl);
+        }
+
+        public void PreAnalyse(string text)
         {
             throw new NotImplementedException();
         }
 
-        private void CheckForBasicProblem(ProblemDecl domain, IErrorListener listener)
+        private void CheckForBasicProblem(ProblemDecl domain)
         {
             if (domain.DomainName == null)
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"Missing domain name reference",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Objects == null)
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"Missing objects declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Objects != null && domain.Objects.Objs.Count == 0)
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"Missing objects",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Init == null)
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"Missing Init declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Init != null && domain.Init.Predicates.Count == 0)
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"No init predicates declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Goal == null)
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"Missing Goal declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
         }
 
-        private void CheckDeclaredVsUsedObjects(ProblemDecl problem, IErrorListener listener)
+        private void CheckDeclaredVsUsedObjects(ProblemDecl problem)
         {
             if (problem.Objects != null)
             {
                 foreach (var obj in problem.Objects.Objs)
                 {
                     if (problem.FindNames(obj.Name).Count == 1)
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                             $"Unused object detected '{obj}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
-                            ParserErrorCode.UnusedObject,
                             obj.Line,
                             obj.Start));
                 }
             }
         }
 
-        private void CheckForUniqueObjectNames(ProblemDecl problem, IErrorListener listener)
+        private void CheckForUniqueObjectNames(ProblemDecl problem)
         {
             if (problem.Objects != null)
             {
@@ -110,11 +110,10 @@ namespace PDDLParser.Analysers
                 {
                     if (objs.Contains(obj.Name))
                     {
-                        listener.AddError(new ParseError(
+                        Listener.AddError(new ParseError(
                                 $"Multiple declarations of object with the same name '{obj.Name}'",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
-                                ParserErrorCode.MultipleDeclarationsOfObjects,
                                 obj.Line,
                                 obj.Start));
                     }
@@ -123,17 +122,16 @@ namespace PDDLParser.Analysers
             }
         }
         
-        private void CheckForValidGoal(ProblemDecl problem, IErrorListener listener)
+        private void CheckForValidGoal(ProblemDecl problem)
         {
             if (problem.Goal != null)
             {
                 if (!DoesAnyPredicatesExist(problem.Goal.GoalExp))
                 {
-                    listener.AddError(new ParseError(
+                    Listener.AddError(new ParseError(
                         $"No actual goal predicates in the goal declaration!",
                         ParseErrorType.Warning,
                         ParseErrorLevel.Analyser,
-                        ParserErrorCode.NoGoalsDeclared,
                         problem.Goal.GoalExp.Line,
                         problem.Goal.GoalExp.Start));
                 }

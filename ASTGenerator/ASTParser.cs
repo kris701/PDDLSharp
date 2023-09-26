@@ -1,4 +1,4 @@
-﻿using Models.AST;
+﻿using PDDL.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ASTGenerator
+namespace PDDL.ASTGenerator
 {
     public class ASTParser : IASTParser<ASTNode>
     {

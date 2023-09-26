@@ -1,17 +1,21 @@
-﻿using ErrorListeners;
-using Models;
-using Models.Problem;
+﻿using PDDL.ErrorListeners;
+using PDDL.Models;
+using PDDL.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contextualisers
+namespace PDDL.Contextualisers
 {
     public class PDDLProblemDeclContextualiser : BaseContextualiser<ProblemDecl>
     {
-        public override void Contexturalise(ProblemDecl decl, IErrorListener listener)
+        public PDDLProblemDeclContextualiser(IErrorListener listener) : base(listener)
+        {
+        }
+
+        public override void Contexturalise(ProblemDecl decl)
         {
             SetGoalContext(decl.Goal);
             DecorateObjects(decl);

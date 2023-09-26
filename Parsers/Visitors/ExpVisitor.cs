@@ -1,7 +1,7 @@
-﻿using ASTGenerator;
-using ErrorListeners;
-using Models;
-using Models.AST;
+﻿using PDDL.ASTGenerator;
+using PDDL.ErrorListeners;
+using PDDL.Models;
+using PDDL.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Parsers.Visitors
+namespace PDDL.Parsers.Visitors
 {
     public class ExpVisitor : BaseVisitor, IVisitor<ASTNode, INode, IExp>
     {
@@ -32,8 +32,7 @@ namespace Parsers.Visitors
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
-                ParseErrorLevel.Parsing,
-                ParserErrorCode.UnknownNode));
+                ParseErrorLevel.Parsing));
             return default;
         }
 
@@ -173,7 +172,6 @@ namespace Parsers.Visitors
                             $"Context indicated the use of a type, but an object name was not given!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Parsing,
-                            ParserErrorCode.ExpectedNameButGotNone,
                             node.Line,
                             node.Start));
                     }
@@ -183,7 +181,6 @@ namespace Parsers.Visitors
                             $"Context indicated the use of a type, but a type was not given!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Parsing,
-                            ParserErrorCode.ExpectedTypeButGotNone,
                             node.Line,
                             node.Start));
                     }

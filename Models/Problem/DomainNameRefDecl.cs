@@ -1,12 +1,12 @@
-﻿using Models.AST;
-using Models.Domain;
+﻿using PDDL.Models.AST;
+using PDDL.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Problem
+namespace PDDL.Models.Problem
 {
     public class DomainNameRefDecl : BaseNode, IDecl, INamedNode
     {

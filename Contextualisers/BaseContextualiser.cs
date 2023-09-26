@@ -1,16 +1,23 @@
-﻿using ErrorListeners;
-using Models;
+﻿using PDDL.ErrorListeners;
+using PDDL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contextualisers
+namespace PDDL.Contextualisers
 {
     public abstract class BaseContextualiser<T> : IContextualiser<T>
     {
-        public abstract void Contexturalise(T decl, IErrorListener listener);
+        public IErrorListener Listener { get; }
+
+        protected BaseContextualiser(IErrorListener listener)
+        {
+            Listener = listener;
+        }
+
+        public abstract void Contexturalise(T decl);
 
         internal int GetPredicateCountInExp(IExp exp)
         {

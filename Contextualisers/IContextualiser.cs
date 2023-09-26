@@ -1,14 +1,16 @@
-﻿using ErrorListeners;
+﻿using PDDL.ErrorListeners;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contextualisers
+namespace PDDL.Contextualisers
 {
     public interface IContextualiser<T>
     {
-        void Contexturalise(T decl, IErrorListener listener);
+        IErrorListener Listener { get; }
+
+        void Contexturalise(T decl);
     }
 }

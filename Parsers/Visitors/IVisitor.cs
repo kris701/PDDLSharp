@@ -1,11 +1,11 @@
-﻿using ErrorListeners;
+﻿using PDDL.ErrorListeners;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Parsers.Visitors
+namespace PDDL.Parsers.Visitors
 {
     public interface IVisitor<AST, ParentT, OutT>
     {

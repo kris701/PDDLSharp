@@ -1,7 +1,7 @@
-﻿using ErrorListeners;
-using Models;
-using Models.AST;
-using Models.Domain;
+﻿using PDDL.ErrorListeners;
+using PDDL.Models;
+using PDDL.Models.AST;
+using PDDL.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,19 +10,23 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contextualisers
+namespace PDDL.Contextualisers
 {
     public class PDDLDomainDeclContextualiser : BaseContextualiser<DomainDecl>
     {
-        public override void Contexturalise(DomainDecl decl, IErrorListener listener)
+        public PDDLDomainDeclContextualiser(IErrorListener listener) : base(listener)
         {
-            InsertDefaultPredicates(decl, listener);
-            DecorateAllTypesWithInheritence(decl, listener);
-            DecorateActionParameters(decl, listener);
-            DecorateAxiomVars(decl, listener);
         }
 
-        private void InsertDefaultPredicates(DomainDecl decl, IErrorListener listener)
+        public override void Contexturalise(DomainDecl decl)
+        {
+            InsertDefaultPredicates(decl);
+            DecorateAllTypesWithInheritence(decl);
+            DecorateActionParameters(decl);
+            DecorateAxiomVars(decl);
+        }
+
+        private void InsertDefaultPredicates(DomainDecl decl)
         {
             if (decl.Predicates != null)
             {
@@ -38,7 +42,7 @@ namespace Contextualisers
             }
         }
 
-        private void DecorateAllTypesWithInheritence(DomainDecl decl, IErrorListener listener)
+        private void DecorateAllTypesWithInheritence(DomainDecl decl)
         {
             if (decl.Types != null)
             {
@@ -59,7 +63,7 @@ namespace Contextualisers
             }
         }
 
-        private void DecorateActionParameters(DomainDecl decl, IErrorListener listener)
+        private void DecorateActionParameters(DomainDecl decl)
         {
             if (decl.Actions != null)
             {
@@ -74,7 +78,7 @@ namespace Contextualisers
             }
         }
 
-        private void DecorateAxiomVars(DomainDecl decl, IErrorListener listener)
+        private void DecorateAxiomVars(DomainDecl decl)
         {
             if (decl.Axioms != null)
             {

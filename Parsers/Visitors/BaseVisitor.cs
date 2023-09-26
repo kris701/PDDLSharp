@@ -1,7 +1,7 @@
-﻿using ASTGenerator;
-using ErrorListeners;
-using Models;
-using Models.AST;
+﻿using PDDL.ASTGenerator;
+using PDDL.ErrorListeners;
+using PDDL.Models;
+using PDDL.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Parsers.Visitors
+namespace PDDL.Parsers.Visitors
 {
     public abstract class BaseVisitor
     {
@@ -21,7 +21,6 @@ namespace Parsers.Visitors
                     $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.OuterContent.Replace(targetName, "").Trim()}",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
-                    ParserErrorCode.StrayCharactersFound,
                     node.Line,
                     node.Start));
                 return false;
@@ -39,7 +38,6 @@ namespace Parsers.Visitors
                         $"'{nodeName}' must not contain any children!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
-                        ParserErrorCode.NoChildrenAllowed,
                         node.Line,
                         node.Start));
                     return false;
@@ -53,7 +51,6 @@ namespace Parsers.Visitors
                         $"'{nodeName}' must have exactly {targetChildren} children, but it has '{node.Children.Count}'!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
-                        ParserErrorCode.NeedExactChildren,
                         node.Line,
                         node.Start));
                     return false;
@@ -70,7 +67,6 @@ namespace Parsers.Visitors
                     $"'{nodeName}' must have more than {targetChildren} children, but it has '{node.Children.Count}'!",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
-                    ParserErrorCode.MustHaveMoreThanChildren,
                     node.Line,
                     node.Start));
                 return false;
@@ -115,7 +111,6 @@ namespace Parsers.Visitors
                             $"Unexpected node type while parsing! Expected '{nodeType}' but got {nameof(T)}!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Parsing,
-                            ParserErrorCode.UnexpectedNodeType,
                             parsed.Line,
                             parsed.Start));
                     }
@@ -139,7 +134,6 @@ namespace Parsers.Visitors
                         $"Could not parse predicate!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
-                        ParserErrorCode.CouldNotParsePredicate,
                         child.Line,
                         child.Start));
             }
@@ -154,7 +148,6 @@ namespace Parsers.Visitors
                     $"'{nodeName}' is malformed! missing '{targetName}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
-                    ParserErrorCode.UnexpectedNodeType,
                     node.Line,
                     node.Start));
                 return false;
@@ -176,7 +169,6 @@ namespace Parsers.Visitors
                     $"'{nodeName}' is malformed! Expected {target} loose children but got {actualCount}.",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
-                    ParserErrorCode.NeedExactLooseChildren,
                     node.Line,
                     node.Start));
                 return false;
