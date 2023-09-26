@@ -62,7 +62,7 @@ namespace PDDLSharp.Analysers
                                 if (!objects.Any(x => x.Name == arg.Name))
                                 {
                                     Listener.AddError(new ParseError(
-                                        $"Undeclared object detected!",
+                                        $"Undeclared object detected: '{arg.Name}'",
                                         ParseErrorType.Error,
                                         ParseErrorLevel.Analyser,
                                         arg.Line,
@@ -100,7 +100,7 @@ namespace PDDLSharp.Analysers
                     if (!objects.Any(x => x.Name == arg.Name))
                     {
                         Listener.AddError(new ParseError(
-                            $"Undeclared object detected!",
+                            $"Undeclared object detected: {arg.Name}",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             arg.Line,
@@ -167,7 +167,7 @@ namespace PDDLSharp.Analysers
                 foreach(var obj in problem.Objects.Objs)
                     if (!ContainsType(domain, obj.Type.Name))
                         Listener.AddError(new ParseError(
-                            $"Unknown type for object! '{obj.Type}'",
+                            $"Unknown type for object! '{obj.Type.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             obj.Line,

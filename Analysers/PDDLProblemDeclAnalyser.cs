@@ -93,7 +93,7 @@ namespace PDDLSharp.Analysers
                 {
                     if (problem.FindNames(obj.Name).Count == 1)
                         Listener.AddError(new ParseError(
-                            $"Unused object detected '{obj}'",
+                            $"Unused object detected '{obj.Name}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
                             obj.Line,

@@ -102,7 +102,7 @@ namespace PDDLSharp.Analysers
                 {
                     if (!simplePredNames.Contains(pred.Name))
                         Listener.AddError(new ParseError(
-                            $"Undefined predicate! '{pred}'",
+                            $"Undefined predicate! '{pred.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             pred.Line,
@@ -118,7 +118,7 @@ namespace PDDLSharp.Analysers
                 {
                     if (domain.FindNames(predicate.Name).Count == 1)
                         Listener.AddError(new ParseError(
-                            $"Unused predicate detected '{predicate}'",
+                            $"Unused predicate detected '{predicate.Name}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
                             predicate.Line,
@@ -135,7 +135,7 @@ namespace PDDLSharp.Analysers
                 {
                     if (allTypes.Count(x => x.Name == type.Name) == 1)
                         Listener.AddError(new ParseError(
-                            $"Unused type detected '{type}'",
+                            $"Unused type detected '{type.Name}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
                             type.Line,
@@ -189,7 +189,7 @@ namespace PDDLSharp.Analysers
                         if (!ContainsType(domain, arg.Type.Name))
                         {
                             Listener.AddError(new ParseError(
-                                $"Predicate arguments contains unknown type!",
+                                $"Predicate arguments contains unknown type: {arg.Type.Name}",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 arg.Line,
@@ -223,7 +223,7 @@ namespace PDDLSharp.Analysers
                         if (!ContainsType(domain, param.Type.Name))
                         {
                             Listener.AddError(new ParseError(
-                                $"Parameter contains unknow type!",
+                                $"Parameter contains unknow type: {arg.Type.Name}",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 param.Line,
@@ -261,7 +261,7 @@ namespace PDDLSharp.Analysers
                     if (argOrCons == null)
                     {
                         Listener.AddError(new ParseError(
-                            $"Arguments does not match the predicate definition!",
+                            $"Argument does not match the predicate definition: {arg.Name}",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             arg.Line,
@@ -270,7 +270,7 @@ namespace PDDLSharp.Analysers
                     else if (argOrCons.Name != arg.Name && !arg.Type.IsTypeOf(argOrCons.Type.Name))
                     {
                         Listener.AddError(new ParseError(
-                            $"Predicate has an invalid argument type! Expected a '{GetParameterOrConstant(action, arg.Name).Name}' but got a '{arg.Type}'",
+                            $"Predicate has an invalid argument type! Expected a '{GetParameterOrConstant(action, arg.Name).Name}' but got a '{arg.Type.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             arg.Line,
@@ -300,7 +300,7 @@ namespace PDDLSharp.Analysers
                         if (!ContainsType(domain, param.Type.Name))
                         {
                             Listener.AddError(new ParseError(
-                                $"Parameter contains unknow type!",
+                                $"Parameter contains unknow type: {param.Type.Name}",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 param.Line,
@@ -337,7 +337,7 @@ namespace PDDLSharp.Analysers
                     if (!arg.Type.IsTypeOf(GetParameterOrConstant(axiom, arg.Name).Type.Name))
                     {
                         Listener.AddError(new ParseError(
-                            $"Predicate has an invalid argument type! Expected a '{GetParameterOrConstant(axiom, arg.Name).Name}' but got a '{arg.Type}'",
+                            $"Predicate has an invalid argument type! Expected a '{GetParameterOrConstant(axiom, arg.Name).Name}' but got a '{arg.Type.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             arg.Line,
@@ -365,7 +365,7 @@ namespace PDDLSharp.Analysers
                     if (!ContainsType(domain, cons.Type.Name))
                     {
                         Listener.AddError(new ParseError(
-                            $"Constant contains unknown type!",
+                            $"Constant contains unknown type: {cons.Type.Name}",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             cons.Line,
