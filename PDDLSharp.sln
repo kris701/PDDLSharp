@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools", "Tools\Tools.csproj", "{954A8E05-81F4-403A-9346-E9CBF8EE3348}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contextualisers", "Contextualisers\Contextualisers.csproj", "{B37DF253-9A79-4732-8831-EE66D318FE83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contextualisers", "Contextualisers\Contextualisers.csproj", "{B37DF253-9A79-4732-8831-EE66D318FE83}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorListeners", "ErrorListeners\ErrorListeners.csproj", "{D0B21DE2-2DA6-47CA-9EA3-F4EF92D62DCF}"
 EndProject
@@ -19,15 +19,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers", "Parsers\Parsers.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASTGenerators.Tests", "ASTGenerators.Tests\ASTGenerators.Tests.csproj", "{CDE823EF-0C28-4D56-B8B4-9B3D520464EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contextualisers.Tests", "Contextualisers.Tests\Contextualisers.Tests.csproj", "{121214B0-7DFD-4B32-A642-2EF5B8808C52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contextualisers.Tests", "Contextualisers.Tests\Contextualisers.Tests.csproj", "{121214B0-7DFD-4B32-A642-2EF5B8808C52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parsers.Tests", "Parsers.Tests\Parsers.Tests.csproj", "{D072A50D-687A-4BED-9E3B-E420D1455CFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers.Tests", "Parsers.Tests\Parsers.Tests.csproj", "{D072A50D-687A-4BED-9E3B-E420D1455CFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models.Tests", "Models.Tests\Models.Tests.csproj", "{0AF4F189-B735-49D1-B47D-42A410E71345}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models.Tests", "Models.Tests\Models.Tests.csproj", "{0AF4F189-B735-49D1-B47D-42A410E71345}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLSharp.Tests.System", "PDDLSharp.Tests.System\PDDLSharp.Tests.System.csproj", "{323D934C-0370-48CB-9374-369BEFD58CF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDDLSharp.Tests.System", "PDDLSharp.Tests.System\PDDLSharp.Tests.System.csproj", "{323D934C-0370-48CB-9374-369BEFD58CF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerators", "CodeGenerators\CodeGenerators.csproj", "{902EB2E1-CEBD-47FC-9274-07446F7B6ED1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerators", "CodeGenerators\CodeGenerators.csproj", "{902EB2E1-CEBD-47FC-9274-07446F7B6ED1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerators.Tests", "CodeGenerators.Tests\CodeGenerators.Tests.csproj", "{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,10 @@ Global
 		{902EB2E1-CEBD-47FC-9274-07446F7B6ED1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{902EB2E1-CEBD-47FC-9274-07446F7B6ED1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{902EB2E1-CEBD-47FC-9274-07446F7B6ED1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

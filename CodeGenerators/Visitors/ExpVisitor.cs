@@ -17,14 +17,14 @@ namespace PDDL.CodeGenerators.Visitors
             if (node.Type == null || node.Type.Name == "")
                 return $"({node.Name})";
             else
-                return $"({node.Name} - {node.Type})";
+                return $"({node.Name} - {Visit(node.Type)})";
         }
 
         public string Visit(AndExp node)
         {
             string retStr = "";
             foreach (var type in node.Children)
-                retStr += $" {type}{Environment.NewLine}";
+                retStr += $" {Visit((dynamic)type)}{Environment.NewLine}";
             return $"(and{retStr})";
         }
 
