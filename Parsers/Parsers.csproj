@@ -11,7 +11,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Analysers\Analysers.csproj" />
     <ProjectReference Include="..\ASTGenerators\ASTGenerators.csproj" />
-    <ProjectReference Include="..\ASTGenerator\ASTGenerators.csproj" />
     <ProjectReference Include="..\Contextualisers\Contextualisers.csproj" />
     <ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
