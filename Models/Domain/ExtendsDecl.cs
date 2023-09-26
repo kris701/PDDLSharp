@@ -19,14 +19,6 @@ namespace PDDL.Models.Domain
             Extends = extends;
         }
 
-        public override string ToString()
-        {
-            string retStr = "";
-            foreach (var type in Extends)
-                retStr += $" {type}{Environment.NewLine}";
-            return $"(:extends{retStr})";
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

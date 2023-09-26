@@ -18,14 +18,6 @@ namespace PDDL.Models.Domain
             Items = timeless;
         }
 
-        public override string ToString()
-        {
-            string retStr = "";
-            foreach (var type in Items)
-                retStr += $" {type}{Environment.NewLine}";
-            return $"(:timeless{retStr})";
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

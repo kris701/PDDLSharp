@@ -20,14 +20,6 @@ namespace PDDL.Models.Domain
             Constants = constants;
         }
 
-        public override string ToString()
-        {
-            string retStr = "";
-            foreach (var type in Constants)
-                retStr += $" {type}{Environment.NewLine}";
-            return $"(:constants{retStr})";
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

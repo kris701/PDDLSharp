@@ -17,14 +17,6 @@ namespace PDDL.Models.Problem
             Predicates = predicates;
         }
 
-        public override string ToString()
-        {
-            string retStr = "";
-            foreach (var type in Predicates)
-                retStr += $" {type}{Environment.NewLine}";
-            return $"(:init{retStr})";
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

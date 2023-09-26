@@ -26,14 +26,6 @@ namespace PDDL.Models.Expressions
             Type = new TypeExp(node, this, "");
         }
 
-        public override string ToString()
-        {
-            if (Type == null || Type.Name == "")
-                return $"({Name})";
-            else
-                return $"({Name} - {Type})";
-        }
-
         public override int GetHashCode()
         {
             if (Type != null)

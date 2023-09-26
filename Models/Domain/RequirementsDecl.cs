@@ -18,14 +18,6 @@ namespace PDDL.Models.Domain
             Requirements = requirements;
         }
 
-        public override string ToString()
-        {
-            var reqStr = "";
-            foreach (var requirement in Requirements)
-                reqStr += $" {requirement}";
-            return $"(:requirements{reqStr})";
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

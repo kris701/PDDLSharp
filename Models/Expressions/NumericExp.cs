@@ -21,11 +21,6 @@ namespace PDDL.Models.Expressions
             Arg2 = arg2;
         }
 
-        public override string ToString()
-        {
-            return $"({Name} {Arg1} {Arg2})";
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() + Name.GetHashCode() + Arg1.GetHashCode() + Arg2.GetHashCode();

@@ -19,11 +19,6 @@ namespace PDDL.Models.Problem
             MetricExp = metricExp;
         }
 
-        public override string ToString()
-        {
-            return $"(:metric {MetricType} {MetricExp})";
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() + MetricExp.GetHashCode();

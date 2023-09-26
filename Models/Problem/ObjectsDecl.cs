@@ -18,14 +18,6 @@ namespace PDDL.Models.Problem
             Objs = types;
         }
 
-        public override string ToString()
-        {
-            string retStr = "";
-            foreach (var type in Objs)
-                retStr += $" {type}{Environment.NewLine}";
-            return $"(:objects{retStr})";
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

@@ -19,14 +19,6 @@ namespace PDDL.Models.Expressions
             Arguments = arguments;
         }
 
-        public override string ToString()
-        {
-            var paramRetStr = "";
-            foreach (var arg in Arguments)
-                paramRetStr += $" {arg}";
-            return $"({Name}{paramRetStr})";
-        }
-
         public override int GetHashCode()
         {
             int hash = Name.GetHashCode() + base.GetHashCode();

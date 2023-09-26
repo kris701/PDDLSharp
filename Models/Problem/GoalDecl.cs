@@ -18,11 +18,6 @@ namespace PDDL.Models.Problem
             GoalExp = goalExp;
         }
 
-        public override string ToString()
-        {
-            return $"(:goal {GoalExp})";
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() + GoalExp.GetHashCode();

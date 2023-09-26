@@ -19,14 +19,6 @@ namespace PDDL.Models.Domain
             Predicates = predicates;
         }
 
-        public override string ToString()
-        {
-            string retStr = "";
-            foreach (var type in Predicates)
-                retStr += $" {type}{Environment.NewLine}";
-            return $"(:predicates{retStr})";
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace PDDL.ErrorListeners
 {
     public enum ParseErrorType { None, Message, Warning, Error }
-    public enum ParseErrorLevel { None, PreParsing, Parsing, Contexturaliser, Analyser }
+    public enum ParseErrorLevel { None, PreParsing, Parsing, Contexturaliser, Analyser, CodeGeneration }
     public class ParseError
     {
         public string Message { get; internal set; }

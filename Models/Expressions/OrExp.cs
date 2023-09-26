@@ -20,11 +20,6 @@ namespace PDDL.Models.Expressions
             Option2 = option2;
         }
 
-        public override string ToString()
-        {
-            return $"(or {Option1} {Option2})";
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() * Option1.GetHashCode() * Option2.GetHashCode();

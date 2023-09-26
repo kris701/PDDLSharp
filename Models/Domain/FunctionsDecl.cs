@@ -18,14 +18,6 @@ namespace PDDL.Models.Domain
             Functions = functions;
         }
 
-        public override string ToString()
-        {
-            string retStr = "";
-            foreach (var type in Functions)
-                retStr += $" {type}{Environment.NewLine}";
-            return $"(:functions{retStr})";
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

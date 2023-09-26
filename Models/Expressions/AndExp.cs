@@ -18,14 +18,6 @@ namespace PDDL.Models.Expressions
             Children = children;
         }
 
-        public override string ToString()
-        {
-            string retStr = "";
-            foreach (var type in Children)
-                retStr += $" {type}{Environment.NewLine}";
-            return $"(and{retStr})";
-        }
-
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

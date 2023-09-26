@@ -17,11 +17,6 @@ namespace PDDL.Models.Expressions
             Child = child;
         }
 
-        public override string ToString()
-        {
-            return $"(not {Child})";
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() * Child.GetHashCode();

@@ -17,11 +17,6 @@ namespace PDDL.Models.Problem
             Name = name;
         }
 
-        public override string ToString()
-        {
-            return $"(:domain {Name})";
-        }
-
         public override int GetHashCode()
         {
             return base.GetHashCode() + Name.GetHashCode();

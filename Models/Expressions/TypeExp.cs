@@ -37,11 +37,6 @@ namespace PDDL.Models.Expressions
             return SuperTypes.Any(x => x == typeName);
         }
 
-        public override string ToString()
-        {
-            return Name;
-        }
-
         public override int GetHashCode()
         {
             int hash = Name.GetHashCode() + base.GetHashCode();
