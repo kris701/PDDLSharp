@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Tools
 {
-    public static class PDDLHelper
+    public static class PDDLFileHelper
     {
         public static bool IsFileDomain(string path)
         {

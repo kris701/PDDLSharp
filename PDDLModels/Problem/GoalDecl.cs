@@ -14,14 +14,14 @@ namespace PDDLModels.Problem
         public IExp GoalExp { get; set; }
 
         // Context
-        public int PredicateCount { get; internal set; }
-        public List<PredicateExp> TruePredicates { get; internal set; }
-        public List<PredicateExp> FalsePredicates { get; internal set; }
-        public bool DoesContainOr { get; internal set; }
-        public bool DoesContainAnd { get; internal set; }
-        public bool DoesContainNot { get; internal set; }
-        public bool DoesContainPredicates { get; internal set; }
-        public bool DoesContainNames { get; internal set; }
+        public int PredicateCount { get; set; }
+        public List<PredicateExp> TruePredicates { get; set; }
+        public List<PredicateExp> FalsePredicates { get; set; }
+        public bool DoesContainOr { get; set; }
+        public bool DoesContainAnd { get; set; }
+        public bool DoesContainNot { get; set; }
+        public bool DoesContainPredicates { get; set; }
+        public bool DoesContainNames { get; set; }
 
         public GoalDecl(ASTNode node, INode parent, IExp goalExp) : base(node, parent)
         {

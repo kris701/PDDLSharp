@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Analysers\Analysers.csproj" />
+    <ProjectReference Include="..\ASTGenerator\ASTGenerator.csproj" />
     <ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" />
+    <ProjectReference Include="..\PDDLContextualiser\PDDLContextualiser.csproj" />
     <ProjectReference Include="..\PDDLModels\PDDLModels.csproj" />
+    <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
 
 </Project>

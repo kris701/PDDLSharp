@@ -1,6 +1,7 @@
-﻿using PDDLParser.Listener;
-using PDDLParser.Models;
-using PDDLParser.Models.Domain;
+﻿using ErrorListeners;
+using PDDLModels;
+using PDDLModels.AST;
+using PDDLModels.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Contextualisers
+namespace Contextualisers
 {
     public class PDDLDomainDeclContextualiser : BaseContextualiser<DomainDecl>
     {
@@ -27,12 +28,12 @@ namespace PDDLParser.Contextualisers
             {
                 decl.Predicates.Predicates.Add(
                     new PredicateExp(
-                        new AST.ASTNode(), 
+                        new ASTNode(), 
                         decl.Predicates, 
                         "=", 
                         new List<NameExp>() { 
-                            new NameExp(new AST.ASTNode(), decl.Predicates, "l"),
-                            new NameExp(new AST.ASTNode(), decl.Predicates, "r")
+                            new NameExp(new ASTNode(), decl.Predicates, "l"),
+                            new NameExp(new ASTNode(), decl.Predicates, "r")
                         }));
             }
         }

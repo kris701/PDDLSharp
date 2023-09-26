@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" />
     <ProjectReference Include="..\PDDLModels\PDDLModels.csproj" />
   </ItemGroup>
 

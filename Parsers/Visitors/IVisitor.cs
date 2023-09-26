@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contextualisers
+namespace Parsers.Visitors
 {
-    public interface IContextualiser<T>
+    public interface IVisitor<AST, ParentT, OutT>
     {
-        void Contexturalise(T decl, IErrorListener listener);
+        OutT Visit(AST node, ParentT parent, IErrorListener listener);
     }
 }
