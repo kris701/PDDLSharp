@@ -1,13 +1,13 @@
-﻿using PDDL.Models.AST;
+﻿using PDDLSharp.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDL.Tools;
-using PDDL.Models.Expressions;
+using PDDLSharp.Tools;
+using PDDLSharp.Models.Expressions;
 
-namespace PDDL.Models.Domain
+namespace PDDLSharp.Models.Domain
 {
     public class TypesDecl : BaseWalkableNode, IDecl
     {

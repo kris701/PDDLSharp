@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Parsers.Tests.PositionTestsData
+namespace PDDLSharp.Parsers.Tests.PositionTestsData
 {
     internal class PositionNode
     {

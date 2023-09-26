@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Tools
+namespace PDDLSharp.Tools
 {
     public static class HashSetHelper
     {

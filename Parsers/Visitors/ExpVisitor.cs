@@ -1,8 +1,8 @@
-﻿using PDDL.ASTGenerators;
-using PDDL.ErrorListeners;
-using PDDL.Models;
-using PDDL.Models.AST;
-using PDDL.Models.Expressions;
+﻿using PDDLSharp.ASTGenerators;
+using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
+using PDDLSharp.Models.AST;
+using PDDLSharp.Models.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace PDDL.Parsers.Visitors
+namespace PDDLSharp.Parsers.Visitors
 {
     public class ExpVisitor : BaseVisitor, IVisitor<ASTNode, INode, IExp>
     {

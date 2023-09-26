@@ -1,10 +1,10 @@
-using PDDL.ErrorListeners;
-using PDDL.Models;
-using PDDL.Models.AST;
-using PDDL.Models.Expressions;
+using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
+using PDDLSharp.Models.AST;
+using PDDLSharp.Models.Expressions;
 using System;
 
-namespace PDDL.CodeGenerators.Tests
+namespace PDDLSharp.CodeGenerators.Tests
 {
     [TestClass]
     public class SimpleVisitTests

@@ -1,7 +1,7 @@
-﻿using PDDL.ASTGenerators;
-using PDDL.ErrorListeners;
-using PDDL.Models;
-using PDDL.Models.AST;
+﻿using PDDLSharp.ASTGenerators;
+using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
+using PDDLSharp.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace PDDL.Parsers.Visitors
+namespace PDDLSharp.Parsers.Visitors
 {
     public abstract class BaseVisitor
     {

@@ -1,7 +1,7 @@
-﻿using PDDL.ErrorListeners;
-using PDDL.Models.AST;
-using PDDL.Models.Domain;
-using PDDL.Models.Expressions;
+﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.AST;
+using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Contextualisers
+namespace PDDLSharp.Contextualisers
 {
     public class PDDLDomainDeclContextualiser : BaseContextualiser<DomainDecl>
     {

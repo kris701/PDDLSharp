@@ -1,7 +1,7 @@
-﻿using PDDL.ErrorListeners;
-using PDDL.Models.Domain;
-using PDDL.Models.Expressions;
-using PDDL.Models.Problem;
+﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.Expressions;
+using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace PDDL.CodeGenerators.Visitors
+namespace PDDLSharp.CodeGenerators.Visitors
 {
     public partial class GeneratorVisitors
     {

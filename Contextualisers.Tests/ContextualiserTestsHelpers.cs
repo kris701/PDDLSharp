@@ -1,12 +1,12 @@
-﻿using PDDL.Models;
-using PDDL.Models.Expressions;
+﻿using PDDLSharp.Models;
+using PDDLSharp.Models.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Contextualisers.Tests
+namespace PDDLSharp.Contextualisers.Tests
 {
     internal static class ContextualiserTestsHelpers
     {

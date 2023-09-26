@@ -1,6 +1,6 @@
-using PDDL.Models.AST;
+using PDDLSharp.Models.AST;
 
-namespace PDDL.ASTGenerators.Tests
+namespace PDDLSharp.ASTGenerators.Tests
 {
     [TestClass]
     public class ASTParserTests

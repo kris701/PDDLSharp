@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.PDDLSharp.Tests.System
+namespace PDDLSharp.PDDLSharp.Tests.System
 {
     internal static class BenchmarkFetcher
     {

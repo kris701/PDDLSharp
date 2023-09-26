@@ -1,14 +1,14 @@
-﻿using PDDL.Models.Domain;
-using PDDL.Models.Problem;
+﻿using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using PDDL.Tools;
+using PDDLSharp.Tools;
 
-namespace PDDL.Models
+namespace PDDLSharp.Models
 {
     public class PDDLDecl
     {

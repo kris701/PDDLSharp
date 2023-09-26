@@ -1,4 +1,4 @@
-﻿using PDDL.Models.AST;
+﻿using PDDLSharp.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +6,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using PDDL.Tools;
+using PDDLSharp.Tools;
 
-namespace PDDL.Models.Domain
+namespace PDDLSharp.Models.Domain
 {
     public class AxiomDecl : BaseWalkableNode, IDecl
     {

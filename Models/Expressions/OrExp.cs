@@ -1,13 +1,13 @@
-﻿using PDDL.Models.AST;
+﻿using PDDLSharp.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using PDDL.Tools;
+using PDDLSharp.Tools;
 
-namespace PDDL.Models.Expressions
+namespace PDDLSharp.Models.Expressions
 {
     public class OrExp : BaseWalkableNode, IExp
     {

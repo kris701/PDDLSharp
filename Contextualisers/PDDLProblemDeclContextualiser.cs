@@ -1,13 +1,13 @@
-﻿using PDDL.ErrorListeners;
-using PDDL.Models.Expressions;
-using PDDL.Models.Problem;
+﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.Expressions;
+using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Contextualisers
+namespace PDDLSharp.Contextualisers
 {
     public class PDDLProblemDeclContextualiser : BaseContextualiser<ProblemDecl>
     {

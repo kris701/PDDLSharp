@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Models
+namespace PDDLSharp.Models
 {
     public interface IWalkable : INode, IEnumerable<INode>
     {

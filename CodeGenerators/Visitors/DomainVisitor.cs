@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualBasic;
-using PDDL.ErrorListeners;
-using PDDL.Models.Domain;
-using PDDL.Models.Expressions;
+using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace PDDL.CodeGenerators.Visitors
+namespace PDDLSharp.CodeGenerators.Visitors
 {
     public partial class GeneratorVisitors
     {

@@ -1,4 +1,4 @@
-﻿using PDDL.ErrorListeners;
+﻿using PDDLSharp.ErrorListeners;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace PDDL.Analysers
+namespace PDDLSharp.Analysers
 {
     public class GeneralPreAnalyser : IAnalyser<string>
     {

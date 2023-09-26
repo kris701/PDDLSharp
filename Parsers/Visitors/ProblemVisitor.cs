@@ -1,15 +1,15 @@
-﻿using PDDL.ErrorListeners;
-using PDDL.Models;
-using PDDL.Models.AST;
-using PDDL.Models.Expressions;
-using PDDL.Models.Problem;
+﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
+using PDDLSharp.Models.AST;
+using PDDLSharp.Models.Expressions;
+using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Parsers.Visitors
+namespace PDDLSharp.Parsers.Visitors
 {
     public class ProblemVisitor : BaseVisitor, IVisitor<ASTNode, INode, IDecl>
     {

@@ -1,4 +1,4 @@
-﻿using PDDL.Parsers.Visitors;
+﻿using PDDLSharp.Parsers.Visitors;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,16 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using PDDL.ErrorListeners;
-using PDDL.Tools;
-using PDDL.Models;
-using PDDL.Models.Domain;
-using PDDL.Models.Problem;
-using PDDL.Models.AST;
-using PDDL.ASTGenerators;
-using PDDL.Contextualisers;
+using PDDLSharp.ErrorListeners;
+using PDDLSharp.Tools;
+using PDDLSharp.Models;
+using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.Problem;
+using PDDLSharp.Models.AST;
+using PDDLSharp.ASTGenerators;
+using PDDLSharp.Contextualisers;
 
-namespace PDDL.Parsers
+namespace PDDLSharp.Parsers
 {
     public class PDDLParser : IPDDLParser
     {

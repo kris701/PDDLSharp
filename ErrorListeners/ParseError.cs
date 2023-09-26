@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.ErrorListeners
+namespace PDDLSharp.ErrorListeners
 {
     public enum ParseErrorType { None, Message, Warning, Error }
     public enum ParseErrorLevel { None, PreParsing, Parsing, Contexturaliser, Analyser, CodeGeneration }

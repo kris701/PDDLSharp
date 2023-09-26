@@ -1,5 +1,5 @@
-﻿using PDDL.Models.AST;
-using PDDL.Models.Domain;
+﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Models.Expressions
+namespace PDDLSharp.Models.Expressions
 {
     public class TypeExp : BaseNode, IExp, INamedNode
     {

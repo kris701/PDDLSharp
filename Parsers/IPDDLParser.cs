@@ -1,14 +1,14 @@
-﻿using PDDL.ErrorListeners;
-using PDDL.Models;
-using PDDL.Models.Domain;
-using PDDL.Models.Problem;
+﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
+using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Parsers
+namespace PDDLSharp.Parsers
 {
     public interface IPDDLParser
     {

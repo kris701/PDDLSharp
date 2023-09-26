@@ -1,7 +1,7 @@
-﻿using PDDL.ErrorListeners;
-using PDDL.Models;
-using PDDL.Models.Domain;
-using PDDL.Models.Expressions;
+﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
+using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
 
-namespace PDDL.Analysers
+namespace PDDLSharp.Analysers
 {
     public class PDDLDomainDeclAnalyser : IAnalyser<DomainDecl>
     {

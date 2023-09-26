@@ -1,11 +1,11 @@
-﻿using PDDL.Models.AST;
+﻿using PDDLSharp.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Models.Domain
+namespace PDDLSharp.Models.Domain
 {
     public class DomainNameDecl : BaseNode, IDecl, INamedNode
     {

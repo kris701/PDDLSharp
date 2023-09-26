@@ -1,7 +1,7 @@
-﻿using PDDL.ASTGenerators.Tests.PositionTestsData;
-using PDDL.Models.AST;
+﻿using PDDLSharp.ASTGenerators.Tests.PositionTestsData;
+using PDDLSharp.Models.AST;
 
-namespace PDDL.ASTGenerators.Tests
+namespace PDDLSharp.ASTGenerators.Tests
 {
     [TestClass]
     public class PositionTests

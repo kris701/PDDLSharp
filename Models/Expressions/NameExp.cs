@@ -1,13 +1,13 @@
-﻿using PDDL.Models.AST;
-using PDDL.Models.Domain;
+﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDL.Tools;
+using PDDLSharp.Tools;
 
-namespace PDDL.Models.Expressions
+namespace PDDLSharp.Models.Expressions
 {
     public class NameExp : BaseNode, IExp, INamedNode
     {

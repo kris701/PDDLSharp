@@ -1,4 +1,4 @@
-﻿using PDDL.Models.AST;
+﻿using PDDLSharp.Models.AST;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDL.Tools;
+using PDDLSharp.Tools;
 
-namespace PDDL.Models.Domain
+namespace PDDLSharp.Models.Domain
 {
     public class DomainDecl : BaseWalkableNode, IDecl
     {

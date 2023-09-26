@@ -1,5 +1,5 @@
-﻿using PDDL.Models.AST;
-using PDDL.Tools;
+﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Models
+namespace PDDLSharp.Models
 {
     public abstract class BaseNode : INode
     {

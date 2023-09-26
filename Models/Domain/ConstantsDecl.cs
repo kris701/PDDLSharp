@@ -1,4 +1,4 @@
-﻿using PDDL.Models.AST;
+﻿using PDDLSharp.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +6,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using PDDL.Tools;
-using PDDL.Models.Expressions;
+using PDDLSharp.Tools;
+using PDDLSharp.Models.Expressions;
 
-namespace PDDL.Models.Domain
+namespace PDDLSharp.Models.Domain
 {
     public class ConstantsDecl : BaseNode, IDecl
     {

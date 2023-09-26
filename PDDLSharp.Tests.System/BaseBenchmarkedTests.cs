@@ -1,13 +1,13 @@
-﻿using PDDL.Analysers;
-using PDDL.ErrorListeners;
-using PDDL.Parsers;
+﻿using PDDLSharp.Analysers;
+using PDDLSharp.ErrorListeners;
+using PDDLSharp.Parsers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.PDDLSharp.Tests.System
+namespace PDDLSharp.PDDLSharp.Tests.System
 {
     public class BaseBenchmarkedTests
     {
