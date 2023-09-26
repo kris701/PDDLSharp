@@ -5,11 +5,11 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLSharp", "PDDLSharp\PDDLSharp.csproj", "{852F2E90-7DFF-4F27-988B-64D61863853F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLModels", "PDDLModels\PDDLModels.csproj", "{1100B4CA-FE6E-4494-91A6-8C1B867FE108}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{1100B4CA-FE6E-4494-91A6-8C1B867FE108}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools", "Tools\Tools.csproj", "{954A8E05-81F4-403A-9346-E9CBF8EE3348}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLContextualiser", "PDDLContextualiser\PDDLContextualiser.csproj", "{B37DF253-9A79-4732-8831-EE66D318FE83}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contextualisers", "Contextualisers\Contextualisers.csproj", "{B37DF253-9A79-4732-8831-EE66D318FE83}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErrorListeners", "ErrorListeners\ErrorListeners.csproj", "{D0B21DE2-2DA6-47CA-9EA3-F4EF92D62DCF}"
 EndProject

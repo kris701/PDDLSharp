@@ -1,7 +1,7 @@
 ﻿using ASTGenerator;
 using ErrorListeners;
-using PDDLModels;
-using PDDLModels.AST;
+using Models;
+using Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;

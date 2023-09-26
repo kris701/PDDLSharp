@@ -1,7 +1,7 @@
 ﻿using ErrorListeners;
-using PDDLModels;
-using PDDLModels.Domain;
-using PDDLModels.Problem;
+using Models;
+using Models.Domain;
+using Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;

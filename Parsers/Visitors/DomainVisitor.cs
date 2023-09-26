@@ -1,8 +1,8 @@
 ﻿using ASTGenerator;
 using ErrorListeners;
-using PDDLModels;
-using PDDLModels.AST;
-using PDDLModels.Domain;
+using Models;
+using Models.AST;
+using Models.Domain;
 using Tools;
 using System;
 using System.Collections.Generic;

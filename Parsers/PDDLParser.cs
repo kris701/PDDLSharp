@@ -9,10 +9,10 @@ using PDDLParser.Analysers;
 using System.Xml.Linq;
 using ErrorListeners;
 using Tools;
-using PDDLModels;
-using PDDLModels.Domain;
-using PDDLModels.Problem;
-using PDDLModels.AST;
+using Models;
+using Models.Domain;
+using Models.Problem;
+using Models.AST;
 using ASTGenerator;
 using Contextualisers;
 
