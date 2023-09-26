@@ -18,4 +18,11 @@
     <PackageReference Include="coverlet.collector" Version="3.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ASTGenerator\ASTGenerator.csproj" />
+    <ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Parsers\Parsers.csproj" />
+  </ItemGroup>
+
 </Project>
