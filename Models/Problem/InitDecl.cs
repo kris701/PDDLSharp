@@ -51,13 +51,6 @@ namespace PDDL.Models.Problem
             return hash;
         }
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is InitDecl exp)
-                return exp.GetHashCode() == GetHashCode();
-            return false;
-        }
-
         public override IEnumerator<INode> GetEnumerator()
         {
             return Predicates.GetEnumerator();

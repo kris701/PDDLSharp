@@ -1,6 +1,7 @@
 ﻿using PDDL.ErrorListeners;
 using PDDL.Models;
 using PDDL.Models.Domain;
+using PDDL.Models.Expressions;
 using PDDL.Models.Problem;
 using System;
 using System.Collections.Generic;
@@ -164,7 +165,7 @@ namespace PDDL.Analysers
             if (problem.Objects != null)
             {
                 foreach(var obj in problem.Objects.Objs)
-                    if (!domain.ContainsType(obj.Type.Name))
+                    if (!ContainsType(domain, obj.Type.Name))
                         Listener.AddError(new ParseError(
                             $"Unknown type for object! '{obj.Type}'",
                             ParseErrorType.Error,
@@ -172,6 +173,19 @@ namespace PDDL.Analysers
                             obj.Line,
                             obj.Start));
             }
+        }
+        public bool ContainsType(DomainDecl domain, string target)
+        {
+            if (target == "")
+                return true;
+            if (domain.Types == null)
+                return false;
+            foreach (var type in domain.Types.Types)
+            {
+                if (type.IsTypeOf(target))
+                    return true;
+            }
+            return false;
         }
         private void CheckForInitDeclarationTypes(DomainDecl domain, ProblemDecl problem)
         {

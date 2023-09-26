@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using PDDL.Tools;
 
-namespace PDDL.Models
+namespace PDDL.Models.Expressions
 {
     public class AndExp : BaseWalkableNode, IExp
     {
@@ -50,15 +50,6 @@ namespace PDDL.Models
             foreach (var child in Children)
                 hash *= child.GetHashCode();
             return hash;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is AndExp exp)
-            {
-                return exp.GetHashCode() == GetHashCode();
-            }
-            return false;
         }
 
         public override IEnumerator<INode> GetEnumerator()

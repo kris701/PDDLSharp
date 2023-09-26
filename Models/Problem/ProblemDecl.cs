@@ -79,15 +79,6 @@ namespace PDDL.Models.Problem
             return hash;
         }
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is ProblemDecl exp)
-            {
-                return exp.GetHashCode() == GetHashCode();
-            }
-            return false;
-        }
-
         public override IEnumerator<INode> GetEnumerator()
         {
             if (Name != null)

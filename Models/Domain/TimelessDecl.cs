@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PDDL.Tools;
+using PDDL.Models.Expressions;
 
 namespace PDDL.Models.Domain
 {
@@ -49,13 +50,6 @@ namespace PDDL.Models.Domain
             foreach (var item in Items)
                 hash *= item.GetHashCode();
             return hash;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is TimelessDecl exp)
-                return exp.GetHashCode() == GetHashCode();
-            return false;
         }
 
         public override IEnumerator<INode> GetEnumerator()

@@ -41,12 +41,5 @@ namespace PDDL.Models.Problem
         {
             return base.GetHashCode() + Name.GetHashCode();
         }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is DomainNameRefDecl exp)
-                return exp.GetHashCode() == GetHashCode();
-            return false;
-        }
     }
 }

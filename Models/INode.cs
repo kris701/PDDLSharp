@@ -8,13 +8,13 @@ namespace PDDL.Models
 {
     public interface INode
     {
-        INode? Parent { get; }
-        int Start { get; set; }
-        int End { get; set; }
-        int Line { get; set; }
+        public INode? Parent { get; }
+        public int Start { get; set; }
+        public int End { get; set; }
+        public int Line { get; set; }
 
-        HashSet<INamedNode> FindNames(string name);
-        HashSet<T> FindTypes<T>();
-        int GetHashCode();
+        public HashSet<INamedNode> FindNames(string name);
+        public HashSet<T> FindTypes<T>();
+        public int GetHashCode();
     }
 }

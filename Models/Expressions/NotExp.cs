@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PDDL.Tools;
 
-namespace PDDL.Models
+namespace PDDL.Models.Expressions
 {
     public class NotExp : BaseWalkableNode, IExp
     {
@@ -39,15 +39,6 @@ namespace PDDL.Models
         public override int GetHashCode()
         {
             return base.GetHashCode() * Child.GetHashCode();
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is NotExp exp)
-            {
-                return exp.GetHashCode() == GetHashCode();
-            }
-            return false;
         }
 
         public override IEnumerator<INode> GetEnumerator()

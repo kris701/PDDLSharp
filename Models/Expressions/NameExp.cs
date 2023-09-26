@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using PDDL.Tools;
 
-namespace PDDL.Models
+namespace PDDL.Models.Expressions
 {
-    public class NameExp : BaseNode, IExp, ICloneable, INamedNode
+    public class NameExp : BaseNode, IExp, INamedNode
     {
         public string Name { get; set; }
         public TypeExp? Type { get; set; }
@@ -20,16 +20,10 @@ namespace PDDL.Models
             Type = type;
         }
 
-        public NameExp(ASTNode node, INode? parent, string name) : base(node, parent) 
+        public NameExp(ASTNode node, INode? parent, string name) : base(node, parent)
         {
             Name = name;
             Type = new TypeExp(node, this, "");
-        }
-
-        public NameExp(ASTNode node, INode? parent) : base(node, parent)
-        {
-            Name = "";
-            Type = null;
         }
 
         public override string ToString()
@@ -45,20 +39,6 @@ namespace PDDL.Models
             if (Type != null)
                 return Name.GetHashCode() + base.GetHashCode() + Type.GetHashCode();
             return Name.GetHashCode() + base.GetHashCode();
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is NameExp exp)
-            {
-                return exp.GetHashCode() == GetHashCode();
-            }
-            return false;
-        }
-
-        public object Clone()
-        {
-            return new NameExp(new ASTNode(Start, End, Line), Parent, Name, Type);
         }
 
         public override HashSet<INamedNode> FindNames(string name)

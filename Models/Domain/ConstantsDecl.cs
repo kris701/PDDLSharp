@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using PDDL.Tools;
+using PDDL.Models.Expressions;
 
 namespace PDDL.Models.Domain
 {
@@ -51,13 +52,6 @@ namespace PDDL.Models.Domain
             foreach (var constant in Constants)
                 hash *= constant.GetHashCode();
             return hash;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is ConstantsDecl exp)
-                return exp.GetHashCode() == GetHashCode();
-            return false;
         }
     }
 }

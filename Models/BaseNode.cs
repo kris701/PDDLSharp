@@ -35,5 +35,14 @@ namespace PDDL.Models
         {
             return Start.GetHashCode() + End.GetHashCode() + Line.GetHashCode();
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+            if (obj is not INode)
+                return false;
+            return obj.GetHashCode() == GetHashCode();
+        }
     }
 }

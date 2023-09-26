@@ -42,13 +42,6 @@ namespace PDDL.Models.Problem
             return base.GetHashCode() + GoalExp.GetHashCode();
         }
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is GoalDecl exp)
-                return exp.GetHashCode() == GetHashCode();
-            return false;
-        }
-
         public override IEnumerator<INode> GetEnumerator()
         {
             yield return GoalExp;

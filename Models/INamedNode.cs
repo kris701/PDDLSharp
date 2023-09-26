@@ -8,6 +8,6 @@ namespace PDDL.Models
 {
     public interface INamedNode : INode
     {
-        string Name { get; set; }
+        public string Name { get; set; }
     }
 }

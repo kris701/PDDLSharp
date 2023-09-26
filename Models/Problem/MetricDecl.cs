@@ -43,13 +43,6 @@ namespace PDDL.Models.Problem
             return base.GetHashCode() + MetricExp.GetHashCode();
         }
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is MetricDecl exp)
-                return exp.GetHashCode() == GetHashCode();
-            return false;
-        }
-
         public override IEnumerator<INode> GetEnumerator()
         {
             yield return MetricExp;

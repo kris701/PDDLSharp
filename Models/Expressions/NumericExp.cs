@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PDDL.Tools;
 
-namespace PDDL.Models
+namespace PDDL.Models.Expressions
 {
     public class NumericExp : BaseWalkableNode, IExp, INamedNode
     {
@@ -29,15 +29,6 @@ namespace PDDL.Models
         public override int GetHashCode()
         {
             return base.GetHashCode() + Name.GetHashCode() + Arg1.GetHashCode() + Arg2.GetHashCode();
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is NumericExp exp)
-            {
-                return exp.GetHashCode() == GetHashCode();
-            }
-            return false;
         }
 
         public override HashSet<INamedNode> FindNames(string name)

@@ -7,7 +7,7 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDL.Models
+namespace PDDL.Models.Expressions
 {
     public class TypeExp : BaseNode, IExp, INamedNode
     {
@@ -22,7 +22,7 @@ namespace PDDL.Models
                 SuperTypes.Add(type);
         }
 
-        public TypeExp(ASTNode node, INode parent, string name) : base(node, parent) 
+        public TypeExp(ASTNode node, INode parent, string name) : base(node, parent)
         {
             Name = name;
             SuperTypes = new HashSet<string>();
@@ -49,15 +49,6 @@ namespace PDDL.Models
                 foreach (var type in SuperTypes)
                     hash *= type.GetHashCode();
             return hash;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is TypeExp exp)
-            {
-                return exp.GetHashCode() == GetHashCode();
-            }
-            return false;
         }
 
         public override HashSet<INamedNode> FindNames(string name)

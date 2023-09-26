@@ -1,5 +1,6 @@
 ﻿using PDDL.ErrorListeners;
 using PDDL.Models;
+using PDDL.Models.Expressions;
 using PDDL.Models.Problem;
 using System;
 using System.Collections.Generic;

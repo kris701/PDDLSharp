@@ -57,13 +57,6 @@ namespace PDDL.Models.Domain
             return hash;
         }
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is ActionDecl exp)
-                return exp.GetHashCode() == GetHashCode();
-            return false;
-        }
-
         public override IEnumerator<INode> GetEnumerator()
         {
             yield return Parameters;

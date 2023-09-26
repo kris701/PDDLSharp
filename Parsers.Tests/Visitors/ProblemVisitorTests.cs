@@ -3,6 +3,7 @@ using PDDL.ErrorListeners;
 using PDDL.Models;
 using PDDL.Models.AST;
 using PDDL.Models.Domain;
+using PDDL.Models.Expressions;
 using PDDL.Models.Problem;
 using PDDL.Parsers.Visitors;
 using System;

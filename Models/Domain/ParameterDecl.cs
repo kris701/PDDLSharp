@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using PDDL.Tools;
+using PDDL.Models.Expressions;
 
 namespace PDDL.Models.Domain
 {
@@ -16,13 +17,6 @@ namespace PDDL.Models.Domain
         public ParameterDecl(ASTNode node, INode parent, List<NameExp> values) : base(node, parent)
         {
             Values = values;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is ParameterDecl exp)
-                return exp.GetHashCode() == GetHashCode();
-            return false;
         }
 
         public override HashSet<INamedNode> FindNames(string name)

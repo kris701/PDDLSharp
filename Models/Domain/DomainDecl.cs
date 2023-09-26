@@ -30,20 +30,6 @@ namespace PDDL.Models.Domain
             Axioms = new List<AxiomDecl>();
         }
 
-        public bool ContainsType(string target)
-        {
-            if (target == "")
-                return true;
-            if (Types == null)
-                return false;
-            foreach(var type in Types.Types)
-            {
-                if (type.IsTypeOf(target))
-                    return true;
-            }
-            return false;
-        }
-
         public override HashSet<INamedNode> FindNames(string name)
         {
             HashSet<INamedNode> res = new HashSet<INamedNode>();
@@ -142,13 +128,6 @@ namespace PDDL.Models.Domain
                     hash *= axi.GetHashCode();
 
             return hash;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is DomainDecl exp)
-                return exp.GetHashCode() == GetHashCode();
-            return false;
         }
 
         public override IEnumerator<INode> GetEnumerator()

@@ -1,6 +1,7 @@
 ﻿using PDDL.ErrorListeners;
 using PDDL.Models;
 using PDDL.Models.Domain;
+using PDDL.Models.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -185,7 +186,7 @@ namespace PDDL.Analysers
                 {
                     foreach(var arg in predicate.Arguments)
                     {
-                        if (!domain.ContainsType(arg.Type.Name))
+                        if (!ContainsType(domain, arg.Type.Name))
                         {
                             Listener.AddError(new ParseError(
                                 $"Predicate arguments contains unknown type!",
@@ -198,6 +199,19 @@ namespace PDDL.Analysers
                 }
             }
         }
+        public bool ContainsType(DomainDecl domain, string target)
+        {
+            if (target == "")
+                return true;
+            if (domain.Types == null)
+                return false;
+            foreach (var type in domain.Types.Types)
+            {
+                if (type.IsTypeOf(target))
+                    return true;
+            }
+            return false;
+        }
         private void CheckTypeMatchForActions(DomainDecl domain)
         {
             if (domain.Actions != null)
@@ -206,7 +220,7 @@ namespace PDDL.Analysers
                 {
                     foreach(var param in act.Parameters.Values)
                     {
-                        if (!domain.ContainsType(param.Type.Name))
+                        if (!ContainsType(domain, param.Type.Name))
                         {
                             Listener.AddError(new ParseError(
                                 $"Parameter contains unknow type!",
@@ -283,7 +297,7 @@ namespace PDDL.Analysers
                 {
                     foreach (var param in axi.Vars.Values)
                     {
-                        if (!domain.ContainsType(param.Type.Name))
+                        if (!ContainsType(domain, param.Type.Name))
                         {
                             Listener.AddError(new ParseError(
                                 $"Parameter contains unknow type!",
@@ -348,7 +362,7 @@ namespace PDDL.Analysers
             {
                 foreach(var cons in domain.Constants.Constants)
                 {
-                    if (!domain.ContainsType(cons.Type.Name))
+                    if (!ContainsType(domain, cons.Type.Name))
                     {
                         Listener.AddError(new ParseError(
                             $"Constant contains unknown type!",

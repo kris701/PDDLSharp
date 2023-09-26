@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using PDDL.Tools;
 
-namespace PDDL.Models
+namespace PDDL.Models.Expressions
 {
     public class OrExp : BaseWalkableNode, IExp
     {
@@ -46,15 +46,6 @@ namespace PDDL.Models
         public override int GetHashCode()
         {
             return base.GetHashCode() * Option1.GetHashCode() * Option2.GetHashCode();
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is OrExp exp)
-            {
-                return exp.GetHashCode() == GetHashCode();
-            }
-            return false;
         }
 
         public override IEnumerator<INode> GetEnumerator()
