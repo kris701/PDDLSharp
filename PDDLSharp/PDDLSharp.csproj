@@ -33,14 +33,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
-    <ProjectReference Include="..\Analysers\Analysers.csproj" />
-    <ProjectReference Include="..\ASTGenerators\ASTGenerators.csproj" />
-    <ProjectReference Include="..\CodeGenerators\CodeGenerators.csproj" />
-    <ProjectReference Include="..\Contextualisers\Contextualisers.csproj" />
-    <ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\Parsers\Parsers.csproj" />
-    <ProjectReference Include="..\Tools\Tools.csproj" />
+	  <PackageReference Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage" Version="1.0.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Analysers\Analysers.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\ASTGenerators\ASTGenerators.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\CodeGenerators\CodeGenerators.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\Contextualisers\Contextualisers.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\Models\Models.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\Parsers\Parsers.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\Tools\Tools.csproj" PrivateAssets="all"/>
   </ItemGroup>
 
 </Project>

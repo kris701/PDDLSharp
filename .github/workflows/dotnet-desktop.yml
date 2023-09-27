@@ -32,7 +32,7 @@ jobs:
           cd PDDLSharp
           dotnet nuget add source --username kris701 --password ${{ secrets.API_KEY_GITHUB }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/kris701/index.json"
           dotnet build --configuration Release
-          dotnet pack --configuration Release -IncludeReferencedProjects
+          dotnet pack --configuration Release
           cd bin
           cd Release
           dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_GITHUB }} --source "github" --skip-duplicate
