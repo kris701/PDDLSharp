@@ -4,8 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>PDDL.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <AssemblyName>PDDL.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>PDDLSharp.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <AssemblyName>PDDLSharp.$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

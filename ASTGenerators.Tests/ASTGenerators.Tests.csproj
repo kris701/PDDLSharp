@@ -7,8 +7,8 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <RootNamespace>PDDL.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <AssemblyName>PDDL.$(MSBuildProjectName)</AssemblyName>
+    <RootNamespace>PDDLSharp.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <AssemblyName>PDDLSharp.$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
