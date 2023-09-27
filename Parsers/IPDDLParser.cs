@@ -12,10 +12,9 @@ namespace PDDLSharp.Parsers
 {
     public interface IPDDLParser
     {
-        IErrorListener Listener { get; }
+        public IErrorListener Listener { get; }
 
-        PDDLDecl Parse(string domainFile, string problemFile);
-        DomainDecl ParseDomain(string domainFile);
-        ProblemDecl ParseProblem(string problemFile);
+        public PDDLDecl Parse(string domainFile, string problemFile);
+        public T? ParseAs<T>(string file) where T : INode;
     }
 }

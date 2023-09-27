@@ -41,7 +41,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser(listener);
 
             // ACT
-            var decl = parser.ParseDomain(domain);
+            var decl = parser.ParseAs<DomainDecl>(domain);
             contextualiser.Contexturalise(decl);
 
             // ASSERT
@@ -63,7 +63,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             foreach (var problem in problems)
             {
                 Trace.WriteLine($"   Parsing problem: {problem}");
-                var decl = parser.ParseProblem(problem);
+                var decl = parser.ParseAs<ProblemDecl>(problem);
                 contextualiser.Contexturalise(decl);
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                 listener.Errors.Clear();
@@ -89,8 +89,8 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             foreach (var problem in problems)
             {
                 Trace.WriteLine($"   Parsing problem: {problem}");
-                var domainDecl = parser.ParseDomain(domain);
-                var problemDecl = parser.ParseProblem(problem);
+                var domainDecl = parser.ParseAs<DomainDecl>(domain);
+                var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                 var decl = new PDDLDecl(domainDecl, problemDecl);
                 contextualiser.Contexturalise(decl);
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));

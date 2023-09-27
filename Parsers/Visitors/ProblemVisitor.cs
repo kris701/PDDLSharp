@@ -11,36 +11,36 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Parsers.Visitors
 {
-    public class ProblemVisitor : BaseVisitor, IVisitor<ASTNode, INode, IDecl>
+    public partial class ParserVisitor
     {
-        public IDecl Visit(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl VisitProblem(ASTNode node, INode parent)
         {
             IDecl? returnNode;
-            if ((returnNode = TryVisitProblemDeclNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitProblemNameNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitDomainRefNameNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitObjectsNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitInitsNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitGoalNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitMetricNode(node, parent, listener)) != null) return returnNode;
+            if ((returnNode = TryVisitProblemDeclNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitProblemNameNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitDomainRefNameNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitObjectsNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitInitsNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitGoalNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitMetricNode(node, parent)) != null) return returnNode;
 
-            listener.AddError(new ParseError(
+            Listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
             return returnNode;
         }
 
-        public IDecl? TryVisitProblemDeclNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitProblemDeclNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "define"))
             {
-                if (DoesNotContainStrayCharacters(node, "define", listener))
+                if (DoesNotContainStrayCharacters(node, "define"))
                 {
                     var returnProblem = new ProblemDecl(node);
                     foreach (var child in node.Children)
                     {
-                        var visited = Visit(child, returnProblem, listener);
+                        var visited = VisitProblem(child, returnProblem);
 
                         switch (visited)
                         {
@@ -58,10 +58,10 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitProblemNameNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitProblemNameNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "problem") &&
-                DoesContentContainNLooseChildren(node, "problem", 1, listener))
+                DoesContentContainNLooseChildren(node, "problem", 1))
             {
                 var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "problem");
                 return new ProblemNameDecl(node, parent, name);
@@ -69,10 +69,10 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitDomainRefNameNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitDomainRefNameNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":domain") &&
-                DoesContentContainNLooseChildren(node, ":domain", 1, listener))
+                DoesContentContainNLooseChildren(node, ":domain", 1))
             {
                 var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":domain");
                 return new DomainNameRefDecl(node, parent, name);
@@ -80,29 +80,29 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitObjectsNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitObjectsNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":objects") &&
-                DoesNodeHaveSpecificChildCount(node, ":objects", 0, listener))
+                DoesNodeHaveSpecificChildCount(node, ":objects", 0))
             {
                 var newObjs = new ObjectsDecl(node, parent, new List<NameExp>());
 
                 var parseStr = node.InnerContent.Substring(node.InnerContent.IndexOf(":objects") + ":objects".Length);
-                newObjs.Objs = LooseParseString<NameExp>(node, newObjs, ":objects", parseStr, listener);
+                newObjs.Objs = LooseParseString<NameExp>(node, newObjs, ":objects", parseStr);
 
                 return newObjs;
             }
             return null;
         }
 
-        public IDecl? TryVisitInitsNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitInitsNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":init") &&
-                DoesNotContainStrayCharacters(node, ":init", listener))
+                DoesNotContainStrayCharacters(node, ":init"))
             {
                 var newInit = new InitDecl(node, parent, new List<IExp>());
-                var preds = ParseAsList<PredicateExp>(node, newInit, listener, false);
-                var nums = ParseAsList<NumericExp>(node, newInit, listener, false);
+                var preds = ParseAsList<PredicateExp>(node, newInit, false);
+                var nums = ParseAsList<NumericExp>(node, newInit, false);
                 newInit.Predicates.AddRange(preds);
                 newInit.Predicates.AddRange(nums);
                 return newInit;
@@ -110,14 +110,14 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitGoalNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitGoalNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":goal") &&
-                DoesNodeHaveSpecificChildCount(node, ":goal", 1, listener) &&
-                DoesNotContainStrayCharacters(node, ":goal", listener))
+                DoesNodeHaveSpecificChildCount(node, ":goal", 1) &&
+                DoesNotContainStrayCharacters(node, ":goal"))
             {
                 var newGoal = new GoalDecl(node, parent, null);
-                newGoal.GoalExp = new ExpVisitor().Visit(node.Children[0], newGoal, listener);
+                newGoal.GoalExp = VisitExp(node.Children[0], newGoal);
                 return newGoal;
             }
             return null;
@@ -127,17 +127,18 @@ namespace PDDLSharp.Parsers.Visitors
         {
             "maximize", "minimize"
         };
-        public IDecl? TryVisitMetricNode(ASTNode node, INode parent, IErrorListener listener)
+
+        public IDecl? TryVisitMetricNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":metric") &&
-                DoesNodeHaveSpecificChildCount(node, ":metric", 1, listener) &&
-                DoesContentContainNLooseChildren(node, ":metric", 1, listener))
+                DoesNodeHaveSpecificChildCount(node, ":metric", 1) &&
+                DoesContentContainNLooseChildren(node, ":metric", 1))
             {
                 var metricType = node.InnerContent.Substring(node.InnerContent.IndexOf(":metric") + ":metric".Length).Trim();
                 if (MetricNodeTypes.Contains(metricType))
                 {
                     var newMetric = new MetricDecl(node, parent, metricType, null);
-                    newMetric.MetricExp = new ExpVisitor().Visit(node.Children[0], newMetric, listener);
+                    newMetric.MetricExp = VisitExp(node.Children[0], newMetric);
                     return newMetric;
                 }
             }

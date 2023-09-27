@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PDDLSharp.Models.Tests
 {
@@ -28,8 +29,7 @@ namespace PDDLSharp.Models.Tests
             IASTParser<ASTNode> astParser = new ASTParser();
             var ast = astParser.Parse(toParse);
             Assert.IsNotNull(ast);
-            IVisitor<ASTNode, INode, IDecl> visitor = new DomainVisitor();
-            var decl = visitor.Visit(ast, null, listener) as DomainDecl;
+            DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(ast, null) as DomainDecl;
             Assert.IsNotNull(decl);
 
             // ACT
@@ -53,8 +53,7 @@ namespace PDDLSharp.Models.Tests
             IASTParser<ASTNode> astParser = new ASTParser();
             var ast = astParser.Parse(toParse);
             Assert.IsNotNull(ast);
-            IVisitor<ASTNode, INode, IDecl> visitor = new DomainVisitor();
-            var decl = visitor.Visit(ast, null, listener) as DomainDecl;
+            DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(ast, null) as DomainDecl;
             Assert.IsNotNull(decl);
 
             // ACT
@@ -81,8 +80,7 @@ namespace PDDLSharp.Models.Tests
             IASTParser<ASTNode> astParser = new ASTParser();
             var ast = astParser.Parse(toParse);
             Assert.IsNotNull(ast);
-            IVisitor<ASTNode, INode, IDecl> visitor = new ProblemVisitor();
-            var decl = visitor.Visit(ast, null, listener) as ProblemDecl;
+            ProblemDecl? decl = new ParserVisitor(listener).TryVisitAs<ProblemDecl>(ast, null) as ProblemDecl;
             Assert.IsNotNull(decl);
 
             // ACT
@@ -106,8 +104,7 @@ namespace PDDLSharp.Models.Tests
             IASTParser<ASTNode> astParser = new ASTParser();
             var ast = astParser.Parse(toParse);
             Assert.IsNotNull(ast);
-            IVisitor<ASTNode, INode, IDecl> visitor = new ProblemVisitor();
-            var decl = visitor.Visit(ast, null, listener) as ProblemDecl;
+            ProblemDecl? decl = new ParserVisitor(listener).TryVisitAs<ProblemDecl>(ast, null) as ProblemDecl;
             Assert.IsNotNull(decl);
 
             // ACT

@@ -27,7 +27,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             IPDDLParser pddlParser = new PDDLParser(listener);
 
             // ACT
-            var node = pddlParser.ParseDomain(testFile);
+            var node = pddlParser.ParseAs<DomainDecl>(testFile);
 
             // ASSERT
             IsNodePositionValid(node, expectedNode);

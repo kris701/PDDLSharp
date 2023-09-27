@@ -29,7 +29,7 @@ namespace PDDLSharp.Contextualisers.Tests
 
             IASTParser<ASTNode> parser = new ASTParser();
             var node = parser.Parse(toParse);
-            DomainDecl? decl = new DomainVisitor().Visit(node, null, listener) as DomainDecl;
+            DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
 
             IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser(listener);
@@ -56,7 +56,7 @@ namespace PDDLSharp.Contextualisers.Tests
 
             IASTParser<ASTNode> parser = new ASTParser();
             var node = parser.Parse(toParse);
-            DomainDecl? decl = new DomainVisitor().Visit(node, null, listener) as DomainDecl;
+            DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
 
             IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser(listener);
@@ -82,7 +82,7 @@ namespace PDDLSharp.Contextualisers.Tests
 
             IASTParser<ASTNode> parser = new ASTParser();
             var node = parser.Parse(toParse);
-            DomainDecl? decl = new DomainVisitor().Visit(node, null, listener) as DomainDecl;
+            DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
 
             IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser(listener);

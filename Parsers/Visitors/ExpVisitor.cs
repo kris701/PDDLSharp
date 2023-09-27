@@ -12,35 +12,35 @@ using System.Xml.Linq;
 
 namespace PDDLSharp.Parsers.Visitors
 {
-    public class ExpVisitor : BaseVisitor, IVisitor<ASTNode, INode, IExp>
+    public partial class ParserVisitor
     {
-        public IExp Visit(ASTNode node, INode parent, IErrorListener listener)
+        public IExp VisitExp(ASTNode node, INode parent)
         {
             IExp? returnNode;
-            if ((returnNode = TryVisitAndNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitOrNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitNotNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitNumericNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitPredicateNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitNameNode(node, parent, listener)) != null) return returnNode;
+            if ((returnNode = TryVisitAndNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitOrNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitNotNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitNumericNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitPredicateNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitNameNode(node, parent)) != null) return returnNode;
 
-            listener.AddError(new ParseError(
+            Listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
             return returnNode;
         }
 
-        public IExp? TryVisitAndNode(ASTNode node, INode parent, IErrorListener listener)
+        public IExp? TryVisitAndNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "and"))
             {
-                if (DoesNodeHaveMoreThanNChildren(node, "and", 0, listener) &&
-                    DoesNotContainStrayCharacters(node, "and", listener))
+                if (DoesNodeHaveMoreThanNChildren(node, "and", 0) &&
+                    DoesNotContainStrayCharacters(node, "and"))
                 {
                     var newAndExp = new AndExp(node, parent, new List<IExp>());
                     foreach (var child in node.Children)
-                        newAndExp.Children.Add(Visit(child, newAndExp, listener));
+                        newAndExp.Children.Add(VisitExp(child, newAndExp));
 
                     return newAndExp;
                 }
@@ -48,45 +48,45 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IExp? TryVisitOrNode(ASTNode node, INode parent, IErrorListener listener)
+        public IExp? TryVisitOrNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "or") &&
-                DoesNodeHaveSpecificChildCount(node, "or", 2, listener) &&
-                DoesNotContainStrayCharacters(node, "or", listener))
+                DoesNodeHaveSpecificChildCount(node, "or", 2) &&
+                DoesNotContainStrayCharacters(node, "or"))
             {
                 var newOrExp = new OrExp(node, parent, null, null);
-                newOrExp.Option1 = Visit(node.Children[0], newOrExp, listener);
-                newOrExp.Option2 = Visit(node.Children[1], newOrExp, listener);
+                newOrExp.Option1 = VisitExp(node.Children[0], newOrExp);
+                newOrExp.Option2 = VisitExp(node.Children[1], newOrExp);
                 return newOrExp;
             }
             return null;
         }
 
-        public IExp? TryVisitNotNode(ASTNode node, INode parent, IErrorListener listener)
+        public IExp? TryVisitNotNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "not") &&
-                DoesNodeHaveSpecificChildCount(node, "not", 1, listener) &&
-                DoesNotContainStrayCharacters(node, "not", listener))
+                DoesNodeHaveSpecificChildCount(node, "not", 1) &&
+                DoesNotContainStrayCharacters(node, "not"))
             {
                 var newNotExp = new NotExp(node, parent, null);
-                newNotExp.Child = Visit(node.Children[0], newNotExp, listener);
+                newNotExp.Child = VisitExp(node.Children[0], newNotExp);
                 return newNotExp;
             }
             return null;
         }
 
-        public IExp? TryVisitPredicateNode(ASTNode node, INode parent, IErrorListener listener)
+        public IExp? TryVisitPredicateNode(ASTNode node, INode parent)
         {
             if (node.OuterContent.Contains('(') && 
                 node.OuterContent.Contains(')') && 
                 node.InnerContent != "" &&
-                DoesNodeHaveSpecificChildCount(node, "predicate", 0, listener))
+                DoesNodeHaveSpecificChildCount(node, "predicate", 0))
             {
                 var predicateName = node.InnerContent.Split(' ')[0];
                 var newPredicateExp = new PredicateExp(node, parent, predicateName, new List<NameExp>());
 
                 var content = node.InnerContent.Substring(node.InnerContent.IndexOf(predicateName) + predicateName.Length);
-                newPredicateExp.Arguments = LooseParseString<NameExp>(node, newPredicateExp, predicateName, content, listener);
+                newPredicateExp.Arguments = LooseParseString<NameExp>(node, newPredicateExp, predicateName, content);
 
                 return newPredicateExp;
             }
@@ -97,7 +97,8 @@ namespace PDDLSharp.Parsers.Visitors
         {
             "increase", "decrease", "assign", "scale-up", "scale-down", "=", "+", "-", "*", "/", "<", ">"
         };
-        public IExp? TryVisitNumericNode(ASTNode node, INode parent, IErrorListener listener)
+
+        public IExp? TryVisitNumericNode(ASTNode node, INode parent)
         {
             if (node.OuterContent.Contains('(') && 
                 node.OuterContent.Contains(')') && 
@@ -112,20 +113,20 @@ namespace PDDLSharp.Parsers.Visitors
                     IExp arg2;
                     if (node.Children.Count == 2)
                     {
-                        arg1 = Visit(node.Children[0], newNumericExp, listener);
+                        arg1 = VisitExp(node.Children[0], newNumericExp);
                         if (arg1 == null)
                             return null;
-                        arg2 = Visit(node.Children[1], newNumericExp, listener);
+                        arg2 = VisitExp(node.Children[1], newNumericExp);
                         if (arg2 == null)
                             return null;
                     }
                     else
                     {
-                        arg1 = Visit(node.Children[0], newNumericExp, listener);
+                        arg1 = VisitExp(node.Children[0], newNumericExp);
                         if (arg1 == null)
                             return null;
                         var content = node.InnerContent.Substring(node.InnerContent.IndexOf(numericName) + numericName.Length);
-                        arg2 = Visit(new ASTNode(node.Start, node.End, content, content), newNumericExp, listener);
+                        arg2 = VisitExp(new ASTNode(node.Start, node.End, content, content), newNumericExp);
                         if (arg2 == null)
                             return null;
                     }
@@ -137,17 +138,17 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IExp? TryVisitNameNode(ASTNode node, INode parent, IErrorListener listener)
+        public IExp? TryVisitNameNode(ASTNode node, INode parent)
         {
             if (node.InnerContent.Contains(ASTTokens.TypeToken) &&
-                DoesNodeHaveSpecificChildCount(node, "name", 0, listener))
+                DoesNodeHaveSpecificChildCount(node, "name", 0))
             {
                 var left = node.InnerContent.Substring(0, node.InnerContent.IndexOf(ASTTokens.TypeToken)).Trim();
                 var right = node.InnerContent.Substring(node.InnerContent.IndexOf(ASTTokens.TypeToken) + 3).Trim();
 
                 if (left == "")
                 {
-                    listener.AddError(new ParseError(
+                    Listener.AddError(new ParseError(
                         $"Context indicated the use of a type, but an object name was not given!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
@@ -156,7 +157,7 @@ namespace PDDLSharp.Parsers.Visitors
                 }
                 if (right == "")
                 {
-                    listener.AddError(new ParseError(
+                    Listener.AddError(new ParseError(
                         $"Context indicated the use of a type, but a type was not given!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
@@ -175,7 +176,7 @@ namespace PDDLSharp.Parsers.Visitors
                     right);
                 return newNameExp;
             }
-            else if (DoesNodeHaveSpecificChildCount(node, "name", 0, listener))
+            else if (DoesNodeHaveSpecificChildCount(node, "name", 0))
             {
                 var newNameExp = new NameExp(node, parent, node.InnerContent);
                 return newNameExp;

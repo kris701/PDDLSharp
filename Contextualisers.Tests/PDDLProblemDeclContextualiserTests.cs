@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.ASTGenerators;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
+using PDDLSharp.Models.Domain;
 using PDDLSharp.Models.Problem;
 using PDDLSharp.Parsers.Visitors;
 using System;
@@ -27,7 +28,7 @@ namespace PDDLSharp.Contextualisers.Tests
 
             IASTParser<ASTNode> parser = new ASTParser();
             var node = parser.Parse(toParse);
-            ProblemDecl? decl = new ProblemVisitor().Visit(node, null, listener) as ProblemDecl;
+            ProblemDecl? decl = new ParserVisitor(listener).TryVisitAs<ProblemDecl>(node, null) as ProblemDecl;
             Assert.IsNotNull(decl);
 
             IContextualiser<ProblemDecl> contextualiser = new PDDLProblemDeclContextualiser(listener);

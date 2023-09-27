@@ -14,40 +14,40 @@ using System.Xml.Linq;
 
 namespace PDDLSharp.Parsers.Visitors
 {
-    public class DomainVisitor : BaseVisitor, IVisitor<ASTNode, INode, IDecl>
+    public partial class ParserVisitor
     {
-        public IDecl Visit(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl VisitDomain(ASTNode node, INode parent)
         {
             IDecl? returnNode;
-            if ((returnNode = TryVisitDomainDeclNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitDomainNameNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitRequirementsNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitExtendsNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitTypesNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitConstantsNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitPredicatesNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitFunctionsNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitTimelessNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitActionNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitDurativeActionNode(node, parent, listener)) != null) return returnNode;
-            if ((returnNode = TryVisitAxiomNode(node, parent, listener)) != null) return returnNode;
+            if ((returnNode = TryVisitDomainDeclNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitDomainNameNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitRequirementsNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitExtendsNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitTypesNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitConstantsNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitPredicatesNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitFunctionsNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitTimelessNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitActionNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitDurativeActionNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitAxiomNode(node, parent)) != null) return returnNode;
 
-            listener.AddError(new ParseError(
+            Listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
             return returnNode;
         }
 
-        public IDecl? TryVisitDomainDeclNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitDomainDeclNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "define") &&
-                DoesNotContainStrayCharacters(node, "define", listener))
+                DoesNotContainStrayCharacters(node, "define"))
             {
                 var returnDomain = new DomainDecl(node);
                 foreach (var child in node.Children)
                 {
-                    var visited = Visit(child, returnDomain, listener);
+                    var visited = VisitDomain(child, returnDomain);
 
                     switch (visited)
                     {
@@ -69,10 +69,10 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitDomainNameNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitDomainNameNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "domain") &&
-                DoesContentContainNLooseChildren(node, "domain", 1, listener))
+                DoesContentContainNLooseChildren(node, "domain", 1))
             {
                 var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "domain");
                 return new DomainNameDecl(node, parent, name);
@@ -80,33 +80,33 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitRequirementsNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitRequirementsNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":requirements"))
             {
                 var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":requirements");
                 var newReq = new RequirementsDecl(node, parent, new List<NameExp>());
-                newReq.Requirements = LooseParseString<NameExp>(node, newReq, ":requirements", str, listener);
+                newReq.Requirements = LooseParseString<NameExp>(node, newReq, ":requirements", str);
 
                 return newReq;
             }
             return null;
         }
 
-        public IDecl? TryVisitExtendsNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitExtendsNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":extends"))
             {
                 var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":extends");
                 var newExt = new ExtendsDecl(node, parent, new List<NameExp>());
-                newExt.Extends = LooseParseString<NameExp>(node, newExt, ":extends", str, listener);
+                newExt.Extends = LooseParseString<NameExp>(node, newExt, ":extends", str);
 
                 return newExt;
             }
             return null;
         }
 
-        public IDecl? TryVisitTypesNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitTypesNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":types"))
             {
@@ -149,7 +149,7 @@ namespace PDDLSharp.Parsers.Visitors
                             HashSet<string> superTypes = new HashSet<string>();
                             var superTypeStr = line.Substring(line.LastIndexOf(ASTTokens.TypeToken) + ASTTokens.TypeToken.Length);
                             if (superTypeStr.Contains(ASTTokens.TypeToken) || superTypeStr.Trim().Contains(' '))
-                                listener.AddError(new ParseError(
+                                Listener.AddError(new ParseError(
                                     "Type definition cannot have two supertypes!",
                                     ParseErrorType.Error,
                                     ParseErrorLevel.Parsing
@@ -226,146 +226,143 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitConstantsNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitConstantsNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":constants"))
             {
                 var newCons = new ConstantsDecl(node, parent, new List<NameExp>());
                 var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":constants");
-                newCons.Constants = LooseParseString<NameExp>(node, newCons, ":constants", str, listener);
+                newCons.Constants = LooseParseString<NameExp>(node, newCons, ":constants", str);
 
                 return newCons;
             }
             return null;
         }
 
-        public IDecl? TryVisitPredicatesNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitPredicatesNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":predicates"))
             {
                 var newPred = new PredicatesDecl(node, parent, new List<PredicateExp>());
-                newPred.Predicates = ParseAsList<PredicateExp>(node, newPred, listener);
+                newPred.Predicates = ParseAsList<PredicateExp>(node, newPred);
 
                 return newPred;
             }
             return null;
         }
 
-        public IDecl? TryVisitFunctionsNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitFunctionsNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":functions"))
             {
                 var newFuncs = new FunctionsDecl(node, parent, new List<PredicateExp>());
-                newFuncs.Functions = ParseAsList<PredicateExp>(node, newFuncs, listener);
+                newFuncs.Functions = ParseAsList<PredicateExp>(node, newFuncs);
 
                 return newFuncs;
             }
             return null;
         }
 
-        public IDecl? TryVisitTimelessNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitTimelessNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":timeless"))
             {
                 var newTime = new TimelessDecl(node, parent, new List<PredicateExp>());
-                newTime.Items = ParseAsList<PredicateExp>(node, newTime, listener);
+                newTime.Items = ParseAsList<PredicateExp>(node, newTime);
 
                 return newTime;
             }
             return null;
         }
 
-        public IDecl? TryVisitActionNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitActionNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":action") &&
-                DoesContentContainTarget(node, ":action", ":parameters", listener) &&
-                DoesContentContainTarget(node, ":action", ":precondition", listener) &&
-                DoesContentContainTarget(node, ":action", ":effect", listener) &&
-                DoesNodeHaveSpecificChildCount(node, ":action", 3, listener) &&
-                DoesContentContainNLooseChildren(node, ":action", 4, listener))
+                DoesContentContainTarget(node, ":action", ":parameters") &&
+                DoesContentContainTarget(node, ":action", ":precondition") &&
+                DoesContentContainTarget(node, ":action", ":effect") &&
+                DoesNodeHaveSpecificChildCount(node, ":action", 3) &&
+                DoesContentContainNLooseChildren(node, ":action", 4))
             {
                 var nameFindStr = ReduceToSingleSpace(RemoveNodeTypeAndEscapeChars(node.InnerContent, ":action"));
                 var actionName = nameFindStr.Split(' ')[0].Trim();
 
                 var newActionDecl = new ActionDecl(node, parent, actionName, null, null, null);
-                var visitor = new ExpVisitor();
 
                 // Parameters
                 newActionDecl.Parameters = new ParameterDecl(
                     node.Children[0],
                     newActionDecl,
-                    LooseParseString<NameExp>(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent, listener));
+                    LooseParseString<NameExp>(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent));
 
                 // Preconditions
-                newActionDecl.Preconditions = visitor.Visit(node.Children[1], newActionDecl, listener);
+                newActionDecl.Preconditions = VisitExp(node.Children[1], newActionDecl);
 
                 // Effects
-                newActionDecl.Effects = visitor.Visit(node.Children[2], newActionDecl, listener);
+                newActionDecl.Effects = VisitExp(node.Children[2], newActionDecl);
 
                 return newActionDecl;
             }
             return null;
         }
 
-        public IDecl? TryVisitDurativeActionNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitDurativeActionNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":durative-action") &&
-                DoesContentContainTarget(node, ":durative-action", ":parameters", listener) &&
-                DoesContentContainTarget(node, ":durative-action", ":condition", listener) &&
-                DoesContentContainTarget(node, ":durative-action", ":duration", listener) &&
-                DoesContentContainTarget(node, ":durative-action", ":effect", listener) &&
-                DoesNodeHaveSpecificChildCount(node, ":durative-action", 4, listener) &&
-                DoesContentContainNLooseChildren(node, ":durative-action", 5, listener))
+                DoesContentContainTarget(node, ":durative-action", ":parameters") &&
+                DoesContentContainTarget(node, ":durative-action", ":condition") &&
+                DoesContentContainTarget(node, ":durative-action", ":duration") &&
+                DoesContentContainTarget(node, ":durative-action", ":effect") &&
+                DoesNodeHaveSpecificChildCount(node, ":durative-action", 4) &&
+                DoesContentContainNLooseChildren(node, ":durative-action", 5))
             {
                 var nameFindStr = ReduceToSingleSpace(RemoveNodeTypeAndEscapeChars(node.InnerContent, ":durative-action"));
                 var actionName = nameFindStr.Split(' ')[0].Trim();
 
                 var newActionDecl = new DurativeActionDecl(node, parent, actionName, null, null, null, null);
-                var visitor = new ExpVisitor();
 
                 // Parameters
                 newActionDecl.Parameters = new ParameterDecl(
                     node.Children[0],
                     newActionDecl,
-                    LooseParseString<NameExp>(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent, listener));
+                    LooseParseString<NameExp>(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent));
 
                 // Duration
-                newActionDecl.Duration = visitor.Visit(node.Children[1], newActionDecl, listener);
+                newActionDecl.Duration = VisitExp(node.Children[1], newActionDecl);
 
                 // Preconditions
-                newActionDecl.Condition = visitor.Visit(node.Children[2], newActionDecl, listener);
+                newActionDecl.Condition = VisitExp(node.Children[2], newActionDecl);
 
                 // Effects
-                newActionDecl.Effects = visitor.Visit(node.Children[3], newActionDecl, listener);
+                newActionDecl.Effects = VisitExp(node.Children[3], newActionDecl);
 
                 return newActionDecl;
             }
             return null;
         }
 
-        public IDecl? TryVisitAxiomNode(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl? TryVisitAxiomNode(ASTNode node, INode parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":axiom") &&
-                DoesContentContainTarget(node, ":axiom", ":vars", listener) &&
-                DoesContentContainTarget(node, ":axiom", ":context", listener) &&
-                DoesContentContainTarget(node, ":axiom", ":implies", listener) &&
-                DoesNodeHaveSpecificChildCount(node, ":axiom", 3, listener) &&
-                DoesContentContainNLooseChildren(node, ":axiom", 3, listener))
+                DoesContentContainTarget(node, ":axiom", ":vars") &&
+                DoesContentContainTarget(node, ":axiom", ":context") &&
+                DoesContentContainTarget(node, ":axiom", ":implies") &&
+                DoesNodeHaveSpecificChildCount(node, ":axiom", 3) &&
+                DoesContentContainNLooseChildren(node, ":axiom", 3))
             {
                 var newAxiomDecl = new AxiomDecl(node, parent, null, null, null);
-                var visitor = new ExpVisitor();
 
                 // Vars
                 newAxiomDecl.Vars = new ParameterDecl(
                     node.Children[0],
                     newAxiomDecl,
-                    LooseParseString<NameExp>(node.Children[0], newAxiomDecl, "parameters", node.Children[0].InnerContent.Trim(), listener));
+                    LooseParseString<NameExp>(node.Children[0], newAxiomDecl, "parameters", node.Children[0].InnerContent.Trim()));
 
                 // Context
-                newAxiomDecl.Context = visitor.Visit(node.Children[1], newAxiomDecl, listener);
+                newAxiomDecl.Context = VisitExp(node.Children[1], newAxiomDecl);
 
                 // Implies
-                newAxiomDecl.Implies = visitor.Visit(node.Children[2], newAxiomDecl, listener);
+                newAxiomDecl.Implies = VisitExp(node.Children[2], newAxiomDecl);
 
                 return newAxiomDecl;
             }

@@ -35,7 +35,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().Visit(node, null, null);
+            IDecl? decl = new ParserVisitor(null).VisitDomain(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, expectedType);
@@ -51,7 +51,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitDomainDeclNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitDomainDeclNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(DomainDecl));
@@ -69,7 +69,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitDomainDeclNode(node, null, listener);
+            IDecl? decl = new ParserVisitor(listener).TryVisitDomainDeclNode(node, null);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -86,7 +86,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitDomainNameNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitDomainNameNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(DomainNameDecl));
@@ -104,7 +104,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitDomainNameNode(node, null, listener);
+            IDecl? decl = new ParserVisitor(listener).TryVisitDomainNameNode(node, null);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -119,7 +119,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitDomainNameNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitDomainNameNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(DomainNameDecl));
@@ -136,7 +136,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitRequirementsNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitRequirementsNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(RequirementsDecl));
@@ -152,7 +152,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitRequirementsNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitRequirementsNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(RequirementsDecl));
@@ -175,7 +175,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitExtendsNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitExtendsNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ExtendsDecl));
@@ -191,7 +191,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitExtendsNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitExtendsNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ExtendsDecl));
@@ -214,7 +214,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitTypesNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitTypesNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(TypesDecl));
@@ -232,7 +232,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitTypesNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitTypesNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(TypesDecl));
@@ -256,7 +256,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitTypesNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitTypesNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(TypesDecl));
@@ -281,7 +281,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitConstantsNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitConstantsNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ConstantsDecl));
@@ -299,7 +299,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitConstantsNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitConstantsNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ConstantsDecl));
@@ -322,7 +322,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitConstantsNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitConstantsNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ConstantsDecl));
@@ -345,7 +345,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitPredicatesNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitPredicatesNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(PredicatesDecl));
@@ -361,7 +361,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitPredicatesNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitPredicatesNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(PredicatesDecl));
@@ -384,7 +384,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitFunctionsNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitFunctionsNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(FunctionsDecl));
@@ -400,7 +400,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitFunctionsNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitFunctionsNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(FunctionsDecl));
@@ -424,7 +424,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitTimelessNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitTimelessNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(TimelessDecl));
@@ -442,7 +442,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitTimelessNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitTimelessNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(TimelessDecl));
@@ -464,7 +464,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitActionNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitActionNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ActionDecl));
@@ -480,7 +480,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitActionNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitActionNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ActionDecl));
@@ -503,7 +503,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitActionNode(node, null, listener);
+            IDecl? decl = new ParserVisitor(listener).TryVisitActionNode(node, null);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -522,7 +522,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitActionNode(node, null, listener);
+            IDecl? decl = new ParserVisitor(listener).TryVisitActionNode(node, null);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -538,7 +538,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitDurativeActionNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitDurativeActionNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(DurativeActionDecl));
@@ -554,7 +554,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitDurativeActionNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitDurativeActionNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(DurativeActionDecl));
@@ -578,7 +578,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitDurativeActionNode(node, null, listener);
+            IDecl? decl = new ParserVisitor(listener).TryVisitDurativeActionNode(node, null);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -597,7 +597,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitDurativeActionNode(node, null, listener);
+            IDecl? decl = new ParserVisitor(listener).TryVisitDurativeActionNode(node, null);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -613,7 +613,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitAxiomNode(node, null, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitAxiomNode(node, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(AxiomDecl));
@@ -633,7 +633,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl? decl = new DomainVisitor().TryVisitAxiomNode(node, null, listener);
+            IDecl? decl = new ParserVisitor(listener).TryVisitAxiomNode(node, null);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);

@@ -28,59 +28,46 @@ namespace PDDLSharp.Parsers
 
         public PDDLDecl Parse(string domainFile, string problemFile)
         {
-            return new PDDLDecl(
-                ParseDomain(domainFile),
-                ParseProblem(problemFile));
-        }
-
-        public DomainDecl ParseDomain(string domainFile)
-        {
             if (!PDDLFileHelper.IsFileDomain(domainFile))
                 Listener.AddError(new ParseError(
-                    $"Attempted file to parse was not a domain file!",
+                    $"File is not a domain file: '{domainFile}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
-
-            var absAST = ParseAsASTTree(domainFile, Listener);
-
-            IVisitor<ASTNode, INode, IDecl> visitor = new DomainVisitor();
-            var returnDomain = visitor.Visit(absAST, null, Listener);
-            if (returnDomain is DomainDecl decl)
-                return decl;
-            return new DomainDecl(new ASTNode());
-        }
-
-        public ProblemDecl ParseProblem(string problemFile)
-        {
             if (!PDDLFileHelper.IsFileProblem(problemFile))
                 Listener.AddError(new ParseError(
-                    $"Attempted file to parse was not a problem file!",
+                    $"File is not a problem file: '{problemFile}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
 
-            var absAST = ParseAsASTTree(problemFile, Listener);
-
-            IVisitor<ASTNode, INode, IDecl> visitor = new ProblemVisitor();
-            var returnProblem = visitor.Visit(absAST, null, Listener);
-            if (returnProblem is ProblemDecl decl)
-                return decl;
-            return new ProblemDecl(new ASTNode());
+            return new PDDLDecl(
+                ParseAs<DomainDecl>(domainFile),
+                ParseAs<ProblemDecl>(problemFile));
         }
 
-        private ASTNode ParseAsASTTree(string path, IErrorListener listener)
+        public T? ParseAs<T>(string file) where T : INode
         {
-            var text = ReadDataAsString(path, listener);
+            var absAST = ParseAsASTTree(file);
+            var visitor = new ParserVisitor(Listener);
+            var result = visitor.TryVisitAs<T>(absAST, null);
+            if (result is T act)
+                return act;
+            return default(T);
+        }
+
+        private ASTNode ParseAsASTTree(string path)
+        {
+            var text = ReadDataAsString(path);
 
             IASTParser<ASTNode> astParser = new ASTParser();
             var absAST = astParser.Parse(text);
             return absAST;
         }
 
-        private string ReadDataAsString(string path, IErrorListener listener)
+        private string ReadDataAsString(string path)
         {
             if (!File.Exists(path))
             {
-                listener.AddError(new ParseError(
+                Listener.AddError(new ParseError(
                     $"Could not find the file to parse: '{path}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
