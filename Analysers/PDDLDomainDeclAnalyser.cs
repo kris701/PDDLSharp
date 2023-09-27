@@ -258,10 +258,19 @@ namespace PDDLSharp.Analysers
                 foreach (var arg in pred.Arguments)
                 {
                     var argOrCons = GetParameterOrConstant(action, arg.Name);
-                    if (!arg.Type.IsTypeOf(argOrCons))
+                    if (argOrCons == null)
                     {
                         Listener.AddError(new ParseError(
-                            $"Predicate has an invalid argument type! Expected a '{argOrCons}' but got a '{arg.Type.Name}'",
+                            $"Argument does not match the predicate definition: {arg.Name}",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
+                            arg.Line,
+                            arg.Start));
+                    }
+                    else if (argOrCons.Name != arg.Name && !arg.Type.IsTypeOf(argOrCons.Type.Name))
+                    {
+                        Listener.AddError(new ParseError(
+                            $"Predicate has an invalid argument type! Expected a '{GetParameterOrConstant(action, arg.Name).Name}' but got a '{arg.Type.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             arg.Line,
@@ -271,16 +280,14 @@ namespace PDDLSharp.Analysers
                 }
             }
         }
-        public string GetParameterOrConstant(ActionDecl act, string name)
+        private NameExp GetParameterOrConstant(ActionDecl action, string name)
         {
-            var concrete = act.Parameters.Values.SingleOrDefault(x => x.Name == name);
+            var concrete = action.Parameters.Values.SingleOrDefault(x => x.Name == name);
             if (concrete == null)
-                if (act.Parent is DomainDecl domain)
+                if (action.Parent is DomainDecl domain)
                     if (domain.Constants != null)
-                        concrete = domain.Constants.Constants.SingleOrDefault(x => x.Name == name);
-            if (concrete == null)
-                return "";
-            return concrete.Name;
+                        return domain.Constants.Constants.SingleOrDefault(x => x.Name == name);
+            return concrete;
         }
         private void CheckTypeMatchForAxioms(DomainDecl domain)
         {
