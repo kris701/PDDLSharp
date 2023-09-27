@@ -11,7 +11,7 @@ namespace PDDLSharp.Models
 {
     public abstract class BaseWalkableNode : BaseNode, IWalkable
     {
-        protected BaseWalkableNode(ASTNode node, INode parent) : base(node, parent)
+        protected BaseWalkableNode(ASTNode node, INode? parent) : base(node, parent)
         {
         }
 

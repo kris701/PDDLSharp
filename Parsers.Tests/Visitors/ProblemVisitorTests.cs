@@ -48,8 +48,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitProblemDeclNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitProblemDeclNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ProblemDecl));
@@ -67,8 +66,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitProblemDeclNode(node, null, listener, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitProblemDeclNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -85,8 +83,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitProblemNameNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitProblemNameNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ProblemNameDecl));
@@ -105,8 +102,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitProblemNameNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitProblemNameNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ProblemNameDecl));
@@ -126,8 +122,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitProblemNameNode(node, null, listener, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitProblemNameNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -144,8 +139,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitDomainRefNameNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitDomainRefNameNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(DomainNameRefDecl));
@@ -164,8 +158,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitDomainRefNameNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitDomainRefNameNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(DomainNameRefDecl));
@@ -185,8 +178,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitDomainRefNameNode(node, null, listener, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitDomainRefNameNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -204,8 +196,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitObjectsNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitObjectsNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ObjectsDecl));
@@ -223,8 +214,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitObjectsNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitObjectsNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ObjectsDecl));
@@ -249,8 +239,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitObjectsNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitObjectsNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ObjectsDecl));
@@ -274,8 +263,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitObjectsNode(node, null, listener, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitObjectsNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -293,8 +281,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitInitsNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitInitsNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(InitDecl));
@@ -312,8 +299,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitInitsNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitInitsNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(InitDecl));
@@ -337,8 +323,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitInitsNode(node, null, listener, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitInitsNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -355,8 +340,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitGoalNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitGoalNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(GoalDecl));
@@ -372,8 +356,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitGoalNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitGoalNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(GoalDecl));
@@ -398,8 +381,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitGoalNode(node, null, listener, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitGoalNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -418,8 +400,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitGoalNode(node, null, listener, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitGoalNode(node, null, listener);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -436,8 +417,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            IDecl decl;
-            new ProblemVisitor().TryVisitMetricNode(node, null, null, out decl);
+            IDecl? decl = new ProblemVisitor().TryVisitMetricNode(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(MetricDecl));
