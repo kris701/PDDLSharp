@@ -60,7 +60,6 @@ namespace PDDLSharp.Analysers
             ":adl",
             ":universal-preconditions",
             ":quantified-preconditions",
-            ":conditional-effects",
             ":action-expansions",
             ":foreach-expansions",
             ":dag-expansions",
