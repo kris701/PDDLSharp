@@ -270,7 +270,7 @@ namespace PDDLSharp.Analysers
                     else if (argOrCons.Name != arg.Name && !arg.Type.IsTypeOf(argOrCons.Type.Name))
                     {
                         Listener.AddError(new ParseError(
-                            $"Predicate has an invalid argument type! Expected a '{GetParameterOrConstant(action, arg.Name).Name}' but got a '{arg.Type.Name}'",
+                            $"Predicate has an invalid argument type! Expected a '{argOrCons.Name}' but got a '{arg.Type.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             arg.Line,
@@ -280,7 +280,7 @@ namespace PDDLSharp.Analysers
                 }
             }
         }
-        private NameExp GetParameterOrConstant(ActionDecl action, string name)
+        private NameExp? GetParameterOrConstant(ActionDecl action, string name)
         {
             var concrete = action.Parameters.Values.SingleOrDefault(x => x.Name == name);
             if (concrete == null)

@@ -39,8 +39,8 @@ namespace PDDLSharp.Parsers.Visitors
                 DoesNotContainStrayCharacters(node, "when"))
             {
                 var newWhenExp = new WhenExp(node, parent, null, null);
-                newWhenExp.Condition = TryVisitAs<IExp>(node.Children[0], newWhenExp);
-                newWhenExp.Effect = TryVisitAs<IExp>(node.Children[1], newWhenExp);
+                newWhenExp.Condition = VisitExp(node.Children[0], newWhenExp);
+                newWhenExp.Effect = VisitExp(node.Children[1], newWhenExp);
 
                 return newWhenExp;
             }
