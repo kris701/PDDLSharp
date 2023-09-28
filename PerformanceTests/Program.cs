@@ -1,4 +1,8 @@
-﻿using PDDLSharp.Models.Domain;
+﻿using PDDLSharp.Analysers;
+using PDDLSharp.Contextualisers;
+using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
+using PDDLSharp.Models.Domain;
 using PDDLSharp.Parsers;
 using System;
 using System.Diagnostics;
@@ -14,14 +18,21 @@ namespace PerformanceTests
             Console.WriteLine("Done!");
 
             var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
+            var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
 
-            IPDDLParser parser = new PDDLParser(null);
+            IErrorListener listener = new ErrorListener();
+            IPDDLParser parser = new PDDLParser(listener);
+            IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
+            IAnalyser<PDDLDecl> analyser = new PDDLDeclAnalyser(listener);
+
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Console.WriteLine($"Parsing... {i}");
-                parser.ParseAs<DomainDecl>(targetDomain);
+                var decl = parser.Parse(targetDomain, targetProblem);
+                contextualiser.Contexturalise(decl);
+                analyser.PostAnalyse(decl);
             }
             watch.Stop();
             Console.WriteLine($"Done! Took {watch.ElapsedMilliseconds}ms");

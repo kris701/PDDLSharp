@@ -30,6 +30,7 @@ namespace PDDLSharp.Analysers
             CheckForUnusedPredicates(decl);
             CheckForUnusedTypes(decl);
             CheckForUnusedActionParameters(decl);
+            CheckForUnusedDurativeActionParameters(decl);
             CheckForUnusedAxiomParameters(decl);
 
             // Types
@@ -114,15 +115,18 @@ namespace PDDLSharp.Analysers
         {
             if (domain.Predicates != null)
             {
+                var allPredicates = domain.FindTypes<PredicateExp>();
                 foreach (var predicate in domain.Predicates.Predicates)
                 {
-                    if (domain.FindNames(predicate.Name).Count == 1)
+                    if (allPredicates.Count(x => x.Name == predicate.Name) == 1)
+                    {
                         Listener.AddError(new ParseError(
                             $"Unused predicate detected '{predicate.Name}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
                             predicate.Line,
                             predicate.Start));
+                    }
                 }
             }
         }
@@ -149,10 +153,29 @@ namespace PDDLSharp.Analysers
             {
                 foreach (var act in domain.Actions)
                 {
+                    var allNames = act.FindTypes<NameExp>();
                     foreach (var param in act.Parameters.Values)
-                        if (act.FindNames(param.Name).Count == 0)
+                        if (allNames.Count(x => x.Name == param.Name) == 1)
                             Listener.AddError(new ParseError(
                                 $"Unused action parameter found '{param.Name}'",
+                                ParseErrorType.Message,
+                                ParseErrorLevel.Analyser,
+                                param.Line,
+                                param.Start));
+                }
+            }
+        }
+        private void CheckForUnusedDurativeActionParameters(DomainDecl domain)
+        {
+            if (domain.DurativeActions != null)
+            {
+                foreach (var act in domain.DurativeActions)
+                {
+                    var allNames = act.FindTypes<NameExp>();
+                    foreach (var param in act.Parameters.Values)
+                        if (allNames.Count(x => x.Name == param.Name) == 1)
+                            Listener.AddError(new ParseError(
+                                $"Unused durative action parameter found '{param.Name}'",
                                 ParseErrorType.Message,
                                 ParseErrorLevel.Analyser,
                                 param.Line,
@@ -166,8 +189,9 @@ namespace PDDLSharp.Analysers
             {
                 foreach (var axi in domain.Axioms)
                 {
+                    var allNames = axi.FindTypes<NameExp>();
                     foreach (var param in axi.Vars.Values)
-                        if (axi.FindNames(param.Name).Count == 0)
+                        if (allNames.Count(x => x.Name == param.Name) == 1)
                             Listener.AddError(new ParseError(
                                 $"Unused axiom variable found '{param.Name}'",
                                 ParseErrorType.Message,
