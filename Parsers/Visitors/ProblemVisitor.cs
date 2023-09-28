@@ -33,27 +33,25 @@ namespace PDDLSharp.Parsers.Visitors
 
         public IDecl? TryVisitProblemDeclNode(ASTNode node, INode? parent)
         {
-            if (IsOfValidNodeType(node.InnerContent, "define"))
+            if (IsOfValidNodeType(node.InnerContent, "define") &&
+                DoesNotContainStrayCharacters(node, "define"))
             {
-                if (DoesNotContainStrayCharacters(node, "define"))
+                var returnProblem = new ProblemDecl(node);
+                foreach (var child in node.Children)
                 {
-                    var returnProblem = new ProblemDecl(node);
-                    foreach (var child in node.Children)
-                    {
-                        var visited = VisitProblem(child, returnProblem);
+                    var visited = VisitProblem(child, returnProblem);
 
-                        switch (visited)
-                        {
-                            case ProblemNameDecl d: returnProblem.Name = d; break;
-                            case DomainNameRefDecl d: returnProblem.DomainName = d; break;
-                            case ObjectsDecl d: returnProblem.Objects = d; break;
-                            case InitDecl d: returnProblem.Init = d; break;
-                            case GoalDecl d: returnProblem.Goal = d; break;
-                            case MetricDecl d: returnProblem.Metric = d; break;
-                        }
+                    switch (visited)
+                    {
+                        case ProblemNameDecl d: returnProblem.Name = d; break;
+                        case DomainNameRefDecl d: returnProblem.DomainName = d; break;
+                        case ObjectsDecl d: returnProblem.Objects = d; break;
+                        case InitDecl d: returnProblem.Init = d; break;
+                        case GoalDecl d: returnProblem.Goal = d; break;
+                        case MetricDecl d: returnProblem.Metric = d; break;
                     }
-                    return returnProblem;
                 }
+                return returnProblem;
             }
             return null;
         }

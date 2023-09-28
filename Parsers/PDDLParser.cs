@@ -94,21 +94,16 @@ namespace PDDLSharp.Parsers
 
         private string ReplaceCommentsWithWhiteSpace(string text)
         {
-            string returnStr = "";
-            bool isComment = false;
-            for (int i = 0; i < text.Length; i++)
+            var retStr = text;
+            int offset = 0;
+            while (retStr.Contains(";"))
             {
-                if (text[i] == ';')
-                    isComment = true;
-                else if (text[i] == ASTTokens.BreakToken)
-                    isComment = false;
-
-                if (isComment)
-                    returnStr += ' ';
-                else
-                    returnStr += text[i];
+                int from = retStr.IndexOf(";", offset);
+                int to = retStr.IndexOf(ASTTokens.BreakToken, from);
+                retStr = retStr.Remove(from, to - from).Insert(from, new string(' ', to - from));
+                offset = to + 1;
             }
-            return returnStr;
+            return retStr;
         }
     }
 }

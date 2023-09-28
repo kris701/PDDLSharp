@@ -23,7 +23,7 @@ namespace PDDLSharp.ASTGenerators
                 end = text.LastIndexOf(')') + 1;
 
             var node = ParseAsNodeRec(text, 0, end);
-            SetLineNumberByCharacterNumberRec(text.Replace("\r", " ").Replace("\t", " "), node);
+            SetLineNumbersByCharacter(text, node);
             return node;
         }
 
@@ -44,7 +44,6 @@ namespace PDDLSharp.ASTGenerators
                 innerContent = ReplaceRangeWithSpaces(innerContent, lastP, lastP + 1);
 
                 var children = new List<ASTNode>();
-                //while (innerContent.Count(x => x == ')' || x == '(') >= 2)
                 while (innerContent.Contains('(') && innerContent.Contains(')'))
                 {
                     int currentLevel = 0;
@@ -90,18 +89,39 @@ namespace PDDLSharp.ASTGenerators
 
         private string ReplaceRangeWithSpaces(string text, int from, int to)
         {
-            var newText = text.Substring(0, from);
-            newText += new string(' ', to - from);
-            newText += text.Substring(to);
-            return newText;
+            return text.Remove(from, to - from).Insert(from, new string(' ', to - from));
         }
 
-        private void SetLineNumberByCharacterNumberRec(string source, ASTNode node)
+        private void SetLineNumbersByCharacter(string source, ASTNode node)
+        {
+            List<int> lineDict = new List<int>();
+            int offset = source.IndexOf(ASTTokens.BreakToken);
+            while(offset != -1)
+            {
+                lineDict.Add(offset);
+                offset = source.IndexOf(ASTTokens.BreakToken, offset + 1);
+            }
+
+            SetLineNumberByCharacterNumberRec(lineDict, node);
+        }
+
+        private void SetLineNumberByCharacterNumberRec(List<int> lineDict, ASTNode node)
         {
             foreach (var child in node.Children)
-                SetLineNumberByCharacterNumberRec(source, child);
-            var partStr = source.Substring(0, node.Start);
-            node.Line = partStr.Count(c => c == ASTTokens.BreakToken) + 1;
+                SetLineNumberByCharacterNumberRec(lineDict, child);
+
+            int counter = 1;
+            foreach(var endChar in lineDict)
+            {
+                if (endChar > node.Start)
+                {
+                    node.Line = counter;
+                    break;
+                }
+                counter++;
+            }
+            if (node.Line == -1)
+                node.Line = lineDict.Count + 1;
         }
     }
 }
