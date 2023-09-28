@@ -9,10 +9,10 @@ namespace PDDLSharp.Models.Expressions
 {
     public class WhenExp : BaseWalkableNode, IExp
     {
-        public AndExp Condition { get; set; }
-        public AndExp Effect { get; set; }
+        public IExp Condition { get; set; }
+        public IExp Effect { get; set; }
 
-        public WhenExp(ASTNode node, INode parent, AndExp condition, AndExp effect) : base(node, parent)
+        public WhenExp(ASTNode node, INode parent, IExp condition, IExp effect) : base(node, parent)
         {
             Condition = condition;
             Effect = effect;

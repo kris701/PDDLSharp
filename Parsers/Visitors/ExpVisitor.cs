@@ -18,6 +18,7 @@ namespace PDDLSharp.Parsers.Visitors
         {
             IExp? returnNode;
             if ((returnNode = TryVisitAndNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitWhenNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitOrNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNotNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNumericNode(node, parent)) != null) return returnNode;
@@ -31,19 +32,31 @@ namespace PDDLSharp.Parsers.Visitors
             return returnNode;
         }
 
+        public IExp? TryVisitWhenNode(ASTNode node, INode parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, "when") &&
+                DoesNodeHaveSpecificChildCount(node, "when", 2) &&
+                DoesNotContainStrayCharacters(node, "when"))
+            {
+                var newWhenExp = new WhenExp(node, parent, null, null);
+                newWhenExp.Condition = TryVisitAs<IExp>(node.Children[0], newWhenExp);
+                newWhenExp.Effect = TryVisitAs<IExp>(node.Children[1], newWhenExp);
+
+                return newWhenExp;
+            }
+            return null;
+        }
+
         public IExp? TryVisitAndNode(ASTNode node, INode parent)
         {
-            if (IsOfValidNodeType(node.InnerContent, "and"))
+            if (IsOfValidNodeType(node.InnerContent, "and") &&
+                DoesNodeHaveMoreThanNChildren(node, "and", 0) &&
+                DoesNotContainStrayCharacters(node, "and"))
             {
-                if (DoesNodeHaveMoreThanNChildren(node, "and", 0) &&
-                    DoesNotContainStrayCharacters(node, "and"))
-                {
-                    var newAndExp = new AndExp(node, parent, new List<IExp>());
-                    foreach (var child in node.Children)
-                        newAndExp.Children.Add(VisitExp(child, newAndExp));
-
-                    return newAndExp;
-                }
+                var newAndExp = new AndExp(node, parent, new List<IExp>());
+                foreach (var child in node.Children)
+                    newAndExp.Children.Add(VisitExp(child, newAndExp));
+                return newAndExp;
             }
             return null;
         }
