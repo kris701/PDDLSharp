@@ -9,26 +9,23 @@ using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.Expressions
 {
-    public class NameExp : BaseNode, IExp, INamedNode
+    public class NameExp : BaseNamedNode, IExp
     {
-        public string Name { get; set; }
         public TypeExp Type { get; set; }
 
-        public NameExp(ASTNode node, INode? parent, string name, TypeExp type) : base(node, parent)
+        public NameExp(ASTNode node, INode? parent, string name, TypeExp type) : base(node, parent, name)
         {
-            Name = name;
             Type = type;
         }
 
-        public NameExp(ASTNode node, INode? parent, string name) : base(node, parent)
+        public NameExp(ASTNode node, INode? parent, string name) : base(node, parent, name)
         {
-            Name = name;
             Type = new TypeExp(node, this, "");
         }
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode() + base.GetHashCode() + Type.GetHashCode();
+            return base.GetHashCode() + Type.GetHashCode();
         }
     }
 }

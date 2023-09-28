@@ -8,18 +8,16 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Models.Problem
 {
-    public class DomainNameRefDecl : BaseNode, IDecl, INamedNode
+    public class DomainNameRefDecl : BaseNamedNode, IDecl
     {
-        public string Name { get; set; }
 
-        public DomainNameRefDecl(ASTNode node, INode? parent, string name) : base(node, parent)
+        public DomainNameRefDecl(ASTNode node, INode? parent, string name) : base(node, parent, name)
         {
-            Name = name;
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() + Name.GetHashCode();
+            return base.GetHashCode();
         }
     }
 }

@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Models.Expressions
 {
-    public class TypeExp : BaseNode, IExp, INamedNode
+    public class TypeExp : BaseNamedNode, IExp
     {
-        public string Name { get; set; }
         // This is the primary supertype. It is needed in the code generation part
         public string SuperType { get; set; }
         // This is the set of alternative supertypes (inherited types)
         public HashSet<string> SuperTypes { get; set; }
 
-        public TypeExp(ASTNode node, INode? parent, string name, string superType, HashSet<string> altTypes) : base(node, parent)
+        public TypeExp(ASTNode node, INode? parent, string name, string superType, HashSet<string> altTypes) : base(node, parent, name)
         {
-            Name = name;
             SuperType = superType;
             SuperTypes = new HashSet<string>();
             foreach (var type in altTypes)
@@ -27,17 +25,15 @@ namespace PDDLSharp.Models.Expressions
             SuperTypes.Add(superType);
         }
 
-        public TypeExp(ASTNode node, INode? parent, string name, string superType) : base(node, parent)
+        public TypeExp(ASTNode node, INode? parent, string name, string superType) : base(node, parent, name)
         {
-            Name = name;
             SuperTypes = new HashSet<string>();
             SuperType = superType;
             SuperTypes.Add(superType);
         }
 
-        public TypeExp(ASTNode node, INode? parent, string name) : base(node, parent)
+        public TypeExp(ASTNode node, INode? parent, string name) : base(node, parent, name)
         {
-            Name = name;
             SuperTypes = new HashSet<string>();
             SuperType = "";
         }
@@ -53,7 +49,7 @@ namespace PDDLSharp.Models.Expressions
 
         public override int GetHashCode()
         {
-            int hash = Name.GetHashCode() + base.GetHashCode();
+            int hash = SuperType.GetHashCode() + base.GetHashCode();
             if (SuperTypes != null)
                 foreach (var type in SuperTypes)
                     hash *= type.GetHashCode();
