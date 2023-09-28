@@ -15,7 +15,7 @@ namespace PDDLSharp.Models.Domain
     {
         public List<NameExp> Constants { get; set; }
 
-        public ConstantsDecl(ASTNode node, INode parent, List<NameExp> constants) : base(node, parent) 
+        public ConstantsDecl(ASTNode node, INode? parent, List<NameExp> constants) : base(node, parent) 
         {
             Constants = constants;
         }

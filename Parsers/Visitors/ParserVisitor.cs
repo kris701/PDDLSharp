@@ -23,7 +23,7 @@ namespace PDDLSharp.Parsers.Visitors
             Listener = listener;
         }
 
-        public T TryVisitAs<T>(ASTNode node, INode parent) where T : INode
+        public T TryVisitAs<T>(ASTNode node, INode? parent) where T : INode
         {
             var res = VisitAs<T>(node, parent);
             if (res is T model)
@@ -37,7 +37,7 @@ namespace PDDLSharp.Parsers.Visitors
             return default(T);
         }
 
-        private INode? VisitAs<T>(ASTNode node, INode parent) where T : INode =>
+        private INode? VisitAs<T>(ASTNode node, INode? parent) where T : INode =>
             // Domain
             typeof(T) == typeof(DomainDecl)         ? TryVisitDomainDeclNode(node, parent) :
             typeof(T) == typeof(DomainNameDecl)     ? TryVisitDomainNameNode(node, parent) :

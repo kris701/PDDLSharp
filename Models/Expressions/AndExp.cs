@@ -13,7 +13,7 @@ namespace PDDLSharp.Models.Expressions
     {
         public List<IExp> Children { get; set; }
 
-        public AndExp(ASTNode node, INode parent, List<IExp> children) : base(node, parent)
+        public AndExp(ASTNode node, INode? parent, List<IExp> children) : base(node, parent)
         {
             Children = children;
         }

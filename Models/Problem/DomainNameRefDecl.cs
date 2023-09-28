@@ -12,7 +12,7 @@ namespace PDDLSharp.Models.Problem
     {
         public string Name { get; set; }
 
-        public DomainNameRefDecl(ASTNode node, INode parent, string name) : base(node, parent)
+        public DomainNameRefDecl(ASTNode node, INode? parent, string name) : base(node, parent)
         {
             Name = name;
         }

@@ -13,7 +13,7 @@ namespace PDDLSharp.Models.Domain
     {
         public List<PredicateExp> Functions { get; set; }
 
-        public FunctionsDecl(ASTNode node, INode parent, List<PredicateExp> functions) : base(node, parent)
+        public FunctionsDecl(ASTNode node, INode? parent, List<PredicateExp> functions) : base(node, parent)
         {
             Functions = functions;
         }

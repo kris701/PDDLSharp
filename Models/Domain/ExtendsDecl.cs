@@ -14,7 +14,7 @@ namespace PDDLSharp.Models.Domain
     {
         public List<NameExp> Extends { get; set; }
 
-        public ExtendsDecl(ASTNode node, INode parent, List<NameExp> extends) : base(node, parent)
+        public ExtendsDecl(ASTNode node, INode? parent, List<NameExp> extends) : base(node, parent)
         {
             Extends = extends;
         }

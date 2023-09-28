@@ -16,7 +16,7 @@ namespace PDDLSharp.Models.Domain
         public IExp Preconditions { get; set; }
         public IExp Effects { get; set; }
 
-        public ActionDecl(ASTNode node, INode parent, string name, ParameterDecl parameters, IExp preconditions, IExp effects) : base(node, parent)
+        public ActionDecl(ASTNode node, INode? parent, string name, ParameterDecl parameters, IExp preconditions, IExp effects) : base(node, parent)
         {
             Name = name;
             Parameters = parameters;

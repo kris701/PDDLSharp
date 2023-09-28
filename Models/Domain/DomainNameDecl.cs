@@ -11,7 +11,7 @@ namespace PDDLSharp.Models.Domain
     {
         public string Name { get; set; }
 
-        public DomainNameDecl(ASTNode node, INode parent, string name) : base(node, parent)
+        public DomainNameDecl(ASTNode node, INode? parent, string name) : base(node, parent)
         {
             Name = name;
         }

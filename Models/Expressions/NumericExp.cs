@@ -14,7 +14,7 @@ namespace PDDLSharp.Models.Expressions
         public IExp Arg1 { get; set; }
         public IExp Arg2 { get; set; }
 
-        public NumericExp(ASTNode node, INode parent, string name, IExp arg1, IExp arg2) : base(node, parent)
+        public NumericExp(ASTNode node, INode? parent, string name, IExp arg1, IExp arg2) : base(node, parent)
         {
             Name = name;
             Arg1 = arg1;

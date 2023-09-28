@@ -14,7 +14,7 @@ namespace PDDLSharp.Models.Domain
     {
         public List<NameExp> Values { get; set; }
 
-        public ParameterDecl(ASTNode node, INode parent, List<NameExp> values) : base(node, parent)
+        public ParameterDecl(ASTNode node, INode? parent, List<NameExp> values) : base(node, parent)
         {
             Values = values;
         }

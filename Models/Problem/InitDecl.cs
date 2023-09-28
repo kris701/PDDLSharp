@@ -12,7 +12,7 @@ namespace PDDLSharp.Models.Problem
     {
         public List<IExp> Predicates { get; set; }
 
-        public InitDecl(ASTNode node, INode parent, List<IExp> predicates) : base(node, parent)
+        public InitDecl(ASTNode node, INode? parent, List<IExp> predicates) : base(node, parent)
         {
             Predicates = predicates;
         }

@@ -17,7 +17,7 @@ namespace PDDLSharp.Parsers.Visitors
 {
     public partial class ParserVisitor
     {
-        public IDecl VisitDomain(ASTNode node, INode parent)
+        public IDecl VisitDomain(ASTNode node, INode? parent)
         {
             IDecl? returnNode;
             if ((returnNode = TryVisitDomainDeclNode(node, parent)) != null) return returnNode;
@@ -40,7 +40,7 @@ namespace PDDLSharp.Parsers.Visitors
             return returnNode;
         }
 
-        public IDecl? TryVisitDomainDeclNode(ASTNode node, INode parent)
+        public IDecl? TryVisitDomainDeclNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "define") &&
                 DoesNotContainStrayCharacters(node, "define"))
@@ -70,7 +70,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitDomainNameNode(ASTNode node, INode parent)
+        public IDecl? TryVisitDomainNameNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "domain") &&
                 DoesContentContainNLooseChildren(node, "domain", 1))
@@ -81,7 +81,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitRequirementsNode(ASTNode node, INode parent)
+        public IDecl? TryVisitRequirementsNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":requirements"))
             {
@@ -94,7 +94,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitExtendsNode(ASTNode node, INode parent)
+        public IDecl? TryVisitExtendsNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":extends"))
             {
@@ -107,7 +107,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitTypesNode(ASTNode node, INode parent)
+        public IDecl? TryVisitTypesNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":types"))
             {
@@ -178,7 +178,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitConstantsNode(ASTNode node, INode parent)
+        public IDecl? TryVisitConstantsNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":constants"))
             {
@@ -191,7 +191,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitPredicatesNode(ASTNode node, INode parent)
+        public IDecl? TryVisitPredicatesNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":predicates"))
             {
@@ -203,7 +203,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitFunctionsNode(ASTNode node, INode parent)
+        public IDecl? TryVisitFunctionsNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":functions"))
             {
@@ -215,7 +215,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitTimelessNode(ASTNode node, INode parent)
+        public IDecl? TryVisitTimelessNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":timeless"))
             {
@@ -227,7 +227,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitActionNode(ASTNode node, INode parent)
+        public IDecl? TryVisitActionNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":action") &&
                 DoesContentContainTarget(node, ":action", ":parameters") &&
@@ -258,7 +258,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitDurativeActionNode(ASTNode node, INode parent)
+        public IDecl? TryVisitDurativeActionNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":durative-action") &&
                 DoesContentContainTarget(node, ":durative-action", ":parameters") &&
@@ -293,7 +293,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitAxiomNode(ASTNode node, INode parent)
+        public IDecl? TryVisitAxiomNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":axiom") &&
                 DoesContentContainTarget(node, ":axiom", ":vars") &&

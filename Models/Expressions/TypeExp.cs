@@ -17,7 +17,7 @@ namespace PDDLSharp.Models.Expressions
         // This is the set of alternative supertypes (inherited types)
         public HashSet<string> SuperTypes { get; set; }
 
-        public TypeExp(ASTNode node, INode parent, string name, string superType, HashSet<string> altTypes) : base(node, parent)
+        public TypeExp(ASTNode node, INode? parent, string name, string superType, HashSet<string> altTypes) : base(node, parent)
         {
             Name = name;
             SuperType = superType;
@@ -27,7 +27,7 @@ namespace PDDLSharp.Models.Expressions
             SuperTypes.Add(superType);
         }
 
-        public TypeExp(ASTNode node, INode parent, string name, string superType) : base(node, parent)
+        public TypeExp(ASTNode node, INode? parent, string name, string superType) : base(node, parent)
         {
             Name = name;
             SuperTypes = new HashSet<string>();
@@ -35,7 +35,7 @@ namespace PDDLSharp.Models.Expressions
             SuperTypes.Add(superType);
         }
 
-        public TypeExp(ASTNode node, INode parent, string name) : base(node, parent)
+        public TypeExp(ASTNode node, INode? parent, string name) : base(node, parent)
         {
             Name = name;
             SuperTypes = new HashSet<string>();
