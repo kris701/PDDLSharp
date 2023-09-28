@@ -28,6 +28,11 @@ namespace PDDLSharp.CodeGenerators.Visitors
             return $"(and{retStr})";
         }
 
+        public string Visit(WhenExp node)
+        {
+            return $"(when {Environment.NewLine}{Visit((dynamic)node.Condition)}{Environment.NewLine}{Visit((dynamic)node.Effect)}{Environment.NewLine})";
+        }
+
         public string Visit(NotExp node)
         {
             return $"(not {Visit((dynamic)node.Child)})";

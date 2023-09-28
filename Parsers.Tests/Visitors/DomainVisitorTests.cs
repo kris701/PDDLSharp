@@ -245,10 +245,10 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(:types site material - object \n bricks cables windows - material)", "object", "object", "", "material", "material", "material")]
-        [DataRow("(:types a - b \n c - d)", "b", "", "d", "")]
-        [DataRow("(:types a q - b \n e c - d)", "b", "b", "", "d", "d", "")]
-        [DataRow("(:types a - b)", "b", "")]
+        [DataRow("(:types site material - object \n bricks cables windows - material)", "object", "object", "material", "material", "material")]
+        [DataRow("(:types a - b \n c - d)", "b", "d")]
+        [DataRow("(:types a q - b \n e c - d)", "b", "b", "d", "d")]
+        [DataRow("(:types a - b)", "b")]
         public void Can_ParseTypesNode_CorrectInheritTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE
@@ -265,6 +265,36 @@ namespace PDDLSharp.Parsers.Tests.Visitors
                 Assert.AreEqual(expected.Length, types.Types.Count);
                 for (int i = 0; i < types.Types.Count; i++)
                     Assert.IsTrue(types.Types[i].IsTypeOf(expected[i]));
+            }
+        }
+
+        [TestMethod]
+        [DataRow("(:types a - b \n b - object)", "b;object;", "object;")]
+        [DataRow("(:types a - object \n b - a)", "object;", "a;object;")]
+        [DataRow("(:types a - object \n b c - a)", "object;", "a;object;", "a;object;")]
+        [DataRow("(:types a - object \n b c - a \n q)", "object;", "a;object;", "a;object;", ";")]
+        [DataRow("(:types a - object \n b c - a \n q \n d - c)", "object;", "a;object;", "a;object;", "c;a;object;", "c;a;object;")]
+        public void Can_ParseTypesNode_CorrectInheritSuperTypes(string toParse, params string[] expected)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+
+            // ACT
+            IDecl? decl = new ParserVisitor(null).TryVisitTypesNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(decl, typeof(TypesDecl));
+            if (decl is TypesDecl types)
+            {
+                Assert.AreEqual(expected.Length, types.Types.Count);
+                for (int i = 0; i < types.Types.Count; i++)
+                {
+                    var str = "";
+                    foreach (var supertype in types.Types[i].SuperTypes)
+                        str += $"{supertype};";
+                    Assert.AreEqual(expected[i], str);
+                }
             }
         }
 

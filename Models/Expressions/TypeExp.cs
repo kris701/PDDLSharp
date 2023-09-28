@@ -12,20 +12,34 @@ namespace PDDLSharp.Models.Expressions
     public class TypeExp : BaseNode, IExp, INamedNode
     {
         public string Name { get; set; }
+        // This is the primary supertype. It is needed in the code generation part
+        public string SuperType { get; set; }
+        // This is the set of alternative supertypes (inherited types)
         public HashSet<string> SuperTypes { get; set; }
 
-        public TypeExp(ASTNode node, INode parent, string name, HashSet<string> types) : base(node, parent)
+        public TypeExp(ASTNode node, INode parent, string name, string superType, HashSet<string> altTypes) : base(node, parent)
+        {
+            Name = name;
+            SuperType = superType;
+            SuperTypes = new HashSet<string>();
+            foreach (var type in altTypes)
+                SuperTypes.Add(type);
+            SuperTypes.Add(superType);
+        }
+
+        public TypeExp(ASTNode node, INode parent, string name, string superType) : base(node, parent)
         {
             Name = name;
             SuperTypes = new HashSet<string>();
-            foreach (var type in types)
-                SuperTypes.Add(type);
+            SuperType = superType;
+            SuperTypes.Add(superType);
         }
 
         public TypeExp(ASTNode node, INode parent, string name) : base(node, parent)
         {
             Name = name;
             SuperTypes = new HashSet<string>();
+            SuperType = "";
         }
 
         public bool IsTypeOf(string typeName)

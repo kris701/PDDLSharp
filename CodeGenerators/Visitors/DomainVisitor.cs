@@ -144,13 +144,9 @@ namespace PDDLSharp.CodeGenerators.Visitors
             string retStr = "";
             foreach (var type in node.Types)
             {
-                if (type.SuperTypes.Count > 0)
+                if (type.SuperType != "")
                 {
-                    string typeList = "";
-                    foreach (var superType in type.SuperTypes)
-                        typeList += $"{superType} ";
-
-                    retStr += $" {Visit(type)} - {typeList}{Environment.NewLine}";
+                    retStr += $" {Visit(type)} - {type.SuperType}{Environment.NewLine}";
                 }
                 else
                 {

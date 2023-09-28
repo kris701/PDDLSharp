@@ -555,7 +555,7 @@ namespace PDDLSharp.Analysers
                 {
                     if (wasTypeMissmatch)
                         Listener.AddError(new ParseError(
-                            $"Used predicate '{pred.Name}' did not match the type definitions from the parameters!",
+                            $"Used predicate '{pred.Name}' did not match the type definitions from the parameters! ",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             pred.Line,
