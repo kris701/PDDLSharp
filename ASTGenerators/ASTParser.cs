@@ -22,8 +22,8 @@ namespace PDDLSharp.ASTGenerators
             if (text.Contains(')'))
                 end = text.LastIndexOf(')') + 1;
 
-            var node = ParseAsNodeRec(text, 0, end);
-            SetLineNumbersByCharacter(text, node);
+            var lineDict = GenerateLineDict(text);
+            var node = ParseAsNodeRec(text, 0, end, lineDict, 0);
             return node;
         }
 
@@ -34,8 +34,9 @@ namespace PDDLSharp.ASTGenerators
             return text;
         }
 
-        private ASTNode ParseAsNodeRec(string text, int thisStart, int thisEnd)
+        private ASTNode ParseAsNodeRec(string text, int thisStart, int thisEnd, List<int> lineDict, int lineOffset)
         {
+            lineOffset = GetLineNumber(lineDict, thisStart, lineOffset);
             if (text.Contains('('))
             {
                 var firstP = text.IndexOf('(');
@@ -65,13 +66,14 @@ namespace PDDLSharp.ASTGenerators
                     }
 
                     var newContent = innerContent.Substring(startP, endP - startP);
-                    children.Add(ParseAsNodeRec(newContent, thisStart + startP, thisStart + endP));
+                    children.Add(ParseAsNodeRec(newContent, thisStart + startP, thisStart + endP, lineDict, lineOffset - 1));
                     innerContent = ReplaceRangeWithSpaces(innerContent, startP, endP);
                 }
                 var outer = $"({innerContent.Trim()})";
                 return new ASTNode(
                     thisStart,
                     thisEnd,
+                    lineOffset,
                     outer,
                     innerContent.Trim(),
                     children);
@@ -82,46 +84,46 @@ namespace PDDLSharp.ASTGenerators
                 return new ASTNode(
                     thisStart,
                     thisEnd,
+                    lineOffset,
                     newText,
                     newText);
             }
         }
 
+        // Faster string replacement
+        // From https://stackoverflow.com/a/54056154
         private string ReplaceRangeWithSpaces(string text, int from, int to)
         {
-            return text.Remove(from, to - from).Insert(from, new string(' ', to - from));
+            int length = to - from;
+            string replacement = new string(' ', to - from);
+            return string.Create(text.Length - length + replacement.Length, (text, from, length, replacement),
+                (span, state) =>
+                {
+                    state.text.AsSpan().Slice(0, state.from).CopyTo(span);
+                    state.replacement.AsSpan().CopyTo(span.Slice(state.from));
+                    state.text.AsSpan().Slice(state.from + state.length).CopyTo(span.Slice(state.from + state.replacement.Length));
+                });
         }
 
-        private void SetLineNumbersByCharacter(string source, ASTNode node)
+        private List<int> GenerateLineDict(string source)
         {
             List<int> lineDict = new List<int>();
             int offset = source.IndexOf(ASTTokens.BreakToken);
-            while(offset != -1)
+            while (offset != -1)
             {
                 lineDict.Add(offset);
                 offset = source.IndexOf(ASTTokens.BreakToken, offset + 1);
             }
-
-            SetLineNumberByCharacterNumberRec(lineDict, node);
+            return lineDict;
         }
 
-        private void SetLineNumberByCharacterNumberRec(List<int> lineDict, ASTNode node)
+        private int GetLineNumber(List<int> lineDict, int start, int offset)
         {
-            foreach (var child in node.Children)
-                SetLineNumberByCharacterNumberRec(lineDict, child);
-
-            int counter = 1;
-            foreach(var endChar in lineDict)
-            {
-                if (endChar > node.Start)
-                {
-                    node.Line = counter;
-                    break;
-                }
-                counter++;
-            }
-            if (node.Line == -1)
-                node.Line = lineDict.Count + 1;
+            int length = lineDict.Count;
+            for (int i = offset; i < length; i++)
+                if (start < lineDict[i])
+                    return i + 1;
+            return lineDict.Count + 1;
         }
     }
 }

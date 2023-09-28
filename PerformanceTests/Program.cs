@@ -17,8 +17,10 @@ namespace PerformanceTests
             BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
             Console.WriteLine("Done!");
 
-            var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
-            var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
+            var targetDomain = "benchmarks/airport/p50-domain.pddl";
+            var targetProblem = "benchmarks/airport/p50-airport5MUC-p15.pddl";
+            //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
+            //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
 
             IErrorListener listener = new ErrorListener();
             IPDDLParser parser = new PDDLParser(listener);
@@ -27,7 +29,7 @@ namespace PerformanceTests
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Console.WriteLine($"Parsing... {i}");
                 var decl = parser.Parse(targetDomain, targetProblem);
