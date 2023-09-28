@@ -9,12 +9,11 @@
 		109:135:PredicateExp
 			126:134:NameExp
 	141:226:TypesDecl
-		157:161:TypeExp
-		162:170:TypeExp
-		173:179:TypeExp
-		188:194:TypeExp
-		195:201:TypeExp
-		202:209:TypeExp
+		141:226:TypeExp
+		141:226:TypeExp
+		141:226:TypeExp
+		141:226:TypeExp
+		141:226:TypeExp
 	231:259:ConstantsDecl
 		243:258:NameExp
 	304:573:PredicatesDecl

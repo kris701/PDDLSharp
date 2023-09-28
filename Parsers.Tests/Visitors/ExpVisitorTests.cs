@@ -18,6 +18,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
     {
         [TestMethod]
         [DataRow("(and ())", typeof(AndExp))]
+        [DataRow("(when (and ()) (and ()))", typeof(WhenExp))]
         [DataRow("(not (aaabsbdsb))", typeof(NotExp))]
         [DataRow("(or (aaa) (bbb))", typeof(OrExp))]
         [DataRow("(pred)", typeof(PredicateExp))]
@@ -36,6 +37,61 @@ namespace PDDLSharp.Parsers.Tests.Visitors
 
             // ASSERT
             Assert.IsInstanceOfType(exp, expectedType);
+        }
+
+        [TestMethod]
+        [DataRow("(when (and ()) (and ()))")]
+        [DataRow("(when (and (a)) (and (b)))")]
+        [DataRow("(when (and (ab) (a)) (and ()))")]
+        public void Can_ParseWhenNode(string toParse)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitWhenNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(WhenExp));
+        }
+
+        [TestMethod]
+        [DataRow("(when)")]
+        [DataRow("(when  ())")]
+        public void Cant_ParseWhenNode_IfNotTwoChildren(string toParse)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitWhenNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("(when a (and ()) (and ()))")]
+        [DataRow("(when a (and ())     a (and ()))")]
+        [DataRow("(when a (and ())     a (and ()))q")]
+        [DataRow("(when (and ())(and ()))q")]
+        public void Cant_ParseWhenNode_IfContainsStrayCharacters(string toParse)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitWhenNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
         }
 
         [TestMethod]

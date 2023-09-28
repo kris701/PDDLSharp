@@ -7,6 +7,7 @@ using PDDLSharp.Models.Expressions;
 using PDDLSharp.Tools;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,114 +113,65 @@ namespace PDDLSharp.Parsers.Visitors
             {
                 var newTypesDecl = new TypesDecl(node, parent, new List<TypeExp>());
 
-                var str = ReplaceRangeWithSpaces(node.InnerContent, node.InnerContent.IndexOf(":types"), ":types".Length);
+                var str = ReduceToSingleSpace(ReplaceRangeWithSpaces(node.InnerContent, node.InnerContent.IndexOf(":types"), ":types".Length)).Trim();
 
-                if (str.Trim() == "")
-                {
+                // In case types are decleared but is empty
+                if (str== "")
                     return newTypesDecl;
+
+                // Initial parse
+                List<TypeExp> typeExps = new List<TypeExp>();
+                str = str.Replace(ASTTokens.BreakToken, ' ').Trim();
+                var typesDefSplit = str.Split(' ').ToList();
+                typesDefSplit.Reverse();
+                typesDefSplit.RemoveAll(x => x.Trim() == "");
+
+                string currentSuperType = "";
+                foreach(var typeDef in typesDefSplit)
+                {
+                    string newType = "";
+                    if (typeDef.Contains(ASTTokens.TypeToken))
+                    {
+                        var split = typeDef.Split(ASTTokens.TypeToken).ToList();
+                        split.RemoveAll(x => x.Trim() == "");
+                        var superType = split[1].Trim();
+                        var subType = split[0].Trim();
+
+                        currentSuperType = superType;
+                        newType = subType;
+                    }
+                    else
+                        newType = typeDef;
+                    typeExps.Insert(0, new TypeExp(node, newTypesDecl, newType, currentSuperType, new HashSet<string>() { currentSuperType }));
                 }
 
-                if (str.Contains(ASTTokens.TypeToken))
+                // Stitch type inheritence
+                if (typeExps.Count > 0)
                 {
-                    var newTypes = new List<TypeExp>();
-
-                    // Stitch type lines for inheritence
-                    List<string> lines = new List<string>();
-                    var splits = str.Split(ASTTokens.BreakToken);
-                    string addLine = "";
-                    foreach (var split in splits)
+                    bool updatesFound = true;
+                    while (updatesFound)
                     {
-                        addLine += split;
-                        if (addLine.Contains(ASTTokens.TypeToken))
+                        updatesFound = false;
+                        foreach (var typeExp in typeExps)
                         {
-                            lines.Add(addLine);
-                            addLine = "";
-                        }
-                    }
-
-                    int indexOffset = 0;
-                    int characterOffset = node.Start + 1;
-                    foreach (var line in lines)
-                    {
-                        characterOffset += line.Length + 1;
-                        if (line != "")
-                        {
-                            int innerCharacterOffset = characterOffset;
-                            int typesAdded = 0;
-                            HashSet<string> superTypes = new HashSet<string>();
-                            var superTypeStr = line.Substring(line.LastIndexOf(ASTTokens.TypeToken) + ASTTokens.TypeToken.Length);
-                            if (superTypeStr.Contains(ASTTokens.TypeToken) || superTypeStr.Trim().Contains(' '))
-                                Listener.AddError(new ParseError(
-                                    "Type definition cannot have two supertypes!",
-                                    ParseErrorType.Error,
-                                    ParseErrorLevel.Parsing
-                                    ));
-
-                            var superType = superTypeStr.Trim();
-                            superTypes.Add(superType);
-                            var newType = new TypeExp(
-                                new ASTNode(innerCharacterOffset - superType.Length, innerCharacterOffset, node.Line),
-                                newTypesDecl,
-                                superType, new HashSet<string>());
-                            newTypes.Insert(indexOffset, newType);
-                            innerCharacterOffset -= superType.Length + ASTTokens.TypeToken.Length;
-                            typesAdded++;
-
-                            var subTypesStr = line.Substring(0, line.IndexOf(ASTTokens.TypeToken));
-                            foreach (var param in subTypesStr.Split(' ').Reverse())
+                            foreach (var otherTypeExp in typeExps)
                             {
-                                if (param != "")
+                                if (typeExp.Name != otherTypeExp.Name)
                                 {
-                                    var newSubType = new TypeExp(
-                                        new ASTNode(innerCharacterOffset - param.Length, innerCharacterOffset, node.Line),
-                                        newTypesDecl, param, superTypes);
-                                    newTypes.Insert(indexOffset, newSubType);
-                                    innerCharacterOffset -= param.Length + 1;
-                                    typesAdded++;
+                                    if (typeExp.SuperTypes.Contains(otherTypeExp.Name))
+                                    {
+                                        var size = typeExp.SuperTypes.Count;
+                                        typeExp.SuperTypes.AddRange(otherTypeExp.SuperTypes);
+                                        if (size != typeExp.SuperTypes.Count)
+                                            updatesFound = true;
+                                    }
                                 }
                             }
-
-                            indexOffset += typesAdded;
-                        }
-                    }
-
-                    foreach (var type in newTypes)
-                    {
-                        if (!newTypesDecl.Types.Any(x => x.Name == type.Name))
-                        {
-                            var all = newTypes.FindAll(x => x.Name == type.Name);
-                            if (all.Count > 1)
-                            {
-                                HashSet<string> merged = new HashSet<string>();
-                                foreach (var copyType in all)
-                                    merged.AddRange(copyType.SuperTypes);
-                                newTypesDecl.Types.Add(
-                                    new TypeExp(new ASTNode(type.Start, type.End, type.Line),
-                                    newTypesDecl,
-                                    type.Name,
-                                    merged));
-                            }
-                            else
-                                newTypesDecl.Types.Add(type);
                         }
                     }
                 }
-                else
-                {
-                    int characterOffset = node.End - 1;
-                    str = ReduceToSingleSpace(PurgeEscapeChars(str));
-                    foreach (var param in str.Split(' ').Reverse())
-                    {
-                        if (param != "")
-                        {
-                            var newSubType = new TypeExp(
-                                new ASTNode(characterOffset - param.Length, characterOffset, node.Line),
-                                newTypesDecl, param, new HashSet<string>());
-                            newTypesDecl.Types.Insert(0, newSubType);
-                            characterOffset -= param.Length + 1;
-                        }
-                    }
-                }
+
+                newTypesDecl.Types = typeExps;
 
                 return newTypesDecl;
             }

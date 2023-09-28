@@ -3,6 +3,7 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.Expressions;
 using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,21 @@ namespace PDDLSharp.Parsers.Visitors
             Listener = listener;
         }
 
-        public INode? TryVisitAs<T>(ASTNode node, INode parent) where T : INode =>
+        public T TryVisitAs<T>(ASTNode node, INode parent) where T : INode
+        {
+            var res = VisitAs<T>(node, parent);
+            if (res is T model)
+                return model;
+            Listener.AddError(new ParseError(
+                $"Could not parse node as a '{nameof(T)}', got a '{nameof(res)}'",
+                ParseErrorType.Error,
+                ParseErrorLevel.Parsing,
+                node.Line,
+                node.Start));
+            return default(T);
+        }
+
+        private INode? VisitAs<T>(ASTNode node, INode parent) where T : INode =>
             // Domain
             typeof(T) == typeof(DomainDecl)         ? TryVisitDomainDeclNode(node, parent) :
             typeof(T) == typeof(DomainNameDecl)     ? TryVisitDomainNameNode(node, parent) :
@@ -47,6 +62,13 @@ namespace PDDLSharp.Parsers.Visitors
             typeof(T) == typeof(MetricDecl)         ? TryVisitMetricNode(node, parent) :
 
             // Exp
+            typeof(T) == typeof(WhenExp)            ? TryVisitWhenNode(node, parent) :
+            typeof(T) == typeof(AndExp)             ? TryVisitAndNode(node, parent) :
+            typeof(T) == typeof(OrExp)              ? TryVisitOrNode(node, parent) :
+            typeof(T) == typeof(NotExp)             ? TryVisitNotNode(node, parent) :
+            typeof(T) == typeof(PredicateExp)       ? TryVisitPredicateNode(node, parent) :
+            typeof(T) == typeof(NumericExp)         ? TryVisitNumericNode(node, parent) :
+            typeof(T) == typeof(NameExp)            ? TryVisitNameNode(node, parent) :
             typeof(T) == typeof(IExp)               ? VisitExp(node, parent) :
 
             // Default
