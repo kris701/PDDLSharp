@@ -39,12 +39,18 @@ namespace PDDLSharp.Parsers
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
 
+            if (!CompatabilityHelper.IsPDDLDomainSpported(File.ReadAllText(domainFile)))
+                Listener.AddError(new ParseError(
+                    $"Domain contains unsupported packages! Results may not be accurate!",
+                    ParseErrorType.Warning,
+                    ParseErrorLevel.PreParsing));
+
             return new PDDLDecl(
                 ParseAs<DomainDecl>(domainFile),
                 ParseAs<ProblemDecl>(problemFile));
         }
 
-        public T? ParseAs<T>(string file) where T : INode
+        public T ParseAs<T>(string file) where T : INode
         {
             var absAST = ParseAsASTTree(file);
             var visitor = new ParserVisitor(Listener);
