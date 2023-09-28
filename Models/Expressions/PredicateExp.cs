@@ -8,20 +8,18 @@ using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.Expressions
 {
-    public class PredicateExp : BaseWalkableNode, IExp, INamedNode
+    public class PredicateExp : BaseNamedWalkableNode, IExp
     {
-        public string Name { get; set; }
         public List<NameExp> Arguments { get; set; }
 
-        public PredicateExp(ASTNode node, INode parent, string name, List<NameExp> arguments) : base(node, parent)
+        public PredicateExp(ASTNode node, INode? parent, string name, List<NameExp> arguments) : base(node, parent, name)
         {
-            Name = name;
             Arguments = arguments;
         }
 
         public override int GetHashCode()
         {
-            int hash = Name.GetHashCode() + base.GetHashCode();
+            int hash = base.GetHashCode();
             foreach (var arg in Arguments)
                 hash *= arg.GetHashCode();
             return hash;

@@ -13,7 +13,7 @@ namespace PDDLSharp.Models.Domain
     {
         public List<NameExp> Requirements {  get; set; }
 
-        public RequirementsDecl(ASTNode node, INode parent, List<NameExp> requirements) : base(node, parent)
+        public RequirementsDecl(ASTNode node, INode? parent, List<NameExp> requirements) : base(node, parent)
         {
             Requirements = requirements;
         }

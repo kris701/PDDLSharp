@@ -13,7 +13,7 @@ namespace PDDLSharp.Models.Domain
     {
         public List<PredicateExp> Items { get; set; }
 
-        public TimelessDecl(ASTNode node, INode parent, List<PredicateExp> timeless) : base(node, parent)
+        public TimelessDecl(ASTNode node, INode? parent, List<PredicateExp> timeless) : base(node, parent)
         {
             Items = timeless;
         }

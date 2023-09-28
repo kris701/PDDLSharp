@@ -16,7 +16,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
         public string Visit(ProblemDecl node)
         {
             string retStr = "(define ";
-            retStr += $"{Visit(node.Name)}{Environment.NewLine}";
+            if (node.Name != null)
+                retStr += $"{Visit(node.Name)}{Environment.NewLine}";
             if (node.DomainName != null)
                 retStr += $"{Visit(node.DomainName)}{Environment.NewLine}";
             if (node.Objects != null)

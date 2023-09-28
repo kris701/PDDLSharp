@@ -13,7 +13,7 @@ namespace PDDLSharp.Models.Problem
     {
         public List<NameExp> Objs { get; set; }
 
-        public ObjectsDecl(ASTNode node, INode parent, List<NameExp> types) : base(node, parent)
+        public ObjectsDecl(ASTNode node, INode? parent, List<NameExp> types) : base(node, parent)
         {
             Objs = types;
         }

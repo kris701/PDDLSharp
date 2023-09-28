@@ -14,7 +14,7 @@ namespace PDDLSharp.Parsers.Visitors
 {
     public partial class ParserVisitor
     {
-        public IExp VisitExp(ASTNode node, INode parent)
+        public IExp VisitExp(ASTNode node, INode? parent)
         {
             IExp? returnNode;
             if ((returnNode = TryVisitAndNode(node, parent)) != null) return returnNode;
@@ -32,22 +32,22 @@ namespace PDDLSharp.Parsers.Visitors
             return returnNode;
         }
 
-        public IExp? TryVisitWhenNode(ASTNode node, INode parent)
+        public IExp? TryVisitWhenNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "when") &&
                 DoesNodeHaveSpecificChildCount(node, "when", 2) &&
                 DoesNotContainStrayCharacters(node, "when"))
             {
                 var newWhenExp = new WhenExp(node, parent, null, null);
-                newWhenExp.Condition = TryVisitAs<IExp>(node.Children[0], newWhenExp);
-                newWhenExp.Effect = TryVisitAs<IExp>(node.Children[1], newWhenExp);
+                newWhenExp.Condition = VisitExp(node.Children[0], newWhenExp);
+                newWhenExp.Effect = VisitExp(node.Children[1], newWhenExp);
 
                 return newWhenExp;
             }
             return null;
         }
 
-        public IExp? TryVisitAndNode(ASTNode node, INode parent)
+        public IExp? TryVisitAndNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "and") &&
                 DoesNodeHaveMoreThanNChildren(node, "and", 0) &&
@@ -61,7 +61,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IExp? TryVisitOrNode(ASTNode node, INode parent)
+        public IExp? TryVisitOrNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "or") &&
                 DoesNodeHaveSpecificChildCount(node, "or", 2) &&
@@ -75,7 +75,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IExp? TryVisitNotNode(ASTNode node, INode parent)
+        public IExp? TryVisitNotNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "not") &&
                 DoesNodeHaveSpecificChildCount(node, "not", 1) &&
@@ -88,7 +88,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IExp? TryVisitPredicateNode(ASTNode node, INode parent)
+        public IExp? TryVisitPredicateNode(ASTNode node, INode? parent)
         {
             if (node.OuterContent.Contains('(') && 
                 node.OuterContent.Contains(')') && 
@@ -111,7 +111,7 @@ namespace PDDLSharp.Parsers.Visitors
             "increase", "decrease", "assign", "scale-up", "scale-down", "=", "+", "-", "*", "/", "<", ">"
         };
 
-        public IExp? TryVisitNumericNode(ASTNode node, INode parent)
+        public IExp? TryVisitNumericNode(ASTNode node, INode? parent)
         {
             if (node.OuterContent.Contains('(') && 
                 node.OuterContent.Contains(')') && 
@@ -151,7 +151,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IExp? TryVisitNameNode(ASTNode node, INode parent)
+        public IExp? TryVisitNameNode(ASTNode node, INode? parent)
         {
             if (node.InnerContent.Contains(ASTTokens.TypeToken) &&
                 DoesNodeHaveSpecificChildCount(node, "name", 0))

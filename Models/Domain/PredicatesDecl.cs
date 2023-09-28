@@ -14,7 +14,7 @@ namespace PDDLSharp.Models.Domain
     {
         public List<PredicateExp> Predicates { get; set; }
 
-        public PredicatesDecl(ASTNode node, INode parent, List<PredicateExp> predicates) : base(node, parent)
+        public PredicatesDecl(ASTNode node, INode? parent, List<PredicateExp> predicates) : base(node, parent)
         {
             Predicates = predicates;
         }

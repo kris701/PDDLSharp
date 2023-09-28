@@ -45,6 +45,16 @@ namespace PDDLSharp.Models.AST
             Children = node.Children;
         }
 
+        public ASTNode(int start, int end, int line, string outer, string inner, List<ASTNode> children)
+        {
+            Line = line;
+            Start = start;
+            End = end;
+            OuterContent = outer;
+            InnerContent = inner;
+            Children = children;
+        }
+
         public ASTNode(int start, int end, string outer, string inner, List<ASTNode> children)
         {
             Line = -1;

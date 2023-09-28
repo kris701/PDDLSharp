@@ -15,6 +15,6 @@ namespace PDDLSharp.Parsers
         public IErrorListener Listener { get; }
 
         public PDDLDecl Parse(string domainFile, string problemFile);
-        public T? ParseAs<T>(string file) where T : INode;
+        public T ParseAs<T>(string file) where T : INode;
     }
 }

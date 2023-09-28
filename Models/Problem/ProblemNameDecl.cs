@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Models.Problem
 {
-    public class ProblemNameDecl : BaseNode, IDecl, INamedNode
+    public class ProblemNameDecl : BaseNamedNode, IDecl
     {
-        public string Name { get; set; }
-
-        public ProblemNameDecl(ASTNode node, INode parent, string name) : base(node, parent)
+        public ProblemNameDecl(ASTNode node, INode? parent, string name) : base(node, parent, name)
         {
-            Name = name;
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() * Name.GetHashCode();
+            return base.GetHashCode();
         }
     }
 }

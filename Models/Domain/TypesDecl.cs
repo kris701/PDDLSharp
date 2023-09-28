@@ -13,7 +13,7 @@ namespace PDDLSharp.Models.Domain
     {
         public List<TypeExp> Types { get; set; }
 
-        public TypesDecl(ASTNode node, INode parent, List<TypeExp> types) : base(node, parent)
+        public TypesDecl(ASTNode node, INode? parent, List<TypeExp> types) : base(node, parent)
         {
             Types = types;
         }

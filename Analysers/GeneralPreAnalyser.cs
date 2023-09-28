@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Tools;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,7 +28,11 @@ namespace PDDLSharp.Analysers
         {
             CheckParenthesesMissmatch(text);
             CheckForCasing(text);
-            CheckForUnsupportedRequirements(text);
+            if (!CompatabilityHelper.IsPDDLDomainSpported(text))
+                Listener.AddError(new ParseError(
+                    $"Domain contains unsupported packages! Results may not be accurate!",
+                    ParseErrorType.Warning,
+                    ParseErrorLevel.PreParsing));
         }
 
         private void CheckParenthesesMissmatch(string text)

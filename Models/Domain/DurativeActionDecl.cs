@@ -8,18 +8,15 @@ using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.Domain
 {
-    public class DurativeActionDecl : BaseWalkableNode, IDecl, INamedNode
+    public class DurativeActionDecl : BaseNamedWalkableNode, IDecl
     {
-        public string Name { get; set; }
-
         public ParameterDecl Parameters { get; set; }
         public IExp Condition { get; set; }
         public IExp Effects { get; set; }
         public IExp Duration { get; set; }
 
-        public DurativeActionDecl(ASTNode node, INode parent, string name, ParameterDecl parameters, IExp condition, IExp effects, IExp duration) : base(node, parent)
+        public DurativeActionDecl(ASTNode node, INode? parent, string name, ParameterDecl parameters, IExp condition, IExp effects, IExp duration) : base(node, parent, name)
         {
-            Name = name;
             Parameters = parameters;
             Condition = condition;
             Effects = effects;
@@ -29,7 +26,6 @@ namespace PDDLSharp.Models.Domain
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
-            hash *= Name.GetHashCode();
             hash *= Parameters.GetHashCode();
             hash *= Condition.GetHashCode();
             hash *= Effects.GetHashCode();

@@ -13,7 +13,7 @@ namespace PDDLSharp.Parsers.Visitors
 {
     public partial class ParserVisitor
     {
-        public IDecl VisitProblem(ASTNode node, INode parent)
+        public IDecl VisitProblem(ASTNode node, INode? parent)
         {
             IDecl? returnNode;
             if ((returnNode = TryVisitProblemDeclNode(node, parent)) != null) return returnNode;
@@ -31,34 +31,32 @@ namespace PDDLSharp.Parsers.Visitors
             return returnNode;
         }
 
-        public IDecl? TryVisitProblemDeclNode(ASTNode node, INode parent)
+        public IDecl? TryVisitProblemDeclNode(ASTNode node, INode? parent)
         {
-            if (IsOfValidNodeType(node.InnerContent, "define"))
+            if (IsOfValidNodeType(node.InnerContent, "define") &&
+                DoesNotContainStrayCharacters(node, "define"))
             {
-                if (DoesNotContainStrayCharacters(node, "define"))
+                var returnProblem = new ProblemDecl(node);
+                foreach (var child in node.Children)
                 {
-                    var returnProblem = new ProblemDecl(node);
-                    foreach (var child in node.Children)
-                    {
-                        var visited = VisitProblem(child, returnProblem);
+                    var visited = VisitProblem(child, returnProblem);
 
-                        switch (visited)
-                        {
-                            case ProblemNameDecl d: returnProblem.Name = d; break;
-                            case DomainNameRefDecl d: returnProblem.DomainName = d; break;
-                            case ObjectsDecl d: returnProblem.Objects = d; break;
-                            case InitDecl d: returnProblem.Init = d; break;
-                            case GoalDecl d: returnProblem.Goal = d; break;
-                            case MetricDecl d: returnProblem.Metric = d; break;
-                        }
+                    switch (visited)
+                    {
+                        case ProblemNameDecl d: returnProblem.Name = d; break;
+                        case DomainNameRefDecl d: returnProblem.DomainName = d; break;
+                        case ObjectsDecl d: returnProblem.Objects = d; break;
+                        case InitDecl d: returnProblem.Init = d; break;
+                        case GoalDecl d: returnProblem.Goal = d; break;
+                        case MetricDecl d: returnProblem.Metric = d; break;
                     }
-                    return returnProblem;
                 }
+                return returnProblem;
             }
             return null;
         }
 
-        public IDecl? TryVisitProblemNameNode(ASTNode node, INode parent)
+        public IDecl? TryVisitProblemNameNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "problem") &&
                 DoesContentContainNLooseChildren(node, "problem", 1))
@@ -69,7 +67,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitDomainRefNameNode(ASTNode node, INode parent)
+        public IDecl? TryVisitDomainRefNameNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":domain") &&
                 DoesContentContainNLooseChildren(node, ":domain", 1))
@@ -80,7 +78,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitObjectsNode(ASTNode node, INode parent)
+        public IDecl? TryVisitObjectsNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":objects") &&
                 DoesNodeHaveSpecificChildCount(node, ":objects", 0))
@@ -95,7 +93,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitInitsNode(ASTNode node, INode parent)
+        public IDecl? TryVisitInitsNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":init") &&
                 DoesNotContainStrayCharacters(node, ":init"))
@@ -110,7 +108,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        public IDecl? TryVisitGoalNode(ASTNode node, INode parent)
+        public IDecl? TryVisitGoalNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":goal") &&
                 DoesNodeHaveSpecificChildCount(node, ":goal", 1) &&
@@ -128,7 +126,7 @@ namespace PDDLSharp.Parsers.Visitors
             "maximize", "minimize"
         };
 
-        public IDecl? TryVisitMetricNode(ASTNode node, INode parent)
+        public IDecl? TryVisitMetricNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":metric") &&
                 DoesNodeHaveSpecificChildCount(node, ":metric", 1) &&

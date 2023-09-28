@@ -8,22 +8,20 @@ using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.Expressions
 {
-    public class NumericExp : BaseWalkableNode, IExp, INamedNode
+    public class NumericExp : BaseNamedWalkableNode, IExp
     {
-        public string Name { get; set; }
         public IExp Arg1 { get; set; }
         public IExp Arg2 { get; set; }
 
-        public NumericExp(ASTNode node, INode parent, string name, IExp arg1, IExp arg2) : base(node, parent)
+        public NumericExp(ASTNode node, INode? parent, string name, IExp arg1, IExp arg2) : base(node, parent, name)
         {
-            Name = name;
             Arg1 = arg1;
             Arg2 = arg2;
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() + Name.GetHashCode() + Arg1.GetHashCode() + Arg2.GetHashCode();
+            return base.GetHashCode() + Arg1.GetHashCode() + Arg2.GetHashCode();
         }
 
         public override IEnumerator<INode> GetEnumerator()

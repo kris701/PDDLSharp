@@ -89,15 +89,18 @@ namespace PDDLSharp.Analysers
         {
             if (problem.Objects != null)
             {
+                var allNames = problem.FindTypes<NameExp>();
                 foreach (var obj in problem.Objects.Objs)
                 {
-                    if (problem.FindNames(obj.Name).Count == 1)
+                    if (allNames.Count(x => x.Name == obj.Name) == 1)
+                    {
                         Listener.AddError(new ParseError(
                             $"Unused object detected '{obj.Name}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
                             obj.Line,
                             obj.Start));
+                    }
                 }
             }
         }

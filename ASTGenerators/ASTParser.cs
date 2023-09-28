@@ -22,8 +22,8 @@ namespace PDDLSharp.ASTGenerators
             if (text.Contains(')'))
                 end = text.LastIndexOf(')') + 1;
 
-            var node = ParseAsNodeRec(text, 0, end);
-            SetLineNumberByCharacterNumberRec(text.Replace("\r", " ").Replace("\t", " "), node);
+            var lineDict = GenerateLineDict(text);
+            var node = ParseAsNodeRec(text, 0, end, lineDict, 0);
             return node;
         }
 
@@ -34,8 +34,9 @@ namespace PDDLSharp.ASTGenerators
             return text;
         }
 
-        private ASTNode ParseAsNodeRec(string text, int thisStart, int thisEnd)
+        private ASTNode ParseAsNodeRec(string text, int thisStart, int thisEnd, List<int> lineDict, int lineOffset)
         {
+            lineOffset = GetLineNumber(lineDict, thisStart, lineOffset);
             if (text.Contains('('))
             {
                 var firstP = text.IndexOf('(');
@@ -44,7 +45,6 @@ namespace PDDLSharp.ASTGenerators
                 innerContent = ReplaceRangeWithSpaces(innerContent, lastP, lastP + 1);
 
                 var children = new List<ASTNode>();
-                //while (innerContent.Count(x => x == ')' || x == '(') >= 2)
                 while (innerContent.Contains('(') && innerContent.Contains(')'))
                 {
                     int currentLevel = 0;
@@ -66,13 +66,14 @@ namespace PDDLSharp.ASTGenerators
                     }
 
                     var newContent = innerContent.Substring(startP, endP - startP);
-                    children.Add(ParseAsNodeRec(newContent, thisStart + startP, thisStart + endP));
+                    children.Add(ParseAsNodeRec(newContent, thisStart + startP, thisStart + endP, lineDict, lineOffset - 1));
                     innerContent = ReplaceRangeWithSpaces(innerContent, startP, endP);
                 }
                 var outer = $"({innerContent.Trim()})";
                 return new ASTNode(
                     thisStart,
                     thisEnd,
+                    lineOffset,
                     outer,
                     innerContent.Trim(),
                     children);
@@ -83,25 +84,46 @@ namespace PDDLSharp.ASTGenerators
                 return new ASTNode(
                     thisStart,
                     thisEnd,
+                    lineOffset,
                     newText,
                     newText);
             }
         }
 
+        // Faster string replacement
+        // From https://stackoverflow.com/a/54056154
         private string ReplaceRangeWithSpaces(string text, int from, int to)
         {
-            var newText = text.Substring(0, from);
-            newText += new string(' ', to - from);
-            newText += text.Substring(to);
-            return newText;
+            int length = to - from;
+            string replacement = new string(' ', to - from);
+            return string.Create(text.Length - length + replacement.Length, (text, from, length, replacement),
+                (span, state) =>
+                {
+                    state.text.AsSpan().Slice(0, state.from).CopyTo(span);
+                    state.replacement.AsSpan().CopyTo(span.Slice(state.from));
+                    state.text.AsSpan().Slice(state.from + state.length).CopyTo(span.Slice(state.from + state.replacement.Length));
+                });
         }
 
-        private void SetLineNumberByCharacterNumberRec(string source, ASTNode node)
+        private List<int> GenerateLineDict(string source)
         {
-            foreach (var child in node.Children)
-                SetLineNumberByCharacterNumberRec(source, child);
-            var partStr = source.Substring(0, node.Start);
-            node.Line = partStr.Count(c => c == ASTTokens.BreakToken) + 1;
+            List<int> lineDict = new List<int>();
+            int offset = source.IndexOf(ASTTokens.BreakToken);
+            while (offset != -1)
+            {
+                lineDict.Add(offset);
+                offset = source.IndexOf(ASTTokens.BreakToken, offset + 1);
+            }
+            return lineDict;
+        }
+
+        private int GetLineNumber(List<int> lineDict, int start, int offset)
+        {
+            int length = lineDict.Count;
+            for (int i = offset; i < length; i++)
+                if (start < lineDict[i])
+                    return i + 1;
+            return lineDict.Count + 1;
         }
     }
 }
