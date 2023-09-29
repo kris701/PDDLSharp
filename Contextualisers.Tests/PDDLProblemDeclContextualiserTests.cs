@@ -27,7 +27,7 @@ namespace PDDLSharp.Contextualisers.Tests
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Parse(toParse);
+            var node = parser.Generate(toParse);
             ProblemDecl? decl = new ParserVisitor(listener).TryVisitAs<ProblemDecl>(node, null) as ProblemDecl;
             Assert.IsNotNull(decl);
 

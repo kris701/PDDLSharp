@@ -19,7 +19,7 @@ namespace PDDLSharp.ASTGenerators.Tests
             IGenerator<ASTNode> parser = new ASTGenerator();
 
             // ACT
-            var res = parser.Parse(toParse);
+            var res = parser.Generate(toParse);
 
             // ASSERT
             Assert.AreEqual(expectedNodes, res.Count);
@@ -36,7 +36,7 @@ namespace PDDLSharp.ASTGenerators.Tests
             IGenerator<ASTNode> parser = new ASTGenerator();
 
             // ACT
-            var res = parser.Parse(toParse);
+            var res = parser.Generate(toParse);
 
             // ASSERT
             Assert.AreEqual(expectedContent, res.OuterContent);
@@ -53,7 +53,7 @@ namespace PDDLSharp.ASTGenerators.Tests
             IGenerator<ASTNode> parser = new ASTGenerator();
 
             // ACT
-            var res = parser.Parse(toParse);
+            var res = parser.Generate(toParse);
 
             // ASSERT
             Assert.AreEqual(expectedContent, res.InnerContent);
@@ -71,7 +71,7 @@ namespace PDDLSharp.ASTGenerators.Tests
             IGenerator<ASTNode> parser = new ASTGenerator();
 
             // ACT
-            var res = parser.Parse(toParse);
+            var res = parser.Generate(toParse);
 
             // ASSERT
             Assert.AreEqual(expectedLineNumber, res.Children[targetChild].Line);

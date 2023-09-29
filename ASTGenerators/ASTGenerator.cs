@@ -11,7 +11,7 @@ namespace PDDLSharp.ASTGenerators
 {
     public class ASTGenerator : IGenerator<ASTNode>
     {
-        public ASTNode Parse(string text)
+        public ASTNode Generate(string text)
         {
             if (File.Exists(text))
                 text = File.ReadAllText(text);

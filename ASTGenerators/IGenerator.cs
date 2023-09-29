@@ -8,7 +8,7 @@ namespace PDDLSharp.ASTGenerators
 {
     public interface IGenerator<T>
     {
-        public T Parse(string text);
+        public T Generate(string text);
         public string TokenizeSpecials(string text);
     }
 }

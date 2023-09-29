@@ -27,7 +27,7 @@ namespace PDDLSharp.Models.Tests
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IGenerator<ASTNode> astParser = new ASTGenerator();
-            var ast = astParser.Parse(toParse);
+            var ast = astParser.Generate(toParse);
             Assert.IsNotNull(ast);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(ast, null) as DomainDecl;
             Assert.IsNotNull(decl);
@@ -51,7 +51,7 @@ namespace PDDLSharp.Models.Tests
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IGenerator<ASTNode> astParser = new ASTGenerator();
-            var ast = astParser.Parse(toParse);
+            var ast = astParser.Generate(toParse);
             Assert.IsNotNull(ast);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(ast, null) as DomainDecl;
             Assert.IsNotNull(decl);
@@ -78,7 +78,7 @@ namespace PDDLSharp.Models.Tests
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IGenerator<ASTNode> astParser = new ASTGenerator();
-            var ast = astParser.Parse(toParse);
+            var ast = astParser.Generate(toParse);
             Assert.IsNotNull(ast);
             ProblemDecl? decl = new ParserVisitor(listener).TryVisitAs<ProblemDecl>(ast, null) as ProblemDecl;
             Assert.IsNotNull(decl);
@@ -102,7 +102,7 @@ namespace PDDLSharp.Models.Tests
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IGenerator<ASTNode> astParser = new ASTGenerator();
-            var ast = astParser.Parse(toParse);
+            var ast = astParser.Generate(toParse);
             Assert.IsNotNull(ast);
             ProblemDecl? decl = new ParserVisitor(listener).TryVisitAs<ProblemDecl>(ast, null) as ProblemDecl;
             Assert.IsNotNull(decl);
