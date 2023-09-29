@@ -18,6 +18,11 @@ namespace PDDLSharp.Models.Problem
             Objs = types;
         }
 
+        public ObjectsDecl(INode? parent, List<NameExp> types) : base(parent)
+        {
+            Objs = types;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

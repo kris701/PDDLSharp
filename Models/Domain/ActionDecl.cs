@@ -21,6 +21,13 @@ namespace PDDLSharp.Models.Domain
             Effects = effects;
         }
 
+        public ActionDecl(INode? parent, string name, ParameterDecl parameters, IExp preconditions, IExp effects) : base(parent, name)
+        {
+            Parameters = parameters;
+            Preconditions = preconditions;
+            Effects = effects;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

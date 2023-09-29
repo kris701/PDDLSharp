@@ -17,6 +17,11 @@ namespace PDDLSharp.Models.Expressions
             Arguments = arguments;
         }
 
+        public PredicateExp(INode? parent, string name, List<NameExp> arguments) : base(parent, name)
+        {
+            Arguments = arguments;
+        }
+
         public override int GetHashCode()
         {
             int hash = base.GetHashCode();

@@ -31,6 +31,13 @@ namespace PDDLSharp.Models.Domain
             DurativeActions = new List<DurativeActionDecl>();
         }
 
+        public DomainDecl() : base(null)
+        {
+            Actions = new List<ActionDecl>();
+            Axioms = new List<AxiomDecl>();
+            DurativeActions = new List<DurativeActionDecl>();
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

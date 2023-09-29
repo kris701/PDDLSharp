@@ -16,6 +16,11 @@ namespace PDDLSharp.Models
             Name = name;
         }
 
+        protected BaseNamedNode(INode? parent, string name) : base(parent)
+        {
+            Name = name;
+        }
+
         public override string? ToString()
         {
             return Name;

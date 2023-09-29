@@ -18,6 +18,11 @@ namespace PDDLSharp.Models.Domain
             Items = timeless;
         }
 
+        public TimelessDecl(INode? parent, List<PredicateExp> timeless) : base(parent)
+        {
+            Items = timeless;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

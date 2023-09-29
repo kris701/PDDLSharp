@@ -19,6 +19,12 @@ namespace PDDLSharp.Models.Expressions
             Arg2 = arg2;
         }
 
+        public NumericExp(INode? parent, string name, IExp arg1, IExp arg2) : base(parent, name)
+        {
+            Arg1 = arg1;
+            Arg2 = arg2;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode() + Arg1.GetHashCode() + Arg2.GetHashCode();

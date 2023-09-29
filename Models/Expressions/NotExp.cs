@@ -17,6 +17,11 @@ namespace PDDLSharp.Models.Expressions
             Child = child;
         }
 
+        public NotExp(INode? parent, IExp child) : base(parent)
+        {
+            Child = child;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode() * Child.GetHashCode();

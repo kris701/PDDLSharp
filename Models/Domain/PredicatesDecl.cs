@@ -19,6 +19,11 @@ namespace PDDLSharp.Models.Domain
             Predicates = predicates;
         }
 
+        public PredicatesDecl(INode? parent, List<PredicateExp> predicates) : base(parent)
+        {
+            Predicates = predicates;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

@@ -13,6 +13,10 @@ namespace PDDLSharp.Models.Problem
         {
         }
 
+        public ProblemNameDecl(INode? parent, string name) : base(parent, name)
+        {
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();

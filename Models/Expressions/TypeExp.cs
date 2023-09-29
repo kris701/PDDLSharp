@@ -25,6 +25,15 @@ namespace PDDLSharp.Models.Expressions
             SuperTypes.Add(superType);
         }
 
+        public TypeExp(INode? parent, string name, string superType, HashSet<string> altTypes) : base(parent, name)
+        {
+            SuperType = superType;
+            SuperTypes = new HashSet<string>();
+            foreach (var type in altTypes)
+                SuperTypes.Add(type);
+            SuperTypes.Add(superType);
+        }
+
         public TypeExp(ASTNode node, INode? parent, string name, string superType) : base(node, parent, name)
         {
             SuperTypes = new HashSet<string>();
@@ -32,7 +41,20 @@ namespace PDDLSharp.Models.Expressions
             SuperTypes.Add(superType);
         }
 
+        public TypeExp(INode? parent, string name, string superType) : base(parent, name)
+        {
+            SuperTypes = new HashSet<string>();
+            SuperType = superType;
+            SuperTypes.Add(superType);
+        }
+
         public TypeExp(ASTNode node, INode? parent, string name) : base(node, parent, name)
+        {
+            SuperTypes = new HashSet<string>();
+            SuperType = "";
+        }
+
+        public TypeExp(INode? parent, string name) : base(parent, name)
         {
             SuperTypes = new HashSet<string>();
             SuperType = "";

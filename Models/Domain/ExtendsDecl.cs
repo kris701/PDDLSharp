@@ -19,6 +19,11 @@ namespace PDDLSharp.Models.Domain
             Extends = extends;
         }
 
+        public ExtendsDecl(INode? parent, List<NameExp> extends) : base(parent)
+        {
+            Extends = extends;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

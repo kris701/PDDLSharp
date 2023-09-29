@@ -18,6 +18,7 @@ namespace PDDLSharp.Models.Problem
         public MetricDecl? Metric { get; set; }
 
         public ProblemDecl(ASTNode node) : base(node, null) { }
+        public ProblemDecl() : base(null) { }
 
         public override int GetHashCode()
         {

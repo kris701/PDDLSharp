@@ -18,6 +18,11 @@ namespace PDDLSharp.Models.Domain
             Types = types;
         }
 
+        public TypesDecl(INode? parent, List<TypeExp> types) : base(parent)
+        {
+            Types = types;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
