@@ -14,147 +14,154 @@ namespace PDDLSharp.CodeGenerators.Visitors
 {
     public partial class GeneratorVisitors
     {
-        public string Visit(DomainDecl node)
+        public string Visit(DomainDecl node, int indent)
         {
-            string retStr = "(define ";
+            string retStr = $"{IndentStr(indent)}(define{Environment.NewLine}";
             if (node.Name != null)
-                retStr += $"{Visit(node.Name)}{Environment.NewLine}";
+                retStr += $"{Visit(node.Name, indent + 1)}{Environment.NewLine}";
             if (node.Requirements != null)
-                retStr += $"{Visit(node.Requirements)}{Environment.NewLine}";
+                retStr += $"{Visit(node.Requirements, indent + 1)}{Environment.NewLine}";
             if (node.Types != null)
-                retStr += $"{Visit(node.Types)}{Environment.NewLine}";
+                retStr += $"{Visit(node.Types, indent + 1)}{Environment.NewLine}";
             if (node.Predicates != null)
-                retStr += $"{Visit(node.Predicates)}{Environment.NewLine}";
+                retStr += $"{Visit(node.Predicates, indent + 1)}{Environment.NewLine}";
             if (node.Constants != null)
-                retStr += $"{Visit(node.Constants)}{Environment.NewLine}";
+                retStr += $"{Visit(node.Constants, indent + 1)}{Environment.NewLine}";
             if (node.Extends != null)
-                retStr += $"{Visit(node.Extends)}{Environment.NewLine}";
+                retStr += $"{Visit(node.Extends, indent + 1)}{Environment.NewLine}";
             if (node.Timeless != null)
-                retStr += $"{Visit(node.Timeless)}{Environment.NewLine}";
+                retStr += $"{Visit(node.Timeless, indent + 1)}{Environment.NewLine}";
             if (node.Functions != null)
-                retStr += $"{Visit(node.Functions)}{Environment.NewLine}";
+                retStr += $"{Visit(node.Functions, indent + 1)}{Environment.NewLine}";
 
             if (node.Actions != null)
                 foreach(var act in node.Actions)
-                    retStr += $"{Visit(act)}{Environment.NewLine}";
+                    retStr += $"{Visit(act, indent + 1)}{Environment.NewLine}";
             if (node.Axioms != null)
                 foreach (var axi in node.Axioms)
-                    retStr += $"{Visit(axi)}{Environment.NewLine}";
+                    retStr += $"{Visit(axi, indent + 1)}{Environment.NewLine}";
             if (node.DurativeActions != null)
                 foreach (var durAct in node.DurativeActions)
-                    retStr += $"{Visit(durAct)}{Environment.NewLine}";
+                    retStr += $"{Visit(durAct, indent + 1)}{Environment.NewLine}";
 
-            retStr += ")";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
         }
 
-        public string Visit(ActionDecl node)
+        public string Visit(ActionDecl node, int indent)
         {
-            string retStr = $"(:action {node.Name}{Environment.NewLine}";
-            retStr += $":parameters {Visit(node.Parameters)}{Environment.NewLine}";
-            retStr += $":precondition {Visit((dynamic)node.Preconditions)}{Environment.NewLine}";
-            retStr += $":effect {Visit((dynamic)node.Effects)}{Environment.NewLine}";
-            retStr += $"){Environment.NewLine}";
+            string retStr = $"{IndentStr(indent)}(:action {node.Name}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:parameters {Visit(node.Parameters, 0)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:precondition {Environment.NewLine}{Visit((dynamic)node.Preconditions, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:effect {Environment.NewLine}{Visit((dynamic)node.Effects, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
         }
 
-        public string Visit(AxiomDecl node)
+        public string Visit(AxiomDecl node, int indent)
         {
-            string retStr = $"(:axiom{Environment.NewLine}";
-            retStr += $":vars {Visit(node.Vars)}{Environment.NewLine}";
-            retStr += $":context {Visit((dynamic)node.Context)}{Environment.NewLine}";
-            retStr += $":implies {Visit((dynamic)node.Implies)}{Environment.NewLine}";
-            retStr += $"){Environment.NewLine}";
+            string retStr = $"{IndentStr(indent)}(:axiom{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:vars {Visit(node.Vars, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:context {Visit((dynamic)node.Context, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:implies {Visit((dynamic)node.Implies, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
         }
 
-        public string Visit(ConstantsDecl node)
+        public string Visit(DurativeActionDecl node, int indent)
         {
-            string retStr = "";
-            foreach (var type in node.Constants)
-                retStr += $" {Visit(type)}{Environment.NewLine}".Replace("(","").Replace(")","");
-            return $"(:constants{retStr}){Environment.NewLine}";
-        }
-
-        public string Visit(DomainNameDecl node)
-        {
-            return $"(domain {node.Name}){Environment.NewLine}";
-        }
-
-        public string Visit(DurativeActionDecl node)
-        {
-            string retStr = $"(:durative-action {node.Name}{Environment.NewLine}";
-            retStr += $":parameters {Visit(node.Parameters)}{Environment.NewLine}";
-            retStr += $":duration {Visit((dynamic)node.Duration)}{Environment.NewLine}";
-            retStr += $":precondition {Visit((dynamic)node.Condition)}{Environment.NewLine}";
-            retStr += $":effect {Visit((dynamic)node.Effects)}{Environment.NewLine}";
-            retStr += $"){Environment.NewLine}";
+            string retStr = $"{IndentStr(indent)}(:durative-action {node.Name}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:parameters {Visit(node.Parameters, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:duration {Visit((dynamic)node.Duration, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:condition {Visit((dynamic)node.Condition, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:effect {Visit((dynamic)node.Effects, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
         }
 
-        public string Visit(ExtendsDecl node)
+        public string Visit(ConstantsDecl node, int indent)
         {
-            string retStr = "";
-            foreach (var type in node.Extends)
-                retStr += $" {Visit(type)}{Environment.NewLine}";
-            return $"(:extends{retStr}{Environment.NewLine})";
+            string retStr = $"{IndentStr(indent)}(:constants{Environment.NewLine}";
+            foreach (var constant in node.Constants)
+                retStr += $"{Visit((dynamic)constant, indent + 1)}{Environment.NewLine}".Replace("(", "").Replace(")", "");
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            return retStr;
         }
 
-        public string Visit(FunctionsDecl node)
+        public string Visit(DomainNameDecl node, int indent)
         {
-            string retStr = "";
-            foreach (var type in node.Functions)
-                retStr += $" {Visit(type)}{Environment.NewLine}";
-            return $"(:functions{retStr}{Environment.NewLine})";
+            return $"{IndentStr(indent)}(domain {node.Name}){Environment.NewLine}";
         }
 
-        public string Visit(ParameterDecl node)
+        public string Visit(ExtendsDecl node, int indent)
+        {
+            string retStr = $"{IndentStr(indent)}(:extends{Environment.NewLine}";
+            foreach (var extends in node.Extends)
+                retStr += $"{Visit((dynamic)extends, indent + 1)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            return retStr;
+        }
+
+        public string Visit(FunctionsDecl node, int indent)
+        {
+            string retStr = $"{IndentStr(indent)}(:functions{Environment.NewLine}";
+            foreach (var function in node.Functions)
+                retStr += $"{Visit((dynamic)function, indent + 1)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            return retStr;
+        }
+
+        public string Visit(ParameterDecl node, int indent)
         {
             string retStr = "";
             foreach (var type in node.Values)
-                retStr += $" {Visit(type)}".Replace("(","").Replace(")","");
+                retStr += $" {Visit(type, 0)}".Replace("(","").Replace(")","");
             return $"({retStr})";
         }
 
-        public string Visit(PredicatesDecl node)
+        public string Visit(PredicatesDecl node, int indent)
         {
-            string retStr = "";
-            foreach (var type in node.Predicates)
-                retStr += $" {Visit(type)}{Environment.NewLine}";
-            return $"(:predicates{retStr}){Environment.NewLine}";
+            string retStr = $"{IndentStr(indent)}(:predicates{Environment.NewLine}";
+            foreach (var predicate in node.Predicates)
+                retStr += $"{Visit((dynamic)predicate, indent + 1)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            return retStr;
         }
 
-        public string Visit(RequirementsDecl node)
+        public string Visit(RequirementsDecl node, int indent)
         {
-            var reqStr = "";
+            string retStr = $"{IndentStr(indent)}(:requirements";
             foreach (var requirement in node.Requirements)
-                reqStr += $" {requirement.Name}";
-            return $"(:requirements{reqStr}){Environment.NewLine}";
+                retStr += $" {requirement.Name}";
+            retStr += $"){Environment.NewLine}";
+            return retStr;
         }
 
-        public string Visit(TimelessDecl node)
+        public string Visit(TimelessDecl node, int indent)
         {
-            string retStr = "";
-            foreach (var type in node.Items)
-                retStr += $" {Visit(type)}{Environment.NewLine}";
-            return $"(:timeless{retStr}){Environment.NewLine}";
+            string retStr = $"{IndentStr(indent)}(:timeless{Environment.NewLine}";
+            foreach (var timelessItem in node.Items)
+                retStr += $"{Visit((dynamic)timelessItem, indent + 1)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            return retStr;
         }
 
-        public string Visit(TypesDecl node)
+        public string Visit(TypesDecl node, int indent)
         {
-            string retStr = "";
+            string retStr = $"{IndentStr(indent)}(:types{Environment.NewLine}";
             foreach (var type in node.Types)
             {
                 if (type.SuperType != "")
                 {
-                    retStr += $" {Visit(type)} - {type.SuperType}{Environment.NewLine}";
+                    retStr += $"{Visit(type, indent + 1)} - {type.SuperType}{Environment.NewLine}";
                 }
                 else
                 {
-                    retStr += $" {Visit(type)}{Environment.NewLine}";
+                    retStr += $"{Visit(type, indent + 1)}{Environment.NewLine}";
                 }
             }
-            return $"(:types{retStr}){Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            return retStr;
         }
     }
 }

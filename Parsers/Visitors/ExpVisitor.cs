@@ -118,6 +118,7 @@ namespace PDDLSharp.Parsers.Visitors
                 node.InnerContent != "" &&
                 node.Children.Count >= 1)
             {
+                node.InnerContent = ReduceToSingleSpace(node.InnerContent);
                 var numericName = node.InnerContent.Split(' ')[0].Trim();
                 if (NumericNodeTypes.Contains(numericName))
                 {

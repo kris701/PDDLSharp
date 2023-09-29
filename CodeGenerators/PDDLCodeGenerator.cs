@@ -14,6 +14,7 @@ namespace PDDLSharp.CodeGenerators
     public class PDDLCodeGenerator : ICodeGenerator
     {
         public IErrorListener Listener { get; }
+        public bool Readable { get; set; } = false;
 
         public PDDLCodeGenerator(IErrorListener listener)
         {
@@ -23,8 +24,8 @@ namespace PDDLSharp.CodeGenerators
         public void Generate(INode node, string toFile) => File.WriteAllText(toFile, Generate(node));
         public string Generate(INode node)
         {
-            GeneratorVisitors visitor = new GeneratorVisitors();
-            return visitor.Visit((dynamic)node);
+            GeneratorVisitors visitor = new GeneratorVisitors(Readable);
+            return visitor.Visit((dynamic)node, 0);
         }
     }
 }

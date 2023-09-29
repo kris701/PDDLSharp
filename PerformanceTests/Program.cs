@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Analysers;
+using PDDLSharp.CodeGenerators;
 using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
@@ -26,15 +27,21 @@ namespace PerformanceTests
             IParser parser = new PDDLParser(listener);
             IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
             IAnalyser<PDDLDecl> analyser = new PDDLDeclAnalyser(listener);
+            ICodeGenerator generator = new PDDLCodeGenerator(listener);
+
+            generator.Readable = true;
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Console.WriteLine($"Parsing... {i}");
                 var decl = parser.Parse(targetDomain, targetProblem);
                 contextualiser.Contexturalise(decl);
                 analyser.PostAnalyse(decl);
+
+                generator.Generate(decl.Domain, "domain.pddl");
+                generator.Generate(decl.Problem, "problem.pddl");
             }
             watch.Stop();
             Console.WriteLine($"Done! Took {watch.ElapsedMilliseconds}ms");

@@ -31,7 +31,7 @@ namespace PDDLSharp.CodeGenerators.Tests
                     new NameExp(new ASTNode(), null, "abc", new TypeExp(new ASTNode(), null, "typeName")),
                     new NameExp(new ASTNode(), null, "abc"),
                 }),
-                "(and (abc - typeName) (abc))"
+                "(and(abc - typeName)(abc))"
             };
             yield return new object[]
             {
@@ -39,7 +39,7 @@ namespace PDDLSharp.CodeGenerators.Tests
                 {
                     new NameExp(new ASTNode(), null, "abc", new TypeExp(new ASTNode(), null, "typeName")),
                 }),
-                "(and (abc - typeName))"
+                "(and(abc - typeName))"
             };
         }
 
