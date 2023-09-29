@@ -16,7 +16,7 @@ namespace PDDLSharp.ASTGenerators.Tests
             var expectedNode = PositionNode.ParseExpectedFile(expectedFile);
 
             // ACT
-            var node = parser.Generate(testFile);
+            var node = parser.Generate(new FileInfo(testFile));
 
             // ASSERT
             IsNodePositionValid(node, expectedNode);

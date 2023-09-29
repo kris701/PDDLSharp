@@ -206,7 +206,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [DataRow("(:objects a)", "a")]
         [DataRow("(:objects a b)", "a", "b")]
         [DataRow("(:objects a b - type)", "a", "b")]
-        [DataRow("(:objects a longName b)", "a", "longName", "b")]
+        [DataRow("(:objects a longName b)", "a", "longname", "b")]
         public void Can_VisitObjectsNode_CorrectNames(string toParse, params string[] expObjNames)
         {
             // ARRANGE

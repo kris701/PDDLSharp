@@ -52,58 +52,14 @@ namespace PDDLSharp.Parsers
 
         public T ParseAs<T>(string file) where T : INode
         {
-            var absAST = ParseAsASTTree(file);
+            IGenerator<ASTNode> astParser = new ASTGenerator();
+            var absAST = astParser.Generate(new FileInfo(file));
+
             var visitor = new ParserVisitor(Listener);
             var result = visitor.TryVisitAs<T>(absAST, null);
             if (result is T act)
                 return act;
             return default(T);
-        }
-
-        private ASTNode ParseAsASTTree(string path)
-        {
-            var text = ReadDataAsString(path);
-
-            IGenerator<ASTNode> astParser = new ASTGenerator();
-            var absAST = astParser.Generate(text);
-            return absAST;
-        }
-
-        private string ReadDataAsString(string path)
-        {
-            if (!File.Exists(path))
-            {
-                Listener.AddError(new ParseError(
-                    $"Could not find the file to parse: '{path}'",
-                    ParseErrorType.Error,
-                    ParseErrorLevel.PreParsing));
-            }
-            var text = File.ReadAllText(path);
-            text = ReplaceSpecialCharacters(text);
-            text = ReplaceCommentsWithWhiteSpace(text);
-            text = text.ToLower();
-            return text;
-        }
-
-        private string ReplaceSpecialCharacters(string text)
-        {
-            text = text.Replace('\r', ' ');
-            text = text.Replace('\t', ' ');
-            return text;
-        }
-
-        private string ReplaceCommentsWithWhiteSpace(string text)
-        {
-            var retStr = text;
-            int offset = 0;
-            while (retStr.Contains(";"))
-            {
-                int from = retStr.IndexOf(";", offset);
-                int to = retStr.IndexOf(ASTTokens.BreakToken, from);
-                retStr = retStr.Remove(from, to - from).Insert(from, new string(' ', to - from));
-                offset = to + 1;
-            }
-            return retStr;
         }
     }
 }

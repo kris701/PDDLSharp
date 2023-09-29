@@ -3,7 +3,7 @@ using PDDLSharp.Models.AST;
 namespace PDDLSharp.ASTGenerators.Tests
 {
     [TestClass]
-    public class ASTParserTests
+    public class ASTGeneratorTests
     {
         [TestMethod]
         [DataRow("()", 1)]

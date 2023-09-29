@@ -6,35 +6,36 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PDDLSharp.ASTGenerators
 {
     public class ASTGenerator : IGenerator<ASTNode>
     {
+        public ASTNode Generate(FileInfo file) => Generate(File.ReadAllText(file.FullName));
+
         public ASTNode Generate(string text)
         {
-            if (File.Exists(text))
-                text = File.ReadAllText(text);
+            text = text.ToLower();
+            text = TextPreprocessing.ReplaceSpecialCharacters(text);
+            text = TextPreprocessing.ReplaceCommentsWithWhiteSpace(text);
+            text = TextPreprocessing.TokenizeSpecials(text);
 
-            text = TokenizeSpecials(text);
-
-            int end = text.Length;
-            if (text.Contains(')'))
-                end = text.LastIndexOf(')') + 1;
-
+            int end = GetEndIndex(text);
             var lineDict = GenerateLineDict(text);
-            var node = ParseAsNodeRec(text, 0, end, lineDict, 0);
+            var node = GenerateASTNodeRec(text, 0, end, lineDict, 0);
             return node;
         }
 
-        public string TokenizeSpecials(string text)
+        public int GetEndIndex(string text)
         {
-            text = text.Replace("\n- ", $"\n{ASTTokens.TypeToken}");
-            text = text.Replace(" - ", ASTTokens.TypeToken);
-            return text;
+            int end = text.Length;
+            if (text.Contains(')'))
+                end = text.LastIndexOf(')') + 1;
+            return end;
         }
 
-        private ASTNode ParseAsNodeRec(string text, int thisStart, int thisEnd, List<int> lineDict, int lineOffset)
+        public ASTNode GenerateASTNodeRec(string text, int thisStart, int thisEnd, List<int> lineDict, int lineOffset)
         {
             lineOffset = GetLineNumber(lineDict, thisStart, lineOffset);
             if (text.Contains('('))
@@ -66,7 +67,7 @@ namespace PDDLSharp.ASTGenerators
                     }
 
                     var newContent = innerContent.Substring(startP, endP - startP);
-                    children.Add(ParseAsNodeRec(newContent, thisStart + startP, thisStart + endP, lineDict, lineOffset - 1));
+                    children.Add(GenerateASTNodeRec(newContent, thisStart + startP, thisStart + endP, lineDict, lineOffset - 1));
                     innerContent = ReplaceRangeWithSpaces(innerContent, startP, endP);
                 }
                 var outer = $"({innerContent.Trim()})";
@@ -92,7 +93,7 @@ namespace PDDLSharp.ASTGenerators
 
         // Faster string replacement
         // From https://stackoverflow.com/a/54056154
-        private string ReplaceRangeWithSpaces(string text, int from, int to)
+        public string ReplaceRangeWithSpaces(string text, int from, int to)
         {
             int length = to - from;
             string replacement = new string(' ', to - from);
@@ -105,7 +106,7 @@ namespace PDDLSharp.ASTGenerators
                 });
         }
 
-        private List<int> GenerateLineDict(string source)
+        public List<int> GenerateLineDict(string source)
         {
             List<int> lineDict = new List<int>();
             int offset = source.IndexOf(ASTTokens.BreakToken);
@@ -117,7 +118,7 @@ namespace PDDLSharp.ASTGenerators
             return lineDict;
         }
 
-        private int GetLineNumber(List<int> lineDict, int start, int offset)
+        public int GetLineNumber(List<int> lineDict, int start, int offset)
         {
             int length = lineDict.Count;
             for (int i = offset; i < length; i++)
