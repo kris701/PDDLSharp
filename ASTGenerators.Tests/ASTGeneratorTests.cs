@@ -5,6 +5,7 @@ namespace PDDLSharp.ASTGenerators.Tests
     [TestClass]
     public class ASTGeneratorTests
     {
+        #region Overall
         [TestMethod]
         [DataRow("()", 1)]
         [DataRow("(abc)", 1)]
@@ -76,5 +77,91 @@ namespace PDDLSharp.ASTGenerators.Tests
             // ASSERT
             Assert.AreEqual(expectedLineNumber, res.Children[targetChild].Line);
         }
+        #endregion
+
+        #region ReplaceRangeWithSpaces
+
+        [TestMethod]
+        //        123456789
+        [DataRow("(test)", 1, 5, "(    )")]
+        [DataRow("(test)", 0, 6, "      ")]
+        [DataRow("(test (aba))", 6, 11, "(test      )")]
+        public void Can_ReplaceRangeWithSpaces(string text, int from, int to, string expected)
+        {
+            // ARRANGE
+            ASTGenerator parser = new ASTGenerator();
+
+            // ACT
+            var res = parser.ReplaceRangeWithSpaces(text, from, to);
+
+            // ASSERT
+            Assert.AreEqual(expected, res);
+        }
+
+        #endregion
+
+        #region GenerateLineDict
+
+        [TestMethod]
+        [DataRow("abc\ndef\n", 3, 7)]
+        [DataRow("abc\ndeaaaaaaaaaf\n", 3, 16)]
+        [DataRow("abc\ndeaaaaaaaaaf\naaa\n", 3, 16)]
+        [DataRow("abc\ndeaaaaaaaaaf\naaa\n", 3, 16, 20)]
+        public void Can_GenerateLineDict(string text, params int[] expected)
+        {
+            // ARRANGE
+            ASTGenerator parser = new ASTGenerator();
+
+            // ACT
+            var res = parser.GenerateLineDict(text);
+
+            // ASSERT
+            for (int i = 0; i < expected.Length; i++)
+                Assert.AreEqual(expected[i], res[i]);
+        }
+
+        #endregion
+
+        #region GetLineNumber
+
+        [TestMethod]
+        [DataRow("abc\ndef\n", 2, 1)]
+        [DataRow("abc\ndef\n", 3, 2)]
+        [DataRow("abc\ndef\n", 4, 2)]
+        [DataRow("abc\ndef\n", 6, 2)]
+        [DataRow("abc\ndeaaaaaaaaaf\n", 2, 1)]
+        [DataRow("abc\ndeaaaaaaaaaf\n", 10, 2)]
+        [DataRow("abc\ndeaaaaaaaaaf\naaa\n", 18, 3)]
+        public void Can_GetLineNumber(string text, int startCharacter, int expected)
+        {
+            // ARRANGE
+            ASTGenerator parser = new ASTGenerator();
+            var dict = parser.GenerateLineDict(text);
+
+            // ACT
+            var res = parser.GetLineNumber(dict, startCharacter, 0);
+
+            // ASSERT
+            Assert.AreEqual(expected, res);
+        }
+
+        [TestMethod]
+        [DataRow("abc\ndef\n", 2, 0, 1)]
+        [DataRow("abc\ndef\n", 5, 1, 2)]
+        [DataRow("abc\ndeaaaaaaaaaf\naaa\n", 18, 2, 3)]
+        public void Can_GetLineNumber_WithOffset(string text, int startCharacter, int offset, int expected)
+        {
+            // ARRANGE
+            ASTGenerator parser = new ASTGenerator();
+            var dict = parser.GenerateLineDict(text);
+
+            // ACT
+            var res = parser.GetLineNumber(dict, startCharacter, offset);
+
+            // ASSERT
+            Assert.AreEqual(expected, res);
+        }
+
+        #endregion
     }
 }
