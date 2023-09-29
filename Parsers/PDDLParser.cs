@@ -64,7 +64,7 @@ namespace PDDLSharp.Parsers
         {
             var text = ReadDataAsString(path);
 
-            IASTParser<ASTNode> astParser = new ASTParser();
+            IGenerator<ASTNode> astParser = new ASTGenerator();
             var absAST = astParser.Parse(text);
             return absAST;
         }

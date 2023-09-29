@@ -12,7 +12,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_ASTParser_SetCorrectPossitions(string testFile, string expectedFile)
         {
             // ARRANGE
-            IASTParser<ASTNode> parser = new ASTParser();
+            IGenerator<ASTNode> parser = new ASTGenerator();
             var expectedNode = PositionNode.ParseExpectedFile(expectedFile);
 
             // ACT

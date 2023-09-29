@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.ASTGenerators
 {
-    public class ASTParser : IASTParser<ASTNode>
+    public class ASTGenerator : IGenerator<ASTNode>
     {
         public ASTNode Parse(string text)
         {

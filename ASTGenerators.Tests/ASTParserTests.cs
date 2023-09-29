@@ -16,7 +16,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_ParseGeneralStructure(string toParse, int expectedNodes)
         {
             // ARRANGE
-            IASTParser<ASTNode> parser = new ASTParser();
+            IGenerator<ASTNode> parser = new ASTGenerator();
 
             // ACT
             var res = parser.Parse(toParse);
@@ -33,7 +33,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_ParseSingleNodeContent_1(string toParse, string expectedContent)
         {
             // ARRANGE
-            IASTParser<ASTNode> parser = new ASTParser();
+            IGenerator<ASTNode> parser = new ASTGenerator();
 
             // ACT
             var res = parser.Parse(toParse);
@@ -50,7 +50,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_ParseSingleNodeContent_2(string toParse, string expectedContent)
         {
             // ARRANGE
-            IASTParser<ASTNode> parser = new ASTParser();
+            IGenerator<ASTNode> parser = new ASTGenerator();
 
             // ACT
             var res = parser.Parse(toParse);
@@ -68,7 +68,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_CanSetCorrectLineNumber(string toParse, int targetChild, int expectedLineNumber)
         {
             // ARRANGE
-            IASTParser<ASTNode> parser = new ASTParser();
+            IGenerator<ASTNode> parser = new ASTGenerator();
 
             // ACT
             var res = parser.Parse(toParse);
