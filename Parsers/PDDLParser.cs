@@ -17,7 +17,7 @@ using PDDLSharp.Contextualisers;
 
 namespace PDDLSharp.Parsers
 {
-    public class PDDLParser : IPDDLParser
+    public class PDDLParser : IParser
     {
         public IErrorListener Listener { get; }
 

@@ -45,11 +45,11 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             }
         }
 
-        public IPDDLParser GetParser(string domain, IErrorListener listener)
+        public IParser GetParser(string domain, IErrorListener listener)
         {
             if (!IsDomainSupported(domain))
                 Assert.Inconclusive("Domain is unsupported");
-            IPDDLParser parser = new PDDLParser(listener);
+            IParser parser = new PDDLParser(listener);
             parser.Listener.ThrowIfTypeAbove = ErrorListeners.ParseErrorType.Warning;
             return parser;
         }

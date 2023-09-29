@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Parsers
 {
-    public interface IPDDLParser
+    public interface IParser
     {
         public IErrorListener Listener { get; }
 

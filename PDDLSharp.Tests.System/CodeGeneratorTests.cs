@@ -38,7 +38,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IPDDLParser parser = GetParser(domain, listener);
+            IParser parser = GetParser(domain, listener);
             IPDDLCodeGenerator generator = new PDDLCodeGenerator(listener);
 
             // ACT
@@ -58,7 +58,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IPDDLParser parser = GetParser(domain, listener);
+            IParser parser = GetParser(domain, listener);
             IPDDLCodeGenerator generator = new PDDLCodeGenerator(listener);
 
             // ACT
@@ -85,7 +85,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IPDDLParser parser = GetParser(domain, listener);
+            IParser parser = GetParser(domain, listener);
             IPDDLCodeGenerator generator = new PDDLCodeGenerator(listener);
             IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
             IAnalyser<PDDLDecl> analyser = new PDDLDeclAnalyser(listener);

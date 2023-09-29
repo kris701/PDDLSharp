@@ -24,7 +24,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             // ARRANGE
             var expectedNode = PositionNode.ParseExpectedFile(expectedFile);
             IErrorListener listener = new ErrorListener();
-            IPDDLParser pddlParser = new PDDLParser(listener);
+            IParser pddlParser = new PDDLParser(listener);
 
             // ACT
             var node = pddlParser.ParseAs<DomainDecl>(testFile);

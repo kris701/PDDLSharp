@@ -37,7 +37,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IPDDLParser parser = GetParser(domain, listener);
+            IParser parser = GetParser(domain, listener);
             IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser(listener);
 
             // ACT
@@ -56,7 +56,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IPDDLParser parser = GetParser(domain, listener);
+            IParser parser = GetParser(domain, listener);
             IContextualiser<ProblemDecl> contextualiser = new PDDLProblemDeclContextualiser(listener);
 
             // ACT
@@ -81,7 +81,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IPDDLParser parser = GetParser(domain, listener);
+            IParser parser = GetParser(domain, listener);
             IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
             Random rnd = new Random();
 
