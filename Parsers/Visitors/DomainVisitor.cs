@@ -87,7 +87,7 @@ namespace PDDLSharp.Parsers.Visitors
             {
                 var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":requirements");
                 var newReq = new RequirementsDecl(node, parent, new List<NameExp>());
-                newReq.Requirements = LooseParseString<NameExp>(node, newReq, ":requirements", str);
+                newReq.Requirements = ParseAsParameters(node, newReq, ":requirements", str);
 
                 return newReq;
             }
@@ -100,7 +100,7 @@ namespace PDDLSharp.Parsers.Visitors
             {
                 var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":extends");
                 var newExt = new ExtendsDecl(node, parent, new List<NameExp>());
-                newExt.Extends = LooseParseString<NameExp>(node, newExt, ":extends", str);
+                newExt.Extends = ParseAsParameters(node, newExt, ":extends", str);
 
                 return newExt;
             }
@@ -113,7 +113,7 @@ namespace PDDLSharp.Parsers.Visitors
             {
                 var newTypesDecl = new TypesDecl(node, parent, new List<TypeExp>());
 
-                var str = ReduceToSingleSpace(ReplaceRangeWithSpaces(node.InnerContent, node.InnerContent.IndexOf(":types"), ":types".Length)).Trim();
+                var str = RemoveNodeType(node.InnerContent, ":types").Trim();
 
                 // In case types are decleared but is empty
                 if (str== "")
@@ -184,7 +184,7 @@ namespace PDDLSharp.Parsers.Visitors
             {
                 var newCons = new ConstantsDecl(node, parent, new List<NameExp>());
                 var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":constants");
-                newCons.Constants = LooseParseString<NameExp>(node, newCons, ":constants", str);
+                newCons.Constants = ParseAsParameters(node, newCons, ":constants", str);
 
                 return newCons;
             }
@@ -245,7 +245,7 @@ namespace PDDLSharp.Parsers.Visitors
                 newActionDecl.Parameters = new ParameterDecl(
                     node.Children[0],
                     newActionDecl,
-                    LooseParseString<NameExp>(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent));
+                    ParseAsParameters(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent));
 
                 // Preconditions
                 newActionDecl.Preconditions = VisitExp(node.Children[1], newActionDecl);
@@ -277,7 +277,7 @@ namespace PDDLSharp.Parsers.Visitors
                 newActionDecl.Parameters = new ParameterDecl(
                     node.Children[0],
                     newActionDecl,
-                    LooseParseString<NameExp>(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent));
+                    ParseAsParameters(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent));
 
                 // Duration
                 newActionDecl.Duration = VisitExp(node.Children[1], newActionDecl);
@@ -308,7 +308,7 @@ namespace PDDLSharp.Parsers.Visitors
                 newAxiomDecl.Vars = new ParameterDecl(
                     node.Children[0],
                     newAxiomDecl,
-                    LooseParseString<NameExp>(node.Children[0], newAxiomDecl, "parameters", node.Children[0].InnerContent.Trim()));
+                    ParseAsParameters(node.Children[0], newAxiomDecl, "parameters", node.Children[0].InnerContent.Trim()));
 
                 // Context
                 newAxiomDecl.Context = VisitExp(node.Children[1], newAxiomDecl);

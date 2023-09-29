@@ -86,7 +86,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var newObjs = new ObjectsDecl(node, parent, new List<NameExp>());
 
                 var parseStr = node.InnerContent.Substring(node.InnerContent.IndexOf(":objects") + ":objects".Length);
-                newObjs.Objs = LooseParseString<NameExp>(node, newObjs, ":objects", parseStr);
+                newObjs.Objs = ParseAsParameters(node, newObjs, ":objects", parseStr);
 
                 return newObjs;
             }
@@ -99,7 +99,7 @@ namespace PDDLSharp.Parsers.Visitors
                 DoesNotContainStrayCharacters(node, ":init"))
             {
                 var newInit = new InitDecl(node, parent, new List<IExp>());
-                var preds = ParseAsList<PredicateExp>(node, newInit, false);
+                var preds = ParseAsList<IExp>(node, newInit, false);
                 var nums = ParseAsList<NumericExp>(node, newInit, false);
                 newInit.Predicates.AddRange(preds);
                 newInit.Predicates.AddRange(nums);

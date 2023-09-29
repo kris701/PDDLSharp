@@ -8,10 +8,12 @@ using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+[assembly:InternalsVisibleTo("PDDLSharp.Parsers.Tests")]
 namespace PDDLSharp.Parsers.Visitors
 {
     public partial class ParserVisitor
@@ -74,14 +76,6 @@ namespace PDDLSharp.Parsers.Visitors
             // Default
             null;
 
-        internal string ReplaceRangeWithSpaces(string text, int from, int to)
-        {
-            var newText = text.Substring(0, from);
-            newText += new string(' ', to - from);
-            newText += text.Substring(to);
-            return newText;
-        }
-
         internal bool DoesNotContainStrayCharacters(ASTNode node, string targetName)
         {
             if (node.InnerContent.Replace(targetName, "").Trim() != "")
@@ -143,12 +137,10 @@ namespace PDDLSharp.Parsers.Visitors
             return true;
         }
 
-        internal List<T> LooseParseString<T>(ASTNode node, INode parent, string nodeType, string content)
+        internal List<NameExp> ParseAsParameters(ASTNode node, INode parent, string nodeType, string content)
         {
-            List<T> objs = new List<T>();
+            List<NameExp> objs = new List<NameExp>();
             int offset = node.End - 1;
-            //if (node.InnerContent.StartsWith(nodeType))
-            //    offset += node.InnerContent.IndexOf(nodeType) + nodeType.Length + 1;
             content = PurgeEscapeChars(content);
 
             string currentType = "";
@@ -166,22 +158,34 @@ namespace PDDLSharp.Parsers.Visitors
                     else if (!typedParam.Contains(ASTTokens.TypeToken) && currentType != "")
                         typedParam = $"{typedParam}{ASTTokens.TypeToken}{currentType}";
 
-                    var parsed = VisitExp(new ASTNode(
+                    var parsed = VisitAs<NameExp>(new ASTNode(
                         offset - param.Length,
                         offset,
                         node.Line,
                         typedParam,
                         typedParam), parent);
-                    if (parsed is T nExp)
+                    if (parsed is NameExp nExp)
                         objs.Add(nExp);
                     else
                     {
-                        Listener.AddError(new ParseError(
-                            $"Unexpected node type while parsing! Expected '{nodeType}' but got {nameof(T)}!",
-                            ParseErrorType.Error,
-                            ParseErrorLevel.Parsing,
-                            parsed.Line,
-                            parsed.Start));
+                        if (parsed == null)
+                        {
+                            Listener.AddError(new ParseError(
+                                $"Unexpected node type while parsing! Expected '{nameof(NameExp)}' but got null!",
+                                ParseErrorType.Error,
+                                ParseErrorLevel.Parsing,
+                                node.Line,
+                                node.Start));
+                        }
+                        else
+                        {
+                            Listener.AddError(new ParseError(
+                                $"Unexpected node type while parsing! Expected '{nameof(NameExp)}' but got '{parsed.GetType().Name}'!",
+                                ParseErrorType.Error,
+                                ParseErrorLevel.Parsing,
+                                parsed.Line,
+                                parsed.Start));
+                        }
                     }
                 }
                 offset -= param.Length + 1;
@@ -190,12 +194,12 @@ namespace PDDLSharp.Parsers.Visitors
             return objs;
         }
 
-        internal List<T> ParseAsList<T>(ASTNode node, INode parent, bool throwIfNotCorrect = true)
+        internal List<T> ParseAsList<T>(ASTNode node, INode parent, bool throwIfNotCorrect = true) where T : INode
         {
             List<T> items = new List<T>();
             foreach (var child in node.Children)
             {
-                var newNode = VisitExp(child, parent);
+                var newNode = VisitAs<T>(child, parent);
                 if (newNode is T nExp)
                     items.Add(nExp);
                 else if (throwIfNotCorrect)
@@ -265,6 +269,11 @@ namespace PDDLSharp.Parsers.Visitors
         internal string RemoveNodeTypeAndEscapeChars(string content, string nodeType)
         {
             return PurgeEscapeChars(content).Remove(content.IndexOf(nodeType), nodeType.Length).Trim();
+        }
+
+        internal string RemoveNodeType(string content, string nodeType)
+        {
+            return content.Remove(content.IndexOf(nodeType), nodeType.Length).Trim();
         }
 
         internal string ReduceToSingleSpace(string text)
