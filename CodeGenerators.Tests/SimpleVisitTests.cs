@@ -51,7 +51,7 @@ namespace PDDLSharp.CodeGenerators.Tests
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IPDDLCodeGenerator generator = new PDDLCodeGenerator(listener);
+            ICodeGenerator generator = new PDDLCodeGenerator(listener);
 
             // ACT
             var result = generator.Generate(node);
