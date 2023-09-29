@@ -1,9 +1,14 @@
-﻿using PDDLSharp.ASTGenerators;
+﻿using PDDLSharp;
+using PDDLSharp.ASTGenerators;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.Domain;
+using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.Tests;
+using PDDLSharp.Parsers.Tests;
 using PDDLSharp.Parsers.Tests.PositionTestsData;
+using PDDLSharp.Parsers.Tests.Visitors;
 using PDDLSharp.Parsers.Visitors;
 using System;
 using System.Collections.Generic;
@@ -11,7 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Parsers.Tests.Visitors
+namespace PDDLSharp.Parsers.Tests
 {
     [TestClass]
     public class PositionTests
@@ -44,9 +49,6 @@ namespace PDDLSharp.Parsers.Tests.Visitors
                 int index = 0;
                 foreach (var child in walkable)
                 {
-                    //if (index >= expectedNode.Children.Count)
-                    //    Assert.Fail($"Node did not have the expected number of children! Node {expectedNode.NodeType}, expected {expectedNode.Children.Count} children");
-                    
                     IsNodePositionValid(child, expectedNode.Children[index++]);
                 }
             }

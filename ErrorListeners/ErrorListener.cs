@@ -20,7 +20,7 @@ namespace PDDLSharp.ErrorListeners
         public void AddError(ParseError err)
         {
             Errors.Add(err);
-            if (Errors.Any(x => x.Type > ThrowIfTypeAbove))
+            if (err.Type > ThrowIfTypeAbove)
                 throw new ParseException(Errors);
         }
 
