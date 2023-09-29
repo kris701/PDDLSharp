@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.CodeGenerators
 {
-    public interface IPDDLCodeGenerator
+    public interface ICodeGenerator
     {
         public IErrorListener Listener { get; }
 
