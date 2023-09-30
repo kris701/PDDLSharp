@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.ASTGenerators
 {
-    public interface IASTParser<T>
+    public interface IGenerator<T>
     {
-        T Parse(string text);
-        string TokenizeSpecials(string text);
+        public T Generate(FileInfo file);
+        public T Generate(string text);
     }
 }

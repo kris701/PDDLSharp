@@ -18,6 +18,11 @@ namespace PDDLSharp.Models.Domain
             Requirements = requirements;
         }
 
+        public RequirementsDecl(INode? parent, List<NameExp> requirements) : base(parent)
+        {
+            Requirements = requirements;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

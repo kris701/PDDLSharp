@@ -27,8 +27,8 @@ namespace PDDLSharp.Contextualisers.Tests
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            IASTParser<ASTNode> parser = new ASTParser();
-            var node = parser.Parse(toParse);
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
 
@@ -54,8 +54,8 @@ namespace PDDLSharp.Contextualisers.Tests
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            IASTParser<ASTNode> parser = new ASTParser();
-            var node = parser.Parse(toParse);
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
 
@@ -80,8 +80,8 @@ namespace PDDLSharp.Contextualisers.Tests
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            IASTParser<ASTNode> parser = new ASTParser();
-            var node = parser.Parse(toParse);
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
 

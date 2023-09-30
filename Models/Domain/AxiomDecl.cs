@@ -23,6 +23,13 @@ namespace PDDLSharp.Models.Domain
             Implies = implies;
         }
 
+        public AxiomDecl(INode? parent, ParameterDecl vars, IExp context, IExp implies) : base(parent)
+        {
+            Vars = vars;
+            Context = context;
+            Implies = implies;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

@@ -34,7 +34,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IPDDLParser parser = GetParser(domain, listener);
+            IParser parser = GetParser(domain, listener);
 
             // ACT
             parser.ParseAs<DomainDecl>(domain);
@@ -51,7 +51,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IPDDLParser parser = GetParser(domain, listener);
+            IParser parser = GetParser(domain, listener);
 
             // ACT
             foreach (var problem in problems)
@@ -74,7 +74,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IPDDLParser parser = GetParser(domain, listener);
+            IParser parser = GetParser(domain, listener);
 
             // ACT
             foreach (var problem in problems)

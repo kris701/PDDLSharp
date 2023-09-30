@@ -18,6 +18,11 @@ namespace PDDLSharp.Models.Domain
             Functions = functions;
         }
 
+        public FunctionsDecl(INode? parent, List<PredicateExp> functions) : base(parent)
+        {
+            Functions = functions;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

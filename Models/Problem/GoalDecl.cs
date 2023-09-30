@@ -18,6 +18,11 @@ namespace PDDLSharp.Models.Problem
             GoalExp = goalExp;
         }
 
+        public GoalDecl(INode? parent, IExp goalExp) : base(parent)
+        {
+            GoalExp = goalExp;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode() + GoalExp.GetHashCode();

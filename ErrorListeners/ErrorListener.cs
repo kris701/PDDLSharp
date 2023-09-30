@@ -17,10 +17,16 @@ namespace PDDLSharp.ErrorListeners
             ThrowIfTypeAbove = ParseErrorType.Warning;
         }
 
+        public ErrorListener(ParseErrorType throwAbove)
+        {
+            Errors = new List<ParseError>();
+            ThrowIfTypeAbove = throwAbove;
+        }
+
         public void AddError(ParseError err)
         {
             Errors.Add(err);
-            if (Errors.Any(x => x.Type > ThrowIfTypeAbove))
+            if (err.Type > ThrowIfTypeAbove)
                 throw new ParseException(Errors);
         }
 

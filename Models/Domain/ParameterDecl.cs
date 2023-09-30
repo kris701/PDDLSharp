@@ -19,6 +19,11 @@ namespace PDDLSharp.Models.Domain
             Values = values;
         }
 
+        public ParameterDecl(INode? parent, List<NameExp> values) : base(parent)
+        {
+            Values = values;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

@@ -15,6 +15,10 @@ namespace PDDLSharp.Models
         {
         }
 
+        protected BaseWalkableNode(INode? parent) : base(parent)
+        {
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();

@@ -20,6 +20,11 @@ namespace PDDLSharp.Models.Domain
             Constants = constants;
         }
 
+        public ConstantsDecl(INode? parent, List<NameExp> constants) : base(parent)
+        {
+            Constants = constants;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

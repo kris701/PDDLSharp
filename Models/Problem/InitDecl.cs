@@ -17,6 +17,11 @@ namespace PDDLSharp.Models.Problem
             Predicates = predicates;
         }
 
+        public InitDecl(INode? parent, List<IExp> predicates) : base(parent)
+        {
+            Predicates = predicates;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

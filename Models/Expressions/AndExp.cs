@@ -18,6 +18,11 @@ namespace PDDLSharp.Models.Expressions
             Children = children;
         }
 
+        public AndExp(INode? parent, List<IExp> children) : base(parent)
+        {
+            Children = children;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

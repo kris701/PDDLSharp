@@ -20,6 +20,12 @@ namespace PDDLSharp.Models.Expressions
             Option2 = option2;
         }
 
+        public OrExp(INode? parent, IExp option1, IExp option2) : base(parent)
+        {
+            Option1 = option1;
+            Option2 = option2;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode() * Option1.GetHashCode() * Option2.GetHashCode();

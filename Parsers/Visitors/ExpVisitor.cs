@@ -99,7 +99,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var newPredicateExp = new PredicateExp(node, parent, predicateName, new List<NameExp>());
 
                 var content = node.InnerContent.Substring(node.InnerContent.IndexOf(predicateName) + predicateName.Length);
-                newPredicateExp.Arguments = LooseParseString<NameExp>(node, newPredicateExp, predicateName, content);
+                newPredicateExp.Arguments = ParseAsParameters(node, newPredicateExp, predicateName, content);
 
                 return newPredicateExp;
             }
@@ -118,6 +118,7 @@ namespace PDDLSharp.Parsers.Visitors
                 node.InnerContent != "" &&
                 node.Children.Count >= 1)
             {
+                node.InnerContent = ReduceToSingleSpace(node.InnerContent);
                 var numericName = node.InnerContent.Split(' ')[0].Trim();
                 if (NumericNodeTypes.Contains(numericName))
                 {

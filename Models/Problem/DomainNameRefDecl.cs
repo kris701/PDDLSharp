@@ -15,6 +15,10 @@ namespace PDDLSharp.Models.Problem
         {
         }
 
+        public DomainNameRefDecl(INode? parent, string name) : base(parent, name)
+        {
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();

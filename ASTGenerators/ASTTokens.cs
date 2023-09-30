@@ -8,7 +8,7 @@ namespace PDDLSharp.ASTGenerators
 {
     public class ASTTokens
     {
-        public static string TypeToken = "=t=";
-        public static char BreakToken = '\n';
+        public static readonly string TypeToken = "=t=";
+        public static readonly char BreakToken = '\n';
     }
 }

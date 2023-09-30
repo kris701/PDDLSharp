@@ -18,6 +18,12 @@ namespace PDDLSharp.Models.Expressions
             Effect = effect;
         }
 
+        public WhenExp(INode? parent, IExp condition, IExp effect) : base(parent)
+        {
+            Condition = condition;
+            Effect = effect;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

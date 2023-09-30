@@ -19,6 +19,12 @@ namespace PDDLSharp.Models.Problem
             MetricExp = metricExp;
         }
 
+        public MetricDecl(INode? parent, string metricType, IExp metricExp) : base(parent)
+        {
+            MetricType = metricType;
+            MetricExp = metricExp;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode() + MetricType.GetHashCode() + MetricExp.GetHashCode();

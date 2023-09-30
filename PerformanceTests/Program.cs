@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Analysers;
+using PDDLSharp.CodeGenerators;
 using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
@@ -17,15 +18,18 @@ namespace PerformanceTests
             BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
             Console.WriteLine("Done!");
 
-            var targetDomain = "benchmarks/airport/p50-domain.pddl";
-            var targetProblem = "benchmarks/airport/p50-airport5MUC-p15.pddl";
-            //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
-            //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
+            //var targetDomain = "benchmarks/airport/p50-domain.pddl";
+            //var targetProblem = "benchmarks/airport/p50-airport5MUC-p15.pddl";
+            var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
+            var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
 
             IErrorListener listener = new ErrorListener();
-            IPDDLParser parser = new PDDLParser(listener);
+            IParser parser = new PDDLParser(listener);
             IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
             IAnalyser<PDDLDecl> analyser = new PDDLDeclAnalyser(listener);
+            ICodeGenerator generator = new PDDLCodeGenerator(listener);
+
+            generator.Readable = true;
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
@@ -35,6 +39,9 @@ namespace PerformanceTests
                 var decl = parser.Parse(targetDomain, targetProblem);
                 contextualiser.Contexturalise(decl);
                 analyser.PostAnalyse(decl);
+
+                generator.Generate(decl.Domain, "domain.pddl");
+                generator.Generate(decl.Problem, "problem.pddl");
             }
             watch.Stop();
             Console.WriteLine($"Done! Took {watch.ElapsedMilliseconds}ms");

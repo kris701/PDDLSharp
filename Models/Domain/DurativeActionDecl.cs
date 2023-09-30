@@ -23,6 +23,14 @@ namespace PDDLSharp.Models.Domain
             Duration = duration;
         }
 
+        public DurativeActionDecl(INode? parent, string name, ParameterDecl parameters, IExp condition, IExp effects, IExp duration) : base(parent, name)
+        {
+            Parameters = parameters;
+            Condition = condition;
+            Effects = effects;
+            Duration = duration;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
