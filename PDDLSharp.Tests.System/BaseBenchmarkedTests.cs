@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.Analysers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Parsers;
+using PDDLSharp.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 {
     public class BaseBenchmarkedTests
     {
-        public static long MaxFileSize = 10000;
+        public static long MaxFileSize = 100000;
         public static long MaxProblemsPrDomain = 5;
         public static Dictionary<string, List<string>> _testDict = new Dictionary<string, List<string>>();
 
@@ -19,16 +20,10 @@ namespace PDDLSharp.PDDLSharp.Tests.System
         {
             await BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
             Random rnd = new Random();
-            List<string> validDomains = new List<string>();
-            foreach (var path in Directory.GetDirectories(BenchmarkFetcher.OutputPath))
-            {
-                if (path.EndsWith("-strips"))
-                    validDomains.Add(path);
-            }
-            foreach (var domainPath in validDomains)
+            foreach (var domainPath in Directory.GetDirectories(BenchmarkFetcher.OutputPath))
             {
                 var domainFile = Path.Combine(domainPath, "domain.pddl");
-                if (File.Exists(domainFile))
+                if (File.Exists(domainFile) && IsDomainSupported(domainFile))
                 {
                     if (!_testDict.ContainsKey(domainFile))
                     {
@@ -54,9 +49,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             return parser;
         }
 
-        public bool IsDomainSupported(string domainFile)
+        public static bool IsDomainSupported(string domainFile)
         {
-            IAnalyser<string> preanalyser = new GeneralPreAnalyser(new ErrorListener());
+            IAnalyser<string> preanalyser = new GeneralPreAnalyser(new ErrorListener(ParseErrorType.Error));
             var text = File.ReadAllText(domainFile);
             preanalyser.PreAnalyse(text);
             if (preanalyser.Listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning) > 0)

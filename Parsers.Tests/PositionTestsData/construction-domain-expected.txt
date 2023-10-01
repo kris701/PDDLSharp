@@ -33,7 +33,7 @@
 		538:567:PredicateExp
 			553:566:NameExp
 	675:1038:ActionDecl
-		715:738:ParameterDecl
+		715:738:ParameterExp
 			716:725:NameExp
 			726:737:NameExp
 		761:908:AndExp
@@ -54,7 +54,7 @@
 			971:989:PredicateExp
 				986:988:NameExp
 	1044:1243:AxiomDecl
-		1066:1077:ParameterDecl
+		1066:1077:ParameterExp
 			1067:1076:NameExp
 		1095:1204:AndExp
 			1112:1128:PredicateExp

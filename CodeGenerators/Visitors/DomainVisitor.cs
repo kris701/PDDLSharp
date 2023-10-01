@@ -111,7 +111,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
             return retStr;
         }
 
-        public string Visit(ParameterDecl node, int indent)
+        public string Visit(ParameterExp node, int indent)
         {
             string retStr = "";
             foreach (var type in node.Values)

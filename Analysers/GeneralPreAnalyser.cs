@@ -58,36 +58,5 @@ namespace PDDLSharp.Analysers
                     ParseErrorLevel.PreParsing));
             }
         }
-
-        public static List<string> UnsupportedPackages = new List<string>()
-        {
-            ":existential-preconditions",
-            ":adl",
-            ":universal-preconditions",
-            ":quantified-preconditions",
-            ":action-expansions",
-            ":foreach-expansions",
-            ":dag-expansions",
-            ":subgoals-through-axioms",
-            ":safety-constraints",
-            ":expression-evaluation",
-            ":fluents",
-            ":open-world",
-            ":true-negation",
-            ":ucpop"
-        };
-        private void CheckForUnsupportedRequirements(string text)
-        {
-            foreach(var unsuportedPackage in UnsupportedPackages)
-            {
-                if (text.Contains(unsuportedPackage))
-                {
-                    Listener.AddError(new ParseError(
-                        $"The reqirement '{unsuportedPackage}' is not supported by this parser. Results may not be accurate!",
-                        ParseErrorType.Warning,
-                        ParseErrorLevel.PreParsing));
-                }
-            }
-        }
     }
 }

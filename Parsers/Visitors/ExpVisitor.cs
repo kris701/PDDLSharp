@@ -19,6 +19,7 @@ namespace PDDLSharp.Parsers.Visitors
             IExp? returnNode;
             if ((returnNode = TryVisitAndNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitWhenNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitForAllNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitOrNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNotNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNumericNode(node, parent)) != null) return returnNode;
@@ -30,6 +31,24 @@ namespace PDDLSharp.Parsers.Visitors
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
             return returnNode;
+        }
+
+        public IExp? TryVisitForAllNode(ASTNode node, INode? parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, "forall") &&
+                DoesNodeHaveSpecificChildCount(node, "forall", 2) &&
+                DoesNotContainStrayCharacters(node, "forall"))
+            {
+                var newForAllExpression = new ForAllExp(node, parent, null, null);
+                newForAllExpression.Parameters = new ParameterExp(
+                    node.Children[0],
+                    newForAllExpression,
+                    ParseAsParameters(node.Children[0], newForAllExpression, "", node.Children[0].InnerContent));
+                newForAllExpression.Expression = VisitExp(node.Children[1], newForAllExpression);
+
+                return newForAllExpression;
+            }
+            return null;
         }
 
         public IExp? TryVisitWhenNode(ASTNode node, INode? parent)

@@ -19,6 +19,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [TestMethod]
         [DataRow("(and ())", typeof(AndExp))]
         [DataRow("(when (and ()) (and ()))", typeof(WhenExp))]
+        [DataRow("(forall (pred) (and ()))", typeof(ForAllExp))]
         [DataRow("(not (aaabsbdsb))", typeof(NotExp))]
         [DataRow("(or (aaa) (bbb))", typeof(OrExp))]
         [DataRow("(pred)", typeof(PredicateExp))]
@@ -37,6 +38,62 @@ namespace PDDLSharp.Parsers.Tests.Visitors
 
             // ASSERT
             Assert.IsInstanceOfType(exp, expectedType);
+        }
+
+        [TestMethod]
+        [DataRow("(forall (and ()) (and ()))")]
+        [DataRow("(forall (and (a)) (and (b)))")]
+        [DataRow("(forall (and (ab) (a)) (and ()))")]
+        public void Can_ParseForAllNode(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitForAllNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(ForAllExp));
+        }
+
+        [TestMethod]
+        [DataRow("(forall)")]
+        [DataRow("(forall  ())")]
+        [DataRow("(forall  () () ())")]
+        public void Cant_ParseForAllNode_IfNotTwoChildren(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitForAllNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("(forall a (and ()) (and ()))")]
+        [DataRow("(forall a (and ())     a (and ()))")]
+        [DataRow("(forall a (and ())     a (and ()))q")]
+        [DataRow("(forall (and ())(and ()))q")]
+        public void Cant_ParseForAllNode_IfContainsStrayCharacters(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitForAllNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
         }
 
         [TestMethod]

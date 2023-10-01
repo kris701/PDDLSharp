@@ -5,17 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PDDLSharp.Tools;
+using PDDLSharp.Models.Expressions;
 
 namespace PDDLSharp.Models.Domain
 {
     public class DurativeActionDecl : BaseNamedWalkableNode, IDecl
     {
-        public ParameterDecl Parameters { get; set; }
+        public ParameterExp Parameters { get; set; }
         public IExp Condition { get; set; }
         public IExp Effects { get; set; }
         public IExp Duration { get; set; }
 
-        public DurativeActionDecl(ASTNode node, INode? parent, string name, ParameterDecl parameters, IExp condition, IExp effects, IExp duration) : base(node, parent, name)
+        public DurativeActionDecl(ASTNode node, INode? parent, string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(node, parent, name)
         {
             Parameters = parameters;
             Condition = condition;
@@ -23,7 +24,7 @@ namespace PDDLSharp.Models.Domain
             Duration = duration;
         }
 
-        public DurativeActionDecl(INode? parent, string name, ParameterDecl parameters, IExp condition, IExp effects, IExp duration) : base(parent, name)
+        public DurativeActionDecl(INode? parent, string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(parent, name)
         {
             Parameters = parameters;
             Condition = condition;
