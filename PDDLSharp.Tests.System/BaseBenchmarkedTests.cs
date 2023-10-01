@@ -33,7 +33,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 if (!ExcludedDomains.Contains(new DirectoryInfo(domainPath).Name))
                 {
                     var domainFile = Path.Combine(domainPath, "domain.pddl");
-                    if (File.Exists(domainFile) && IsDomainSupported(domainFile))
+                    if (File.Exists(domainFile) && CompatabilityHelper.IsPDDLDomainSpported(new FileInfo(domainFile)))
                     {
                         if (!_testDict.ContainsKey(domainFile))
                         {
@@ -53,21 +53,11 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
         public IParser GetParser(string domain, IErrorListener listener)
         {
-            if (!IsDomainSupported(domain))
+            if (!CompatabilityHelper.IsPDDLDomainSpported(domain))
                 Assert.Inconclusive("Domain is unsupported");
             IParser parser = new PDDLParser(listener);
             parser.Listener.ThrowIfTypeAbove = ErrorListeners.ParseErrorType.Warning;
             return parser;
-        }
-
-        public static bool IsDomainSupported(string domainFile)
-        {
-            IAnalyser<string> preanalyser = new GeneralPreAnalyser(new ErrorListener(ParseErrorType.Error));
-            var text = File.ReadAllText(domainFile);
-            preanalyser.PreAnalyse(text);
-            if (preanalyser.Listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning) > 0)
-                return false;
-            return true;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace PerformanceTests
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 200; i++)
             {
                 Console.WriteLine($"Parsing... {i}");
                 var decl = parser.Parse(targetDomain, targetProblem);
@@ -45,6 +45,7 @@ namespace PerformanceTests
             }
             watch.Stop();
             Console.WriteLine($"Done! Took {watch.ElapsedMilliseconds}ms");
+            Console.WriteLine($"Avg took {watch.ElapsedMilliseconds/200}ms");
         }
     }
 }
