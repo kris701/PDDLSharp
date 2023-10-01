@@ -21,6 +21,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [DataRow("(define (problem a))", typeof(ProblemDecl))]
         [DataRow("(problem abc)", typeof(ProblemNameDecl))]
         [DataRow("(:domain abc)", typeof(DomainNameRefDecl))]
+        [DataRow("(:situation abc)", typeof(SituationDecl))]
         [DataRow("(:objects abc def - type)", typeof(ObjectsDecl))]
         [DataRow("(:init (a ?b) (c ?d))", typeof(InitDecl))]
         [DataRow("(:goal (not (a)))", typeof(GoalDecl))]
@@ -185,6 +186,62 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         }
 
         [TestMethod]
+        [DataRow("(:situation abc)")]
+        [DataRow("(:situation    abc)")]
+        [DataRow("(:situation    abc       )")]
+        public void Can_VisitSituationNode(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IDecl? decl = new ParserVisitor(null).TryVisitSituationNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(decl, typeof(SituationDecl));
+        }
+
+        [TestMethod]
+        [DataRow("(:situation abc)", "abc")]
+        [DataRow("(:situation a)", "a")]
+        [DataRow("(:situation    abc)", "abc")]
+        [DataRow("(:situation    abc       )", "abc")]
+        [DataRow("(:situation    abcaaaaaaaaaaaaaaaa       )", "abcaaaaaaaaaaaaaaaa")]
+        public void Can_VisitSituationNode_CoorectName(string toParse, string expected)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IDecl? decl = new ParserVisitor(null).TryVisitSituationNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(decl, typeof(SituationDecl));
+            if (decl is SituationDecl name)
+                Assert.AreEqual(expected, name.Name);
+        }
+
+        [TestMethod]
+        [DataRow("(:situation)")]
+        [DataRow("(:situation         )")]
+        public void Cant_VisitSituationNode_IfNoLooseChild(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IDecl? decl = new ParserVisitor(listener).TryVisitSituationNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
         [DataRow("(:objects)")]
         [DataRow("(:objects abc)")]
         [DataRow("(:objects abc - type)")]
@@ -227,8 +284,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(:objects a)", "")]
-        [DataRow("(:objects a b)", "", "")]
+        [DataRow("(:objects a)", "object")]
+        [DataRow("(:objects a b)", "object", "object")]
         [DataRow("(:objects a - type b - type)", "type", "type")]
         [DataRow("(:objects a - type2 b - type)", "type2", "type")]
         [DataRow("(:objects a - type \n longName - type2 b - type2)", "type", "type2", "type2")]

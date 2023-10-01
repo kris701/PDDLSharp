@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Analysers
 {
-    public interface IAnalyser<T>
+    public interface IAnalyser
     {
-        IErrorListener Listener { get; }
+        public IErrorListener Listener { get; }
 
-        void PreAnalyse(string text);
-        void PostAnalyse(T decl);
+        public void Analyse(PDDLDecl decl);
     }
 }

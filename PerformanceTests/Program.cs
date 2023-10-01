@@ -26,7 +26,7 @@ namespace PerformanceTests
             IErrorListener listener = new ErrorListener();
             IParser parser = new PDDLParser(listener);
             IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
-            IAnalyser<PDDLDecl> analyser = new PDDLDeclAnalyser(listener);
+            IAnalyser analyser = new PDDLAnalyser(listener);
             ICodeGenerator generator = new PDDLCodeGenerator(listener);
 
             generator.Readable = true;
@@ -38,7 +38,7 @@ namespace PerformanceTests
                 Console.WriteLine($"Parsing... {i}");
                 var decl = parser.Parse(targetDomain, targetProblem);
                 contextualiser.Contexturalise(decl);
-                analyser.PostAnalyse(decl);
+                analyser.Analyse(decl);
 
                 generator.Generate(decl.Domain, "domain.pddl");
                 generator.Generate(decl.Problem, "problem.pddl");

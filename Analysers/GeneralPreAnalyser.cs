@@ -10,7 +10,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace PDDLSharp.Analysers
 {
-    public class GeneralPreAnalyser : IAnalyser<string>
+    public class GeneralPreAnalyser
     {
         public IErrorListener Listener { get; }
 

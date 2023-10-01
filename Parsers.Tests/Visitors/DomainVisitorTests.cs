@@ -345,7 +345,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [TestMethod]
         [DataRow("(:constants a - b)", "b")]
         [DataRow("(:constants a - b other - type)", "b", "type")]
-        [DataRow("(:constants a - b other - type c)", "b", "type", "")]
+        [DataRow("(:constants a - b other - type c)", "b", "type", "object")]
         public void Can_ParseConstantsNode_CorrectTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE

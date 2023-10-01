@@ -24,7 +24,26 @@ namespace PDDLSharp.Contextualisers
             IContextualiser<ProblemDecl> problemContextualiser = new PDDLProblemDeclContextualiser(Listener);
             problemContextualiser.Contexturalise(decl.Problem);
 
+            DecorateConstants(decl.Domain, decl.Problem);
             DecorateAllTypesWithInheritence(decl.Domain, decl.Problem);
+        }
+
+        private void DecorateConstants(DomainDecl domain, ProblemDecl problem)
+        {
+            if (domain.Constants != null)
+            {
+                foreach(var constant in domain.Constants.Constants)
+                {
+                    var allOfConstant = problem.FindNames(constant.Name);
+                    foreach(var instance in allOfConstant)
+                    {
+                        if (instance is NameExp named)
+                        {
+                            named.Type = constant.Type;
+                        }
+                    }
+                }
+            }
         }
 
         private void DecorateAllTypesWithInheritence(DomainDecl domain, ProblemDecl problem)

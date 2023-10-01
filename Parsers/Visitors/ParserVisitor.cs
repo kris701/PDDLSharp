@@ -59,6 +59,7 @@ namespace PDDLSharp.Parsers.Visitors
             typeof(T) == typeof(ProblemDecl)        ? TryVisitProblemDeclNode(node, parent) :
             typeof(T) == typeof(ProblemNameDecl)    ? TryVisitProblemNameNode(node, parent) :
             typeof(T) == typeof(DomainNameRefDecl)  ? TryVisitDomainRefNameNode(node, parent) :
+            typeof(T) == typeof(SituationDecl)      ? TryVisitSituationNode(node, parent) :
             typeof(T) == typeof(ObjectsDecl)        ? TryVisitObjectsNode(node, parent) :
             typeof(T) == typeof(InitDecl)           ? TryVisitInitsNode(node, parent) :
             typeof(T) == typeof(GoalDecl)           ? TryVisitGoalNode(node, parent) :
@@ -68,6 +69,7 @@ namespace PDDLSharp.Parsers.Visitors
             typeof(T) == typeof(WhenExp)            ? TryVisitWhenNode(node, parent) :
             typeof(T) == typeof(ForAllExp)          ? TryVisitForAllNode(node, parent) :
             typeof(T) == typeof(TimedLiteralExp)    ? TryVisitTimedLiteralNode(node, parent) :
+            typeof(T) == typeof(LiteralExp)         ? TryVisitLiteralNode(node, parent) :
             typeof(T) == typeof(ExistsExp)          ? TryVisitExistsNode(node, parent) :
             typeof(T) == typeof(ImplyExp)           ? TryVisitImplyNode(node, parent) :
             typeof(T) == typeof(AndExp)             ? TryVisitAndNode(node, parent) :
@@ -148,7 +150,7 @@ namespace PDDLSharp.Parsers.Visitors
             int offset = node.End - 1;
             content = PurgeEscapeChars(content);
 
-            string currentType = "";
+            string currentType = "object";
             foreach (var param in content.Split(' ').Reverse())
             {
                 if (param != "" && param != nodeType)

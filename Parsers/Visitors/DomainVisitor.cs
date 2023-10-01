@@ -64,6 +64,7 @@ namespace PDDLSharp.Parsers.Visitors
                         case ActionDecl d: returnDomain.Actions.Add(d); break;
                         case DurativeActionDecl d: returnDomain.DurativeActions.Add(d); break;
                         case AxiomDecl d: returnDomain.Axioms.Add(d); break;
+                        case DerivedDecl d: returnDomain.Deriveds.Add(d); break;
                     }
                 }
                 return returnDomain;

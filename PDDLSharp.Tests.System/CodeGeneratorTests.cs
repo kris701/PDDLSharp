@@ -88,7 +88,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser parser = GetParser(domain, listener);
             ICodeGenerator generator = new PDDLCodeGenerator(listener);
             IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
-            IAnalyser<PDDLDecl> analyser = new PDDLDeclAnalyser(listener);
+            IAnalyser analyser = new PDDLAnalyser(listener);
 
             // ACT
             foreach (var problem in problems)
@@ -97,12 +97,12 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
                 var decl = parser.Parse(domain, problem);
                 contextualiser.Contexturalise(decl);
-                analyser.PostAnalyse(decl);
+                analyser.Analyse(decl);
                 generator.Generate(decl.Domain, "temp_domain.pddl");
                 generator.Generate(decl.Problem, "temp_problem.pddl");
                 var newDecl = new PDDLDecl(parser.ParseAs<DomainDecl>("temp_domain.pddl"), parser.ParseAs<ProblemDecl>("temp_problem.pddl"));
                 contextualiser.Contexturalise(newDecl);
-                analyser.PostAnalyse(newDecl);
+                analyser.Analyse(newDecl);
 
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                 listener.Errors.Clear();

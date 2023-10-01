@@ -23,6 +23,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [DataRow("(exists (?a) (and ()))", typeof(ExistsExp))]
         [DataRow("(imply (a) (and ()))", typeof(ImplyExp))]
         [DataRow("(at 5 (a))", typeof(TimedLiteralExp))]
+        [DataRow("10", typeof(LiteralExp))]
         [DataRow("(not (aaabsbdsb))", typeof(NotExp))]
         [DataRow("(or (aaa) (bbb))", typeof(OrExp))]
         [DataRow("(pred)", typeof(PredicateExp))]
@@ -41,6 +42,24 @@ namespace PDDLSharp.Parsers.Tests.Visitors
 
             // ASSERT
             Assert.IsInstanceOfType(exp, expectedType);
+        }
+
+        [TestMethod]
+        [DataRow("59")]
+        [DataRow("-1")]
+        [DataRow("-1       ")]
+        [DataRow("        -1       ")]
+        public void Can_ParseLiteralExpNode(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitLiteralNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(LiteralExp));
         }
 
         [TestMethod]
@@ -527,7 +546,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(pred ?a)", "")]
+        [DataRow("(pred ?a)", "object")]
         [DataRow("(pred ?a - type)", "type")]
         [DataRow("(pred ?a ?b - type)", "type", "type")]
         [DataRow("(pred ?a - type ?b - type)", "type", "type")]
