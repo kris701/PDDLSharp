@@ -14,6 +14,7 @@ namespace PDDLSharp.Models
     {
         public DomainDecl Domain { get; set; }
         public ProblemDecl Problem { get; set; }
+        public bool IsContextualised { get; set; } = false;
 
         public PDDLDecl(DomainDecl domain, ProblemDecl problem)
         {

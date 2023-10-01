@@ -27,7 +27,6 @@ To contextualise a domain/problem:
 ```csharp
 IErrorListener listener = new ErrorListener();
 IParser parser = new PDDLParser(listener);
-IContextualiser contextualiser = new PDDLContextualiser(listener);
 PDDLDecl decl = parser.Parse("domain-file.pddl", "problem-file.pddl");
 contextualiser.Contexturalise(decl);
 ```
@@ -36,7 +35,6 @@ To analyse a domain/problem:
 ```csharp
 IErrorListener listener = new ErrorListener();
 IParser parser = new PDDLParser(listener);
-IContextualiser contextualiser = new PDDLContextualiser(listener);
 IAnalyser analyser = new PDDLAnalyser(listener);
 PDDLDecl decl = parser.Parse("domain-file.pddl", "problem-file.pddl");
 contextualiser.Contexturalise(decl);

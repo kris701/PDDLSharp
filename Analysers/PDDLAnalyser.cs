@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Analysers.Visitors;
+using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.Domain;
@@ -23,9 +24,15 @@ namespace PDDLSharp.Analysers
 
         public void Analyse(PDDLDecl decl)
         {
+            if (!decl.IsContextualised)
+            {
+                IContextualiser contextualiser = new PDDLContextualiser(Listener);
+                contextualiser.Contexturalise(decl);
+            }
+
             AnalyserVisitors visitor = new AnalyserVisitors(Listener, decl);
-            visitor.Visit((dynamic)decl.Domain);
-            visitor.Visit((dynamic)decl.Problem);
+            visitor.Visit(decl.Domain);
+            visitor.Visit(decl.Problem);
         }
     }
 }

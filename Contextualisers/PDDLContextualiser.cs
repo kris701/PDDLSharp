@@ -31,6 +31,8 @@ namespace PDDLSharp.Contextualisers
                 DecorateNodeWithTypeInheritence(decl.Domain.Types, decl.Domain);
                 DecorateNodeWithTypeInheritence(decl.Domain.Types, decl.Problem);
             }
+
+            decl.IsContextualised = true;
         }
 
         private void DecorateNodeWithTypeInheritence(TypesDecl decl, INode node)

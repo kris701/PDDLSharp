@@ -75,16 +75,12 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         private void DecorateFromConstants(ConstantsDecl decl)
         {
-            foreach (var constant in decl.Constants)
+            var allOfConstant = Declaration.Problem.FindTypes<NameExp>();
+            foreach (var instance in allOfConstant)
             {
-                var allOfConstant = Declaration.Problem.FindNames(constant.Name);
-                foreach (var instance in allOfConstant)
-                {
-                    if (instance is NameExp named)
-                    {
-                        named.Type.Name = constant.Type.Name;
-                    }
-                }
+                var target = decl.Constants.SingleOrDefault(x => x.Name == instance.Name);
+                if (target != null)
+                    instance.Type.Name = target.Type.Name;
             }
         }
 

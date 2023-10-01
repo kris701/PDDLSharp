@@ -25,7 +25,6 @@ namespace PerformanceTests
 
             IErrorListener listener = new ErrorListener();
             IParser parser = new PDDLParser(listener);
-            IContextualiser contextualiser = new PDDLContextualiser(listener);
             IAnalyser analyser = new PDDLAnalyser(listener);
             ICodeGenerator generator = new PDDLCodeGenerator(listener);
 
@@ -33,11 +32,10 @@ namespace PerformanceTests
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 200; i++)
             {
                 Console.WriteLine($"Parsing... {i}");
                 var decl = parser.Parse(targetDomain, targetProblem);
-                contextualiser.Contexturalise(decl);
                 analyser.Analyse(decl);
 
                 generator.Generate(decl.Domain, "domain.pddl");
@@ -45,7 +43,7 @@ namespace PerformanceTests
             }
             watch.Stop();
             Console.WriteLine($"Done! Took {watch.ElapsedMilliseconds}ms");
-            Console.WriteLine($"Avg took {watch.ElapsedMilliseconds/100}ms");
+            Console.WriteLine($"Avg took {watch.ElapsedMilliseconds/200}ms");
         }
     }
 }
