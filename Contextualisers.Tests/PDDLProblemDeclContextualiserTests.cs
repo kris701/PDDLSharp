@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.ASTGenerators;
 using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.Domain;
 using PDDLSharp.Models.Problem;
@@ -26,15 +27,15 @@ namespace PDDLSharp.Contextualisers.Tests
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            IGenerator<ASTNode> parser = new ASTGenerator();
+            IGenerator parser = new ASTGenerator(listener);
             var node = parser.Generate(toParse);
             ProblemDecl? decl = new ParserVisitor(listener).TryVisitAs<ProblemDecl>(node, null) as ProblemDecl;
             Assert.IsNotNull(decl);
 
-            IContextualiser<ProblemDecl> contextualiser = new PDDLProblemDeclContextualiser(listener);
+            IContextualiser contextualiser = new PDDLContextualiser(listener);
 
             // ACT
-            contextualiser.Contexturalise(decl);
+            contextualiser.Contexturalise(new PDDLDecl(new DomainDecl(), decl));
 
             // ASSERT
             foreach(var init in decl.Init.Predicates)

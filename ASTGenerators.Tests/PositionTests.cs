@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.ASTGenerators.Tests.PositionTestsData;
+using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 
 namespace PDDLSharp.ASTGenerators.Tests
@@ -12,7 +13,8 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_ASTParser_SetCorrectPossitions(string testFile, string expectedFile)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
+            IErrorListener listener = new ErrorListener();
+            IGenerator parser = new ASTGenerator(listener);
             var expectedNode = PositionNode.ParseExpectedFile(expectedFile);
 
             // ACT

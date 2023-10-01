@@ -52,7 +52,7 @@ namespace PDDLSharp.Parsers
 
         public T ParseAs<T>(string file) where T : INode
         {
-            IGenerator<ASTNode> astParser = new ASTGenerator();
+            IGenerator astParser = new ASTGenerator(Listener);
             var absAST = astParser.Generate(new FileInfo(file));
 
             var visitor = new ParserVisitor(Listener);

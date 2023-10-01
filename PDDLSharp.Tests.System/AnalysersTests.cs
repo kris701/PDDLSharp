@@ -38,7 +38,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IParser parser = GetParser(domain, listener);
-            IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
+            IContextualiser contextualiser = new PDDLContextualiser(listener);
             IAnalyser analyser = new PDDLAnalyser(listener);
 
             // ACT

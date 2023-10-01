@@ -1,7 +1,9 @@
 ﻿using PDDLSharp.ASTGenerators;
 using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.Problem;
 using PDDLSharp.Parsers.Visitors;
 using System;
 using System.Collections.Generic;
@@ -27,15 +29,15 @@ namespace PDDLSharp.Contextualisers.Tests
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            IGenerator<ASTNode> parser = new ASTGenerator();
+            IGenerator parser = new ASTGenerator(listener);
             var node = parser.Generate(toParse);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
 
-            IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser(listener);
+            IContextualiser contextualiser = new PDDLContextualiser(listener);
 
             // ACT
-            contextualiser.Contexturalise(decl);
+            contextualiser.Contexturalise(new PDDLDecl(decl, new ProblemDecl()));
 
             // ASSERT
             Assert.IsTrue(ContextualiserTestsHelpers.AreAllNameExpOfTypeOrSubType(decl.Actions[0].Preconditions, argName, expectedType));
@@ -54,15 +56,15 @@ namespace PDDLSharp.Contextualisers.Tests
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            IGenerator<ASTNode> parser = new ASTGenerator();
+            IGenerator parser = new ASTGenerator(listener);
             var node = parser.Generate(toParse);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
 
-            IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser(listener);
+            IContextualiser contextualiser = new PDDLContextualiser(listener);
 
             // ACT
-            contextualiser.Contexturalise(decl);
+            contextualiser.Contexturalise(new PDDLDecl(decl, new ProblemDecl()));
 
             // ASSERT
             Assert.IsTrue(ContextualiserTestsHelpers.AreAllNameExpOfTypeOrSubType(decl.Axioms[0].Context, argName, expectedType));
@@ -80,15 +82,15 @@ namespace PDDLSharp.Contextualisers.Tests
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            IGenerator<ASTNode> parser = new ASTGenerator();
+            IGenerator parser = new ASTGenerator(listener);
             var node = parser.Generate(toParse);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
 
-            IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser(listener);
+            IContextualiser contextualiser = new PDDLContextualiser(listener);
 
             // ACT
-            contextualiser.Contexturalise(decl);
+            contextualiser.Contexturalise(new PDDLDecl(decl, new ProblemDecl()));
 
             // ASSERT
             Assert.IsTrue(ContextualiserTestsHelpers.AreAllNameExpOfTypeOrSubType(decl.Axioms[0].Context, argName, expectedSuperType));
