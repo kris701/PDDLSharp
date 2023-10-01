@@ -87,6 +87,11 @@ namespace PDDLSharp.CodeGenerators.Visitors
             return $"{IndentStr(indent)}({node.Name} {Visit((dynamic)node.Arg1, 0)} {numericValue})";
         }
 
+        public string Visit(TimedLiteralExp node, int indent)
+        {
+            return $"{IndentStr(indent)}(at {node.Value} {Visit((dynamic)node.Literal, 0)})";
+        }
+
         public string Visit(OrExp node, int indent)
         {
             string retStr = $"{IndentStr(indent)}(when{Environment.NewLine}";
