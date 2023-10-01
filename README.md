@@ -21,6 +21,7 @@ Fully PDDL 2.2 compatible.
     - [X] Continuous Effects (`:continuous-effects`)
 - [X] Negative Preconditions (`:negative-preconditions`)
 - [X] Derived Predicates (`:derived-predicates`)
+- [X] Timed Initial Literals (`:timed-initial-literals`)
 - [ ] Action Expansions (`:action-expansions`)
 - [ ] Foreach Expansions (`:forach-expansions`)
 - [ ] DAG Expansions (`:dag-expansions`)
