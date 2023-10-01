@@ -1,3 +1,4 @@
+using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 
 namespace PDDLSharp.ASTGenerators.Tests
@@ -17,7 +18,8 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_ParseGeneralStructure(string toParse, int expectedNodes)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
+            IErrorListener listener = new ErrorListener();
+            IGenerator parser = new ASTGenerator(listener);
 
             // ACT
             var res = parser.Generate(toParse);
@@ -34,7 +36,8 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_ParseSingleNodeContent_1(string toParse, string expectedContent)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
+            IErrorListener listener = new ErrorListener();
+            IGenerator parser = new ASTGenerator(listener);
 
             // ACT
             var res = parser.Generate(toParse);
@@ -51,7 +54,8 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_ParseSingleNodeContent_2(string toParse, string expectedContent)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
+            IErrorListener listener = new ErrorListener();
+            IGenerator parser = new ASTGenerator(listener);
 
             // ACT
             var res = parser.Generate(toParse);
@@ -63,13 +67,14 @@ namespace PDDLSharp.ASTGenerators.Tests
         [TestMethod]
         [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a))))", 0, 1)]
         [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a))))", 1, 2)]
-        [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a))))\n(pred (not (var ?a))))", 2, 3)]
-        [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a))))\n\n\n(pred (not (var ?a))))", 2, 5)]
-        [DataRow("\n\n\n((pred (not (var ?a)))\n(pred (not (var ?a))))\n\n\n(pred (not (var ?a))))", 2, 8)]
+        [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a)))\n(pred (not (var ?a))))", 2, 3)]
+        [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a)))\n\n\n(pred (not (var ?a))))", 2, 5)]
+        [DataRow("\n\n\n((pred (not (var ?a)))\n(pred (not (var ?a))))\n\n\n(pred (not (var ?a)))", 2, 8)]
         public void Can_CanSetCorrectLineNumber(string toParse, int targetChild, int expectedLineNumber)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
+            IErrorListener listener = new ErrorListener();
+            IGenerator parser = new ASTGenerator(listener);
 
             // ACT
             var res = parser.Generate(toParse);
@@ -89,7 +94,8 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_ReplaceRangeWithSpaces(string text, int from, int to, string expected)
         {
             // ARRANGE
-            ASTGenerator parser = new ASTGenerator();
+            IErrorListener listener = new ErrorListener();
+            ASTGenerator parser = new ASTGenerator(listener);
 
             // ACT
             var res = parser.ReplaceRangeWithSpaces(text, from, to);
@@ -110,7 +116,8 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_GenerateLineDict(string text, params int[] expected)
         {
             // ARRANGE
-            ASTGenerator parser = new ASTGenerator();
+            IErrorListener listener = new ErrorListener();
+            ASTGenerator parser = new ASTGenerator(listener);
 
             // ACT
             var res = parser.GenerateLineDict(text);
@@ -135,7 +142,8 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_GetLineNumber(string text, int startCharacter, int expected)
         {
             // ARRANGE
-            ASTGenerator parser = new ASTGenerator();
+            IErrorListener listener = new ErrorListener();
+            ASTGenerator parser = new ASTGenerator(listener);
             var dict = parser.GenerateLineDict(text);
 
             // ACT
@@ -152,7 +160,8 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_GetLineNumber_WithOffset(string text, int startCharacter, int offset, int expected)
         {
             // ARRANGE
-            ASTGenerator parser = new ASTGenerator();
+            IErrorListener listener = new ErrorListener();
+            ASTGenerator parser = new ASTGenerator(listener);
             var dict = parser.GenerateLineDict(text);
 
             // ACT

@@ -27,6 +27,7 @@ namespace PDDLSharp.Parsers.Visitors
             if ((returnNode = TryVisitNotNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNumericNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitPredicateNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitLiteralNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNameNode(node, parent)) != null) return returnNode;
 
             Listener.AddError(new ParseError(
@@ -211,7 +212,7 @@ namespace PDDLSharp.Parsers.Visitors
                         arg1 = VisitExp(node.Children[0], newNumericExp);
                         if (arg1 == null)
                             return null;
-                        var content = node.InnerContent.Substring(node.InnerContent.IndexOf(numericName) + numericName.Length);
+                        var content = node.InnerContent.Substring(node.InnerContent.IndexOf(numericName) + numericName.Length).Trim();
                         arg2 = VisitExp(new ASTNode(node.Start, node.End, content, content), newNumericExp);
                         if (arg2 == null)
                             return null;
@@ -220,6 +221,21 @@ namespace PDDLSharp.Parsers.Visitors
                     newNumericExp.Arg2 = arg2;
                     return newNumericExp;
                 }
+            }
+            return null;
+        }
+
+        public IExp? TryVisitLiteralNode(ASTNode node, INode? parent)
+        {
+            if (node.Children.Count == 0 &&
+                node.InnerContent.Any(char.IsDigit) &&
+                !node.InnerContent.Any(char.IsLetter))
+            {
+                var newLiteralExp = new LiteralExp(node, parent, -1);
+                var value = Convert.ToInt32(node.InnerContent);
+                newLiteralExp.Value = value;
+
+                return newLiteralExp;
             }
             return null;
         }

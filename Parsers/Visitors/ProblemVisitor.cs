@@ -19,6 +19,7 @@ namespace PDDLSharp.Parsers.Visitors
             if ((returnNode = TryVisitProblemDeclNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitProblemNameNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitDomainRefNameNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitSituationNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitObjectsNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitInitsNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitGoalNode(node, parent)) != null) return returnNode;
@@ -78,6 +79,17 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
+        public IDecl? TryVisitSituationNode(ASTNode node, INode? parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":situation") &&
+                DoesContentContainNLooseChildren(node, ":situation", 1))
+            {
+                var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":situation");
+                return new SituationDecl(node, parent, name);
+            }
+            return null;
+        }
+
         public IDecl? TryVisitObjectsNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, ":objects") &&
@@ -125,6 +137,13 @@ namespace PDDLSharp.Parsers.Visitors
         {
             "maximize", "minimize"
         };
+        private static string MetricNodeTypesStr()
+        {
+            string retStr = "";
+            foreach (var metric in MetricNodeTypes)
+                retStr += $"{metric}, ";
+            return retStr;
+        }
 
         public IDecl? TryVisitMetricNode(ASTNode node, INode? parent)
         {
@@ -139,6 +158,13 @@ namespace PDDLSharp.Parsers.Visitors
                     newMetric.MetricExp = VisitExp(node.Children[0], newMetric);
                     return newMetric;
                 }
+                else 
+                    Listener.AddError(new ParseError(
+                        $"Invalid metric node type '{metricType}'. Allowed types are: {MetricNodeTypesStr()}",
+                        ParseErrorType.Error,
+                        ParseErrorLevel.Analyser,
+                        node.Line,
+                        node.Start));
             }
             return null;
         }

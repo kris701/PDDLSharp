@@ -83,8 +83,17 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(NumericExp node, int indent)
         {
-            var numericValue = $"{Visit((dynamic)node.Arg2, 0)}".Replace("(","").Replace(")","").Trim();
+            var numericValue = "";
+            if (node.Arg2 is LiteralExp)
+                numericValue = $"{Visit((dynamic)node.Arg2, 0)}".Replace("(","").Replace(")","").Trim();
+            else
+                numericValue = $"{Visit((dynamic)node.Arg2, 0)}".Trim();
             return $"{IndentStr(indent)}({node.Name} {Visit((dynamic)node.Arg1, 0)} {numericValue})";
+        }
+
+        public string Visit(LiteralExp node, int indent)
+        {
+            return $"{IndentStr(indent)}{node.Value})";
         }
 
         public string Visit(TimedLiteralExp node, int indent)

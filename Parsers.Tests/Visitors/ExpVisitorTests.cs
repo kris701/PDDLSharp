@@ -16,6 +16,13 @@ namespace PDDLSharp.Parsers.Tests.Visitors
     [TestClass]
     public class ExpVisitorTests
     {
+        private ASTNode GetParsed(string toParse)
+        {
+            IErrorListener listener = new ErrorListener();
+            IGenerator parser = new ASTGenerator(listener);
+            return parser.Generate(toParse);
+        }
+
         [TestMethod]
         [DataRow("(and ())", typeof(AndExp))]
         [DataRow("(when (and ()) (and ()))", typeof(WhenExp))]
@@ -23,6 +30,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [DataRow("(exists (?a) (and ()))", typeof(ExistsExp))]
         [DataRow("(imply (a) (and ()))", typeof(ImplyExp))]
         [DataRow("(at 5 (a))", typeof(TimedLiteralExp))]
+        [DataRow("10", typeof(LiteralExp))]
         [DataRow("(not (aaabsbdsb))", typeof(NotExp))]
         [DataRow("(or (aaa) (bbb))", typeof(OrExp))]
         [DataRow("(pred)", typeof(PredicateExp))]
@@ -33,8 +41,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_VisitGeneral(string toParse, Type expectedType)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             var exp = new ParserVisitor(null).VisitExp(node, null);
@@ -44,14 +52,32 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         }
 
         [TestMethod]
+        [DataRow("59")]
+        [DataRow("-1")]
+        [DataRow("-1       ")]
+        [DataRow("        -1       ")]
+        public void Can_ParseLiteralExpNode(string toParse)
+        {
+            // ARRANGE
+            var node = GetParsed(toParse);
+            
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitLiteralNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(LiteralExp));
+        }
+
+        [TestMethod]
         [DataRow("(at 5 (a))")]
         [DataRow("(at 500 (pred a))")]
         [DataRow("(at -1 (pred a q))")]
         public void Can_ParseTimedLiteralExpNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitTimedLiteralNode(node, null);
@@ -69,9 +95,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseTimedLiteralExpNode_CorrectValue(string toParse, int expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
-
+            var node = GetParsed(toParse);
+            
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitTimedLiteralNode(node, null);
 
@@ -86,8 +111,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseImplyNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitImplyNode(node, null);
@@ -104,8 +129,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseImplyNode_IfNotTwoChildren(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -123,8 +148,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseImplyNode_IfContainsStrayCharacters(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -142,8 +167,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseExistsNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitExistsNode(node, null);
@@ -158,8 +183,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseExistsNode_IfNotTwoChildren(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -177,8 +202,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseExistsNode_IfContainsStrayCharacters(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -196,8 +221,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseForAllNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitForAllNode(node, null);
@@ -213,8 +238,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseForAllNode_IfNotTwoChildren(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -233,8 +258,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseForAllNode_IfContainsStrayCharacters(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -252,8 +277,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseWhenNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitWhenNode(node, null);
@@ -268,8 +293,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseWhenNode_IfNotTwoChildren(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -288,8 +313,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseWhenNode_IfContainsStrayCharacters(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -307,8 +332,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseAndNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitAndNode(node, null);
@@ -323,8 +348,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         //public void Cant_ParseAndNode_IfNoChildren(string toParse)
         //{
         //    // ARRANGE
-        //    IGenerator<ASTNode> parser = new ASTGenerator();
-        //    var node = parser.Generate(toParse);
+        //    var node = GetParsed(toParse);
+        //    
         //    IErrorListener listener = new ErrorListener();
         //    listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -342,8 +367,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseAndNode_IfContainsStrayCharacters(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -368,8 +393,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseNumericExpNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitNumericNode(node, null);
@@ -384,8 +409,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseOrNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitOrNode(node, null);
@@ -401,8 +426,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseOrNode_IfContainsStrayCharacters(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -419,8 +444,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseNotNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitNotNode(node, null);
@@ -435,8 +460,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseNotNode_IfNoChild(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -454,8 +479,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseNotNode_IfContainsStrayCharacters(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -473,8 +498,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParsePredicateNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitPredicateNode(node, null);
@@ -491,8 +516,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParsePredicateNode_CorrectName(string toParse, string expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitPredicateNode(node, null);
@@ -510,8 +535,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParsePredicateNode_CorrectParameterNames(string toParse, params string[] expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitPredicateNode(node, null);
@@ -527,7 +552,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(pred ?a)", "")]
+        [DataRow("(pred ?a)", "object")]
         [DataRow("(pred ?a - type)", "type")]
         [DataRow("(pred ?a ?b - type)", "type", "type")]
         [DataRow("(pred ?a - type ?b - type)", "type", "type")]
@@ -536,8 +561,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParsePredicateNode_CorrectParameterTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitPredicateNode(node, null);
@@ -558,8 +583,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseNameNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitNameNode(node, null);
@@ -575,8 +600,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseNameNode_CorrectName(string toParse, string expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitNameNode(node, null);
@@ -594,8 +619,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseNameNode_CorrectTypeName(string toParse, string expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitNameNode(node, null);

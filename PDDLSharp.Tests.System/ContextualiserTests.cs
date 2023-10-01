@@ -28,51 +28,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 yield return new object[] { key, _testDict[key] };
         }
 
-
-        [TestMethod]
-        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
-        public void Can_ParseDomains_Contextualize_STRIPS(string domain, List<string> problems)
-        {
-            Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");
-
-            // ARRANGE
-            IErrorListener listener = new ErrorListener();
-            IParser parser = GetParser(domain, listener);
-            IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser(listener);
-
-            // ACT
-            var decl = parser.ParseAs<DomainDecl>(domain);
-            contextualiser.Contexturalise(decl);
-
-            // ASSERT
-            Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
-        }
-
-        [TestMethod]
-        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
-        public void Can_ParseProblems_Contextualise_STRIPS(string domain, List<string> problems)
-        {
-            Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");
-
-            // ARRANGE
-            IErrorListener listener = new ErrorListener();
-            IParser parser = GetParser(domain, listener);
-            IContextualiser<ProblemDecl> contextualiser = new PDDLProblemDeclContextualiser(listener);
-
-            // ACT
-            foreach (var problem in problems)
-            {
-                Trace.WriteLine($"   Parsing problem: {problem}");
-                var decl = parser.ParseAs<ProblemDecl>(problem);
-                contextualiser.Contexturalise(decl);
-                Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
-                listener.Errors.Clear();
-            }
-
-            // ASSERT
-            Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
-        }
-
         [TestMethod]
         [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
         public void Can_ParseProblemAndDomain_Contextualise_STRIPS(string domain, List<string> problems)
@@ -82,7 +37,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IParser parser = GetParser(domain, listener);
-            IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
+            IContextualiser contextualiser = new PDDLContextualiser(listener);
             Random rnd = new Random();
 
             // ACT

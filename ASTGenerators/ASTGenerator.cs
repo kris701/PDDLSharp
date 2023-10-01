@@ -1,4 +1,6 @@
-﻿using PDDLSharp.Models.AST;
+﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.AST;
+using PDDLSharp.Tools;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,12 +12,20 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace PDDLSharp.ASTGenerators
 {
-    public class ASTGenerator : IGenerator<ASTNode>
+    public class ASTGenerator : IGenerator
     {
+        public IErrorListener Listener { get; }
+
+        public ASTGenerator(IErrorListener listener)
+        {
+            Listener = listener;
+        }
+
         public ASTNode Generate(FileInfo file) => Generate(File.ReadAllText(file.FullName));
 
         public ASTNode Generate(string text)
         {
+            PreCheck(text);
             text = text.ToLower();
             text = TextPreprocessing.ReplaceSpecialCharacters(text);
             text = TextPreprocessing.ReplaceCommentsWithWhiteSpace(text);
@@ -125,6 +135,36 @@ namespace PDDLSharp.ASTGenerators
                 if (start < lineDict[i])
                     return i + 1;
             return lineDict.Count + 1;
+        }
+
+        private void PreCheck(string text)
+        {
+            CheckParenthesesMissmatch(text);
+            CheckForCasing(text);
+        }
+
+        private void CheckParenthesesMissmatch(string text)
+        {
+            var leftCount = text.Count(x => x == '(');
+            var rightCount = text.Count(x => x == ')');
+            if (leftCount != rightCount)
+            {
+                Listener.AddError(new ParseError(
+                    $"Parentheses missmatch! There are {leftCount} '(' but {rightCount} ')'!",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.PreParsing));
+            }
+        }
+
+        private void CheckForCasing(string text)
+        {
+            if (text.Any(char.IsUpper))
+            {
+                Listener.AddError(new ParseError(
+                    $"Upper cased letters are ignored in PDDL",
+                    ParseErrorType.Message,
+                    ParseErrorLevel.PreParsing));
+            }
         }
     }
 }

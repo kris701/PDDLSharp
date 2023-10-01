@@ -15,6 +15,13 @@ namespace PDDLSharp.Parsers.Tests.Visitors
     [TestClass]
     public class DomainVisitorTests
     {
+        private ASTNode GetParsed(string toParse)
+        {
+            IErrorListener listener = new ErrorListener();
+            IGenerator parser = new ASTGenerator(listener);
+            return parser.Generate(toParse);
+        }
+
         [TestMethod]
         [DataRow("(define (domain a))", typeof(DomainDecl))]
         [DataRow("(domain abc)", typeof(DomainNameDecl))]
@@ -32,8 +39,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_VisitGeneral(string toParse, Type expectedType)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
 
             // ACT
             IDecl? decl = new ParserVisitor(null).VisitDomain(node, null);
@@ -48,8 +54,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseDomainNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitDomainDeclNode(node, null);
@@ -64,8 +69,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_VisitProblemDecl_IfContainsStrayCharacters(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -83,8 +87,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseDomainNameNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitDomainNameNode(node, null);
@@ -99,8 +102,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cantt_VisitProblemDecl_IfContainsNoName(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -116,8 +119,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseDomainNameNode_CorrectName(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitDomainNameNode(node, null);
@@ -133,8 +136,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseRequirementsNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitRequirementsNode(node, null);
@@ -149,8 +152,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseRequirementsNode_CorrectNames(string toParse, params string[] expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitRequirementsNode(node, null);
@@ -172,8 +175,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseExtendsNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitExtendsNode(node, null);
@@ -188,8 +191,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseExtendsNode_CorrectNames(string toParse, params string[] expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitExtendsNode(node, null);
@@ -211,8 +214,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseTypesNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitTypesNode(node, null);
@@ -229,8 +232,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseTypesNode_CorrectTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitTypesNode(node, null);
@@ -253,8 +256,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseTypesNode_CorrectInheritTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitTypesNode(node, null);
@@ -278,8 +281,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseTypesNode_CorrectInheritSuperTypes(string toParse, params string[] expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitTypesNode(node, null);
@@ -308,8 +311,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseConstantsNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitConstantsNode(node, null);
@@ -326,8 +329,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseConstantsNode_CorrectNames(string toParse, params string[] expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitConstantsNode(node, null);
@@ -345,12 +348,12 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [TestMethod]
         [DataRow("(:constants a - b)", "b")]
         [DataRow("(:constants a - b other - type)", "b", "type")]
-        [DataRow("(:constants a - b other - type c)", "b", "type", "")]
+        [DataRow("(:constants a - b other - type c)", "b", "type", "object")]
         public void Can_ParseConstantsNode_CorrectTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitConstantsNode(node, null);
@@ -372,8 +375,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParsePredicatesNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitPredicatesNode(node, null);
@@ -388,8 +391,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParsePredicatesNode_CorrectName(string toParse, params string[] expecteds)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitPredicatesNode(node, null);
@@ -411,8 +414,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseFunctionsNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitFunctionsNode(node, null);
@@ -427,8 +430,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseFunctionsNode_CorrectName(string toParse, params string[] expecteds)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitFunctionsNode(node, null);
@@ -451,8 +454,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseTimelessNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitTimelessNode(node, null);
@@ -469,8 +472,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseTimelessNode_CorrectNames(string toParse, params string[] expecteds)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitTimelessNode(node, null);
@@ -491,8 +494,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseActionNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitActionNode(node, null);
@@ -507,8 +510,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseActionNode_CorrectActionName(string toParse, string expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitActionNode(node, null);
@@ -528,8 +531,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseActionNode_IfMissingPrimaryElements(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -547,8 +550,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseActionNode_IfMissingName(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -565,8 +568,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseDurativeActionNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitDurativeActionNode(node, null);
@@ -581,8 +584,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseDurativeActionNode_CorrectActionName(string toParse, string expected)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitDurativeActionNode(node, null);
@@ -603,8 +606,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseDurativeActionNode_IfMissingPrimaryElements(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -622,8 +625,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseDurativeActionNode_IfMissingName(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -640,8 +643,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseAxiomNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitAxiomNode(node, null);
@@ -658,8 +661,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Cant_ParseAxiomNode_IfMissingPrimaryElements(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -677,8 +680,8 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         public void Can_ParseDerivedNode(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
 
             // ACT
             IDecl? decl = new ParserVisitor(null).TryVisitDerivedNode(node, null);
@@ -688,13 +691,13 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(:derived ()")]
-        [DataRow("(:derived () () ()")]
+        [DataRow("(:derived ())")]
+        [DataRow("(:derived () () ())")]
         public void Cant_ParseDerivedNode_IfNotTwoChildren(string toParse)
         {
             // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
+            var node = GetParsed(toParse);
+            
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 

@@ -17,7 +17,10 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             // It has a malformed domain
             "zenotravel",
             // It have some malformed parameters
-            "tpp"
+            "tpp",
+            // Both have a missmatch of ( and )
+            "airport-adl",
+            "freecell"
         };
 
         public static long MaxFileSize = 10000;

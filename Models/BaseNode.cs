@@ -56,9 +56,12 @@ namespace PDDLSharp.Models
             return returnSet;
         }
 
-        public List<T> FindTypes<T>()
+        public List<T> FindTypes<T>(List<Type>? stopIf = null)
         {
             List<T> returnSet = new List<T>();
+            if (stopIf != null && stopIf.Contains(this.GetType()))
+                return returnSet;
+
             List<PropertyInfo> myPropertyInfo = this.GetType().GetProperties().ToList();
             if (this is T self)
                 returnSet.Add(self);
@@ -68,12 +71,12 @@ namespace PDDLSharp.Models
                 {
                     var value = prop.GetValue(this, null);
                     if (value is INode valueNode)
-                        returnSet.AddRange(valueNode.FindTypes<T>());
+                        returnSet.AddRange(valueNode.FindTypes<T>(stopIf));
                     else if (value != null && IsList(value))
                         if (value is IEnumerable enu)
                             foreach (var innerValueNode in enu)
                                 if (innerValueNode is INode actualInnerValueNode)
-                                    returnSet.AddRange(actualInnerValueNode.FindTypes<T>());
+                                    returnSet.AddRange(actualInnerValueNode.FindTypes<T>(stopIf));
                 }
             }
             return returnSet;

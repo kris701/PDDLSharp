@@ -31,55 +31,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
         [TestMethod]
         [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
-        public void Can_ParseDomains_Analyse_STRIPS(string domain, List<string> problems)
-        {
-            Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");
-
-            // ARRANGE
-            IErrorListener listener = new ErrorListener();
-            IParser parser = GetParser(domain, listener);
-            IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser(listener);
-            IAnalyser<DomainDecl> analyser = new PDDLDomainDeclAnalyser(listener);
-
-            // ACT
-            var decl = parser.ParseAs<DomainDecl>(domain);
-            contextualiser.Contexturalise(decl);
-            analyser.PostAnalyse(decl);
-
-            // ASSERT
-            Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
-        }
-
-        [TestMethod]
-        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
-        public void Can_ParseProblems_Analyse_STRIPS(string domain, List<string> problems)
-        {
-            Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");
-
-            // ARRANGE
-            IErrorListener listener = new ErrorListener();
-            IParser parser = GetParser(domain, listener);
-            IContextualiser<ProblemDecl> contextualiser = new PDDLProblemDeclContextualiser(listener);
-            IAnalyser<ProblemDecl> analyser = new PDDLProblemDeclAnalyser(listener);
-            Random rnd = new Random();
-
-            // ACT
-            foreach (var problem in problems)
-            {
-                Trace.WriteLine($"   Parsing problem: {problem}");
-                var decl = parser.ParseAs<ProblemDecl>(problem);
-                contextualiser.Contexturalise(decl);
-                analyser.PostAnalyse(decl);
-                Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
-                listener.Errors.Clear();
-            }
-
-            // ASSERT
-            Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
-        }
-
-        [TestMethod]
-        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
         public void Can_ParseProblemAndDomain_Analyse_STRIPS(string domain, List<string> problems)
         {
             Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");
@@ -87,8 +38,8 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IParser parser = GetParser(domain, listener);
-            IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
-            IAnalyser<PDDLDecl> analyser = new PDDLDeclAnalyser(listener);
+            IContextualiser contextualiser = new PDDLContextualiser(listener);
+            IAnalyser analyser = new PDDLAnalyser(listener);
 
             // ACT
             foreach (var problem in problems)
@@ -98,7 +49,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                 var decl = new PDDLDecl(domainDecl, problemDecl);
                 contextualiser.Contexturalise(decl);
-                analyser.PostAnalyse(decl);
+                analyser.Analyse(decl);
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                 listener.Errors.Clear();
             }

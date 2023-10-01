@@ -12,6 +12,7 @@ namespace PDDLSharp.Models.Problem
     {
         public ProblemNameDecl? Name { get; set; }
         public DomainNameRefDecl? DomainName { get; set; }
+        public SituationDecl? Situation { get; set; }
         public ObjectsDecl? Objects { get; set; }
         public InitDecl? Init { get; set; }
         public GoalDecl? Goal { get; set; }
@@ -27,6 +28,8 @@ namespace PDDLSharp.Models.Problem
                 hash *= Name.GetHashCode();
             if (DomainName != null)
                 hash *= DomainName.GetHashCode();
+            if (Situation != null)
+                hash *= Situation.GetHashCode();
             if (Objects != null)
                 hash *= Objects.GetHashCode();
             if (Init != null)
@@ -44,6 +47,8 @@ namespace PDDLSharp.Models.Problem
                 yield return Name;
             if (DomainName != null) 
                 yield return DomainName;
+            if (Situation != null)
+                yield return Situation;
             if (Objects != null) 
                 yield return Objects;
             if (Init != null)

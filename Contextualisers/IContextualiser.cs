@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Contextualisers
 {
-    public interface IContextualiser<T>
+    public interface IContextualiser
     {
-        IErrorListener Listener { get; }
+        public IErrorListener Listener { get; }
 
-        void Contexturalise(T decl);
+        public void Contexturalise(PDDLDecl decl);
     }
 }
