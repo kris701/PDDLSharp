@@ -32,6 +32,7 @@ namespace PDDLSharp.Parsers.Visitors
             if ((returnNode = TryVisitActionNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitDurativeActionNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitAxiomNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitDerivedNode(node, parent)) != null) return returnNode;
 
             Listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
@@ -134,15 +135,21 @@ namespace PDDLSharp.Parsers.Visitors
                     {
                         var split = typeDef.Split(ASTTokens.TypeToken).ToList();
                         split.RemoveAll(x => x.Trim() == "");
-                        var superType = split[1].Trim();
-                        var subType = split[0].Trim();
 
-                        currentSuperType = superType;
-                        newType = subType;
+                        if (split.Count == 1)
+                        {
+                            currentSuperType = split[0].Trim();
+                        }
+                        else if (split.Count == 2)
+                        {
+                            currentSuperType = split[1].Trim();
+                            newType = split[0].Trim();
+                        }
                     }
                     else
                         newType = typeDef;
-                    typeExps.Insert(0, new TypeExp(node, newTypesDecl, newType, currentSuperType, new HashSet<string>() { currentSuperType }));
+                    if (newType != "")
+                        typeExps.Insert(0, new TypeExp(node, newTypesDecl, newType, currentSuperType, new HashSet<string>() { currentSuperType }));
                 }
 
                 // Stitch type inheritence
@@ -242,7 +249,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var newActionDecl = new ActionDecl(node, parent, actionName, null, null, null);
 
                 // Parameters
-                newActionDecl.Parameters = new ParameterDecl(
+                newActionDecl.Parameters = new ParameterExp(
                     node.Children[0],
                     newActionDecl,
                     ParseAsParameters(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent));
@@ -274,7 +281,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var newActionDecl = new DurativeActionDecl(node, parent, actionName, null, null, null, null);
 
                 // Parameters
-                newActionDecl.Parameters = new ParameterDecl(
+                newActionDecl.Parameters = new ParameterExp(
                     node.Children[0],
                     newActionDecl,
                     ParseAsParameters(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent));
@@ -305,7 +312,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var newAxiomDecl = new AxiomDecl(node, parent, null, null, null);
 
                 // Vars
-                newAxiomDecl.Vars = new ParameterDecl(
+                newAxiomDecl.Vars = new ParameterExp(
                     node.Children[0],
                     newAxiomDecl,
                     ParseAsParameters(node.Children[0], newAxiomDecl, "parameters", node.Children[0].InnerContent.Trim()));
@@ -317,6 +324,24 @@ namespace PDDLSharp.Parsers.Visitors
                 newAxiomDecl.Implies = VisitExp(node.Children[2], newAxiomDecl);
 
                 return newAxiomDecl;
+            }
+            return null;
+        }
+
+        public IDecl? TryVisitDerivedNode(ASTNode node, INode? parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":derived") &&
+                DoesNodeHaveSpecificChildCount(node, ":derived", 2))
+            {
+                var derivedDecl = new DerivedDecl(node, parent, null, null);
+
+                // Predicate
+                derivedDecl.Predicate = TryVisitAs<PredicateExp>(node.Children[0], derivedDecl);
+
+                // Expression
+                derivedDecl.Expression = VisitExp(node.Children[1], derivedDecl);
+
+                return derivedDecl;
             }
             return null;
         }

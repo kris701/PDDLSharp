@@ -41,7 +41,7 @@ namespace PDDLSharp.Analysers
 
             // Unique Name Checking
             CheckForUniquePredicateNames(decl);
-            CheckForUniquePredicateParameterNames(decl);
+            //CheckForUniquePredicateParameterNames(decl);
             CheckForUniqueActionNames(decl);
             CheckForUniqueActionParameterNames(decl);
             CheckForUniqueAxiomParameterNames(decl);
@@ -269,8 +269,8 @@ namespace PDDLSharp.Analysers
             }
             else if (node is OrExp or)
             {
-                CheckForValidTypesInAction(or.Option1, domain, action);
-                CheckForValidTypesInAction(or.Option2, domain, action);
+                foreach (var child in or.Options)
+                    CheckForValidTypesInAction(child, domain, action);
             }
             else if (node is NotExp not)
             {
@@ -346,8 +346,8 @@ namespace PDDLSharp.Analysers
             }
             else if (node is OrExp or)
             {
-                CheckForValidTypesInAxiom(or.Option1, domain, axiom);
-                CheckForValidTypesInAxiom(or.Option2, domain, axiom);
+                foreach (var child in or.Options)
+                    CheckForValidTypesInAxiom(child, domain, axiom);
             }
             else if (node is NotExp not)
             {
@@ -422,29 +422,29 @@ namespace PDDLSharp.Analysers
                 }
             }
         }
-        private void CheckForUniquePredicateParameterNames(DomainDecl domain)
-        {
-            if (domain.Predicates != null)
-            {
-                foreach (var predicate in domain.Predicates.Predicates)
-                {
-                    List<string> parameterNames = new List<string>();
-                    foreach (var param in predicate.Arguments)
-                    {
-                        if (parameterNames.Contains(param.Name))
-                        {
-                            Listener.AddError(new ParseError(
-                                $"Multiple declarations of arguments with the same name '{param.Name}' in the predicate '{predicate.Name}'",
-                                ParseErrorType.Error,
-                                ParseErrorLevel.Analyser,
-                                param.Line,
-                                param.Start));
-                        }
-                        parameterNames.Add(param.Name);
-                    }
-                }
-            }
-        }
+        //private void CheckForUniquePredicateParameterNames(DomainDecl domain)
+        //{
+        //    if (domain.Predicates != null)
+        //    {
+        //        foreach (var predicate in domain.Predicates.Predicates)
+        //        {
+        //            List<string> parameterNames = new List<string>();
+        //            foreach (var param in predicate.Arguments)
+        //            {
+        //                if (parameterNames.Contains(param.Name))
+        //                {
+        //                    Listener.AddError(new ParseError(
+        //                        $"Multiple declarations of arguments with the same name '{param.Name}' in the predicate '{predicate.Name}'",
+        //                        ParseErrorType.Error,
+        //                        ParseErrorLevel.Analyser,
+        //                        param.Line,
+        //                        param.Start));
+        //                }
+        //                parameterNames.Add(param.Name);
+        //            }
+        //        }
+        //    }
+        //}
         private void CheckForUniqueActionNames(DomainDecl domain)
         {
             if (domain.Actions != null)
@@ -543,8 +543,8 @@ namespace PDDLSharp.Analysers
             }
             else if (node is OrExp or)
             {
-                CheckExpUsesPredicates(or.Option1, predicates, domain);
-                CheckExpUsesPredicates(or.Option2, predicates, domain);
+                foreach (var child in or.Options)
+                    CheckExpUsesPredicates(child, predicates, domain);
             }
             else if (node is NotExp not)
             {

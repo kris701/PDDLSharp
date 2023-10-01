@@ -6,20 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using PDDLSharp.Tools;
-using PDDLSharp.Models.Expressions;
 
-namespace PDDLSharp.Models.Domain
+namespace PDDLSharp.Models.Expressions
 {
-    public class ParameterDecl : BaseWalkableNode
+    public class ParameterExp : BaseWalkableNode
     {
         public List<NameExp> Values { get; set; }
 
-        public ParameterDecl(ASTNode node, INode? parent, List<NameExp> values) : base(node, parent)
+        public ParameterExp(ASTNode node, INode? parent, List<NameExp> values) : base(node, parent)
         {
             Values = values;
         }
 
-        public ParameterDecl(INode? parent, List<NameExp> values) : base(parent)
+        public ParameterExp(INode? parent, List<NameExp> values) : base(parent)
         {
             Values = values;
         }

@@ -7,23 +7,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using PDDLSharp.Tools;
+using PDDLSharp.Models.Expressions;
 
 namespace PDDLSharp.Models.Domain
 {
     public class AxiomDecl : BaseWalkableNode, IDecl
     {
-        public ParameterDecl Vars { get; set; }
+        public ParameterExp Vars { get; set; }
         public IExp Context { get; set; }
         public IExp Implies { get; set; }
 
-        public AxiomDecl(ASTNode node, INode? parent, ParameterDecl vars, IExp context, IExp implies) : base(node, parent)
+        public AxiomDecl(ASTNode node, INode? parent, ParameterExp vars, IExp context, IExp implies) : base(node, parent)
         {
             Vars = vars;
             Context = context;
             Implies = implies;
         }
 
-        public AxiomDecl(INode? parent, ParameterDecl vars, IExp context, IExp implies) : base(parent)
+        public AxiomDecl(INode? parent, ParameterExp vars, IExp context, IExp implies) : base(parent)
         {
             Vars = vars;
             Context = context;

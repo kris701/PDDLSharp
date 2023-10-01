@@ -20,7 +20,7 @@
 			160:162:NameExp
 			163:165:NameExp
 	172:354:ActionDecl
-		206:217:ParameterDecl
+		206:217:ParameterExp
 			207:212:NameExp
 			213:216:NameExp
 		239:286:AndExp
@@ -37,7 +37,7 @@
 				335:351:PredicateExp
 					345:350:NameExp
 	363:647:ActionDecl
-		396:417:ParameterDecl
+		396:417:ParameterExp
 			397:401:NameExp
 			402:407:NameExp
 			408:416:NameExp
@@ -67,7 +67,7 @@
 				629:644:PredicateExp
 					635:643:NameExp
 	655:924:ActionDecl
-		689:711:ParameterDecl
+		689:711:ParameterExp
 			690:694:NameExp
 			696:701:NameExp
 			702:710:NameExp

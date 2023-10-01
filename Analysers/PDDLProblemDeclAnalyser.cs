@@ -151,10 +151,9 @@ namespace PDDLSharp.Analysers
             }
             else if (exp is OrExp or)
             {
-                if (DoesAnyPredicatesExist(or.Option1))
-                    return true;
-                if (DoesAnyPredicatesExist(or.Option2))
-                    return true;
+                foreach (var child in or.Options)
+                    if (DoesAnyPredicatesExist(child))
+                        return true;
             }
             else if (exp is NotExp not)
             {

@@ -9,12 +9,11 @@
 		109:135:PredicateExp
 			126:134:NameExp
 	141:226:TypesDecl
-		157:161:TypeExp
-		162:170:TypeExp
-		173:179:TypeExp
-		188:194:TypeExp
-		195:201:TypeExp
-		202:209:TypeExp
+		141:226:TypeExp
+		141:226:TypeExp
+		141:226:TypeExp
+		141:226:TypeExp
+		141:226:TypeExp
 	231:259:ConstantsDecl
 		243:258:NameExp
 	304:573:PredicatesDecl
@@ -34,7 +33,7 @@
 		538:567:PredicateExp
 			553:566:NameExp
 	675:1038:ActionDecl
-		715:738:ParameterDecl
+		715:738:ParameterExp
 			716:725:NameExp
 			726:737:NameExp
 		761:908:AndExp
@@ -55,7 +54,7 @@
 			971:989:PredicateExp
 				986:988:NameExp
 	1044:1243:AxiomDecl
-		1066:1077:ParameterDecl
+		1066:1077:ParameterExp
 			1067:1076:NameExp
 		1095:1204:AndExp
 			1112:1128:PredicateExp

@@ -20,10 +20,9 @@ namespace PDDLSharp.Contextualisers.Tests
             }
             else if (exp is OrExp or)
             {
-                if (!AreAllNameExpOfTypeOrSubType(or.Option1, name, type))
-                    return false;
-                if (!AreAllNameExpOfTypeOrSubType(or.Option2, name, type))
-                    return false;
+                foreach (var child in or.Options)
+                    if (!AreAllNameExpOfTypeOrSubType(child, name, type))
+                        return false;
             }
             else if (exp is NotExp not)
             {

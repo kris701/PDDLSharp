@@ -19,6 +19,10 @@ namespace PDDLSharp.Parsers.Visitors
             IExp? returnNode;
             if ((returnNode = TryVisitAndNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitWhenNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitTimedLiteralNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitForAllNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitExistsNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitImplyNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitOrNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNotNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNumericNode(node, parent)) != null) return returnNode;
@@ -30,6 +34,75 @@ namespace PDDLSharp.Parsers.Visitors
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
             return returnNode;
+        }
+
+        public IExp? TryVisitTimedLiteralNode(ASTNode node, INode? parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, "at") &&
+                node.Children.Count == 1 &&
+                node.InnerContent.Any(char.IsDigit))
+            {
+                var newTimedLiteralExp = new TimedLiteralExp(node, parent, -1, null);
+
+                var stray = node.InnerContent.Substring(node.InnerContent.IndexOf("at") + "at".Length).Trim();
+                var value = Convert.ToInt32(stray);
+                newTimedLiteralExp.Value = value;
+                newTimedLiteralExp.Literal = VisitExp(node.Children[0], newTimedLiteralExp);
+
+                return newTimedLiteralExp;
+            }
+            return null;
+        }
+
+        public IExp? TryVisitImplyNode(ASTNode node, INode? parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, "imply") &&
+                DoesNodeHaveSpecificChildCount(node, "imply", 2) &&
+                DoesNotContainStrayCharacters(node, "imply"))
+            {
+                var newImplyExp = new ImplyExp(node, parent, null, null);
+                newImplyExp.Antecedent = VisitExp(node.Children[0], newImplyExp);
+                newImplyExp.Consequent = VisitExp(node.Children[1], newImplyExp);
+
+                return newImplyExp;
+            }
+            return null;
+        }
+
+        public IExp? TryVisitExistsNode(ASTNode node, INode? parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, "exists") &&
+                DoesNodeHaveSpecificChildCount(node, "exists", 2) &&
+                DoesNotContainStrayCharacters(node, "exists"))
+            {
+                var newExistsExp = new ExistsExp(node, parent, null, null);
+                newExistsExp.Parameters = new ParameterExp(
+                    node.Children[0],
+                    newExistsExp,
+                    ParseAsParameters(node.Children[0], newExistsExp, "", node.Children[0].InnerContent));
+                newExistsExp.Expression = VisitExp(node.Children[1], newExistsExp);
+
+                return newExistsExp;
+            }
+            return null;
+        }
+
+        public IExp? TryVisitForAllNode(ASTNode node, INode? parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, "forall") &&
+                DoesNodeHaveSpecificChildCount(node, "forall", 2) &&
+                DoesNotContainStrayCharacters(node, "forall"))
+            {
+                var newForAllExpression = new ForAllExp(node, parent, null, null);
+                newForAllExpression.Parameters = new ParameterExp(
+                    node.Children[0],
+                    newForAllExpression,
+                    ParseAsParameters(node.Children[0], newForAllExpression, "", node.Children[0].InnerContent));
+                newForAllExpression.Expression = VisitExp(node.Children[1], newForAllExpression);
+
+                return newForAllExpression;
+            }
+            return null;
         }
 
         public IExp? TryVisitWhenNode(ASTNode node, INode? parent)
@@ -50,7 +123,7 @@ namespace PDDLSharp.Parsers.Visitors
         public IExp? TryVisitAndNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "and") &&
-                DoesNodeHaveMoreThanNChildren(node, "and", 0) &&
+                //DoesNodeHaveMoreThanNChildren(node, "and", 0) &&
                 DoesNotContainStrayCharacters(node, "and"))
             {
                 var newAndExp = new AndExp(node, parent, new List<IExp>());
@@ -64,12 +137,11 @@ namespace PDDLSharp.Parsers.Visitors
         public IExp? TryVisitOrNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "or") &&
-                DoesNodeHaveSpecificChildCount(node, "or", 2) &&
                 DoesNotContainStrayCharacters(node, "or"))
             {
-                var newOrExp = new OrExp(node, parent, null, null);
-                newOrExp.Option1 = VisitExp(node.Children[0], newOrExp);
-                newOrExp.Option2 = VisitExp(node.Children[1], newOrExp);
+                var newOrExp = new OrExp(node, parent, new List<IExp>());
+                foreach (var child in node.Children)
+                    newOrExp.Options.Add(VisitExp(child, newOrExp));
                 return newOrExp;
             }
             return null;

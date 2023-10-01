@@ -5,23 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PDDLSharp.Tools;
+using PDDLSharp.Models.Expressions;
 
 namespace PDDLSharp.Models.Domain
 {
     public class ActionDecl : BaseNamedWalkableNode, IDecl
     {
-        public ParameterDecl Parameters { get; set; }
+        public ParameterExp Parameters { get; set; }
         public IExp Preconditions { get; set; }
         public IExp Effects { get; set; }
 
-        public ActionDecl(ASTNode node, INode? parent, string name, ParameterDecl parameters, IExp preconditions, IExp effects) : base(node, parent, name)
+        public ActionDecl(ASTNode node, INode? parent, string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(node, parent, name)
         {
             Parameters = parameters;
             Preconditions = preconditions;
             Effects = effects;
         }
 
-        public ActionDecl(INode? parent, string name, ParameterDecl parameters, IExp preconditions, IExp effects) : base(parent, name)
+        public ActionDecl(INode? parent, string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(parent, name)
         {
             Parameters = parameters;
             Preconditions = preconditions;

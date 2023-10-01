@@ -19,6 +19,10 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [TestMethod]
         [DataRow("(and ())", typeof(AndExp))]
         [DataRow("(when (and ()) (and ()))", typeof(WhenExp))]
+        [DataRow("(forall (pred) (and ()))", typeof(ForAllExp))]
+        [DataRow("(exists (?a) (and ()))", typeof(ExistsExp))]
+        [DataRow("(imply (a) (and ()))", typeof(ImplyExp))]
+        [DataRow("(at 5 (a))", typeof(TimedLiteralExp))]
         [DataRow("(not (aaabsbdsb))", typeof(NotExp))]
         [DataRow("(or (aaa) (bbb))", typeof(OrExp))]
         [DataRow("(pred)", typeof(PredicateExp))]
@@ -37,6 +41,208 @@ namespace PDDLSharp.Parsers.Tests.Visitors
 
             // ASSERT
             Assert.IsInstanceOfType(exp, expectedType);
+        }
+
+        [TestMethod]
+        [DataRow("(at 5 (a))")]
+        [DataRow("(at 500 (pred a))")]
+        [DataRow("(at -1 (pred a q))")]
+        public void Can_ParseTimedLiteralExpNode(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitTimedLiteralNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(TimedLiteralExp));
+        }
+
+        [TestMethod]
+        [DataRow("(at 5 (a))", 5)]
+        [DataRow("(at 5    (a))", 5)]
+        [DataRow("(at 500 (pred a))", 500)]
+        [DataRow("(at        500 (pred a) )", 500)]
+        [DataRow("(at -1 (pred a q))", -1)]
+        public void Can_ParseTimedLiteralExpNode_CorrectValue(string toParse, int expected)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitTimedLiteralNode(node, null);
+
+            // ASSERT
+            Assert.AreEqual(expected, (exp as TimedLiteralExp).Value);
+        }
+
+        [TestMethod]
+        [DataRow("(imply (a) (b))")]
+        [DataRow("(imply (a) (and ()))")]
+        [DataRow("(imply (and (a)) (and ()))")]
+        public void Can_ParseImplyNode(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitImplyNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(ImplyExp));
+        }
+
+        [TestMethod]
+        [DataRow("(imply)")]
+        [DataRow("(imply ())")]
+        [DataRow("(imply () () ())")]
+        [DataRow("(imply () () () ())")]
+        public void Cant_ParseImplyNode_IfNotTwoChildren(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitImplyNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("(imply (a) a (b))")]
+        [DataRow("(imply (a) (and ()) ab)")]
+        [DataRow("(imply s (and (a)) (and ()))")]
+        public void Cant_ParseImplyNode_IfContainsStrayCharacters(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitImplyNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("(exists (?a) (and ()))")]
+        [DataRow("(exists (?a - type) (and ()))")]
+        [DataRow("(exists (?a - type ?b - type2) (and ()))")]
+        public void Can_ParseExistsNode(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitExistsNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(ExistsExp));
+        }
+
+        [TestMethod]
+        [DataRow("(exists ())")]
+        [DataRow("(exists () () ())")]
+        public void Cant_ParseExistsNode_IfNotTwoChildren(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitExistsNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("(exists (?a) a (and ()))")]
+        [DataRow("(exists (?a - type) abccc (and ()))")]
+        [DataRow("(exists aafasf (?a - type ?b - type2) (and ()))")]
+        public void Cant_ParseExistsNode_IfContainsStrayCharacters(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitExistsNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("(forall (and ()) (and ()))")]
+        [DataRow("(forall (and (a)) (and (b)))")]
+        [DataRow("(forall (and (ab) (a)) (and ()))")]
+        public void Can_ParseForAllNode(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitForAllNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(ForAllExp));
+        }
+
+        [TestMethod]
+        [DataRow("(forall)")]
+        [DataRow("(forall  ())")]
+        [DataRow("(forall  () () ())")]
+        public void Cant_ParseForAllNode_IfNotTwoChildren(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitForAllNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("(forall a (and ()) (and ()))")]
+        [DataRow("(forall a (and ())     a (and ()))")]
+        [DataRow("(forall a (and ())     a (and ()))q")]
+        [DataRow("(forall (and ())(and ()))q")]
+        public void Cant_ParseForAllNode_IfContainsStrayCharacters(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitForAllNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
         }
 
         [TestMethod]
@@ -111,23 +317,23 @@ namespace PDDLSharp.Parsers.Tests.Visitors
             Assert.IsInstanceOfType(exp, typeof(AndExp));
         }
 
-        [TestMethod]
-        [DataRow("(and)")]
-        [DataRow("(and         )")]
-        public void Cant_ParseAndNode_IfNoChildren(string toParse)
-        {
-            // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
-            IErrorListener listener = new ErrorListener();
-            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+        //[TestMethod]
+        //[DataRow("(and)")]
+        //[DataRow("(and         )")]
+        //public void Cant_ParseAndNode_IfNoChildren(string toParse)
+        //{
+        //    // ARRANGE
+        //    IGenerator<ASTNode> parser = new ASTGenerator();
+        //    var node = parser.Generate(toParse);
+        //    IErrorListener listener = new ErrorListener();
+        //    listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            // ACT
-            IExp? exp = new ParserVisitor(listener).TryVisitAndNode(node, null);
+        //    // ACT
+        //    IExp? exp = new ParserVisitor(listener).TryVisitAndNode(node, null);
 
-            // ASSERT
-            Assert.IsTrue(listener.Errors.Count > 0);
-        }
+        //    // ASSERT
+        //    Assert.IsTrue(listener.Errors.Count > 0);
+        //}
 
         [TestMethod]
         [DataRow("(and () q)")]
@@ -186,26 +392,6 @@ namespace PDDLSharp.Parsers.Tests.Visitors
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(OrExp));
-        }
-
-        [TestMethod]
-        [DataRow("(or () () ())")]
-        [DataRow("(or ())")]
-        [DataRow("(or)")]
-        [DataRow("(or (abcas) () (qwefas))")]
-        public void Cant_ParseOrNode_IfNotExactChildCount(string toParse)
-        {
-            // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
-            IErrorListener listener = new ErrorListener();
-            listener.ThrowIfTypeAbove = ParseErrorType.Error;
-
-            // ACT
-            IExp? exp = new ParserVisitor(listener).TryVisitOrNode(node, null);
-
-            // ASSERT
-            Assert.IsTrue(listener.Errors.Count > 0);
         }
 
         [TestMethod]

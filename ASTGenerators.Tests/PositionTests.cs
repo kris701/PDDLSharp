@@ -24,8 +24,8 @@ namespace PDDLSharp.ASTGenerators.Tests
 
         private void IsNodePositionValid(ASTNode node, PositionNode expectedNode)
         {
-            Assert.AreEqual(expectedNode.Start, node.Start, $"Expected: {expectedNode.NodeType}, Got: {node.InnerContent}");
-            Assert.AreEqual(expectedNode.End, node.End, $"Expected: {expectedNode.NodeType}, Got: {node.InnerContent}");
+            Assert.AreEqual(expectedNode.Start, node.Start, $"Expected: {expectedNode.NodeType} start, Got: {node.InnerContent}");
+            Assert.AreEqual(expectedNode.End, node.End, $"Expected: {expectedNode.NodeType} end, Got: {node.InnerContent}");
             if (expectedNode.Children.Count == node.Children.Count)
                 for (int i = 0; i < expectedNode.Children.Count; i++)
                     IsNodePositionValid(node.Children[i], expectedNode.Children[i]);
