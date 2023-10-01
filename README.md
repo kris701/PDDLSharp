@@ -1,8 +1,62 @@
+
+[![Build and Publish](https://github.com/kris701/PDDLSharp/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/kris701/PDDLSharp/actions/workflows/dotnet-desktop.yml)
+![Nuget](https://img.shields.io/nuget/v/PDDLSharp)
+![Nuget](https://img.shields.io/nuget/dt/PDDLSharp)
+
 # PDDLSharp
 
-Fully PDDL 2.2 compatible.
+This is a project to make a PDDL parser, contextualiser, analyser and code generator for C#. 
+The parser is fully PDDL 2.2 compatible.
+
+## Examples
+A usage example of how to use the parser:
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser parser = new PDDLParser(listener);
+PDDLDecl decl = parser.Parse("domain-file.pddl", "problem-file.pddl");
+```
+
+To parse a file as a specific PDDL object:
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser parser = new PDDLParser(listener);
+ActionDecl decl = parser.ParseAs<ActionDecl>("action-file.pddl");
+```
+
+To contextualise a domain/problem:
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser parser = new PDDLParser(listener);
+IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
+PDDLDecl decl = parser.Parse("domain-file.pddl", "problem-file.pddl");
+contextualiser.Contexturalise(decl);
+```
+
+To analyse a domain/problem:
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser parser = new PDDLParser(listener);
+IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser(listener);
+IAnalyser<PDDLDecl> analyser = new PDDLDeclAnalyser(listener);
+PDDLDecl decl = parser.Parse("domain-file.pddl", "problem-file.pddl");
+contextualiser.Contexturalise(decl);
+analyser.PostAnalyse(decl);
+```
+
+To generate PDDL code from a PDDL object:
+```csharp
+IErrorListener listener = new ErrorListener();
+ICodeGenerator generator = new PDDLCodeGenerator(listener);
+PDDLDecl decl = new PDDLDecl(...);
+// If you want a "pretty" output, use:
+// generator.Readable = true;
+generator.Generate(decl.Domain, "domain.pddl");
+generator.Generate(decl.Problem, "problem.pddl");
+```
 
 ## Supported Requirements
+PDDLSharp supports a large set of requirements, all the way up to PDDL 2.2:
+
 - [x] STRIPS (`:strips`)
 - [x] Typing (`:typing`)
 - [x] Disjunctive Preconditions (`:disjunctive-preconditions`)
