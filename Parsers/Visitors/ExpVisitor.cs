@@ -19,6 +19,7 @@ namespace PDDLSharp.Parsers.Visitors
             IExp? returnNode;
             if ((returnNode = TryVisitAndNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitWhenNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitTimedLiteralNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitForAllNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitExistsNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitImplyNode(node, parent)) != null) return returnNode;
@@ -33,6 +34,24 @@ namespace PDDLSharp.Parsers.Visitors
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
             return returnNode;
+        }
+
+        public IExp? TryVisitTimedLiteralNode(ASTNode node, INode? parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, "at") &&
+                node.Children.Count == 1 &&
+                node.InnerContent.Any(char.IsDigit))
+            {
+                var newTimedLiteralExp = new TimedLiteralExp(node, parent, -1, null);
+
+                var stray = node.InnerContent.Substring(node.InnerContent.IndexOf("at") + "at".Length).Trim();
+                var value = Convert.ToInt32(stray);
+                newTimedLiteralExp.Value = value;
+                newTimedLiteralExp.Literal = VisitExp(node.Children[0], newTimedLiteralExp);
+
+                return newTimedLiteralExp;
+            }
+            return null;
         }
 
         public IExp? TryVisitImplyNode(ASTNode node, INode? parent)

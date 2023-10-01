@@ -16,7 +16,6 @@ namespace PDDLSharp.Tools
             ":subgoals-through-axioms",
             ":safety-constraints",
             ":expression-evaluation",
-            ":fluents",
             ":open-world",
             ":true-negation",
             ":ucpop",

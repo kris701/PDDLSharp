@@ -22,6 +22,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [DataRow("(forall (pred) (and ()))", typeof(ForAllExp))]
         [DataRow("(exists (?a) (and ()))", typeof(ExistsExp))]
         [DataRow("(imply (a) (and ()))", typeof(ImplyExp))]
+        [DataRow("(at 5 (a))", typeof(TimedLiteralExp))]
         [DataRow("(not (aaabsbdsb))", typeof(NotExp))]
         [DataRow("(or (aaa) (bbb))", typeof(OrExp))]
         [DataRow("(pred)", typeof(PredicateExp))]
@@ -40,6 +41,42 @@ namespace PDDLSharp.Parsers.Tests.Visitors
 
             // ASSERT
             Assert.IsInstanceOfType(exp, expectedType);
+        }
+
+        [TestMethod]
+        [DataRow("(at 5 (a))")]
+        [DataRow("(at 500 (pred a))")]
+        [DataRow("(at -1 (pred a q))")]
+        public void Can_ParseTimedLiteralExpNode(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitTimedLiteralNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(TimedLiteralExp));
+        }
+
+        [TestMethod]
+        [DataRow("(at 5 (a))", 5)]
+        [DataRow("(at 5    (a))", 5)]
+        [DataRow("(at 500 (pred a))", 500)]
+        [DataRow("(at        500 (pred a) )", 500)]
+        [DataRow("(at -1 (pred a q))", -1)]
+        public void Can_ParseTimedLiteralExpNode_CorrectValue(string toParse, int expected)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitTimedLiteralNode(node, null);
+
+            // ASSERT
+            Assert.AreEqual(expected, (exp as TimedLiteralExp).Value);
         }
 
         [TestMethod]
