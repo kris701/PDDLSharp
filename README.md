@@ -28,3 +28,5 @@ Fully PDDL 2.2 compatible.
 - [ ] Open World (`:open-world`)
 - [ ] True Negation (`:true-negation`)
 - [ ] UCPOP (`:ucpop`)
+- [ ] Constraints (`:constraints`)
+- [ ] Preferences (`:preferences`)

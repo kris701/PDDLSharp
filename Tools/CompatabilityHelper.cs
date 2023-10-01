@@ -19,6 +19,8 @@ namespace PDDLSharp.Tools
             ":open-world",
             ":true-negation",
             ":ucpop",
+            ":constraints",
+            ":preferences",
             // The 'either' expression is not supported
             "(either "
         };
