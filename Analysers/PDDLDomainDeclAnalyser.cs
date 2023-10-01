@@ -269,8 +269,8 @@ namespace PDDLSharp.Analysers
             }
             else if (node is OrExp or)
             {
-                CheckForValidTypesInAction(or.Option1, domain, action);
-                CheckForValidTypesInAction(or.Option2, domain, action);
+                foreach (var child in or.Options)
+                    CheckForValidTypesInAction(child, domain, action);
             }
             else if (node is NotExp not)
             {
@@ -346,8 +346,8 @@ namespace PDDLSharp.Analysers
             }
             else if (node is OrExp or)
             {
-                CheckForValidTypesInAxiom(or.Option1, domain, axiom);
-                CheckForValidTypesInAxiom(or.Option2, domain, axiom);
+                foreach (var child in or.Options)
+                    CheckForValidTypesInAxiom(child, domain, axiom);
             }
             else if (node is NotExp not)
             {
@@ -543,8 +543,8 @@ namespace PDDLSharp.Analysers
             }
             else if (node is OrExp or)
             {
-                CheckExpUsesPredicates(or.Option1, predicates, domain);
-                CheckExpUsesPredicates(or.Option2, predicates, domain);
+                foreach (var child in or.Options)
+                    CheckExpUsesPredicates(child, predicates, domain);
             }
             else if (node is NotExp not)
             {

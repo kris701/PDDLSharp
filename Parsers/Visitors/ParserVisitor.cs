@@ -68,6 +68,7 @@ namespace PDDLSharp.Parsers.Visitors
             typeof(T) == typeof(WhenExp)            ? TryVisitWhenNode(node, parent) :
             typeof(T) == typeof(ForAllExp)          ? TryVisitForAllNode(node, parent) :
             typeof(T) == typeof(ExistsExp)          ? TryVisitExistsNode(node, parent) :
+            typeof(T) == typeof(ImplyExp)           ? TryVisitImplyNode(node, parent) :
             typeof(T) == typeof(AndExp)             ? TryVisitAndNode(node, parent) :
             typeof(T) == typeof(OrExp)              ? TryVisitOrNode(node, parent) :
             typeof(T) == typeof(NotExp)             ? TryVisitNotNode(node, parent) :

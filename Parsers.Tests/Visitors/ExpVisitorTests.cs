@@ -21,6 +21,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [DataRow("(when (and ()) (and ()))", typeof(WhenExp))]
         [DataRow("(forall (pred) (and ()))", typeof(ForAllExp))]
         [DataRow("(exists (?a) (and ()))", typeof(ExistsExp))]
+        [DataRow("(imply (a) (and ()))", typeof(ImplyExp))]
         [DataRow("(not (aaabsbdsb))", typeof(NotExp))]
         [DataRow("(or (aaa) (bbb))", typeof(OrExp))]
         [DataRow("(pred)", typeof(PredicateExp))]
@@ -39,6 +40,62 @@ namespace PDDLSharp.Parsers.Tests.Visitors
 
             // ASSERT
             Assert.IsInstanceOfType(exp, expectedType);
+        }
+
+        [TestMethod]
+        [DataRow("(imply (a) (b))")]
+        [DataRow("(imply (a) (and ()))")]
+        [DataRow("(imply (and (a)) (and ()))")]
+        public void Can_ParseImplyNode(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IExp? exp = new ParserVisitor(null).TryVisitImplyNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(ImplyExp));
+        }
+
+        [TestMethod]
+        [DataRow("(imply)")]
+        [DataRow("(imply ())")]
+        [DataRow("(imply () () ())")]
+        [DataRow("(imply () () () ())")]
+        public void Cant_ParseImplyNode_IfNotTwoChildren(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitImplyNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("(imply (a) a (b))")]
+        [DataRow("(imply (a) (and ()) ab)")]
+        [DataRow("(imply s (and (a)) (and ()))")]
+        public void Cant_ParseImplyNode_IfContainsStrayCharacters(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IExp? exp = new ParserVisitor(listener).TryVisitImplyNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
         }
 
         [TestMethod]
@@ -298,26 +355,6 @@ namespace PDDLSharp.Parsers.Tests.Visitors
 
             // ASSERT
             Assert.IsInstanceOfType(exp, typeof(OrExp));
-        }
-
-        [TestMethod]
-        [DataRow("(or () () ())")]
-        [DataRow("(or ())")]
-        [DataRow("(or)")]
-        [DataRow("(or (abcas) () (qwefas))")]
-        public void Cant_ParseOrNode_IfNotExactChildCount(string toParse)
-        {
-            // ARRANGE
-            IGenerator<ASTNode> parser = new ASTGenerator();
-            var node = parser.Generate(toParse);
-            IErrorListener listener = new ErrorListener();
-            listener.ThrowIfTypeAbove = ParseErrorType.Error;
-
-            // ACT
-            IExp? exp = new ParserVisitor(listener).TryVisitOrNode(node, null);
-
-            // ASSERT
-            Assert.IsTrue(listener.Errors.Count > 0);
         }
 
         [TestMethod]

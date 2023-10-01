@@ -86,8 +86,8 @@ namespace PDDLSharp.Analysers
             }
             else if (exp is OrExp or)
             {
-                CheckForUndeclaredExpObjects(or.Option1, objects);
-                CheckForUndeclaredExpObjects(or.Option2, objects);
+                foreach (var option in or.Options)
+                    CheckForUndeclaredExpObjects(option, objects);
             }
             else if (exp is NotExp not)
             {
@@ -141,8 +141,8 @@ namespace PDDLSharp.Analysers
             }
             else if (exp is OrExp or)
             {
-                DoesExpContainValidPredicates(or.Option1, predicates);
-                DoesExpContainValidPredicates(or.Option2, predicates);
+                foreach (var option in or.Options)
+                    DoesExpContainValidPredicates(option, predicates);
             }
             else if (exp is NotExp not)
             {
@@ -231,8 +231,8 @@ namespace PDDLSharp.Analysers
             }
             else if (node is OrExp or)
             {
-                CheckExpUsesPredicates(or.Option1, predicates, domain);
-                CheckExpUsesPredicates(or.Option2, predicates, domain);
+                foreach (var option in or.Options)
+                    CheckExpUsesPredicates(option, predicates, domain);
             }
             else if (node is NotExp not)
             {

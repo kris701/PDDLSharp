@@ -29,6 +29,15 @@ namespace PDDLSharp.CodeGenerators.Visitors
             return retStr;
         }
 
+        public string Visit(ImplyExp node, int indent)
+        {
+            string retStr = $"{IndentStr(indent)}(imply{Environment.NewLine}";
+            retStr += $"{Visit((dynamic)node.Antecedent, indent + 1)}{Environment.NewLine}";
+            retStr += $"{Visit((dynamic)node.Consequent, indent + 1)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            return retStr;
+        }
+
         public string Visit(WhenExp node, int indent)
         {
             string retStr = $"{IndentStr(indent)}(when{Environment.NewLine}";
@@ -81,8 +90,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
         public string Visit(OrExp node, int indent)
         {
             string retStr = $"{IndentStr(indent)}(when{Environment.NewLine}";
-            retStr += $"{Visit((dynamic)node.Option1, indent + 1)}{Environment.NewLine}";
-            retStr += $"{Visit((dynamic)node.Option1, indent + 1)}{Environment.NewLine}";
+            foreach (var option in node.Options)
+                retStr += $"{Visit((dynamic)option, indent + 1)}{Environment.NewLine}";
             retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
         }

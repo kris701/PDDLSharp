@@ -20,75 +20,6 @@ namespace PDDLSharp.Contextualisers
 
         public abstract void Contexturalise(T decl);
 
-        internal int GetPredicateCountInExp(IExp exp)
-        {
-            if (exp is AndExp and)
-            {
-                int count = 0;
-                foreach (var child in and.Children)
-                    count += GetPredicateCountInExp(child);
-                return count;
-            }
-            else if (exp is NotExp not)
-            {
-                return GetPredicateCountInExp(not.Child);
-            }
-            else if (exp is OrExp or)
-            {
-                return GetPredicateCountInExp(or.Option1) + GetPredicateCountInExp(or.Option2);
-            }
-            else
-            {
-                if (exp is PredicateExp)
-                    return 1;
-            }
-            return 0;
-        }
-
-        internal bool DoesExpContainNodeType<U>(IExp exp)
-        {
-            if (exp is AndExp and)
-            {
-                if (typeof(U) == typeof(AndExp))
-                    return true;
-
-                foreach (var child in and.Children)
-                    if (DoesExpContainNodeType<U>(child))
-                        return true;
-            }
-            else if (exp is NotExp not)
-            {
-                if (typeof(U) == typeof(NotExp))
-                    return true;
-
-                return DoesExpContainNodeType<U>(not.Child);
-            }
-            else if (exp is OrExp or)
-            {
-                if (typeof(U) == typeof(OrExp))
-                    return true;
-
-                if (DoesExpContainNodeType<U>(or.Option1))
-                    return true;
-                return DoesExpContainNodeType<U>(or.Option2);
-            }
-            else if (exp is PredicateExp pred)
-            {
-                if (typeof(U) == typeof(PredicateExp))
-                    return true;
-
-                foreach (var arg in pred.Arguments)
-                    if (DoesExpContainNodeType<U>(arg))
-                        return true;
-            }
-            else if (exp is NameExp name)
-            {
-                if (typeof(U) == typeof(NameExp))
-                    return true;
-            }
-            return false;
-        }
-
         internal void ReplaceNameExpTypeWith(IExp node, NameExp with)
         {
             if (node is AndExp and)
@@ -98,8 +29,8 @@ namespace PDDLSharp.Contextualisers
             }
             else if (node is OrExp or)
             {
-                ReplaceNameExpTypeWith(or.Option1, with);
-                ReplaceNameExpTypeWith(or.Option2, with);
+                foreach (var child in or.Options)
+                    ReplaceNameExpTypeWith(child, with);
             }
             else if (node is NotExp not)
             {

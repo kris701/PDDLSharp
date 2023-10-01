@@ -10,9 +10,6 @@ namespace PDDLSharp.Tools
     {
         public static List<string> UnsupportedPackages = new List<string>()
         {
-            ":adl",
-            ":universal-preconditions",
-            ":quantified-preconditions",
             ":action-expansions",
             ":foreach-expansions",
             ":dag-expansions",

@@ -11,30 +11,29 @@ namespace PDDLSharp.Models.Expressions
 {
     public class OrExp : BaseWalkableNode, IExp
     {
-        public IExp Option1 { get; set; }
-        public IExp Option2 { get; set; }
+        public List<IExp> Options { get; set; }
 
-        public OrExp(ASTNode node, INode? parent, IExp option1, IExp option2) : base(node, parent)
+        public OrExp(ASTNode node, INode? parent, List<IExp> options) : base(node, parent)
         {
-            Option1 = option1;
-            Option2 = option2;
+            Options = options;
         }
 
-        public OrExp(INode? parent, IExp option1, IExp option2) : base(parent)
+        public OrExp(INode? parent, List<IExp> options) : base(parent)
         {
-            Option1 = option1;
-            Option2 = option2;
+            Options = options;
         }
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() * Option1.GetHashCode() * Option2.GetHashCode();
+            var hash = base.GetHashCode();
+            foreach (var option in Options)
+                hash *= option.GetHashCode();
+            return hash;
         }
 
         public override IEnumerator<INode> GetEnumerator()
         {
-            yield return Option1;
-            yield return Option2;
+            return Options.GetEnumerator(); ;
         }
     }
 }
