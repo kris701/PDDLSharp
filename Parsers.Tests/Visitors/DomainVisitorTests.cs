@@ -28,6 +28,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [DataRow("(:action name :parameters (a) :precondition (not (a)) :effect (a))", typeof(ActionDecl))]
         [DataRow("(:durative-action name :parameters (a) :duration (= ?duration 10) :condition (not (a)) :effect (a))", typeof(DurativeActionDecl))]
         [DataRow("(:axiom :vars (a) :context (not (a)) :implies (a))", typeof(AxiomDecl))]
+        [DataRow("(:derived (a) (not (b)))", typeof(DerivedDecl))]
         public void Can_VisitGeneral(string toParse, Type expectedType)
         {
             // ARRANGE
@@ -664,6 +665,41 @@ namespace PDDLSharp.Parsers.Tests.Visitors
 
             // ACT
             IDecl? decl = new ParserVisitor(listener).TryVisitAxiomNode(node, null);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("(:derived (a) (not (b)))")]
+        [DataRow("(:derived (pred a - type) (not (b)))")]
+        [DataRow("(:derived (pred a - type) (and (b) (c)))")]
+        public void Can_ParseDerivedNode(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+
+            // ACT
+            IDecl? decl = new ParserVisitor(null).TryVisitDerivedNode(node, null);
+
+            // ASSERT
+            Assert.IsInstanceOfType(decl, typeof(DerivedDecl));
+        }
+
+        [TestMethod]
+        [DataRow("(:derived ()")]
+        [DataRow("(:derived () () ()")]
+        public void Cant_ParseDerivedNode_IfNotTwoChildren(string toParse)
+        {
+            // ARRANGE
+            IGenerator<ASTNode> parser = new ASTGenerator();
+            var node = parser.Generate(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IDecl? decl = new ParserVisitor(listener).TryVisitDerivedNode(node, null);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);

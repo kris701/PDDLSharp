@@ -10,7 +10,6 @@ namespace PDDLSharp.Tools
     {
         public static List<string> UnsupportedPackages = new List<string>()
         {
-            ":existential-preconditions",
             ":adl",
             ":universal-preconditions",
             ":quantified-preconditions",
@@ -23,7 +22,9 @@ namespace PDDLSharp.Tools
             ":fluents",
             ":open-world",
             ":true-negation",
-            ":ucpop"
+            ":ucpop",
+            // The 'either' expression is not supported
+            "(either "
         };
         public static bool IsPDDLDomainSpported(FileInfo file) => IsPDDLDomainSpported(File.ReadAllText(file.FullName));
         public static bool IsPDDLDomainSpported(string text)

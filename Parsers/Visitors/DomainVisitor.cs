@@ -32,6 +32,7 @@ namespace PDDLSharp.Parsers.Visitors
             if ((returnNode = TryVisitActionNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitDurativeActionNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitAxiomNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitDerivedNode(node, parent)) != null) return returnNode;
 
             Listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
@@ -323,6 +324,24 @@ namespace PDDLSharp.Parsers.Visitors
                 newAxiomDecl.Implies = VisitExp(node.Children[2], newAxiomDecl);
 
                 return newAxiomDecl;
+            }
+            return null;
+        }
+
+        public IDecl? TryVisitDerivedNode(ASTNode node, INode? parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":derived") &&
+                DoesNodeHaveSpecificChildCount(node, ":derived", 2))
+            {
+                var derivedDecl = new DerivedDecl(node, parent, null, null);
+
+                // Predicate
+                derivedDecl.Predicate = TryVisitAs<PredicateExp>(node.Children[0], derivedDecl);
+
+                // Expression
+                derivedDecl.Expression = VisitExp(node.Children[1], derivedDecl);
+
+                return derivedDecl;
             }
             return null;
         }

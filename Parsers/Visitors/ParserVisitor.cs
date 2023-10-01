@@ -53,6 +53,7 @@ namespace PDDLSharp.Parsers.Visitors
             typeof(T) == typeof(ActionDecl)         ? TryVisitActionNode(node, parent) :
             typeof(T) == typeof(DurativeActionDecl) ? TryVisitDurativeActionNode(node, parent) :
             typeof(T) == typeof(AxiomDecl)          ? TryVisitAxiomNode(node, parent) :
+            typeof(T) == typeof(DerivedDecl)        ? TryVisitDerivedNode(node, parent) :
 
             // Problem
             typeof(T) == typeof(ProblemDecl)        ? TryVisitProblemDeclNode(node, parent) :
@@ -65,6 +66,8 @@ namespace PDDLSharp.Parsers.Visitors
 
             // Exp
             typeof(T) == typeof(WhenExp)            ? TryVisitWhenNode(node, parent) :
+            typeof(T) == typeof(ForAllExp)          ? TryVisitForAllNode(node, parent) :
+            typeof(T) == typeof(ExistsExp)          ? TryVisitExistsNode(node, parent) :
             typeof(T) == typeof(AndExp)             ? TryVisitAndNode(node, parent) :
             typeof(T) == typeof(OrExp)              ? TryVisitOrNode(node, parent) :
             typeof(T) == typeof(NotExp)             ? TryVisitNotNode(node, parent) :

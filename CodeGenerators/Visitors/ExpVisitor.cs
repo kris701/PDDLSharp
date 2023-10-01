@@ -38,6 +38,32 @@ namespace PDDLSharp.CodeGenerators.Visitors
             return retStr;
         }
 
+        public string Visit(ParameterExp node, int indent)
+        {
+            string retStr = "";
+            foreach (var type in node.Values)
+                retStr += $" {Visit(type, 0)}".Replace("(", "").Replace(")", "");
+            return $"({retStr})";
+        }
+
+        public string Visit(ForAllExp node, int indent)
+        {
+            string retStr = $"{IndentStr(indent)}(forall{Environment.NewLine}";
+            retStr += $"{Visit((dynamic)node.Parameters, indent + 1)}{Environment.NewLine}";
+            retStr += $"{Visit((dynamic)node.Expression, indent + 1)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            return retStr;
+        }
+
+        public string Visit(ExistsExp node, int indent)
+        {
+            string retStr = $"{IndentStr(indent)}(exists{Environment.NewLine}";
+            retStr += $"{Visit((dynamic)node.Parameters, indent + 1)}{Environment.NewLine}";
+            retStr += $"{Visit((dynamic)node.Expression, indent + 1)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            return retStr;
+        }
+
         public string Visit(NotExp node, int indent)
         {
             string retStr = $"{IndentStr(indent)}(not{Environment.NewLine}";

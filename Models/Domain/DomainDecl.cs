@@ -23,12 +23,14 @@ namespace PDDLSharp.Models.Domain
         public List<ActionDecl> Actions { get; set; }
         public List<DurativeActionDecl> DurativeActions { get; set; }
         public List<AxiomDecl> Axioms { get; set; }
+        public List<DerivedDecl> Deriveds { get; set; }
 
         public DomainDecl(ASTNode node) : base(node, null)
         {
             Actions = new List<ActionDecl>();
             Axioms = new List<AxiomDecl>();
             DurativeActions = new List<DurativeActionDecl>();
+            Deriveds = new List<DerivedDecl>();
         }
 
         public DomainDecl() : base(null)
@@ -36,6 +38,7 @@ namespace PDDLSharp.Models.Domain
             Actions = new List<ActionDecl>();
             Axioms = new List<AxiomDecl>();
             DurativeActions = new List<DurativeActionDecl>();
+            Deriveds = new List<DerivedDecl>();
         }
 
         public override int GetHashCode()
@@ -67,6 +70,9 @@ namespace PDDLSharp.Models.Domain
             if (Axioms != null)
                 foreach(var axi in Axioms)
                     hash *= axi.GetHashCode();
+            if (Deriveds != null)
+                foreach (var der in Deriveds)
+                    hash *= der.GetHashCode();
 
             return hash;
         }
@@ -91,6 +97,9 @@ namespace PDDLSharp.Models.Domain
             if (Axioms != null)
                 foreach(var axi in Axioms)
                     yield return axi;
+            if (Deriveds != null)
+                foreach (var deri in Deriveds)
+                    yield return deri;
         }
     }
 }

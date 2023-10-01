@@ -79,6 +79,15 @@ namespace PDDLSharp.CodeGenerators.Visitors
             return retStr;
         }
 
+        public string Visit(DerivedDecl node, int indent)
+        {
+            string retStr = $"{IndentStr(indent)}(:derived{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}{Visit(node.Predicate, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}{Visit((dynamic)node.Expression, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            return retStr;
+        }
+
         public string Visit(ConstantsDecl node, int indent)
         {
             string retStr = $"{IndentStr(indent)}(:constants{Environment.NewLine}";
@@ -109,14 +118,6 @@ namespace PDDLSharp.CodeGenerators.Visitors
                 retStr += $"{Visit((dynamic)function, indent + 1)}{Environment.NewLine}";
             retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
-        }
-
-        public string Visit(ParameterExp node, int indent)
-        {
-            string retStr = "";
-            foreach (var type in node.Values)
-                retStr += $" {Visit(type, 0)}".Replace("(","").Replace(")","");
-            return $"({retStr})";
         }
 
         public string Visit(PredicatesDecl node, int indent)

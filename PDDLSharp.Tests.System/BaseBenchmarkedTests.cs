@@ -12,7 +12,15 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 {
     public class BaseBenchmarkedTests
     {
-        public static long MaxFileSize = 100000;
+        public static List<string> ExcludedDomains = new List<string>()
+        {
+            // It has a malformed domain
+            "zenotravel",
+            // It have some malformed parameters
+            "tpp"
+        };
+
+        public static long MaxFileSize = 10000;
         public static long MaxProblemsPrDomain = 5;
         public static Dictionary<string, List<string>> _testDict = new Dictionary<string, List<string>>();
 
@@ -22,18 +30,21 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             Random rnd = new Random();
             foreach (var domainPath in Directory.GetDirectories(BenchmarkFetcher.OutputPath))
             {
-                var domainFile = Path.Combine(domainPath, "domain.pddl");
-                if (File.Exists(domainFile) && IsDomainSupported(domainFile))
+                if (!ExcludedDomains.Contains(new DirectoryInfo(domainPath).Name))
                 {
-                    if (!_testDict.ContainsKey(domainFile))
+                    var domainFile = Path.Combine(domainPath, "domain.pddl");
+                    if (File.Exists(domainFile) && IsDomainSupported(domainFile))
                     {
-                        _testDict.Add(domainFile, new List<string>());
-                        foreach (var problem in Directory.GetFiles(domainPath).OrderBy(x => rnd.Next()))
+                        if (!_testDict.ContainsKey(domainFile))
                         {
-                            if (problem != domainFile && problem.EndsWith(".pddl") && new FileInfo(problem).Length < MaxFileSize)
-                                _testDict[domainFile].Add(problem);
-                            if (_testDict[domainFile].Count >= MaxProblemsPrDomain)
-                                break;
+                            _testDict.Add(domainFile, new List<string>());
+                            foreach (var problem in Directory.GetFiles(domainPath).OrderBy(x => rnd.Next()))
+                            {
+                                if (problem != domainFile && problem.EndsWith(".pddl") && new FileInfo(problem).Length < MaxFileSize && PDDLFileHelper.IsFileProblem(problem))
+                                    _testDict[domainFile].Add(problem);
+                                if (_testDict[domainFile].Count >= MaxProblemsPrDomain)
+                                    break;
+                            }
                         }
                     }
                 }

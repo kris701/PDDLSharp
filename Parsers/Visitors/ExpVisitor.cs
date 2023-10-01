@@ -20,6 +20,7 @@ namespace PDDLSharp.Parsers.Visitors
             if ((returnNode = TryVisitAndNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitWhenNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitForAllNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitExistsNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitOrNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNotNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNumericNode(node, parent)) != null) return returnNode;
@@ -31,6 +32,24 @@ namespace PDDLSharp.Parsers.Visitors
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
             return returnNode;
+        }
+
+        public IExp? TryVisitExistsNode(ASTNode node, INode? parent)
+        {
+            if (IsOfValidNodeType(node.InnerContent, "exists") &&
+                DoesNodeHaveSpecificChildCount(node, "exists", 2) &&
+                DoesNotContainStrayCharacters(node, "exists"))
+            {
+                var newExistsExp = new ExistsExp(node, parent, null, null);
+                newExistsExp.Parameters = new ParameterExp(
+                    node.Children[0],
+                    newExistsExp,
+                    ParseAsParameters(node.Children[0], newExistsExp, "", node.Children[0].InnerContent));
+                newExistsExp.Expression = VisitExp(node.Children[1], newExistsExp);
+
+                return newExistsExp;
+            }
+            return null;
         }
 
         public IExp? TryVisitForAllNode(ASTNode node, INode? parent)
@@ -69,7 +88,7 @@ namespace PDDLSharp.Parsers.Visitors
         public IExp? TryVisitAndNode(ASTNode node, INode? parent)
         {
             if (IsOfValidNodeType(node.InnerContent, "and") &&
-                DoesNodeHaveMoreThanNChildren(node, "and", 0) &&
+                //DoesNodeHaveMoreThanNChildren(node, "and", 0) &&
                 DoesNotContainStrayCharacters(node, "and"))
             {
                 var newAndExp = new AndExp(node, parent, new List<IExp>());
