@@ -1,6 +1,7 @@
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
+using PDDLSharp.Models.Domain;
 using PDDLSharp.Models.Expressions;
 using System;
 
@@ -14,32 +15,51 @@ namespace PDDLSharp.CodeGenerators.Tests
             // Name Exp Node
             yield return new object[]
             {
-                new NameExp(new ASTNode(), null, "abc"),
+                new NameExp(null, "abc"),
                 "(abc)"
             };
             yield return new object[]
             {
-                new NameExp(new ASTNode(), null, "abc", new TypeExp(new ASTNode(), null, "typeName")),
-                "(abc - typeName)"
+                new NameExp(null, "abc", new TypeExp(null, "type")),
+                "(abc)"
             };
 
-            // And Exp Node
+            // Predicates Decl Node
             yield return new object[]
             {
-                new AndExp(new ASTNode(), null, new List<IExp>()
+                new PredicatesDecl(null, new List<PredicateExp>()
                 {
-                    new NameExp(new ASTNode(), null, "abc", new TypeExp(new ASTNode(), null, "typeName")),
-                    new NameExp(new ASTNode(), null, "abc"),
+                    new PredicateExp(null, "name", new List<NameExp>()
+                    {
+                        new NameExp(null, "?a"),
+                        new NameExp(null, "?b")
+                    })
                 }),
-                "(and(abc - typeName)(abc))"
+                "(:predicates(name ?a ?b))"
             };
             yield return new object[]
             {
-                new AndExp(new ASTNode(), null, new List<IExp>()
+                new PredicatesDecl(null, new List<PredicateExp>()
                 {
-                    new NameExp(new ASTNode(), null, "abc", new TypeExp(new ASTNode(), null, "typeName")),
+                    new PredicateExp(null, "name", new List<NameExp>()
+                    {
+                        new NameExp(null, "?a", new TypeExp(null, "typea")),
+                        new NameExp(null, "?b")
+                    })
                 }),
-                "(and(abc - typeName))"
+                "(:predicates(name ?a - typea ?b))"
+            };
+            yield return new object[]
+            {
+                new PredicatesDecl(null, new List<PredicateExp>()
+                {
+                    new PredicateExp(null, "name", new List<NameExp>()
+                    {
+                        new NameExp(null, "?a", new TypeExp(null, "typea")),
+                        new NameExp(null, "?b", new TypeExp(null, "typeb"))
+                    })
+                }),
+                "(:predicates(name ?a - typea ?b - typeb))"
             };
         }
 
