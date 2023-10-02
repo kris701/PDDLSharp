@@ -39,13 +39,13 @@ namespace PDDLSharp.ErrorListeners
             switch (Type)
             {
                 case ParseErrorType.None:
-                    return $"       {Message}";
+                    return $"[NONE] [{Enum.GetName(typeof(ParseErrorLevel), Level)}] {Message}";
                 case ParseErrorType.Message:
-                    return $"[INFO] {Message}";
+                    return $"[INFO] [{Enum.GetName(typeof(ParseErrorLevel), Level)}] {Message}";
                 case ParseErrorType.Warning:
-                    return $"[WARN] {Message}";
+                    return $"[WARN] [{Enum.GetName(typeof(ParseErrorLevel), Level)}] {Message}";
                 case ParseErrorType.Error:
-                    return $"[ERRO] {Message}";
+                    return $"[ERRO] [{Enum.GetName(typeof(ParseErrorLevel), Level)}] {Message}";
             }
             return Message;
         }
