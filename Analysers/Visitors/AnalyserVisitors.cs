@@ -23,39 +23,46 @@ namespace PDDLSharp.Analysers.Visitors
             Declaration = declaration;
         }
 
+        private List<PredicateExp> _predicateCache = new List<PredicateExp>();
+        private List<PredicateExp> GetPredicateCache()
+        {
+            if (_predicateCache.Count == 0)
+            {
+                if (Declaration.Domain.Predicates != null)
+                    _predicateCache.AddRange(Declaration.Domain.Predicates.Predicates);
+                if (Declaration.Domain.Functions != null)
+                    _predicateCache.AddRange(Declaration.Domain.Functions.Functions);
+            }
+            return _predicateCache;
+        }
+
         internal void CheckForCorrectPredicateTypes(IWalkable node)
         {
-            List<PredicateExp> predicates = new List<PredicateExp>();
-            if (Declaration.Domain.Predicates != null)
-                predicates.AddRange(Declaration.Domain.Predicates.Predicates);
-            if (Declaration.Domain.Functions != null)
-                predicates.AddRange(Declaration.Domain.Functions.Functions);
+            List<PredicateExp> predicates = GetPredicateCache();
 
             foreach (var initPred in node)
             {
                 if (initPred is PredicateExp pred)
                 {
-                    var target = predicates.Where(x => x.Name == pred.Name).ToArray()[0];
-
-                    for (int i = 0; i < target.Arguments.Count; i++)
-                        if (!pred.Arguments[i].Type.IsTypeOf(target.Arguments[i].Type.Name))
-                            Listener.AddError(new ParseError(
-                                $"Predicate has an incorrect object type! Expected a '{target.Arguments[i].Type.Name}' but got a '{pred.Arguments[i].Type.Name}'",
-                                ParseErrorType.Error,
-                                ParseErrorLevel.Analyser,
-                                pred.Arguments[i].Line,
-                                pred.Arguments[i].Start));
+                    var target = predicates.FirstOrDefault(x => x.Name == pred.Name);
+                    if (target != null)
+                    {
+                        for (int i = 0; i < target.Arguments.Count; i++)
+                            if (!pred.Arguments[i].Type.IsTypeOf(target.Arguments[i].Type.Name))
+                                Listener.AddError(new ParseError(
+                                    $"Predicate has an incorrect object type! Expected a '{target.Arguments[i].Type.Name}' but got a '{pred.Arguments[i].Type.Name}'",
+                                    ParseErrorType.Error,
+                                    ParseErrorLevel.Analyser,
+                                    pred.Arguments[i].Line,
+                                    pred.Arguments[i].Start));
+                    }
                 }
             }
         }
 
         private void CheckForUndeclaredPredicates(IWalkable node)
         {
-            List<PredicateExp> predicates = new List<PredicateExp>();
-            if (Declaration.Domain.Predicates != null)
-                predicates.AddRange(Declaration.Domain.Predicates.Predicates);
-            if (Declaration.Domain.Functions != null)
-                predicates.AddRange(Declaration.Domain.Functions.Functions);
+            List<PredicateExp> predicates = GetPredicateCache();
 
             foreach (var item in node)
             {
@@ -108,6 +115,19 @@ namespace PDDLSharp.Analysers.Visitors
                             ParseErrorLevel.Analyser,
                             node.Line,
                             node.Start));
+        }
+
+        private bool OnlyOne<T>(List<T> allItems, string targetName) where T : INamedNode
+        {
+            int count = 0;
+            foreach (var type in allItems)
+            {
+                if (type.Name == targetName)
+                    count++;
+                if (count > 1)
+                    return false;
+            }
+            return true;
         }
     }
 }

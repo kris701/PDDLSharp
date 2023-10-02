@@ -1,4 +1,5 @@
-﻿using PDDLSharp.ErrorListeners;
+﻿using Microsoft.VisualBasic;
+using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.Domain;
 using PDDLSharp.Models.Expressions;
@@ -127,7 +128,7 @@ namespace PDDLSharp.Analysers.Visitors
 
             foreach (var type in node.Types)
             {
-                if (allTypes.Count(x => x.Name == type.Name) == 1)
+                if (OnlyOne(allTypes, type.Name))
                     Listener.AddError(new ParseError(
                         $"Unused type detected '{type.Name}'",
                         ParseErrorType.Message,
@@ -176,7 +177,7 @@ namespace PDDLSharp.Analysers.Visitors
             allPredicates.AddRange(Declaration.Problem.FindTypes<PredicateExp>());
             foreach (var predicate in node.Predicates)
             {
-                if (allPredicates.Count(x => x.Name == predicate.Name) == 1)
+                if (OnlyOne(allPredicates, predicate.Name))
                 {
                     Listener.AddError(new ParseError(
                         $"Unused predicate detected '{predicate.Name}'",
