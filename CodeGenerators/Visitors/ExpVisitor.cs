@@ -14,10 +14,15 @@ namespace PDDLSharp.CodeGenerators.Visitors
     {
         public string Visit(NameExp node, int indent)
         {
-            if (node.Type == null || node.Type.Name == "")
-                return $"{IndentStr(indent)}({node.Name})";
+            if (_printType)
+            {
+                if (node.Type == null || node.Type.Name == "object" || node.Type.Name == "")
+                    return $"{IndentStr(indent)}({node.Name})";
+                else
+                    return $"{IndentStr(indent)}({node.Name} - {Visit(node.Type, 0)})";
+            }
             else
-                return $"{IndentStr(indent)}({node.Name} - {Visit(node.Type, 0)})";
+                return $"{IndentStr(indent)}({node.Name})";
         }
 
         public string Visit(AndExp node, int indent)

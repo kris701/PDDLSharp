@@ -7,7 +7,7 @@
 	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	  <Title>PDDLSharp</Title>
 	  <Authors>Kristian Skov Johansen</Authors>
-	  <Description>Tools for PDDL development.</Description>
+	  <Description>PDDL Parser, analyser and code generator for C# that is fully compatible with PDDL 2.2.</Description>
 	  <RepositoryUrl>https://github.com/kris701/PDDLSharp</RepositoryUrl>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -15,7 +15,7 @@
 
 	<PropertyGroup>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<Version>1.0.9</Version>
+		<Version>1.0.10</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

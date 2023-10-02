@@ -78,7 +78,7 @@ namespace PDDLSharp.Contextualisers.Visitors
             var allOfConstant = Declaration.Problem.FindTypes<NameExp>();
             foreach (var instance in allOfConstant)
             {
-                var target = decl.Constants.SingleOrDefault(x => x.Name == instance.Name);
+                var target = decl.Constants.FirstOrDefault(x => x.Name == instance.Name);
                 if (target != null)
                     instance.Type.Name = target.Type.Name;
             }

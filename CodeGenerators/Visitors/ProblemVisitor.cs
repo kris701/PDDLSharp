@@ -67,8 +67,10 @@ namespace PDDLSharp.CodeGenerators.Visitors
         public string Visit(ObjectsDecl node, int indent)
         {
             string retStr = $"{IndentStr(indent)}(:objects{Environment.NewLine}";
+            _printType = true;
             foreach (var obj in node.Objs)
                 retStr += $"{Visit(obj, indent + 1)}{Environment.NewLine}".Replace("(", "").Replace(")", "");
+            _printType = false;
             retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
         }

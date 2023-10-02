@@ -25,7 +25,23 @@ namespace PDDLSharp.CodeGenerators
         public string Generate(INode node)
         {
             GeneratorVisitors visitor = new GeneratorVisitors(Readable);
-            return visitor.Visit((dynamic)node, 0);
+            var retStr = "";
+            try
+            {
+                retStr = visitor.Visit((dynamic)node, 0);
+            }
+            catch (ParseException e)
+            {
+
+            }
+            catch (Exception e)
+            {
+                Listener.AddError(new ParseError(
+                    $"Unexpected exception occured during code generation: {e.Message}",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.CodeGeneration));
+            }
+            return retStr;
         }
     }
 }

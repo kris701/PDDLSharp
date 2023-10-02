@@ -34,7 +34,7 @@ namespace PDDLSharp.Contextualisers.Visitors
 
             foreach(var name in allTypes)
             {
-                var target = allParameters.SingleOrDefault(x => x.Name == name.Name);
+                var target = allParameters.FirstOrDefault(x => x.Name == name.Name);
                 if (target != null)
                 {
                     name.Type.Name = target.Type.Name;

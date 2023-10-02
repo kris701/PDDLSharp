@@ -18,6 +18,11 @@ namespace PerformanceTests
             BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
             Console.WriteLine("Done!");
 
+            RunNTimes(100);
+        }
+
+        private static void RunNTimes(int number)
+        {
             //var targetDomain = "benchmarks/airport/p50-domain.pddl";
             //var targetProblem = "benchmarks/airport/p50-airport5MUC-p15.pddl";
             var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
@@ -30,20 +35,30 @@ namespace PerformanceTests
 
             generator.Readable = true;
 
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-            for (int i = 0; i < 200; i++)
+            Stopwatch instanceWatch = new Stopwatch();
+            List<long> times = new List<long>() { 0, 0, 0 };
+            for (int i = 0; i < number; i++)
             {
-                Console.WriteLine($"Parsing... {i}");
+                Console.WriteLine($"Instance {i}");
+                instanceWatch.Start();
                 var decl = parser.Parse(targetDomain, targetProblem);
-                analyser.Analyse(decl);
+                instanceWatch.Stop();
+                times[0] += instanceWatch.ElapsedMilliseconds;
 
+                instanceWatch.Restart();
+                analyser.Analyse(decl);
+                instanceWatch.Stop();
+                times[1] += instanceWatch.ElapsedMilliseconds;
+
+                instanceWatch.Restart();
                 generator.Generate(decl.Domain, "domain.pddl");
                 generator.Generate(decl.Problem, "problem.pddl");
+                instanceWatch.Stop();
+                times[2] += instanceWatch.ElapsedMilliseconds;
             }
-            watch.Stop();
-            Console.WriteLine($"Done! Took {watch.ElapsedMilliseconds}ms");
-            Console.WriteLine($"Avg took {watch.ElapsedMilliseconds/200}ms");
+            Console.WriteLine($"Parsing took         {times[0]}ms in total.\t\tAvg {times[0]/number}ms pr instance.");
+            Console.WriteLine($"Analysing took       {times[1]}ms in total.\t\tAvg {times[1]/number}ms pr instance.");
+            Console.WriteLine($"Code Generation took {times[2]}ms in total.\t\tAvg {times[2]/number}ms pr instance.");
         }
     }
 }

@@ -8,6 +8,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
 {
     public partial class GeneratorVisitors
     {
+        private bool _printType = false;
         private bool _readable = false;
         public GeneratorVisitors(bool readable)
         {

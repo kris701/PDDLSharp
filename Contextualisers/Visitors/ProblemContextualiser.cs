@@ -59,7 +59,7 @@ namespace PDDLSharp.Contextualisers.Visitors
             {
                 for (int i = 0; i < predicate.Arguments.Count; i++)
                 {
-                    var obj = decl.Objs.SingleOrDefault(x => x.Name == predicate.Arguments[i].Name);
+                    var obj = decl.Objs.FirstOrDefault(x => x.Name == predicate.Arguments[i].Name);
                     if (obj != null)
                         predicate.Arguments[i].Type.Name = obj.Type.Name;
                 }
