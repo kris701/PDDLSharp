@@ -46,7 +46,9 @@ namespace PDDLSharp.CodeGenerators.Visitors
         public string Visit(WhenExp node, int indent)
         {
             string retStr = $"{IndentStr(indent)}(when{Environment.NewLine}";
+            _printType = true;
             retStr += $"{Visit((dynamic)node.Condition, indent + 1)}{Environment.NewLine}";
+            _printType = false;
             retStr += $"{Visit((dynamic)node.Effect, indent + 1)}{Environment.NewLine}";
             retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
