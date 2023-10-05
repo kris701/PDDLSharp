@@ -15,7 +15,7 @@ namespace PDDLSharp.Simulators.StateSpace
         public int Cost { get; }
 
         public void Reset();
-        public void Step(string actionName, List<OperatorObject> arguments);
+        public void Step(string actionName);
         public void Step(string actionName, string[] arguments);
     }
 }

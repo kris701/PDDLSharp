@@ -19,45 +19,53 @@ namespace PDDLSharp.Models.Expressions
         public TypeExp(ASTNode node, INode? parent, string name, string superType, HashSet<string> altTypes) : base(node, parent, name)
         {
             SuperType = superType;
+            if (SuperType == "")
+                SuperType = "object";
             SuperTypes = new HashSet<string>();
             foreach (var type in altTypes)
                 SuperTypes.Add(type);
-            SuperTypes.Add(superType);
+            SuperTypes.Add(SuperType);
         }
 
         public TypeExp(INode? parent, string name, string superType, HashSet<string> altTypes) : base(parent, name)
         {
             SuperType = superType;
+            if (SuperType == "")
+                SuperType = "object";
             SuperTypes = new HashSet<string>();
             foreach (var type in altTypes)
                 SuperTypes.Add(type);
-            SuperTypes.Add(superType);
+            SuperTypes.Add(SuperType);
         }
 
         public TypeExp(ASTNode node, INode? parent, string name, string superType) : base(node, parent, name)
         {
             SuperTypes = new HashSet<string>();
             SuperType = superType;
-            SuperTypes.Add(superType);
+            if (SuperType == "")
+                SuperType = "object";
+            SuperTypes.Add(SuperType);
         }
 
         public TypeExp(INode? parent, string name, string superType) : base(parent, name)
         {
             SuperTypes = new HashSet<string>();
             SuperType = superType;
-            SuperTypes.Add(superType);
+            if (SuperType == "")
+                SuperType = "object";
+            SuperTypes.Add(SuperType);
         }
 
         public TypeExp(ASTNode node, INode? parent, string name) : base(node, parent, name)
         {
-            SuperTypes = new HashSet<string>();
-            SuperType = "";
+            SuperTypes = new HashSet<string>() { "object" };
+            SuperType = "object";
         }
 
         public TypeExp(INode? parent, string name) : base(parent, name)
         {
-            SuperTypes = new HashSet<string>();
-            SuperType = "";
+            SuperTypes = new HashSet<string>() { "object" };
+            SuperType = "object";
         }
 
         public bool IsTypeOf(string typeName)

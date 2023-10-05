@@ -12,6 +12,10 @@ namespace PDDLSharp.Simulators.StateSpace
         public string Name {  get; set; }
         public string Type { get; set; }
 
+        public OperatorObject(OperatorObject other) : this(other.Name, other.Type)
+        {
+        }
+
         public OperatorObject(string name) : this (name, "object")
         {
         }
