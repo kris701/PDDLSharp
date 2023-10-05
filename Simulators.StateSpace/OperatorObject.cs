@@ -22,8 +22,8 @@ namespace PDDLSharp.Simulators.StateSpace
 
         public OperatorObject(string name, string type)
         {
-            Name = name;
-            Type = type;
+            Name = name.ToLower();
+            Type = type.ToLower();
             if (Type == "")
                 Type = "object";
         }

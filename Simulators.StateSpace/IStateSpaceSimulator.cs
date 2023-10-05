@@ -14,6 +14,8 @@ namespace PDDLSharp.Simulators.StateSpace
         public HashSet<Operator> State { get; }
         public int Cost { get; }
 
+        public bool Contains(string op, params string[] arguments);
+        public bool Contains(Operator op);
         public void Reset();
         public void Step(string actionName);
         public void Step(string actionName, params string[] arguments);

@@ -14,13 +14,13 @@ namespace PDDLSharp.Simulators.StateSpace
 
         public Operator(string name, List<OperatorObject> arguments)
         {
-            Name = name;
+            Name = name.ToLower();
             Arguments = arguments;
         }
 
         public Operator(string name, params string[] arguments)
         {
-            Name = name;
+            Name = name.ToLower();
             Arguments = new List<OperatorObject>();
             foreach(var arg in arguments)
                 Arguments.Add(new OperatorObject(arg));
@@ -28,7 +28,7 @@ namespace PDDLSharp.Simulators.StateSpace
 
         public Operator(PredicateExp predicate)
         {
-            Name = predicate.Name;
+            Name = predicate.Name.ToLower();
             Arguments = new List<OperatorObject>();
             foreach (var arg in predicate.Arguments)
                 Arguments.Add(new OperatorObject(arg));

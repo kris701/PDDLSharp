@@ -46,6 +46,26 @@ namespace PDDLSharp.Simulators.StateSpace
             return state;
         }
 
+        public bool Contains(Operator op)
+        {
+            return State.Contains(op);
+        }
+
+        public bool Contains(string op, params string[] arguments)
+        {
+            if (Declaration.Problem.Objects != null)
+            {
+                var args = new List<OperatorObject>();
+                foreach (var arg in arguments)
+                {
+                    var obj = Declaration.Problem.Objects.Objs.First(x => x.Name == arg);
+                    args.Add(new OperatorObject(obj));
+                }
+                return Contains(new Operator(op, args));
+            }
+            return false;
+        }
+
         public void Reset()
         {
             Cost = 0;
@@ -61,7 +81,7 @@ namespace PDDLSharp.Simulators.StateSpace
             var args = new List<OperatorObject>();
             foreach (var arg in arguments) 
             {
-                var obj = Declaration.Problem.Objects.Objs.First(x => x.Name == arg);
+                var obj = Declaration.Problem.Objects.Objs.First(x => x.Name == arg.ToLower());
                 args.Add(new OperatorObject(obj));
             }
             Step(actionName, args);
@@ -72,11 +92,6 @@ namespace PDDLSharp.Simulators.StateSpace
         private void Step(string actionName, List<OperatorObject> arguments)
         {
             actionName = actionName.ToLower();
-            foreach (var arg in arguments)
-            {
-                arg.Name = arg.Name.ToLower();
-                arg.Type = arg.Type.ToLower();
-            }
 
             var targetAction = GetTargetAction(actionName);
 
