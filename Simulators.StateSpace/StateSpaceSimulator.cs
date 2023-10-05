@@ -54,7 +54,7 @@ namespace PDDLSharp.Simulators.StateSpace
                 State = GenerateState(Declaration.Problem.Init);
         }
 
-        public void Step(string actionName, string[] arguments)
+        public void Step(string actionName, params string[] arguments)
         {
             if (Declaration.Problem.Objects == null)
                 throw new ArgumentException("Objects not declared in problem");

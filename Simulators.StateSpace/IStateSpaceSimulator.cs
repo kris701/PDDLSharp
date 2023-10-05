@@ -16,6 +16,6 @@ namespace PDDLSharp.Simulators.StateSpace
 
         public void Reset();
         public void Step(string actionName);
-        public void Step(string actionName, string[] arguments);
+        public void Step(string actionName, params string[] arguments);
     }
 }

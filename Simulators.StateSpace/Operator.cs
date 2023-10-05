@@ -18,7 +18,7 @@ namespace PDDLSharp.Simulators.StateSpace
             Arguments = arguments;
         }
 
-        public Operator(string name, string[] arguments)
+        public Operator(string name, params string[] arguments)
         {
             Name = name;
             Arguments = new List<OperatorObject>();
