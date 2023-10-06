@@ -5,8 +5,8 @@
 
 # PDDLSharp
 
-This is a project to make a PDDL parser, contextualiser, analyser, code generator and much more for C#. 
-The parser is fully PDDL 2.2 compatible.
+This is a package to make a PDDL parser, contextualiser, analyser, code generator and much more for C#. 
+The parser is fully PDDL 2.2 compatible. The package can be found through [Nuget](https://www.nuget.org/packages/PDDLSharp/) or the [Git](https://github.com/kris701/PDDLSharp/pkgs/nuget/PDDLSharp) package manager.
 
 ## PDDL Parser
 The PDDL Parser is the main part of PDDLSharp.
@@ -78,8 +78,6 @@ To generate a [Fast Downward](https://www.fast-downward.org/) plan from a `Actio
 IErrorListener listener = new ErrorListener();
 ICodeGenerator<ActionPlan> generator = new FastDownwardPlanGenerator(listener);
 ActionPlan plan = new ActionPlan(...);
-// If you want a "pretty" output, use:
-// generator.Readable = true;
 generator.Generate(plan, "planFile");
 ```
 
