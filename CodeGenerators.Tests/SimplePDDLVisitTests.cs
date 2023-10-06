@@ -8,7 +8,7 @@ using System;
 namespace PDDLSharp.CodeGenerators.Tests
 {
     [TestClass]
-    public class SimpleVisitTests
+    public class SimplePDDLVisitTests
     {
         public static IEnumerable<object[]> GetTestData()
         {
