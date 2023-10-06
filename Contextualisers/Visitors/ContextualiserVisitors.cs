@@ -2,11 +2,6 @@
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Contextualisers.Visitors
 {
@@ -32,7 +27,7 @@ namespace PDDLSharp.Contextualisers.Visitors
             foreach (var target in targets)
                 allTypes.AddRange(target.FindTypes<NameExp>());
 
-            foreach(var name in allTypes)
+            foreach (var name in allTypes)
             {
                 var target = allParameters.FirstOrDefault(x => x.Name == name.Name);
                 if (target != null)

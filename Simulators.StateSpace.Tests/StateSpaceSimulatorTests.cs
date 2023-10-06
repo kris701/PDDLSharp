@@ -144,7 +144,7 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
             // ACT
             simulator.Step("pick", "ball1", "rooma", "left");
             simulator.Step("move", "rooma", "roomb");
-            simulator.Step("drop", "ball1", "roomb", "left" );
+            simulator.Step("drop", "ball1", "roomb", "left");
 
             // ASSERT
             Assert.IsTrue(simulator.State.Contains("at", "ball1", "roomb"));

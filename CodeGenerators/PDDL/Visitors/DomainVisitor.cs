@@ -1,13 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using PDDLSharp.Models.PDDL.Domain;
 
 namespace PDDLSharp.CodeGenerators.Visitors
 {
@@ -34,7 +25,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
                 retStr += $"{Visit(node.Functions, indent + 1)}{Environment.NewLine}";
 
             if (node.Actions != null)
-                foreach(var act in node.Actions)
+                foreach (var act in node.Actions)
                     retStr += $"{Visit(act, indent + 1)}{Environment.NewLine}";
             if (node.Axioms != null)
                 foreach (var axi in node.Axioms)

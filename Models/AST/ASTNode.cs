@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PDDLSharp.Models.AST
+﻿namespace PDDLSharp.Models.AST
 {
     public class ASTNode
     {
@@ -15,14 +9,15 @@ namespace PDDLSharp.Models.AST
         public string OuterContent { get; set; }
         public string InnerContent { get; set; }
         public List<ASTNode> Children { get; set; }
-        public int Count { 
-            get 
+        public int Count
+        {
+            get
             {
                 int count = 0;
                 foreach (var child in Children)
                     count += child.Count;
                 return count + 1;
-            } 
+            }
         }
 
         public ASTNode()

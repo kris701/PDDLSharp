@@ -45,7 +45,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
         }
 
         [TestMethod]
-        [DynamicData (nameof(GetDictionaryData), DynamicDataSourceType.Method)]
+        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
         public void Can_ParseProblems_ParseOnly_STRIPS(string domain, List<string> problems)
         {
             Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");

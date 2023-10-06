@@ -5,13 +5,6 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Tools;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace PDDLSharp.Parsers.Visitors
 {
@@ -118,7 +111,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var str = RemoveNodeType(node.InnerContent, ":types").Trim();
 
                 // In case types are decleared but is empty
-                if (str== "")
+                if (str == "")
                     return newTypesDecl;
 
                 // Initial parse
@@ -129,7 +122,7 @@ namespace PDDLSharp.Parsers.Visitors
                 typesDefSplit.RemoveAll(x => x.Trim() == "");
 
                 string currentSuperType = "";
-                foreach(var typeDef in typesDefSplit)
+                foreach (var typeDef in typesDefSplit)
                 {
                     string newType = "";
                     if (typeDef.Contains(ASTTokens.TypeToken))

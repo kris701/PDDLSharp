@@ -5,13 +5,7 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 [assembly: InternalsVisibleTo("PDDLSharp.Parsers.Tests")]
 namespace PDDLSharp.Parsers.Visitors
@@ -41,44 +35,44 @@ namespace PDDLSharp.Parsers.Visitors
 
         private INode? VisitAs<T>(ASTNode node, INode? parent) where T : INode =>
             // Domain
-            typeof(T) == typeof(DomainDecl)         ? TryVisitDomainDeclNode(node, parent) :
-            typeof(T) == typeof(DomainNameDecl)     ? TryVisitDomainNameNode(node, parent) :
-            typeof(T) == typeof(RequirementsDecl)   ? TryVisitRequirementsNode(node, parent) :
-            typeof(T) == typeof(ExtendsDecl)        ? TryVisitExtendsNode(node, parent) :
-            typeof(T) == typeof(TypesDecl)          ? TryVisitTypesNode(node, parent) :
-            typeof(T) == typeof(ConstantsDecl)      ? TryVisitConstantsNode(node, parent) :
-            typeof(T) == typeof(PredicatesDecl)     ? TryVisitPredicatesNode(node, parent) :
-            typeof(T) == typeof(FunctionsDecl)      ? TryVisitFunctionsNode(node, parent) :
-            typeof(T) == typeof(TimelessDecl)       ? TryVisitTimelessNode(node, parent) :
-            typeof(T) == typeof(ActionDecl)         ? TryVisitActionNode(node, parent) :
+            typeof(T) == typeof(DomainDecl) ? TryVisitDomainDeclNode(node, parent) :
+            typeof(T) == typeof(DomainNameDecl) ? TryVisitDomainNameNode(node, parent) :
+            typeof(T) == typeof(RequirementsDecl) ? TryVisitRequirementsNode(node, parent) :
+            typeof(T) == typeof(ExtendsDecl) ? TryVisitExtendsNode(node, parent) :
+            typeof(T) == typeof(TypesDecl) ? TryVisitTypesNode(node, parent) :
+            typeof(T) == typeof(ConstantsDecl) ? TryVisitConstantsNode(node, parent) :
+            typeof(T) == typeof(PredicatesDecl) ? TryVisitPredicatesNode(node, parent) :
+            typeof(T) == typeof(FunctionsDecl) ? TryVisitFunctionsNode(node, parent) :
+            typeof(T) == typeof(TimelessDecl) ? TryVisitTimelessNode(node, parent) :
+            typeof(T) == typeof(ActionDecl) ? TryVisitActionNode(node, parent) :
             typeof(T) == typeof(DurativeActionDecl) ? TryVisitDurativeActionNode(node, parent) :
-            typeof(T) == typeof(AxiomDecl)          ? TryVisitAxiomNode(node, parent) :
-            typeof(T) == typeof(DerivedDecl)        ? TryVisitDerivedNode(node, parent) :
+            typeof(T) == typeof(AxiomDecl) ? TryVisitAxiomNode(node, parent) :
+            typeof(T) == typeof(DerivedDecl) ? TryVisitDerivedNode(node, parent) :
 
             // Problem
-            typeof(T) == typeof(ProblemDecl)        ? TryVisitProblemDeclNode(node, parent) :
-            typeof(T) == typeof(ProblemNameDecl)    ? TryVisitProblemNameNode(node, parent) :
-            typeof(T) == typeof(DomainNameRefDecl)  ? TryVisitDomainRefNameNode(node, parent) :
-            typeof(T) == typeof(SituationDecl)      ? TryVisitSituationNode(node, parent) :
-            typeof(T) == typeof(ObjectsDecl)        ? TryVisitObjectsNode(node, parent) :
-            typeof(T) == typeof(InitDecl)           ? TryVisitInitsNode(node, parent) :
-            typeof(T) == typeof(GoalDecl)           ? TryVisitGoalNode(node, parent) :
-            typeof(T) == typeof(MetricDecl)         ? TryVisitMetricNode(node, parent) :
+            typeof(T) == typeof(ProblemDecl) ? TryVisitProblemDeclNode(node, parent) :
+            typeof(T) == typeof(ProblemNameDecl) ? TryVisitProblemNameNode(node, parent) :
+            typeof(T) == typeof(DomainNameRefDecl) ? TryVisitDomainRefNameNode(node, parent) :
+            typeof(T) == typeof(SituationDecl) ? TryVisitSituationNode(node, parent) :
+            typeof(T) == typeof(ObjectsDecl) ? TryVisitObjectsNode(node, parent) :
+            typeof(T) == typeof(InitDecl) ? TryVisitInitsNode(node, parent) :
+            typeof(T) == typeof(GoalDecl) ? TryVisitGoalNode(node, parent) :
+            typeof(T) == typeof(MetricDecl) ? TryVisitMetricNode(node, parent) :
 
             // Exp
-            typeof(T) == typeof(WhenExp)            ? TryVisitWhenNode(node, parent) :
-            typeof(T) == typeof(ForAllExp)          ? TryVisitForAllNode(node, parent) :
-            typeof(T) == typeof(TimedLiteralExp)    ? TryVisitTimedLiteralNode(node, parent) :
-            typeof(T) == typeof(LiteralExp)         ? TryVisitLiteralNode(node, parent) :
-            typeof(T) == typeof(ExistsExp)          ? TryVisitExistsNode(node, parent) :
-            typeof(T) == typeof(ImplyExp)           ? TryVisitImplyNode(node, parent) :
-            typeof(T) == typeof(AndExp)             ? TryVisitAndNode(node, parent) :
-            typeof(T) == typeof(OrExp)              ? TryVisitOrNode(node, parent) :
-            typeof(T) == typeof(NotExp)             ? TryVisitNotNode(node, parent) :
-            typeof(T) == typeof(PredicateExp)       ? TryVisitPredicateNode(node, parent) :
-            typeof(T) == typeof(NumericExp)         ? TryVisitNumericNode(node, parent) :
-            typeof(T) == typeof(NameExp)            ? TryVisitNameNode(node, parent) :
-            typeof(T) == typeof(IExp)               ? VisitExp(node, parent) :
+            typeof(T) == typeof(WhenExp) ? TryVisitWhenNode(node, parent) :
+            typeof(T) == typeof(ForAllExp) ? TryVisitForAllNode(node, parent) :
+            typeof(T) == typeof(TimedLiteralExp) ? TryVisitTimedLiteralNode(node, parent) :
+            typeof(T) == typeof(LiteralExp) ? TryVisitLiteralNode(node, parent) :
+            typeof(T) == typeof(ExistsExp) ? TryVisitExistsNode(node, parent) :
+            typeof(T) == typeof(ImplyExp) ? TryVisitImplyNode(node, parent) :
+            typeof(T) == typeof(AndExp) ? TryVisitAndNode(node, parent) :
+            typeof(T) == typeof(OrExp) ? TryVisitOrNode(node, parent) :
+            typeof(T) == typeof(NotExp) ? TryVisitNotNode(node, parent) :
+            typeof(T) == typeof(PredicateExp) ? TryVisitPredicateNode(node, parent) :
+            typeof(T) == typeof(NumericExp) ? TryVisitNumericNode(node, parent) :
+            typeof(T) == typeof(NameExp) ? TryVisitNameNode(node, parent) :
+            typeof(T) == typeof(IExp) ? VisitExp(node, parent) :
 
             // Default
             null;

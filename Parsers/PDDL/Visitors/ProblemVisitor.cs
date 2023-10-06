@@ -3,11 +3,6 @@ using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Parsers.Visitors
 {
@@ -158,7 +153,7 @@ namespace PDDLSharp.Parsers.Visitors
                     newMetric.MetricExp = VisitExp(node.Children[0], newMetric);
                     return newMetric;
                 }
-                else 
+                else
                     Listener.AddError(new PDDLSharpError(
                         $"Invalid metric node type '{metricType}'. Allowed types are: {MetricNodeTypesStr()}",
                         ParseErrorType.Error,

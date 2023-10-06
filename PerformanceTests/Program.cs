@@ -1,10 +1,8 @@
 ﻿using PDDLSharp.Analysers;
 using PDDLSharp.CodeGenerators;
-using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Parsers;
-using System;
 using System.Diagnostics;
 
 namespace PerformanceTests
@@ -55,9 +53,9 @@ namespace PerformanceTests
                 instanceWatch.Stop();
                 times[2] += instanceWatch.ElapsedMilliseconds;
             }
-            Console.WriteLine($"Parsing took         {times[0]}ms in total.\t\tAvg {times[0]/number}ms pr instance.");
-            Console.WriteLine($"Analysing took       {times[1]}ms in total.\t\tAvg {times[1]/number}ms pr instance.");
-            Console.WriteLine($"Code Generation took {times[2]}ms in total.\t\tAvg {times[2]/number}ms pr instance.");
+            Console.WriteLine($"Parsing took         {times[0]}ms in total.\t\tAvg {times[0] / number}ms pr instance.");
+            Console.WriteLine($"Analysing took       {times[1]}ms in total.\t\tAvg {times[1] / number}ms pr instance.");
+            Console.WriteLine($"Code Generation took {times[2]}ms in total.\t\tAvg {times[2] / number}ms pr instance.");
         }
     }
 }

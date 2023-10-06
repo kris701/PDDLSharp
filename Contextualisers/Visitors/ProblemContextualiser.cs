@@ -1,12 +1,5 @@
-﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL.Expressions;
+﻿using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Contextualisers.Visitors
 {
@@ -31,7 +24,7 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(DomainNameRefDecl node)
         {
-            
+
         }
 
         #endregion
@@ -54,7 +47,7 @@ namespace PDDLSharp.Contextualisers.Visitors
         private void DecorateObjects(ObjectsDecl decl)
         {
             var allPredicates = Declaration.Problem.FindTypes<PredicateExp>();
-            foreach(var predicate in allPredicates)
+            foreach (var predicate in allPredicates)
             {
                 for (int i = 0; i < predicate.Arguments.Count; i++)
                 {

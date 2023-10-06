@@ -14,7 +14,7 @@ namespace PDDLSharp.Parsers.Tests.PositionTestsData
         public int Layer { get; set; } = 0;
         public List<PositionNode> Children { get; set; } = new List<PositionNode>();
         public PositionNode() { }
-        public PositionNode(string line) 
+        public PositionNode(string line)
         {
             var split = line.Split(':');
             Start = Int32.Parse(split[0]);

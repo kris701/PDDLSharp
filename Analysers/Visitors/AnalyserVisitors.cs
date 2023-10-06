@@ -2,12 +2,6 @@
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace PDDLSharp.Analysers.Visitors
 {
@@ -65,7 +59,7 @@ namespace PDDLSharp.Analysers.Visitors
 
             foreach (var item in node)
             {
-                if (item is PredicateExp pred && 
+                if (item is PredicateExp pred &&
                     !predicates.Any(x => x.Name == pred.Name))
                     Listener.AddError(new PDDLSharpError(
                         $"Used of undeclared predicate '{pred.Name}'",
@@ -90,7 +84,7 @@ namespace PDDLSharp.Analysers.Visitors
         private void CheckForUnusedParameters(ParameterExp parameters, IWalkable checkIn)
         {
             var allNodes = checkIn.FindTypes<NameExp>();
-            foreach(var param in parameters.Values)
+            foreach (var param in parameters.Values)
                 if (!allNodes.Any(x => x.Name == param.Name && param != x))
                     Listener.AddError(new PDDLSharpError(
                         $"Unused parameter detected '{param.Name}'",

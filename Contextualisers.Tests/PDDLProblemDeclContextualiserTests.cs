@@ -38,7 +38,7 @@ namespace PDDLSharp.Contextualisers.Tests
             contextualiser.Contexturalise(new PDDLDecl(new DomainDecl(), decl));
 
             // ASSERT
-            foreach(var init in decl.Init.Predicates)
+            foreach (var init in decl.Init.Predicates)
                 Assert.IsTrue(ContextualiserTestsHelpers.AreAllNameExpOfTypeOrSubType(init, argName, expectedType));
             Assert.IsTrue(ContextualiserTestsHelpers.AreAllNameExpOfTypeOrSubType(decl.Goal.GoalExp, argName, expectedType));
         }

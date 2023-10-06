@@ -1,11 +1,4 @@
-﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL.Problem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using PDDLSharp.Models.PDDL.Problem;
 
 namespace PDDLSharp.CodeGenerators.Visitors
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PDDLSharp.ErrorListeners
+﻿namespace PDDLSharp.ErrorListeners
 {
     public class ErrorListener : IErrorListener
     {
@@ -33,7 +27,7 @@ namespace PDDLSharp.ErrorListeners
         public int CountErrorsOfTypeOrAbove(ParseErrorType type)
         {
             int count = 0;
-            foreach(var error in Errors)
+            foreach (var error in Errors)
                 if (error.Type >= type)
                     count++;
             return count;

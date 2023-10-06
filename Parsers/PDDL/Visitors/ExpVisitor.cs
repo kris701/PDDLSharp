@@ -3,12 +3,6 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace PDDLSharp.Parsers.Visitors
 {
@@ -163,8 +157,8 @@ namespace PDDLSharp.Parsers.Visitors
 
         public IExp? TryVisitPredicateNode(ASTNode node, INode? parent)
         {
-            if (node.OuterContent.Contains('(') && 
-                node.OuterContent.Contains(')') && 
+            if (node.OuterContent.Contains('(') &&
+                node.OuterContent.Contains(')') &&
                 node.InnerContent != "" &&
                 DoesNodeHaveSpecificChildCount(node, "predicate", 0))
             {
@@ -186,8 +180,8 @@ namespace PDDLSharp.Parsers.Visitors
 
         public IExp? TryVisitNumericNode(ASTNode node, INode? parent)
         {
-            if (node.OuterContent.Contains('(') && 
-                node.OuterContent.Contains(')') && 
+            if (node.OuterContent.Contains('(') &&
+                node.OuterContent.Contains(')') &&
                 node.InnerContent != "" &&
                 node.Children.Count >= 1)
             {

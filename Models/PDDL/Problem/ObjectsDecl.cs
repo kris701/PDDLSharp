@@ -1,11 +1,4 @@
 ﻿using PDDLSharp.Models.AST;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PDDLSharp.Tools;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Problem

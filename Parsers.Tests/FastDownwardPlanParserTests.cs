@@ -1,12 +1,12 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
+using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers.Tests.PositionTestsData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDLSharp.Models.Plans;
 
 namespace PDDLSharp.Parsers.Tests
 {
@@ -28,7 +28,7 @@ namespace PDDLSharp.Parsers.Tests
             var res = parser.Parse(testFile);
 
             // ASSERT
-            Assert.AreEqual(expectedActionCount, res.Plan.Count);            
+            Assert.AreEqual(expectedActionCount, res.Plan.Count);
         }
 
         [TestMethod]

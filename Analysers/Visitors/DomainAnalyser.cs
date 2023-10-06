@@ -1,13 +1,7 @@
-﻿using Microsoft.VisualBasic;
-using PDDLSharp.ErrorListeners;
+﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Analysers.Visitors
 {
@@ -69,7 +63,7 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(RequirementsDecl node)
         {
             CheckForUniqueNames(
-                node.Requirements, 
+                node.Requirements,
                 (node) => new PDDLSharpError(
                     $"A requirement have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Message,
@@ -210,7 +204,7 @@ namespace PDDLSharp.Analysers.Visitors
 
         public void Visit(ActionDecl node)
         {
-            
+
             CheckForUndeclaredParameters(node.Parameters, new List<INode>()
             {
                 node.Preconditions,
@@ -226,7 +220,7 @@ namespace PDDLSharp.Analysers.Visitors
 
         public void Visit(DurativeActionDecl node)
         {
-            CheckForUndeclaredParameters(node.Parameters, 
+            CheckForUndeclaredParameters(node.Parameters,
                 new List<INode>()
                 {
                     node.Condition,

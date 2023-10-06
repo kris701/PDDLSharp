@@ -42,7 +42,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             var exp = new ParserVisitor(null).VisitExp(node, null);
@@ -60,7 +60,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitLiteralNode(node, null);
@@ -77,7 +77,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitTimedLiteralNode(node, null);
@@ -96,7 +96,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitTimedLiteralNode(node, null);
 
@@ -112,7 +112,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitImplyNode(node, null);
@@ -130,7 +130,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -149,7 +149,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -168,7 +168,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitExistsNode(node, null);
@@ -184,7 +184,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -203,7 +203,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -222,7 +222,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitForAllNode(node, null);
@@ -239,7 +239,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -259,7 +259,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -278,7 +278,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitWhenNode(node, null);
@@ -294,7 +294,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -314,7 +314,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -333,7 +333,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitAndNode(node, null);
@@ -368,7 +368,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -394,7 +394,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitNumericNode(node, null);
@@ -410,7 +410,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitOrNode(node, null);
@@ -427,7 +427,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -445,7 +445,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitNotNode(node, null);
@@ -461,7 +461,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -480,7 +480,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
@@ -499,7 +499,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitPredicateNode(node, null);
@@ -517,7 +517,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitPredicateNode(node, null);
@@ -536,7 +536,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitPredicateNode(node, null);
@@ -562,7 +562,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitPredicateNode(node, null);
@@ -584,7 +584,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitNameNode(node, null);
@@ -601,7 +601,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitNameNode(node, null);
@@ -620,7 +620,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         {
             // ARRANGE
             var node = GetParsed(toParse);
-            
+
 
             // ACT
             IExp? exp = new ParserVisitor(null).TryVisitNameNode(node, null);

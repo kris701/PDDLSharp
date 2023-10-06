@@ -1,12 +1,4 @@
-﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.CodeGenerators.Visitors
 {
@@ -108,7 +100,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
         {
             var numericValue = "";
             if (node.Arg2 is LiteralExp)
-                numericValue = $"{Visit((dynamic)node.Arg2, 0)}".Replace("(","").Replace(")","").Trim();
+                numericValue = $"{Visit((dynamic)node.Arg2, 0)}".Replace("(", "").Replace(")", "").Trim();
             else
                 numericValue = $"{Visit((dynamic)node.Arg2, 0)}".Trim();
             return $"{IndentStr(indent)}({node.Name} {Visit((dynamic)node.Arg1, 0)} {numericValue})";
@@ -138,7 +130,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
             string retStr = $"{IndentStr(indent)}({node.Name}";
             foreach (var arg in node.Arguments)
             {
-                var argStr = $"{Visit((dynamic)arg, 0)}".Replace("(","").Replace(")","");
+                var argStr = $"{Visit((dynamic)arg, 0)}".Replace("(", "").Replace(")", "");
                 retStr += $" {argStr}";
             }
             retStr += ")";

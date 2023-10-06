@@ -2,11 +2,6 @@
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Analysers.Visitors
 {
@@ -83,12 +78,12 @@ namespace PDDLSharp.Analysers.Visitors
         {
             if (Declaration.Domain.Name != null &&
                 node.Name != Declaration.Domain.Name.Name)
-                    Listener.AddError(new PDDLSharpError(
-                        $"Domain name referenced in problem file ('{node.Name}') does not match the actual domain name ('{Declaration.Domain.Name.Name}')!",
-                        ParseErrorType.Warning,
-                        ParseErrorLevel.Analyser,
-                        node.Line,
-                        node.Start));
+                Listener.AddError(new PDDLSharpError(
+                    $"Domain name referenced in problem file ('{node.Name}') does not match the actual domain name ('{Declaration.Domain.Name.Name}')!",
+                    ParseErrorType.Warning,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
         }
 
         #endregion
@@ -114,7 +109,7 @@ namespace PDDLSharp.Analysers.Visitors
                     node.Start));
 
             CheckForUniqueNames(
-                node.Objs, 
+                node.Objs,
                 (node) => new PDDLSharpError(
                     $"An object have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
@@ -234,7 +229,7 @@ namespace PDDLSharp.Analysers.Visitors
         private void IsMetricusingOnlyNumericFluents(MetricDecl node)
         {
             var allNodes = node.MetricExp.FindTypes<INode>();
-            foreach(var exp in allNodes)
+            foreach (var exp in allNodes)
             {
                 if (exp is not PredicateExp && exp is not NumericExp)
                     Listener.AddError(new PDDLSharpError(
