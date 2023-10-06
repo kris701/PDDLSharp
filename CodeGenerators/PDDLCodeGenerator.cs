@@ -29,6 +29,8 @@ namespace PDDLSharp.CodeGenerators
             try
             {
                 retStr = visitor.Visit((dynamic)node, 0);
+                while (retStr.Contains($"{Environment.NewLine}{Environment.NewLine}"))
+                    retStr = retStr.Replace($"{Environment.NewLine}{Environment.NewLine}", Environment.NewLine);
             }
             catch (ParseException e)
             {

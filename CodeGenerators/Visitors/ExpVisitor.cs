@@ -36,7 +36,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
                 retStr += $"{IndentStr(indent)})";
             }
             else if (node.Children.Count == 1)
-                retStr += $" {Visit((dynamic)node.Children[0], indent + 1)}){Environment.NewLine}";
+                retStr += $" {Visit((dynamic)node.Children[0], 0)}){Environment.NewLine}";
             else if (node.Children.Count == 0)
                 retStr += $"){Environment.NewLine}";
 
@@ -66,7 +66,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
             string retStr = "";
             foreach (var type in node.Values)
                 retStr += $" {Visit(type, 0)}".Replace("(", "").Replace(")", "");
-            return $"({retStr})";
+            return $"({retStr.Trim()})";
         }
 
         public string Visit(ForAllExp node, int indent)
@@ -91,14 +91,16 @@ namespace PDDLSharp.CodeGenerators.Visitors
         public string Visit(NotExp node, int indent)
         {
             string retStr = $"{IndentStr(indent)}(not";
-            if (node.Child is IWalkable)
+            if (node.Child is PredicateExp)
+            {
+                retStr += $" {Visit((dynamic)node.Child, 0)})";
+            }
+            else
             {
                 retStr += Environment.NewLine;
                 retStr += $"{Visit((dynamic)node.Child, indent + 1)}{Environment.NewLine}";
                 retStr += $"{IndentStr(indent)})";
             }
-            else
-                retStr += $" {Visit((dynamic)node.Child, indent + 1)})";
             return retStr;
         }
 
