@@ -11,11 +11,15 @@ namespace PDDLSharp.Models.Problem
     public class DomainNameRefDecl : BaseNamedNode, IDecl
     {
 
-        public DomainNameRefDecl(ASTNode node, INode? parent, string name) : base(node, parent, name)
+        public DomainNameRefDecl(ASTNode node, INode parent, string name) : base(node, parent, name)
         {
         }
 
-        public DomainNameRefDecl(INode? parent, string name) : base(parent, name)
+        public DomainNameRefDecl(INode parent, string name) : base(parent, name)
+        {
+        }
+
+        public DomainNameRefDecl(string name) : base(name)
         {
         }
 

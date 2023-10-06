@@ -16,7 +16,7 @@ namespace PDDLSharp.Models.Expressions
         // This is the set of alternative supertypes (inherited types)
         public HashSet<string> SuperTypes { get; set; }
 
-        public TypeExp(ASTNode node, INode? parent, string name, string superType, HashSet<string> altTypes) : base(node, parent, name)
+        public TypeExp(ASTNode node, INode parent, string name, string superType, HashSet<string> altTypes) : base(node, parent, name)
         {
             SuperType = superType;
             if (SuperType == "")
@@ -27,7 +27,18 @@ namespace PDDLSharp.Models.Expressions
             SuperTypes.Add(SuperType);
         }
 
-        public TypeExp(INode? parent, string name, string superType, HashSet<string> altTypes) : base(parent, name)
+        public TypeExp(INode parent, string name, string superType, HashSet<string> altTypes) : base(parent, name)
+        {
+            SuperType = superType;
+            if (SuperType == "")
+                SuperType = "object";
+            SuperTypes = new HashSet<string>();
+            foreach (var type in altTypes)
+                SuperTypes.Add(type);
+            SuperTypes.Add(SuperType);
+        }
+
+        public TypeExp(string name, string superType, HashSet<string> altTypes) : base(name)
         {
             SuperType = superType;
             if (SuperType == "")
@@ -40,32 +51,50 @@ namespace PDDLSharp.Models.Expressions
 
         public TypeExp(ASTNode node, INode? parent, string name, string superType) : base(node, parent, name)
         {
-            SuperTypes = new HashSet<string>();
             SuperType = superType;
             if (SuperType == "")
                 SuperType = "object";
+            SuperTypes = new HashSet<string>();
             SuperTypes.Add(SuperType);
         }
 
         public TypeExp(INode? parent, string name, string superType) : base(parent, name)
         {
-            SuperTypes = new HashSet<string>();
             SuperType = superType;
             if (SuperType == "")
                 SuperType = "object";
+            SuperTypes = new HashSet<string>();
             SuperTypes.Add(SuperType);
         }
 
-        public TypeExp(ASTNode node, INode? parent, string name) : base(node, parent, name)
+        public TypeExp(string name, string superType) : base(name)
         {
-            SuperTypes = new HashSet<string>() { "object" };
-            SuperType = "object";
+            SuperType = superType;
+            if (SuperType == "")
+                SuperType = "object";
+            SuperTypes = new HashSet<string>();
+            SuperTypes.Add(SuperType);
         }
 
-        public TypeExp(INode? parent, string name) : base(parent, name)
+        public TypeExp(ASTNode node, INode parent, string name) : base(node, parent, name)
         {
-            SuperTypes = new HashSet<string>() { "object" };
             SuperType = "object";
+            SuperTypes = new HashSet<string>();
+            SuperTypes.Add(SuperType);
+        }
+
+        public TypeExp(INode parent, string name) : base(parent, name)
+        {
+            SuperType = "object";
+            SuperTypes = new HashSet<string>();
+            SuperTypes.Add(SuperType);
+        }
+
+        public TypeExp(string name) : base(name)
+        {
+            SuperType = "object";
+            SuperTypes = new HashSet<string>();
+            SuperTypes.Add(SuperType);
         }
 
         public TypeExp(TypeExp other) : base(other.Name)

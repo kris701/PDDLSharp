@@ -13,14 +13,24 @@ namespace PDDLSharp.Models.Expressions
     {
         public List<IExp> Children { get; set; }
 
-        public AndExp(ASTNode node, INode? parent, List<IExp> children) : base(node, parent)
+        public AndExp(ASTNode node, INode parent, List<IExp> children) : base(node, parent)
         {
             Children = children;
         }
 
-        public AndExp(INode? parent, List<IExp> children) : base(parent)
+        public AndExp(INode parent, List<IExp> children) : base(parent)
         {
             Children = children;
+        }
+
+        public AndExp(List<IExp> children) : base()
+        {
+            Children = children;
+        }
+
+        public AndExp() : base()
+        {
+            Children = new List<IExp>();
         }
 
         public override int GetHashCode()

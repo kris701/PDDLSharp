@@ -12,13 +12,19 @@ namespace PDDLSharp.Models.Expressions
         public IExp Antecedent { get; set; }
         public IExp Consequent { get; set; }
 
-        public ImplyExp(ASTNode node, INode? parent, IExp antecedent, IExp consequent) : base(node, parent)
+        public ImplyExp(ASTNode node, INode parent, IExp antecedent, IExp consequent) : base(node, parent)
         {
             Antecedent = antecedent;
             Consequent = consequent;
         }
 
-        public ImplyExp(INode? parent, IExp antecedent, IExp Consequent) : base(parent)
+        public ImplyExp(INode parent, IExp antecedent, IExp Consequent) : base(parent)
+        {
+            Antecedent = antecedent;
+            this.Consequent = Consequent;
+        }
+
+        public ImplyExp(IExp antecedent, IExp Consequent) : base()
         {
             Antecedent = antecedent;
             this.Consequent = Consequent;

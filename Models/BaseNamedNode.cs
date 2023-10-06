@@ -11,12 +11,12 @@ namespace PDDLSharp.Models
     {
         public string Name { get; set; }
 
-        protected BaseNamedNode(ASTNode node, INode? parent, string name) : base(node, parent)
+        protected BaseNamedNode(ASTNode node, INode parent, string name) : base(node, parent)
         {
             Name = name;
         }
 
-        protected BaseNamedNode(INode? parent, string name) : base(parent)
+        protected BaseNamedNode(INode parent, string name) : base(parent)
         {
             Name = name;
         }

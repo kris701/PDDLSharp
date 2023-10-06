@@ -15,14 +15,21 @@ namespace PDDLSharp.Models.Domain
         public IExp Preconditions { get; set; }
         public IExp Effects { get; set; }
 
-        public ActionDecl(ASTNode node, INode? parent, string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(node, parent, name)
+        public ActionDecl(ASTNode node, INode parent, string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(node, parent, name)
         {
             Parameters = parameters;
             Preconditions = preconditions;
             Effects = effects;
         }
 
-        public ActionDecl(INode? parent, string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(parent, name)
+        public ActionDecl(INode parent, string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(parent, name)
+        {
+            Parameters = parameters;
+            Preconditions = preconditions;
+            Effects = effects;
+        }
+
+        public ActionDecl(string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(name)
         {
             Parameters = parameters;
             Preconditions = preconditions;

@@ -20,7 +20,7 @@ namespace PDDLSharp.CodeGenerators.Tests
             };
             yield return new object[]
             {
-                new NameExp(null, "abc", new TypeExp(null, "type")),
+                new NameExp(null, "abc", new TypeExp("type")),
                 "(abc)"
             };
 
@@ -43,7 +43,7 @@ namespace PDDLSharp.CodeGenerators.Tests
                 {
                     new PredicateExp(null, "name", new List<NameExp>()
                     {
-                        new NameExp(null, "?a", new TypeExp(null, "typea")),
+                        new NameExp(null, "?a", new TypeExp("typea")),
                         new NameExp(null, "?b")
                     })
                 }),
@@ -55,8 +55,8 @@ namespace PDDLSharp.CodeGenerators.Tests
                 {
                     new PredicateExp(null, "name", new List<NameExp>()
                     {
-                        new NameExp(null, "?a", new TypeExp(null, "typea")),
-                        new NameExp(null, "?b", new TypeExp(null, "typeb"))
+                        new NameExp(null, "?a", new TypeExp("typea")),
+                        new NameExp(null, "?b", new TypeExp("typeb"))
                     })
                 }),
                 "(:predicates(name ?a - typea ?b - typeb))"

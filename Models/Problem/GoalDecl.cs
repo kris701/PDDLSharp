@@ -13,12 +13,17 @@ namespace PDDLSharp.Models.Problem
     {
         public IExp GoalExp { get; set; }
 
-        public GoalDecl(ASTNode node, INode? parent, IExp goalExp) : base(node, parent)
+        public GoalDecl(ASTNode node, INode parent, IExp goalExp) : base(node, parent)
         {
             GoalExp = goalExp;
         }
 
-        public GoalDecl(INode? parent, IExp goalExp) : base(parent)
+        public GoalDecl(INode parent, IExp goalExp) : base(parent)
+        {
+            GoalExp = goalExp;
+        }
+
+        public GoalDecl(IExp goalExp) : base()
         {
             GoalExp = goalExp;
         }

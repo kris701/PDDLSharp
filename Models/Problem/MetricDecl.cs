@@ -13,13 +13,19 @@ namespace PDDLSharp.Models.Problem
         public IExp MetricExp { get; set; }
         public string MetricType { get; set; }
 
-        public MetricDecl(ASTNode node, INode? parent, string metricType, IExp metricExp) : base(node, parent)
+        public MetricDecl(ASTNode node, INode parent, string metricType, IExp metricExp) : base(node, parent)
         {
             MetricType = metricType;
             MetricExp = metricExp;
         }
 
-        public MetricDecl(INode? parent, string metricType, IExp metricExp) : base(parent)
+        public MetricDecl(INode parent, string metricType, IExp metricExp) : base(parent)
+        {
+            MetricType = metricType;
+            MetricExp = metricExp;
+        }
+
+        public MetricDecl(string metricType, IExp metricExp) : base()
         {
             MetricType = metricType;
             MetricExp = metricExp;

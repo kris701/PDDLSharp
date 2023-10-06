@@ -13,13 +13,19 @@ namespace PDDLSharp.Models.Domain
         public PredicateExp Predicate { get; set; }
         public IExp Expression { get; set; }
 
-        public DerivedDecl(ASTNode node, INode? parent, PredicateExp predicate, IExp expression) : base(node, parent)
+        public DerivedDecl(ASTNode node, INode parent, PredicateExp predicate, IExp expression) : base(node, parent)
         {
             Predicate = predicate;
             Expression = expression;
         }
 
-        public DerivedDecl(INode? parent, PredicateExp predicte, IExp expression) : base(parent)
+        public DerivedDecl(INode parent, PredicateExp predicte, IExp expression) : base(parent)
+        {
+            Predicate = predicte;
+            Expression = expression;
+        }
+
+        public DerivedDecl(PredicateExp predicte, IExp expression) : base()
         {
             Predicate = predicte;
             Expression = expression;

@@ -12,13 +12,19 @@ namespace PDDLSharp.Models.Expressions
         public IExp Condition { get; set; }
         public IExp Effect { get; set; }
 
-        public WhenExp(ASTNode node, INode? parent, IExp condition, IExp effect) : base(node, parent)
+        public WhenExp(ASTNode node, INode parent, IExp condition, IExp effect) : base(node, parent)
         {
             Condition = condition;
             Effect = effect;
         }
 
-        public WhenExp(INode? parent, IExp condition, IExp effect) : base(parent)
+        public WhenExp(INode parent, IExp condition, IExp effect) : base(parent)
+        {
+            Condition = condition;
+            Effect = effect;
+        }
+
+        public WhenExp(IExp condition, IExp effect) : base()
         {
             Condition = condition;
             Effect = effect;

@@ -13,14 +13,24 @@ namespace PDDLSharp.Models.Expressions
     {
         public List<NameExp> Values { get; set; }
 
-        public ParameterExp(ASTNode node, INode? parent, List<NameExp> values) : base(node, parent)
+        public ParameterExp(ASTNode node, INode parent, List<NameExp> values) : base(node, parent)
         {
             Values = values;
         }
 
-        public ParameterExp(INode? parent, List<NameExp> values) : base(parent)
+        public ParameterExp(INode parent, List<NameExp> values) : base(parent)
         {
             Values = values;
+        }
+
+        public ParameterExp(List<NameExp> values) : base()
+        {
+            Values = values;
+        }
+
+        public ParameterExp() : base()
+        {
+            Values = new List<NameExp>();
         }
 
         public override int GetHashCode()

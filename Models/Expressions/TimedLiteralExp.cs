@@ -12,13 +12,19 @@ namespace PDDLSharp.Models.Expressions
         public int Value { get; set; }
         public IExp Literal { get; set; }
 
-        public TimedLiteralExp(ASTNode node, INode? parent, int value, IExp literal) : base(node, parent)
+        public TimedLiteralExp(ASTNode node, INode parent, int value, IExp literal) : base(node, parent)
         {
             Value = value;
             Literal = literal;
         }
 
-        public TimedLiteralExp(INode? parent, int value, IExp literal) : base(parent)
+        public TimedLiteralExp(INode parent, int value, IExp literal) : base(parent)
+        {
+            Value = value;
+            Literal = literal;
+        }
+
+        public TimedLiteralExp(int value, IExp literal) : base()
         {
             Value = value;
             Literal = literal;
