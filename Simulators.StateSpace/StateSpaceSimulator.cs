@@ -170,6 +170,16 @@ namespace PDDLSharp.Simulators.StateSpace
             return returnList;
         }
 
+        private Dictionary<string, NameExp> CopyDict(Dictionary<string, NameExp> from)
+        {
+            Dictionary<string, NameExp> newDict = new Dictionary<string, NameExp>();
+
+            foreach (var key in from.Keys)
+                newDict.Add(key, new NameExp(from[key]));
+
+            return newDict;
+        }
+
         private bool IsAllPredicatesTrue(INode node, Dictionary<string, NameExp> dict, bool isNegative)
         {
             if (node is PredicateExp predicate)
@@ -211,16 +221,6 @@ namespace PDDLSharp.Simulators.StateSpace
             }
 
             return newObjects;
-        }
-
-        private Dictionary<string, NameExp> CopyDict(Dictionary<string, NameExp> from)
-        {
-            Dictionary<string, NameExp> newDict = new Dictionary<string, NameExp>();
-
-            foreach (var key in from.Keys)
-                newDict.Add(key, new NameExp(from[key]));
-
-            return newDict;
         }
     }
 }
