@@ -26,28 +26,28 @@ namespace PDDLSharp.Analysers.Visitors
         private void CheckForBasicDomain(DomainDecl domain)
         {
             if (domain.Predicates == null)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing predicates declaration.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Start));
             if (domain.Predicates != null && domain.Predicates.Predicates.Count == 0)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"No predicates defined.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Start));
             if (domain.Actions == null)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Start));
             if (domain.Actions != null && domain.Actions.Count == 0)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
@@ -70,7 +70,7 @@ namespace PDDLSharp.Analysers.Visitors
         {
             CheckForUniqueNames(
                 node.Requirements, 
-                (node) => new ParseError(
+                (node) => new PDDLSharpError(
                     $"A requirement have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
@@ -95,7 +95,7 @@ namespace PDDLSharp.Analysers.Visitors
         {
             CheckForUniqueNames(
                 node.Items,
-                (node) => new ParseError(
+                (node) => new PDDLSharpError(
                     $"A Timeless predicate have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
@@ -111,7 +111,7 @@ namespace PDDLSharp.Analysers.Visitors
         {
             CheckForUniqueNames(
                 node.Types,
-                (node) => new ParseError(
+                (node) => new PDDLSharpError(
                     $"A type have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
@@ -128,7 +128,7 @@ namespace PDDLSharp.Analysers.Visitors
             foreach (var type in node.Types)
             {
                 if (OnlyOne(allTypes, type.Name))
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Unused type detected '{type.Name}'",
                         ParseErrorType.Message,
                         ParseErrorLevel.Analyser,
@@ -145,7 +145,7 @@ namespace PDDLSharp.Analysers.Visitors
         {
             CheckForUniqueNames(
                 node.Constants,
-                (node) => new ParseError(
+                (node) => new PDDLSharpError(
                     $"A constant have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
@@ -161,7 +161,7 @@ namespace PDDLSharp.Analysers.Visitors
         {
             CheckForUniqueNames(
                 node.Predicates,
-                (node) => new ParseError(
+                (node) => new PDDLSharpError(
                     $"A predicate have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
@@ -178,7 +178,7 @@ namespace PDDLSharp.Analysers.Visitors
             {
                 if (OnlyOne(allPredicates, predicate.Name))
                 {
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Unused predicate detected '{predicate.Name}'",
                         ParseErrorType.Message,
                         ParseErrorLevel.Analyser,
@@ -196,7 +196,7 @@ namespace PDDLSharp.Analysers.Visitors
         {
             CheckForUniqueNames(
                 node.Functions,
-                (node) => new ParseError(
+                (node) => new PDDLSharpError(
                     $"A function have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,

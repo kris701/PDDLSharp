@@ -25,7 +25,7 @@ namespace PDDLSharp.Parsers.Visitors
             if ((returnNode = TryVisitGoalNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitMetricNode(node, parent)) != null) return returnNode;
 
-            Listener.AddError(new ParseError(
+            Listener.AddError(new PDDLSharpError(
                 $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
@@ -159,7 +159,7 @@ namespace PDDLSharp.Parsers.Visitors
                     return newMetric;
                 }
                 else 
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Invalid metric node type '{metricType}'. Allowed types are: {MetricNodeTypesStr()}",
                         ParseErrorType.Error,
                         ParseErrorLevel.Analyser,

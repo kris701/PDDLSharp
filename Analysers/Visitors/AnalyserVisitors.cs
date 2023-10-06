@@ -48,7 +48,7 @@ namespace PDDLSharp.Analysers.Visitors
                     {
                         for (int i = 0; i < target.Arguments.Count; i++)
                             if (!pred.Arguments[i].Type.IsTypeOf(target.Arguments[i].Type.Name))
-                                Listener.AddError(new ParseError(
+                                Listener.AddError(new PDDLSharpError(
                                     $"Predicate has an incorrect object type! Expected a '{target.Arguments[i].Type.Name}' but got a '{pred.Arguments[i].Type.Name}'",
                                     ParseErrorType.Error,
                                     ParseErrorLevel.Analyser,
@@ -67,7 +67,7 @@ namespace PDDLSharp.Analysers.Visitors
             {
                 if (item is PredicateExp pred && 
                     !predicates.Any(x => x.Name == pred.Name))
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Used of undeclared predicate '{pred.Name}'",
                         ParseErrorType.Error,
                         ParseErrorLevel.Analyser,
@@ -76,7 +76,7 @@ namespace PDDLSharp.Analysers.Visitors
             }
         }
 
-        private void CheckForUniqueNames<T>(List<T> nodes, Func<T, ParseError> error) where T : INamedNode
+        private void CheckForUniqueNames<T>(List<T> nodes, Func<T, PDDLSharpError> error) where T : INamedNode
         {
             List<string> items = new List<string>();
             foreach (var node in nodes)
@@ -92,7 +92,7 @@ namespace PDDLSharp.Analysers.Visitors
             var allNodes = checkIn.FindTypes<NameExp>();
             foreach(var param in parameters.Values)
                 if (!allNodes.Any(x => x.Name == param.Name && param != x))
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Unused parameter detected '{param.Name}'",
                         ParseErrorType.Warning,
                         ParseErrorLevel.Analyser,
@@ -108,7 +108,7 @@ namespace PDDLSharp.Analysers.Visitors
             foreach (var node in allNodes)
                 if (node.Name.Contains("?"))
                     if (!parameters.Values.Any(x => x.Name == node.Name))
-                        Listener.AddError(new ParseError(
+                        Listener.AddError(new PDDLSharpError(
                             $"Used of undeclared parameter detected '{node.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,

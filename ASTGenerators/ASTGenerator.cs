@@ -149,7 +149,7 @@ namespace PDDLSharp.ASTGenerators
             var rightCount = text.Count(x => x == ')');
             if (leftCount != rightCount)
             {
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Parentheses missmatch! There are {leftCount} '(' but {rightCount} ')'!",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
@@ -160,7 +160,7 @@ namespace PDDLSharp.ASTGenerators
         {
             if (text.Any(char.IsUpper))
             {
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Upper cased letters are ignored in PDDL",
                     ParseErrorType.Message,
                     ParseErrorLevel.PreParsing));

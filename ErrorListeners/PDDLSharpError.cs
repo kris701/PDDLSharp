@@ -8,7 +8,7 @@ namespace PDDLSharp.ErrorListeners
 {
     public enum ParseErrorType { None, Message, Warning, Error }
     public enum ParseErrorLevel { None, PreParsing, Parsing, Contexturaliser, Analyser, CodeGeneration }
-    public class ParseError
+    public class PDDLSharpError
     {
         public string Message { get; internal set; }
         public ParseErrorType Type { get; internal set; }
@@ -16,7 +16,7 @@ namespace PDDLSharp.ErrorListeners
         public int Line { get; internal set; }
         public int Character { get; internal set; }
 
-        public ParseError(string message, ParseErrorType type, ParseErrorLevel level, int line, int character)
+        public PDDLSharpError(string message, ParseErrorType type, ParseErrorLevel level, int line, int character)
         {
             Message = message;
             Type = type;
@@ -25,7 +25,7 @@ namespace PDDLSharp.ErrorListeners
             Character = character;
         }
 
-        public ParseError(string message, ParseErrorType type, ParseErrorLevel level)
+        public PDDLSharpError(string message, ParseErrorType type, ParseErrorLevel level)
         {
             Message = message;
             Type = type;

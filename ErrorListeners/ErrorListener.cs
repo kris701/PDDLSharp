@@ -9,25 +9,25 @@ namespace PDDLSharp.ErrorListeners
     public class ErrorListener : IErrorListener
     {
         public ParseErrorType ThrowIfTypeAbove { get; set; }
-        public List<ParseError> Errors { get; internal set; }
+        public List<PDDLSharpError> Errors { get; internal set; }
 
         public ErrorListener()
         {
-            Errors = new List<ParseError>();
+            Errors = new List<PDDLSharpError>();
             ThrowIfTypeAbove = ParseErrorType.Warning;
         }
 
         public ErrorListener(ParseErrorType throwAbove)
         {
-            Errors = new List<ParseError>();
+            Errors = new List<PDDLSharpError>();
             ThrowIfTypeAbove = throwAbove;
         }
 
-        public void AddError(ParseError err)
+        public void AddError(PDDLSharpError err)
         {
             Errors.Add(err);
             if (err.Type > ThrowIfTypeAbove)
-                throw new ParseException(Errors);
+                throw new PDDLSharpException(Errors);
         }
 
         public int CountErrorsOfTypeOrAbove(ParseErrorType type)

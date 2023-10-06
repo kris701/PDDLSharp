@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.ErrorListeners
 {
-    public class ParseException : Exception
+    public class PDDLSharpException : Exception
     {
-        public List<ParseError> Errors { get; internal set; }
-        public ParseException(List<ParseError> errors) : base(GenerateErrorString(errors))
+        public List<PDDLSharpError> Errors { get; internal set; }
+        public PDDLSharpException(List<PDDLSharpError> errors) : base(GenerateErrorString(errors))
         {
             Errors = errors;
         }
 
-        private static string GenerateErrorString(List<ParseError> errors)
+        private static string GenerateErrorString(List<PDDLSharpError> errors)
         {
             var msgStr = "";
             foreach (var error in errors)

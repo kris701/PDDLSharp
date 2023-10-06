@@ -25,42 +25,42 @@ namespace PDDLSharp.Analysers.Visitors
         private void CheckForBasicProblem(ProblemDecl problem)
         {
             if (problem.DomainName == null)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing domain name reference",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     problem.Line,
                     problem.Start));
             if (problem.Objects == null)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing objects declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     problem.Line,
                     problem.Start));
             if (problem.Objects != null && problem.Objects.Objs.Count == 0)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing objects",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     problem.Line,
                     problem.Start));
             if (problem.Init == null)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing Init declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     problem.Line,
                     problem.Start));
             if (problem.Init != null && problem.Init.Predicates.Count == 0)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"No init predicates declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     problem.Line,
                     problem.Start));
             if (problem.Goal == null)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing Goal declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
@@ -83,7 +83,7 @@ namespace PDDLSharp.Analysers.Visitors
         {
             if (Declaration.Domain.Name != null &&
                 node.Name != Declaration.Domain.Name.Name)
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Domain name referenced in problem file ('{node.Name}') does not match the actual domain name ('{Declaration.Domain.Name.Name}')!",
                         ParseErrorType.Warning,
                         ParseErrorLevel.Analyser,
@@ -106,7 +106,7 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(ObjectsDecl node)
         {
             if (node.Objs.Count == 0)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"No objects declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
@@ -115,7 +115,7 @@ namespace PDDLSharp.Analysers.Visitors
 
             CheckForUniqueNames(
                 node.Objs, 
-                (node) => new ParseError(
+                (node) => new PDDLSharpError(
                     $"An object have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
@@ -136,7 +136,7 @@ namespace PDDLSharp.Analysers.Visitors
             foreach (var name in Declaration.Problem.FindTypes<NameExp>(new List<Type>() { typeof(ExistsExp), typeof(ForAllExp) }))
                 if (!allNames.Any(x => x.Name == name.Name))
                     if (name.Parent != node)
-                        Listener.AddError(new ParseError(
+                        Listener.AddError(new PDDLSharpError(
                             $"Undeclared object detected '{name.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
@@ -151,7 +151,7 @@ namespace PDDLSharp.Analysers.Visitors
             {
                 if (allNames.Count(x => x.Name == obj.Name) == 1)
                 {
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Unused object detected '{obj.Name}'",
                         ParseErrorType.Message,
                         ParseErrorLevel.Analyser,
@@ -166,7 +166,7 @@ namespace PDDLSharp.Analysers.Visitors
             {
                 foreach (var obj in node.Objs)
                     if (!Declaration.Domain.Types.Types.Any(x => x.Name == obj.Type.Name))
-                        Listener.AddError(new ParseError(
+                        Listener.AddError(new PDDLSharpError(
                             $"Unknown type for object! '{obj.Type.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
@@ -177,7 +177,7 @@ namespace PDDLSharp.Analysers.Visitors
             {
                 foreach (var obj in node.Objs)
                     if (obj.Type.Name != "" && obj.Type.Name != "object")
-                        Listener.AddError(new ParseError(
+                        Listener.AddError(new PDDLSharpError(
                             $"Unknown type for object! '{obj.Type.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
@@ -192,7 +192,7 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(InitDecl node)
         {
             if (node.Predicates.Count == 0)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"No init predicates declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
@@ -210,7 +210,7 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(GoalDecl node)
         {
             if (node.GoalExp == null)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"No goal declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
@@ -237,7 +237,7 @@ namespace PDDLSharp.Analysers.Visitors
             foreach(var exp in allNodes)
             {
                 if (exp is not PredicateExp && exp is not NumericExp)
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"The metric expression must only contain predicates or numeric fluents! Currently contains a `{exp.GetType().Name}` node",
                         ParseErrorType.Error,
                         ParseErrorLevel.Analyser,

@@ -30,7 +30,7 @@ namespace PDDLSharp.Parsers.Visitors
             if ((returnNode = TryVisitLiteralNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitNameNode(node, parent)) != null) return returnNode;
 
-            Listener.AddError(new ParseError(
+            Listener.AddError(new PDDLSharpError(
                 $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
@@ -250,7 +250,7 @@ namespace PDDLSharp.Parsers.Visitors
 
                 if (left == "")
                 {
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Context indicated the use of a type, but an object name was not given!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
@@ -259,7 +259,7 @@ namespace PDDLSharp.Parsers.Visitors
                 }
                 if (right == "")
                 {
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Context indicated the use of a type, but a type was not given!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,

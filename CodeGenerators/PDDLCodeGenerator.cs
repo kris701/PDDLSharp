@@ -30,13 +30,13 @@ namespace PDDLSharp.CodeGenerators
                 while (retStr.Contains($"{Environment.NewLine}{Environment.NewLine}"))
                     retStr = retStr.Replace($"{Environment.NewLine}{Environment.NewLine}", Environment.NewLine);
             }
-            catch (ParseException e)
+            catch (PDDLSharpException e)
             {
 
             }
             catch (Exception e)
             {
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Unexpected exception occured during code generation: {e.Message}",
                     ParseErrorType.Error,
                     ParseErrorLevel.CodeGeneration));

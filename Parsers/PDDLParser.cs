@@ -28,18 +28,18 @@ namespace PDDLSharp.Parsers
         public PDDLDecl ParseDecl(string domainFile, string problemFile)
         {
             if (!PDDLFileHelper.IsFileDomain(domainFile))
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"File is not a domain file: '{domainFile}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
             if (!PDDLFileHelper.IsFileProblem(problemFile))
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"File is not a problem file: '{problemFile}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
 
             if (!CompatabilityHelper.IsPDDLDomainSpported(File.ReadAllText(domainFile)))
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Domain contains unsupported packages! Results may not be accurate!",
                     ParseErrorType.Warning,
                     ParseErrorLevel.PreParsing));

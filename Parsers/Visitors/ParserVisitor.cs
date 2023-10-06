@@ -30,7 +30,7 @@ namespace PDDLSharp.Parsers.Visitors
             var res = VisitAs<T>(node, parent);
             if (res is T model)
                 return model;
-            Listener.AddError(new ParseError(
+            Listener.AddError(new PDDLSharpError(
                 $"Could not parse node as a '{nameof(T)}', got a '{nameof(res)}'",
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing,
@@ -87,7 +87,7 @@ namespace PDDLSharp.Parsers.Visitors
         {
             if (node.InnerContent.Replace(targetName, "").Trim() != "")
             {
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.OuterContent.Replace(targetName, "").Trim()}",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
@@ -104,7 +104,7 @@ namespace PDDLSharp.Parsers.Visitors
             {
                 if (node.Children.Count != 0)
                 {
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"'{nodeName}' must not contain any children!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
@@ -117,7 +117,7 @@ namespace PDDLSharp.Parsers.Visitors
             {
                 if (node.Children.Count != targetChildren)
                 {
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"'{nodeName}' must have exactly {targetChildren} children, but it has '{node.Children.Count}'!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
@@ -133,7 +133,7 @@ namespace PDDLSharp.Parsers.Visitors
         {
             if (node.Children.Count <= targetChildren)
             {
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"'{nodeName}' must have more than {targetChildren} children, but it has '{node.Children.Count}'!",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
@@ -177,7 +177,7 @@ namespace PDDLSharp.Parsers.Visitors
                     {
                         if (parsed == null)
                         {
-                            Listener.AddError(new ParseError(
+                            Listener.AddError(new PDDLSharpError(
                                 $"Unexpected node type while parsing! Expected '{nameof(NameExp)}' but got null!",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Parsing,
@@ -186,7 +186,7 @@ namespace PDDLSharp.Parsers.Visitors
                         }
                         else
                         {
-                            Listener.AddError(new ParseError(
+                            Listener.AddError(new PDDLSharpError(
                                 $"Unexpected node type while parsing! Expected '{nameof(NameExp)}' but got '{parsed.GetType().Name}'!",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Parsing,
@@ -210,7 +210,7 @@ namespace PDDLSharp.Parsers.Visitors
                 if (newNode is T nExp)
                     items.Add(nExp);
                 else if (throwIfNotCorrect)
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Could not parse predicate!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
@@ -224,7 +224,7 @@ namespace PDDLSharp.Parsers.Visitors
         {
             if (!node.InnerContent.Contains(targetName))
             {
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"'{nodeName}' is malformed! missing '{targetName}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
@@ -245,7 +245,7 @@ namespace PDDLSharp.Parsers.Visitors
                     actualCount--;
             if (actualCount != target)
             {
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"'{nodeName}' is malformed! Expected {target} loose children but got {actualCount}.",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
