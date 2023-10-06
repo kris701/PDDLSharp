@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.CodeGenerators
 {
-    public interface ICodeGenerator
+    public interface ICodeGenerator<T>
     {
         public IErrorListener Listener { get; }
         public bool Readable { get; set; }
 
-        public string Generate(INode node);
-        public void Generate(INode node, string toFile);
+        public string Generate(T node);
+        public void Generate(T node, string toFile);
     }
 }

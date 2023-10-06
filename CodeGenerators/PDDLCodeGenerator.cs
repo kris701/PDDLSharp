@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.CodeGenerators
 {
-    public class PDDLCodeGenerator : ICodeGenerator
+    public class PDDLCodeGenerator : ICodeGenerator<INode>
     {
         public IErrorListener Listener { get; }
         public bool Readable { get; set; } = false;
