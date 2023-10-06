@@ -12,11 +12,9 @@ namespace PDDLSharp.Simulators.StateSpace
     public interface IStateSpaceSimulator
     {
         public PDDLDecl Declaration { get; }
-        public HashSet<GroundedPredicate> State { get; }
+        public StateSpace State { get; }
         public int Cost { get; }
 
-        public bool Contains(string op, params string[] arguments);
-        public bool Contains(GroundedPredicate op);
         public void Reset();
         public void Step(string actionName);
         public void Step(string actionName, params string[] arguments);

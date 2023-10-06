@@ -46,16 +46,16 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
             IStateSpaceSimulator simulator = new StateSpaceSimulator(decl);
 
             // ACT
-            Assert.IsFalse(simulator.Contains("at-robby", "roomb"));
-            Assert.IsTrue(simulator.Contains("at-robby", "rooma"));
+            Assert.IsFalse(simulator.State.Contains("at-robby", "roomb"));
+            Assert.IsTrue(simulator.State.Contains("at-robby", "rooma"));
             simulator.Step("move", "rooma", "roomb");
-            Assert.IsTrue(simulator.Contains("at-robby", "roomb"));
-            Assert.IsFalse(simulator.Contains("at-robby", "rooma"));
+            Assert.IsTrue(simulator.State.Contains("at-robby", "roomb"));
+            Assert.IsFalse(simulator.State.Contains("at-robby", "rooma"));
             simulator.Reset();
 
             // ASSERT
-            Assert.IsFalse(simulator.Contains("at-robby", "roomb"));
-            Assert.IsTrue(simulator.Contains("at-robby", "rooma"));
+            Assert.IsFalse(simulator.State.Contains("at-robby", "roomb"));
+            Assert.IsTrue(simulator.State.Contains("at-robby", "rooma"));
         }
 
         [TestMethod]
@@ -69,8 +69,8 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
             simulator.Step("move", "rooma", "roomb");
 
             // ASSERT
-            Assert.IsTrue(simulator.Contains("at-robby", "roomb"));
-            Assert.IsFalse(simulator.Contains("at-robby", "rooma"));
+            Assert.IsTrue(simulator.State.Contains("at-robby", "roomb"));
+            Assert.IsFalse(simulator.State.Contains("at-robby", "rooma"));
         }
 
         [TestMethod]
@@ -99,8 +99,8 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
             simulator.Step("move", "roomb", "rooma");
 
             // ASSERT
-            Assert.IsTrue(simulator.Contains("at-robby", "rooma"));
-            Assert.IsFalse(simulator.Contains("at-robby", "roomb"));
+            Assert.IsTrue(simulator.State.Contains("at-robby", "rooma"));
+            Assert.IsFalse(simulator.State.Contains("at-robby", "roomb"));
         }
 
         [TestMethod]
@@ -117,8 +117,8 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
             simulator.ExecutePlan(newPlan);
 
             // ASSERT
-            Assert.IsTrue(simulator.Contains("at-robby", "rooma"));
-            Assert.IsFalse(simulator.Contains("at-robby", "roomb"));
+            Assert.IsTrue(simulator.State.Contains("at-robby", "rooma"));
+            Assert.IsFalse(simulator.State.Contains("at-robby", "roomb"));
             Assert.AreEqual(newPlan.Cost, simulator.Cost);
         }
 
@@ -150,8 +150,8 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
             simulator.Step("drop", "ball1", "roomb", "left" );
 
             // ASSERT
-            Assert.IsTrue(simulator.Contains("at", "ball1", "roomb"));
-            Assert.IsFalse(simulator.Contains("at", "ball1", "rooma"));
+            Assert.IsTrue(simulator.State.Contains("at", "ball1", "roomb"));
+            Assert.IsFalse(simulator.State.Contains("at", "ball1", "rooma"));
         }
 
         [TestMethod]
@@ -169,8 +169,8 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
             simulator.ExecutePlan(newPlan);
 
             // ASSERT
-            Assert.IsTrue(simulator.Contains("at", "ball1", "roomb"));
-            Assert.IsFalse(simulator.Contains("at", "ball1", "rooma"));
+            Assert.IsTrue(simulator.State.Contains("at", "ball1", "roomb"));
+            Assert.IsFalse(simulator.State.Contains("at", "ball1", "rooma"));
             Assert.AreEqual(newPlan.Cost, simulator.Cost);
         }
 
@@ -218,8 +218,8 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
             simulator.Step("turn_to", "satellite0", "groundStation2", "phenomenon6");
 
             // ASSERT
-            Assert.IsTrue(simulator.Contains("pointing", "satellite0", "groundstation2"));
-            Assert.IsFalse(simulator.Contains("pointing", "satellite0", "phenomenon6"));
+            Assert.IsTrue(simulator.State.Contains("pointing", "satellite0", "groundstation2"));
+            Assert.IsFalse(simulator.State.Contains("pointing", "satellite0", "phenomenon6"));
         }
 
         #endregion

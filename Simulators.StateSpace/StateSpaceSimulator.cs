@@ -18,7 +18,7 @@ namespace PDDLSharp.Simulators.StateSpace
     public class StateSpaceSimulator : IStateSpaceSimulator
     {
         public PDDLDecl Declaration { get; internal set; }
-        public HashSet<GroundedPredicate> State { get; internal set; }
+        public StateSpace State { get; internal set; }
         public int Cost { get; internal set; } = 0;
 
         private HashSet<GroundedPredicate> _tempAdd = new HashSet<GroundedPredicate>();
@@ -34,18 +34,10 @@ namespace PDDLSharp.Simulators.StateSpace
                 contextualiser.Contexturalise(Declaration);
             }
 
-            State = new HashSet<GroundedPredicate>();
-            State = GenerateInitialState();
-        }
-
-        private HashSet<GroundedPredicate> GenerateInitialState()
-        {
-            var state = new HashSet<GroundedPredicate>();
-            if (Declaration.Problem.Init != null)
-                foreach (var item in Declaration.Problem.Init.Predicates)
-                    if (item is PredicateExp predicate)
-                        state.Add(new GroundedPredicate(predicate));
-            return state;
+            if (declaration.Problem.Init != null)
+                State = new StateSpace(declaration, declaration.Problem.Init);
+            else
+                State = new StateSpace(declaration);
         }
 
         public void ExecutePlan(ActionPlan plan)
@@ -56,44 +48,24 @@ namespace PDDLSharp.Simulators.StateSpace
                 foreach (var arg in step.Arguments)
                     argStr.Add(arg.Name);
 
-                Step(step.ActionName, GetNameExpFromString(argStr.ToArray()));
+                Step(step.ActionName, NameExpBuilder.GetNameExpFromString(argStr.ToArray(), Declaration));
             }
         }
-
-        public bool Contains(GroundedPredicate op) => State.Contains(op);
-
-        public bool Contains(string op, params string[] arguments) => Contains(new GroundedPredicate(op, GetNameExpFromString(arguments)));
 
         public void Reset()
         {
             Cost = 0;
-            State = new HashSet<GroundedPredicate>();
-            State = GenerateInitialState();
+            if (Declaration.Problem.Init != null)
+                State = new StateSpace(Declaration, Declaration.Problem.Init);
+            else
+                State = new StateSpace(Declaration);
         }
 
         public void Step(string actionName, params string[] arguments)
         {
             if (Declaration.Problem.Objects == null)
                 throw new ArgumentException("Objects not declared in problem");
-            Step(actionName, GetNameExpFromString(arguments));
-        }
-
-        private List<NameExp> GetNameExpFromString(string[] arguments)
-        {
-            var args = new List<NameExp>();
-            foreach (var arg in arguments)
-            {
-                NameExp? obj = null;
-                if (Declaration.Problem.Objects != null)
-                    obj = Declaration.Problem.Objects.Objs.FirstOrDefault(x => x.Name == arg.ToLower());
-                if (obj == null && Declaration.Domain.Constants != null)
-                    obj = Declaration.Domain.Constants.Constants.FirstOrDefault(x => x.Name == arg.ToLower());
-
-                if (obj == null)
-                    throw new ArgumentException($"Cannot find object (or constant) '{arg}'");
-                args.Add(new NameExp(obj));
-            }
-            return args;
+            Step(actionName, NameExpBuilder.GetNameExpFromString(arguments, Declaration));
         }
 
         public void Step(string actionName) => Step(actionName, new List<NameExp>());
@@ -117,7 +89,7 @@ namespace PDDLSharp.Simulators.StateSpace
             foreach (var item in _tempAdd)
                 State.Add(item);
             foreach (var item in _tempDel)
-                State.Remove(item);
+                State.Del(item);
 
             Cost++;
         }
