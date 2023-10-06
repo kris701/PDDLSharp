@@ -109,6 +109,8 @@ namespace PDDLSharp.Simulators.StateSpace
                 throw new ArgumentException("Not all precondition predicates are set!");
 
             ExecuteEffect(targetAction.Effects, argDict, false);
+
+            Cost++;
         }
 
         private ActionDecl GetTargetAction(string actionName)
