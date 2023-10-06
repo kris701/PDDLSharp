@@ -81,7 +81,12 @@ namespace PDDLSharp.Simulators.StateSpace
             var args = new List<OperatorObject>();
             foreach (var arg in arguments) 
             {
-                var obj = Declaration.Problem.Objects.Objs.First(x => x.Name == arg.ToLower());
+                var obj = Declaration.Problem.Objects.Objs.FirstOrDefault(x => x.Name == arg.ToLower());
+                if (obj == null && Declaration.Domain.Constants != null)
+                    obj = Declaration.Domain.Constants.Constants.FirstOrDefault(x => x.Name == arg.ToLower());
+
+                if (obj == null)
+                    throw new ArgumentException($"Cannot find object (or constant) '{arg}'");
                 args.Add(new OperatorObject(obj));
             }
             Step(actionName, args);
@@ -98,8 +103,6 @@ namespace PDDLSharp.Simulators.StateSpace
             if (targetAction.Parameters.Values.Count != arguments.Count)
                 throw new ArgumentOutOfRangeException($"Action takes '{targetAction.Parameters.Values.Count}' arguments, but was given '{arguments.Count}'");
 
-            CheckifObjectsAreValid(arguments);
-
             var argDict = GenerateArgDict(targetAction, arguments);
             if (!IsAllPredicatesTrue(targetAction.Preconditions, argDict, false))
                 throw new ArgumentException("Not all precondition predicates are set!");
@@ -113,16 +116,6 @@ namespace PDDLSharp.Simulators.StateSpace
             if (targetAction == null)
                 throw new ArgumentNullException($"Could not find an action called '{actionName}'");
             return targetAction;
-        }
-
-        private void CheckifObjectsAreValid(List<OperatorObject> arguments)
-        {
-            if (Declaration.Problem.Objects != null)
-            {
-                foreach (var obj in arguments)
-                    if (!Declaration.Problem.Objects.Objs.Any(x => x.Name == obj.Name))
-                        throw new ArgumentException($"No object of name '{obj.Name}' in problem!");
-            }
         }
 
         private Dictionary<string, OperatorObject> GenerateArgDict(ActionDecl targetAction, List<OperatorObject> arguments)
