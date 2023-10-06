@@ -8,7 +8,7 @@ using System;
 namespace PDDLSharp.CodeGenerators.Tests
 {
     [TestClass]
-    public class SimpleVisitTests
+    public class SimplePDDLVisitTests
     {
         public static IEnumerable<object[]> GetTestData()
         {
@@ -71,7 +71,7 @@ namespace PDDLSharp.CodeGenerators.Tests
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            ICodeGenerator generator = new PDDLCodeGenerator(listener);
+            ICodeGenerator<INode> generator = new PDDLCodeGenerator(listener);
 
             // ACT
             var result = generator.Generate(node);

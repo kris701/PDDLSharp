@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.CodeGenerators
 {
-    public class PDDLCodeGenerator : ICodeGenerator
+    public class PDDLCodeGenerator : ICodeGenerator<INode>
     {
         public IErrorListener Listener { get; }
         public bool Readable { get; set; } = false;
@@ -29,6 +29,8 @@ namespace PDDLSharp.CodeGenerators
             try
             {
                 retStr = visitor.Visit((dynamic)node, 0);
+                while (retStr.Contains($"{Environment.NewLine}{Environment.NewLine}"))
+                    retStr = retStr.Replace($"{Environment.NewLine}{Environment.NewLine}", Environment.NewLine);
             }
             catch (ParseException e)
             {

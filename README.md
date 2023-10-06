@@ -5,51 +5,103 @@
 
 # PDDLSharp
 
-This is a project to make a PDDL parser, contextualiser, analyser and code generator for C#. 
+This is a project to make a PDDL parser, contextualiser, analyser, code generator and much more for C#. 
 The parser is fully PDDL 2.2 compatible.
 
-## Examples
-A usage example of how to use the parser:
+## PDDL Parser
+The PDDL Parser is the main part of PDDLSharp.
+Its a fully fledged parser that can parser up to PDDL 2.2 files.
+
+A usage example of how to use the PDDL parser:
 ```csharp
 IErrorListener listener = new ErrorListener();
-IParser parser = new PDDLParser(listener);
-PDDLDecl decl = parser.Parse("domain-file.pddl", "problem-file.pddl");
+IParser<INode> parser = new PDDLParser(listener);
+PDDLDecl decl = new PDDLDecl(
+    parser.ParseAs<DomainDecl>("domain.pddl"),
+    parser.ParseAs<ProblemDecl>("problem.pddl")
+)
 ```
 
 To parse a file as a specific PDDL object:
 ```csharp
 IErrorListener listener = new ErrorListener();
-IParser parser = new PDDLParser(listener);
+IParser<INode> parser = new PDDLParser(listener);
 ActionDecl decl = parser.ParseAs<ActionDecl>("action-file.pddl");
 ```
 
 To contextualise a domain/problem:
 ```csharp
 IErrorListener listener = new ErrorListener();
-IParser parser = new PDDLParser(listener);
-PDDLDecl decl = parser.Parse("domain-file.pddl", "problem-file.pddl");
+IParser<INode> parser = new PDDLParser(listener);
+PDDLDecl decl = new PDDLDecl(
+    parser.ParseAs<DomainDecl>("domain.pddl"),
+    parser.ParseAs<ProblemDecl>("problem.pddl")
+)
 contextualiser.Contexturalise(decl);
 ```
 
-To analyse a domain/problem:
+To analyse a domain/problem (Note, the analyser will also contextualise the PDDL declaration, if it have not been contextualised):
 ```csharp
 IErrorListener listener = new ErrorListener();
-IParser parser = new PDDLParser(listener);
+IParser<INode> parser = new PDDLParser(listener);
 IAnalyser analyser = new PDDLAnalyser(listener);
-PDDLDecl decl = parser.Parse("domain-file.pddl", "problem-file.pddl");
-contextualiser.Contexturalise(decl);
+PDDLDecl decl = new PDDLDecl(
+    parser.ParseAs<DomainDecl>("domain.pddl"),
+    parser.ParseAs<ProblemDecl>("problem.pddl")
+)
 analyser.Analyse(decl);
 ```
 
-To generate PDDL code from a PDDL object:
+## PDDL Code Generator
+To generate PDDL code from a PDDL declaration:
 ```csharp
 IErrorListener listener = new ErrorListener();
-ICodeGenerator generator = new PDDLCodeGenerator(listener);
+ICodeGenerator<INode> generator = new PDDLCodeGenerator(listener);
 PDDLDecl decl = new PDDLDecl(...);
 // If you want a "pretty" output, use:
 // generator.Readable = true;
 generator.Generate(decl.Domain, "domain.pddl");
 generator.Generate(decl.Problem, "problem.pddl");
+```
+
+## Plan Parser
+There is also a plan parser that can parse [Fast Downward](https://www.fast-downward.org/) output plans.
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
+ActionPlan plan = parser.Parse("planFile");
+```
+
+## Plan Code Generator
+To generate a [Fast Downward](https://www.fast-downward.org/) plan from a `ActionPlan` declaration:
+```csharp
+IErrorListener listener = new ErrorListener();
+ICodeGenerator<ActionPlan> generator = new FastDownwardPlanGenerator(listener);
+ActionPlan plan = new ActionPlan(...);
+// If you want a "pretty" output, use:
+// generator.Readable = true;
+generator.Generate(plan, "planFile");
+```
+
+## State Space Simulator
+There is a State Space Simulator included with PDDLSharp.
+This is a simulator that is capable of simulating the state changes for each action execution.
+If there are invalid arguments or type issues, the simulator will throw an exception.
+```csharp
+PDDLDecl declaration = new PDDLDecl(...);
+IStateSpaceSimulator simulator = new StateSpaceSimulator(declaration);
+simulator.Step("actionName", "obj1", "obj2");
+```
+
+You can also give it the output of the Plan Parser to step through:
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
+ActionPlan plan = parser.Parse("planFile");
+
+PDDLDecl declaration = new PDDLDecl(...);
+IStateSpaceSimulator simulator = new StateSpaceSimulator(declaration);
+simulator.ExecutePlan(plan);
 ```
 
 ## Supported Requirements
