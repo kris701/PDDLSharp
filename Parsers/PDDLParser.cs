@@ -14,19 +14,17 @@ using PDDLSharp.Models.Problem;
 using PDDLSharp.Models.AST;
 using PDDLSharp.ASTGenerators;
 using PDDLSharp.Contextualisers;
+using PDDLSharp.Models.Plans;
 
 namespace PDDLSharp.Parsers
 {
-    public class PDDLParser : IParser
+    public class PDDLParser : BaseParser<INode>
     {
-        public IErrorListener Listener { get; }
-
-        public PDDLParser(IErrorListener listener)
+        public PDDLParser(IErrorListener listener) : base(listener)
         {
-            Listener = listener;
         }
 
-        public PDDLDecl Parse(string domainFile, string problemFile)
+        public PDDLDecl ParseDecl(string domainFile, string problemFile)
         {
             if (!PDDLFileHelper.IsFileDomain(domainFile))
                 Listener.AddError(new ParseError(
@@ -50,16 +48,21 @@ namespace PDDLSharp.Parsers
                 ParseAs<ProblemDecl>(problemFile));
         }
 
-        public T ParseAs<T>(string file) where T : INode
+        public override INode Parse(string file)
+        {
+            return ParseAs<INode>(file);
+        }
+
+        public override U ParseAs<U>(string file)
         {
             IGenerator astParser = new ASTGenerator(Listener);
             var absAST = astParser.Generate(new FileInfo(file));
 
             var visitor = new ParserVisitor(Listener);
-            var result = visitor.TryVisitAs<T>(absAST, null);
-            if (result is T act)
+            var result = visitor.TryVisitAs<U>(absAST, null);
+            if (result is U act)
                 return act;
-            return default(T);
+            return default(U);
         }
     }
 }

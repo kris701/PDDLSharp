@@ -35,9 +35,11 @@ namespace PDDLSharp.CodeGenerators.Visitors
                     retStr += $"{Visit((dynamic)type, indent + 1)}{Environment.NewLine}";
                 retStr += $"{IndentStr(indent)})";
             }
-            else
+            else if (node.Children.Count == 1)
                 retStr += $" {Visit((dynamic)node.Children[0], indent + 1)}){Environment.NewLine}";
-            
+            else if (node.Children.Count == 0)
+                retStr += $"){Environment.NewLine}";
+
             return retStr;
         }
 

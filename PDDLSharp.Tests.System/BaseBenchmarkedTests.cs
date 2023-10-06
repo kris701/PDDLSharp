@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Analysers;
 using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
 using PDDLSharp.Parsers;
 using PDDLSharp.Tools;
 using System;
@@ -54,11 +55,11 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             }
         }
 
-        public IParser GetParser(string domain, IErrorListener listener)
+        public IParser<INode> GetParser(string domain, IErrorListener listener)
         {
             if (!CompatabilityHelper.IsPDDLDomainSpported(domain))
                 Assert.Inconclusive("Domain is unsupported");
-            IParser parser = new PDDLParser(listener);
+            IParser<INode> parser = new PDDLParser(listener);
             parser.Listener.ThrowIfTypeAbove = ErrorListeners.ParseErrorType.Warning;
             return parser;
         }

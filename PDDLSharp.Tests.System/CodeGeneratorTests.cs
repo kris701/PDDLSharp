@@ -38,7 +38,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser parser = GetParser(domain, listener);
+            IParser<INode> parser = GetParser(domain, listener);
             ICodeGenerator generator = new PDDLCodeGenerator(listener);
 
             // ACT
@@ -58,7 +58,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser parser = GetParser(domain, listener);
+            IParser<INode> parser = GetParser(domain, listener);
             ICodeGenerator generator = new PDDLCodeGenerator(listener);
 
             // ACT
@@ -85,7 +85,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser parser = GetParser(domain, listener);
+            IParser<INode> parser = GetParser(domain, listener);
             ICodeGenerator generator = new PDDLCodeGenerator(listener);
             IContextualiser contextualiser = new PDDLContextualiser(listener);
             IAnalyser analyser = new PDDLAnalyser(listener);
@@ -95,7 +95,10 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             {
                 Trace.WriteLine($"   Testing problem: {problem}");
 
-                var decl = parser.Parse(domain, problem);
+                var decl = new PDDLDecl(
+                    parser.ParseAs<DomainDecl>(domain),
+                    parser.ParseAs<ProblemDecl>(problem)
+                    );
                 contextualiser.Contexturalise(decl);
                 analyser.Analyse(decl);
                 generator.Generate(decl.Domain, "temp_domain.pddl");

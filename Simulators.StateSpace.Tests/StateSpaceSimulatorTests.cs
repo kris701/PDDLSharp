@@ -18,8 +18,8 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
         private PDDLDecl GetDecl(string domain, string problem)
         {
             IErrorListener listener = new ErrorListener(ParseErrorType.Error);
-            IParser parser = new PDDLParser(listener);
-            return parser.Parse(domain, problem);
+            PDDLParser parser = new PDDLParser(listener);
+            return parser.ParseDecl(domain, problem);
         }
 
         #region Gripper
