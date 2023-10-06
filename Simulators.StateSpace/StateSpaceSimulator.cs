@@ -48,6 +48,18 @@ namespace PDDLSharp.Simulators.StateSpace
             return state;
         }
 
+        public void ExecutePlan(ActionPlan plan)
+        {
+            foreach (var step in plan.Plan)
+            {
+                var argStr = new List<string>();
+                foreach (var arg in step.Arguments)
+                    argStr.Add(arg.Name);
+
+                Step(step.ActionName, GetNameExpFromString(argStr.ToArray()));
+            }
+        }
+
         public bool Contains(GroundedPredicate op) => State.Contains(op);
 
         public bool Contains(string op, params string[] arguments) => Contains(new GroundedPredicate(op, GetNameExpFromString(arguments)));

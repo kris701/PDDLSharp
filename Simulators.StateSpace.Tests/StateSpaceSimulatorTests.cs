@@ -2,6 +2,7 @@
 using PDDLSharp.Models;
 using PDDLSharp.Models.Domain;
 using PDDLSharp.Models.Expressions;
+using PDDLSharp.Models.Plans;
 using PDDLSharp.Models.Problem;
 using PDDLSharp.Parsers;
 using System;
@@ -103,6 +104,25 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
         }
 
         [TestMethod]
+        public void Can_ExecutePlan_Gripper_Move_Move()
+        {
+            // ARRANGE
+            var decl = GetDecl("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl");
+            IStateSpaceSimulator simulator = new StateSpaceSimulator(decl);
+            var newPlan = new ActionPlan(new List<GroundedAction>(), 2);
+            newPlan.Plan.Add(new GroundedAction("move", "rooma", "roomb"));
+            newPlan.Plan.Add(new GroundedAction("move", "roomb", "rooma"));
+
+            // ACT
+            simulator.ExecutePlan(newPlan);
+
+            // ASSERT
+            Assert.IsTrue(simulator.Contains("at-robby", "rooma"));
+            Assert.IsFalse(simulator.Contains("at-robby", "roomb"));
+            Assert.AreEqual(newPlan.Cost, simulator.Cost);
+        }
+
+        [TestMethod]
         public void Can_Step_Gripper_Move_Move_Cost()
         {
             // ARRANGE
@@ -132,6 +152,26 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
             // ASSERT
             Assert.IsTrue(simulator.Contains("at", "ball1", "roomb"));
             Assert.IsFalse(simulator.Contains("at", "ball1", "rooma"));
+        }
+
+        [TestMethod]
+        public void Can_ExecutePlan_Gripper_Pick_Move_Drop()
+        {
+            // ARRANGE
+            var decl = GetDecl("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl");
+            IStateSpaceSimulator simulator = new StateSpaceSimulator(decl);
+            var newPlan = new ActionPlan(new List<GroundedAction>(), 3);
+            newPlan.Plan.Add(new GroundedAction("pick", "ball1", "rooma", "left"));
+            newPlan.Plan.Add(new GroundedAction("move", "rooma", "roomb"));
+            newPlan.Plan.Add(new GroundedAction("drop", "ball1", "roomb", "left"));
+
+            // ACT
+            simulator.ExecutePlan(newPlan);
+
+            // ASSERT
+            Assert.IsTrue(simulator.Contains("at", "ball1", "roomb"));
+            Assert.IsFalse(simulator.Contains("at", "ball1", "rooma"));
+            Assert.AreEqual(newPlan.Cost, simulator.Cost);
         }
 
         [TestMethod]
