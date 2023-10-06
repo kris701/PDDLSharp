@@ -2,8 +2,8 @@
 using PDDLSharp.CodeGenerators;
 using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models;
 using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Parsers;
 using System;
 using System.Diagnostics;

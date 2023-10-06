@@ -3,6 +3,7 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.Problem;
 using PDDLSharp.Parsers.Visitors;
 using System;

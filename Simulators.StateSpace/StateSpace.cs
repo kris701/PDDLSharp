@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models;
-using PDDLSharp.Models.Expressions;
+using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
-using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;

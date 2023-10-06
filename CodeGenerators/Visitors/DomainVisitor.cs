@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.Domain;
 using PDDLSharp.Models.Expressions;
+using PDDLSharp.Models.PDDL.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

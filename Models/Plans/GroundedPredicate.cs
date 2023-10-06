@@ -1,4 +1,4 @@
-﻿using PDDLSharp.Models.Expressions;
+﻿using PDDLSharp.Models.PDDL.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

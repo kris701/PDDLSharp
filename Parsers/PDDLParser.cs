@@ -9,12 +9,13 @@ using System.Xml.Linq;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Tools;
 using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Problem;
 using PDDLSharp.Models.AST;
 using PDDLSharp.ASTGenerators;
 using PDDLSharp.Contextualisers;
 using PDDLSharp.Models.Plans;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.PDDL.Domain;
 
 namespace PDDLSharp.Parsers
 {
