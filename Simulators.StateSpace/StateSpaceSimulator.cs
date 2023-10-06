@@ -21,6 +21,9 @@ namespace PDDLSharp.Simulators.StateSpace
         public HashSet<GroundedPredicate> State { get; internal set; }
         public int Cost { get; internal set; } = 0;
 
+        private HashSet<GroundedPredicate> _tempAdd = new HashSet<GroundedPredicate>();
+        private HashSet<GroundedPredicate> _tempDel = new HashSet<GroundedPredicate>();
+
         public StateSpaceSimulator(PDDLDecl declaration)
         {
             Declaration = declaration;
@@ -32,57 +35,45 @@ namespace PDDLSharp.Simulators.StateSpace
             }
 
             State = new HashSet<GroundedPredicate>();
-            if (declaration.Problem.Init != null)
-                State = GenerateState(declaration.Problem.Init);
+            State = GenerateInitialState();
         }
 
-        private HashSet<GroundedPredicate> GenerateState(InitDecl decl)
+        private HashSet<GroundedPredicate> GenerateInitialState()
         {
             var state = new HashSet<GroundedPredicate>();
-            foreach (var item in decl)
-            {
-                if (item is PredicateExp predicate)
-                    state.Add(new GroundedPredicate(predicate));
-            }
+            if (Declaration.Problem.Init != null)
+                foreach (var item in Declaration.Problem.Init.Predicates)
+                    if (item is PredicateExp predicate)
+                        state.Add(new GroundedPredicate(predicate));
             return state;
         }
 
-        public bool Contains(GroundedPredicate op)
-        {
-            return State.Contains(op);
-        }
+        public bool Contains(GroundedPredicate op) => State.Contains(op);
 
-        public bool Contains(string op, params string[] arguments)
-        {
-            if (Declaration.Problem.Objects != null)
-            {
-                var args = new List<NameExp>();
-                foreach (var arg in arguments)
-                {
-                    var obj = Declaration.Problem.Objects.Objs.First(x => x.Name == arg);
-                    args.Add(obj);
-                }
-                return Contains(new GroundedPredicate(op, args));
-            }
-            return false;
-        }
+        public bool Contains(string op, params string[] arguments) => Contains(new GroundedPredicate(op, GetNameExpFromString(arguments)));
 
         public void Reset()
         {
             Cost = 0;
             State = new HashSet<GroundedPredicate>();
-            if (Declaration.Problem.Init != null)
-                State = GenerateState(Declaration.Problem.Init);
+            State = GenerateInitialState();
         }
 
         public void Step(string actionName, params string[] arguments)
         {
             if (Declaration.Problem.Objects == null)
                 throw new ArgumentException("Objects not declared in problem");
+            Step(actionName, GetNameExpFromString(arguments));
+        }
+
+        private List<NameExp> GetNameExpFromString(string[] arguments)
+        {
             var args = new List<NameExp>();
-            foreach (var arg in arguments) 
+            foreach (var arg in arguments)
             {
-                var obj = Declaration.Problem.Objects.Objs.FirstOrDefault(x => x.Name == arg.ToLower());
+                NameExp? obj = null;
+                if (Declaration.Problem.Objects != null)
+                    obj = Declaration.Problem.Objects.Objs.FirstOrDefault(x => x.Name == arg.ToLower());
                 if (obj == null && Declaration.Domain.Constants != null)
                     obj = Declaration.Domain.Constants.Constants.FirstOrDefault(x => x.Name == arg.ToLower());
 
@@ -90,7 +81,7 @@ namespace PDDLSharp.Simulators.StateSpace
                     throw new ArgumentException($"Cannot find object (or constant) '{arg}'");
                 args.Add(new NameExp(obj));
             }
-            Step(actionName, args);
+            return args;
         }
 
         public void Step(string actionName) => Step(actionName, new List<NameExp>());
@@ -108,7 +99,13 @@ namespace PDDLSharp.Simulators.StateSpace
             if (!IsAllPredicatesTrue(targetAction.Preconditions, argDict, false))
                 throw new ArgumentException("Not all precondition predicates are set!");
 
+            _tempAdd.Clear();
+            _tempDel.Clear();
             ExecuteEffect(targetAction.Effects, argDict, false);
+            foreach (var item in _tempAdd)
+                State.Add(item);
+            foreach (var item in _tempDel)
+                State.Remove(item);
 
             Cost++;
         }
@@ -135,9 +132,9 @@ namespace PDDLSharp.Simulators.StateSpace
             {
                 var op = new GroundedPredicate(predicate, GroundArguments(predicate.Arguments, dict));
                 if (isNegative)
-                    State.Remove(op);
+                    _tempDel.Add(op);
                 else
-                    State.Add(op);
+                    _tempAdd.Add(op);
             } 
             else if (node is NotExp not)
             {
@@ -209,9 +206,9 @@ namespace PDDLSharp.Simulators.StateSpace
                     if (IsAllPredicatesTrue(subNode, dict, isNegative))
                         return true;
             }
-            else if (node is AndExp and)
+            else if (node is IWalkable walk)
             {
-                foreach(var subNode in and)
+                foreach(var subNode in walk)
                     if (!IsAllPredicatesTrue(subNode, dict, isNegative))
                         return false;
             }
