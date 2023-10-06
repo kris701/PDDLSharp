@@ -1,14 +1,14 @@
-﻿using System;
+﻿using PDDLSharp.Models.Plans;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
-namespace PDDLSharp.Simulators.StateSpace.Tests
+namespace PDDLSharp.Models.Tests.Plans
 {
     [TestClass]
-    public class OperatorTests
+    public class GroundedPredicateTests
     {
         [DataRow("pred", "prad")]
         [DataRow("pred", "prud", "obja")]
@@ -19,8 +19,8 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
         public void Can_CheckIfNotEqual(string name1, string name2, params string[] args)
         {
             // ARRANGE
-            var op1 = new Operator(name1, args);
-            var op2 = new Operator(name2, args);
+            var op1 = new GroundedPredicate(name1, args);
+            var op2 = new GroundedPredicate(name2, args);
 
             // ACT
             // ASSERT
@@ -38,8 +38,8 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
         public void Can_CheckIfEqual(string name, params string[] args)
         {
             // ARRANGE
-            var op1 = new Operator(name, args);
-            var op2 = new Operator(name, args);
+            var op1 = new GroundedPredicate(name, args);
+            var op2 = new GroundedPredicate(name, args);
 
             // ACT
             // ASSERT

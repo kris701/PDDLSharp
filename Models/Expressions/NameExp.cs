@@ -33,6 +33,16 @@ namespace PDDLSharp.Models.Expressions
             Type = new TypeExp(this, "");
         }
 
+        public NameExp(string name) : base(name)
+        {
+            Type = new TypeExp(this, "");
+        }
+
+        public NameExp(NameExp other) : base(other.Name)
+        {
+            Type = new TypeExp(other.Type);
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode() + Type.GetHashCode();

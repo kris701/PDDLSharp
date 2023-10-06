@@ -32,6 +32,14 @@ namespace PDDLSharp.Models
             Parent = parent;
         }
 
+        public BaseNode()
+        {
+            Line = -1;
+            Start = -1;
+            End = -1;
+            Parent = null;
+        }
+
         public List<INamedNode> FindNames(string name)
         {
             List<INamedNode> returnSet = new List<INamedNode>();

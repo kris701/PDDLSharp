@@ -3,6 +3,7 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.Domain;
 using PDDLSharp.Models.Expressions;
+using PDDLSharp.Models.Plans;
 using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace PDDLSharp.Simulators.StateSpace
     public class StateSpaceSimulator : IStateSpaceSimulator
     {
         public PDDLDecl Declaration { get; internal set; }
-        public HashSet<Operator> State { get; internal set; }
+        public HashSet<GroundedPredicate> State { get; internal set; }
         public int Cost { get; internal set; } = 0;
 
         public StateSpaceSimulator(PDDLDecl declaration)
@@ -30,23 +31,23 @@ namespace PDDLSharp.Simulators.StateSpace
                 contextualiser.Contexturalise(Declaration);
             }
 
-            State = new HashSet<Operator>();
+            State = new HashSet<GroundedPredicate>();
             if (declaration.Problem.Init != null)
                 State = GenerateState(declaration.Problem.Init);
         }
 
-        private HashSet<Operator> GenerateState(InitDecl decl)
+        private HashSet<GroundedPredicate> GenerateState(InitDecl decl)
         {
-            var state = new HashSet<Operator>();
+            var state = new HashSet<GroundedPredicate>();
             foreach (var item in decl)
             {
                 if (item is PredicateExp predicate)
-                    state.Add(new Operator(predicate));
+                    state.Add(new GroundedPredicate(predicate));
             }
             return state;
         }
 
-        public bool Contains(Operator op)
+        public bool Contains(GroundedPredicate op)
         {
             return State.Contains(op);
         }
@@ -55,13 +56,13 @@ namespace PDDLSharp.Simulators.StateSpace
         {
             if (Declaration.Problem.Objects != null)
             {
-                var args = new List<OperatorObject>();
+                var args = new List<NameExp>();
                 foreach (var arg in arguments)
                 {
                     var obj = Declaration.Problem.Objects.Objs.First(x => x.Name == arg);
-                    args.Add(new OperatorObject(obj));
+                    args.Add(obj);
                 }
-                return Contains(new Operator(op, args));
+                return Contains(new GroundedPredicate(op, args));
             }
             return false;
         }
@@ -69,7 +70,7 @@ namespace PDDLSharp.Simulators.StateSpace
         public void Reset()
         {
             Cost = 0;
-            State = new HashSet<Operator>();
+            State = new HashSet<GroundedPredicate>();
             if (Declaration.Problem.Init != null)
                 State = GenerateState(Declaration.Problem.Init);
         }
@@ -78,7 +79,7 @@ namespace PDDLSharp.Simulators.StateSpace
         {
             if (Declaration.Problem.Objects == null)
                 throw new ArgumentException("Objects not declared in problem");
-            var args = new List<OperatorObject>();
+            var args = new List<NameExp>();
             foreach (var arg in arguments) 
             {
                 var obj = Declaration.Problem.Objects.Objs.FirstOrDefault(x => x.Name == arg.ToLower());
@@ -87,14 +88,14 @@ namespace PDDLSharp.Simulators.StateSpace
 
                 if (obj == null)
                     throw new ArgumentException($"Cannot find object (or constant) '{arg}'");
-                args.Add(new OperatorObject(obj));
+                args.Add(new NameExp(obj));
             }
             Step(actionName, args);
         }
 
-        public void Step(string actionName) => Step(actionName, new List<OperatorObject>());
+        public void Step(string actionName) => Step(actionName, new List<NameExp>());
 
-        private void Step(string actionName, List<OperatorObject> arguments)
+        private void Step(string actionName, List<NameExp> arguments)
         {
             actionName = actionName.ToLower();
 
@@ -118,19 +119,19 @@ namespace PDDLSharp.Simulators.StateSpace
             return targetAction;
         }
 
-        private Dictionary<string, OperatorObject> GenerateArgDict(ActionDecl targetAction, List<OperatorObject> arguments)
+        private Dictionary<string, NameExp> GenerateArgDict(ActionDecl targetAction, List<NameExp> arguments)
         {
-            var argDict = new Dictionary<string, OperatorObject>();
+            var argDict = new Dictionary<string, NameExp>();
             for (int i = 0; i < arguments.Count; i++)
-                argDict.Add(targetAction.Parameters.Values[i].Name, new OperatorObject(arguments[i].Name, arguments[i].Type));
+                argDict.Add(targetAction.Parameters.Values[i].Name, new NameExp(arguments[i]));
             return argDict;
         }
 
-        private void ExecuteEffect(INode node, Dictionary<string, OperatorObject> dict, bool isNegative)
+        private void ExecuteEffect(INode node, Dictionary<string, NameExp> dict, bool isNegative)
         {
             if (node is PredicateExp predicate)
             {
-                var op = new Operator(predicate.Name, GroundArguments(predicate.Arguments, dict));
+                var op = new GroundedPredicate(predicate, GroundArguments(predicate.Arguments, dict));
                 if (isNegative)
                     State.Remove(op);
                 else
@@ -158,9 +159,9 @@ namespace PDDLSharp.Simulators.StateSpace
             }
         }
 
-        private List<Dictionary<string, OperatorObject>> GenerateParameterPermutations(List<NameExp> values, Dictionary<string, OperatorObject> source, int index)
+        private List<Dictionary<string, NameExp>> GenerateParameterPermutations(List<NameExp> values, Dictionary<string, NameExp> source, int index)
         {
-            List<Dictionary<string, OperatorObject>> returnList = new List<Dictionary<string, OperatorObject>>();
+            List<Dictionary<string, NameExp>> returnList = new List<Dictionary<string, NameExp>>();
 
             if (index >= values.Count)
             {
@@ -175,9 +176,9 @@ namespace PDDLSharp.Simulators.StateSpace
                 {
                     var newDict = CopyDict(source);
                     if (newDict.ContainsKey(values[index].Name))
-                        newDict[values[index].Name] = new OperatorObject(ofType.Name);
+                        newDict[values[index].Name] = new NameExp(ofType);
                     else
-                        newDict.Add(values[index].Name, new OperatorObject(ofType.Name));
+                        newDict.Add(values[index].Name, new NameExp(ofType));
 
                     returnList.AddRange(GenerateParameterPermutations(values, newDict, index + 1));
                 }
@@ -186,11 +187,11 @@ namespace PDDLSharp.Simulators.StateSpace
             return returnList;
         }
 
-        private bool IsAllPredicatesTrue(INode node, Dictionary<string, OperatorObject> dict, bool isNegative)
+        private bool IsAllPredicatesTrue(INode node, Dictionary<string, NameExp> dict, bool isNegative)
         {
             if (node is PredicateExp predicate)
             {
-                var op = new Operator(predicate.Name, GroundArguments(predicate.Arguments, dict));
+                var op = new GroundedPredicate(predicate, GroundArguments(predicate.Arguments, dict));
                 if (isNegative)
                     return !State.Contains(op);
                 else
@@ -215,26 +216,26 @@ namespace PDDLSharp.Simulators.StateSpace
             return true;
         }
 
-        private List<OperatorObject> GroundArguments(List<NameExp> args, Dictionary<string, OperatorObject> dict)
+        private List<NameExp> GroundArguments(List<NameExp> args, Dictionary<string, NameExp> dict)
         {
-            List<OperatorObject> newObjects = new List<OperatorObject>();
+            List<NameExp> newObjects = new List<NameExp>();
 
             foreach (var arg in args)
             {
-                if (!arg.Type.IsTypeOf(dict[arg.Name].Type))
+                if (!arg.Type.IsTypeOf(dict[arg.Name].Type.Name))
                     throw new ArgumentException("Argument types did not match!");
-                newObjects.Add(new OperatorObject(dict[arg.Name]));
+                newObjects.Add(dict[arg.Name]);
             }
 
             return newObjects;
         }
 
-        private Dictionary<string,OperatorObject> CopyDict(Dictionary<string, OperatorObject> from)
+        private Dictionary<string, NameExp> CopyDict(Dictionary<string, NameExp> from)
         {
-            Dictionary<string, OperatorObject> newDict = new Dictionary<string, OperatorObject>();
+            Dictionary<string, NameExp> newDict = new Dictionary<string, NameExp>();
 
             foreach (var key in from.Keys)
-                newDict.Add(key, new OperatorObject(from[key]));
+                newDict.Add(key, new NameExp(from[key]));
 
             return newDict;
         }

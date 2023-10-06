@@ -68,6 +68,14 @@ namespace PDDLSharp.Models.Expressions
             SuperType = "object";
         }
 
+        public TypeExp(TypeExp other) : base(other.Name)
+        {
+            SuperTypes = new HashSet<string>();
+            foreach (var superType in other.SuperTypes)
+                SuperTypes.Add(superType);
+            SuperType = other.SuperType;
+        }
+
         public bool IsTypeOf(string typeName)
         {
             if (typeName == "")
