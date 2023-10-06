@@ -17,14 +17,21 @@ namespace PDDLSharp.Models.Domain
         public IExp Context { get; set; }
         public IExp Implies { get; set; }
 
-        public AxiomDecl(ASTNode node, INode? parent, ParameterExp vars, IExp context, IExp implies) : base(node, parent)
+        public AxiomDecl(ASTNode node, INode parent, ParameterExp vars, IExp context, IExp implies) : base(node, parent)
         {
             Vars = vars;
             Context = context;
             Implies = implies;
         }
 
-        public AxiomDecl(INode? parent, ParameterExp vars, IExp context, IExp implies) : base(parent)
+        public AxiomDecl(INode parent, ParameterExp vars, IExp context, IExp implies) : base(parent)
+        {
+            Vars = vars;
+            Context = context;
+            Implies = implies;
+        }
+
+        public AxiomDecl(ParameterExp vars, IExp context, IExp implies) : base()
         {
             Vars = vars;
             Context = context;

@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Parsers
 {
-    public interface IParser
+    public interface IParser<T>
     {
         public IErrorListener Listener { get; }
 
-        public PDDLDecl Parse(string domainFile, string problemFile);
-        public T ParseAs<T>(string file) where T : INode;
+        public T Parse(string file);
+        public U ParseAs<U>(string file) where U : T;
     }
 }

@@ -17,19 +17,27 @@ namespace PDDLSharp.Models
         public int End { get; set; }
         public int Line { get; set; }
 
-        public BaseNode(ASTNode node, INode? parent) : this(parent)
+        public BaseNode(ASTNode node, INode parent) : this(parent)
         {
             Line = node.Line;
             Start = node.Start;
             End = node.End;
         }
 
-        public BaseNode(INode? parent)
+        public BaseNode(INode parent)
         {
             Line = -1;
             Start = -1;
             End = -1;
             Parent = parent;
+        }
+
+        public BaseNode()
+        {
+            Line = -1;
+            Start = -1;
+            End = -1;
+            Parent = null;
         }
 
         public List<INamedNode> FindNames(string name)

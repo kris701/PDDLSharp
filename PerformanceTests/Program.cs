@@ -29,7 +29,7 @@ namespace PerformanceTests
             var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
 
             IErrorListener listener = new ErrorListener();
-            IParser parser = new PDDLParser(listener);
+            PDDLParser parser = new PDDLParser(listener);
             IAnalyser analyser = new PDDLAnalyser(listener);
             ICodeGenerator generator = new PDDLCodeGenerator(listener);
 
@@ -41,7 +41,7 @@ namespace PerformanceTests
             {
                 Console.WriteLine($"Instance {i}");
                 instanceWatch.Start();
-                var decl = parser.Parse(targetDomain, targetProblem);
+                var decl = parser.ParseDecl(targetDomain, targetProblem);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 

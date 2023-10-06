@@ -15,14 +15,24 @@ namespace PDDLSharp.Models.Domain
     {
         public List<NameExp> Constants { get; set; }
 
-        public ConstantsDecl(ASTNode node, INode? parent, List<NameExp> constants) : base(node, parent) 
+        public ConstantsDecl(ASTNode node, INode parent, List<NameExp> constants) : base(node, parent) 
         {
             Constants = constants;
         }
 
-        public ConstantsDecl(INode? parent, List<NameExp> constants) : base(parent)
+        public ConstantsDecl(INode parent, List<NameExp> constants) : base(parent)
         {
             Constants = constants;
+        }
+
+        public ConstantsDecl(List<NameExp> constants) : base()
+        {
+            Constants = constants;
+        }
+
+        public ConstantsDecl() : base()
+        {
+            Constants = new List<NameExp>();
         }
 
         public override int GetHashCode()

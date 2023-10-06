@@ -12,12 +12,17 @@ namespace PDDLSharp.Models.Expressions
     {
         public IExp Child { get; set; }
 
-        public NotExp(ASTNode node, INode? parent, IExp child) : base(node, parent)
+        public NotExp(ASTNode node, INode parent, IExp child) : base(node, parent)
         {
             Child = child;
         }
 
-        public NotExp(INode? parent, IExp child) : base(parent)
+        public NotExp(INode parent, IExp child) : base(parent)
+        {
+            Child = child;
+        }
+
+        public NotExp(IExp child) : base()
         {
             Child = child;
         }

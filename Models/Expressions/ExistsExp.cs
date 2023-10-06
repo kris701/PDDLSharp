@@ -12,13 +12,19 @@ namespace PDDLSharp.Models.Expressions
         public ParameterExp Parameters { get; set; }
         public IExp Expression { get; set; }
 
-        public ExistsExp(ASTNode node, INode? parent, ParameterExp parameters, IExp expression) : base(node, parent)
+        public ExistsExp(ASTNode node, INode parent, ParameterExp parameters, IExp expression) : base(node, parent)
         {
             Parameters = parameters;
             Expression = expression;
         }
 
-        public ExistsExp(INode? parent, ParameterExp parameters, IExp expression) : base(parent)
+        public ExistsExp(INode parent, ParameterExp parameters, IExp expression) : base(parent)
+        {
+            Parameters = parameters;
+            Expression = expression;
+        }
+
+        public ExistsExp(ParameterExp parameters, IExp expression) : base()
         {
             Parameters = parameters;
             Expression = expression;

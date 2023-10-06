@@ -12,14 +12,24 @@ namespace PDDLSharp.Models.Expressions
     {
         public List<NameExp> Arguments { get; set; }
 
-        public PredicateExp(ASTNode node, INode? parent, string name, List<NameExp> arguments) : base(node, parent, name)
+        public PredicateExp(ASTNode node, INode parent, string name, List<NameExp> arguments) : base(node, parent, name)
         {
             Arguments = arguments;
         }
 
-        public PredicateExp(INode? parent, string name, List<NameExp> arguments) : base(parent, name)
+        public PredicateExp(INode parent, string name, List<NameExp> arguments) : base(parent, name)
         {
             Arguments = arguments;
+        }
+
+        public PredicateExp(string name, List<NameExp> arguments) : base(name)
+        {
+            Arguments = arguments;
+        }
+
+        public PredicateExp(string name) : base(name)
+        {
+            Arguments = new List<NameExp>();
         }
 
         public override int GetHashCode()

@@ -16,7 +16,7 @@ namespace PDDLSharp.Models.Domain
         public IExp Effects { get; set; }
         public IExp Duration { get; set; }
 
-        public DurativeActionDecl(ASTNode node, INode? parent, string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(node, parent, name)
+        public DurativeActionDecl(ASTNode node, INode parent, string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(node, parent, name)
         {
             Parameters = parameters;
             Condition = condition;
@@ -24,7 +24,15 @@ namespace PDDLSharp.Models.Domain
             Duration = duration;
         }
 
-        public DurativeActionDecl(INode? parent, string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(parent, name)
+        public DurativeActionDecl(INode parent, string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(parent, name)
+        {
+            Parameters = parameters;
+            Condition = condition;
+            Effects = effects;
+            Duration = duration;
+        }
+
+        public DurativeActionDecl(string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(name)
         {
             Parameters = parameters;
             Condition = condition;

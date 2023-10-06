@@ -13,14 +13,24 @@ namespace PDDLSharp.Models.Expressions
     {
         public List<IExp> Options { get; set; }
 
-        public OrExp(ASTNode node, INode? parent, List<IExp> options) : base(node, parent)
+        public OrExp(ASTNode node, INode parent, List<IExp> options) : base(node, parent)
         {
             Options = options;
         }
 
-        public OrExp(INode? parent, List<IExp> options) : base(parent)
+        public OrExp(INode parent, List<IExp> options) : base(parent)
         {
             Options = options;
+        }
+
+        public OrExp(List<IExp> options) : base()
+        {
+            Options = options;
+        }
+
+        public OrExp() : base()
+        {
+            Options = new List<IExp>();
         }
 
         public override int GetHashCode()

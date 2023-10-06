@@ -36,7 +36,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser parser = GetParser(domain, listener);
+            IParser<INode> parser = GetParser(domain, listener);
             IContextualiser contextualiser = new PDDLContextualiser(listener);
             Random rnd = new Random();
 

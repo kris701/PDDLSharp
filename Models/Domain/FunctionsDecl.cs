@@ -13,14 +13,24 @@ namespace PDDLSharp.Models.Domain
     {
         public List<PredicateExp> Functions { get; set; }
 
-        public FunctionsDecl(ASTNode node, INode? parent, List<PredicateExp> functions) : base(node, parent)
+        public FunctionsDecl(ASTNode node, INode parent, List<PredicateExp> functions) : base(node, parent)
         {
             Functions = functions;
         }
 
-        public FunctionsDecl(INode? parent, List<PredicateExp> functions) : base(parent)
+        public FunctionsDecl(INode parent, List<PredicateExp> functions) : base(parent)
         {
             Functions = functions;
+        }
+
+        public FunctionsDecl(List<PredicateExp> functions) : base()
+        {
+            Functions = functions;
+        }
+
+        public FunctionsDecl() : base()
+        {
+            Functions = new List<PredicateExp>();
         }
 
         public override int GetHashCode()

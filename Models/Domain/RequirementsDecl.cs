@@ -13,14 +13,24 @@ namespace PDDLSharp.Models.Domain
     {
         public List<NameExp> Requirements {  get; set; }
 
-        public RequirementsDecl(ASTNode node, INode? parent, List<NameExp> requirements) : base(node, parent)
+        public RequirementsDecl(ASTNode node, INode parent, List<NameExp> requirements) : base(node, parent)
         {
             Requirements = requirements;
         }
 
-        public RequirementsDecl(INode? parent, List<NameExp> requirements) : base(parent)
+        public RequirementsDecl(INode parent, List<NameExp> requirements) : base(parent)
         {
             Requirements = requirements;
+        }
+
+        public RequirementsDecl(List<NameExp> requirements) : base()
+        {
+            Requirements = requirements;
+        }
+
+        public RequirementsDecl() : base()
+        {
+            Requirements = new List<NameExp>();
         }
 
         public override int GetHashCode()

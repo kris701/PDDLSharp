@@ -12,14 +12,24 @@ namespace PDDLSharp.Models.Problem
     {
         public List<IExp> Predicates { get; set; }
 
-        public InitDecl(ASTNode node, INode? parent, List<IExp> predicates) : base(node, parent)
+        public InitDecl(ASTNode node, INode parent, List<IExp> predicates) : base(node, parent)
         {
             Predicates = predicates;
         }
 
-        public InitDecl(INode? parent, List<IExp> predicates) : base(parent)
+        public InitDecl(INode parent, List<IExp> predicates) : base(parent)
         {
             Predicates = predicates;
+        }
+
+        public InitDecl(List<IExp> predicates) : base()
+        {
+            Predicates = predicates;
+        }
+
+        public InitDecl() : base()
+        {
+            Predicates = new List<IExp>();
         }
 
         public override int GetHashCode()

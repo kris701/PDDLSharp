@@ -276,7 +276,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         [DataRow("(:types a - b \n b - object)", "b;object;", "object;")]
         [DataRow("(:types a - object \n b - a)", "object;", "a;object;")]
         [DataRow("(:types a - object \n b c - a)", "object;", "a;object;", "a;object;")]
-        [DataRow("(:types a - object \n b c - a \n q)", "object;", "a;object;", "a;object;", ";")]
+        [DataRow("(:types a - object \n b c - a \n q)", "object;", "a;object;", "a;object;", ";object;")]
         [DataRow("(:types a - object \n b c - a \n q \n d - c)", "object;", "a;object;", "a;object;", "c;a;object;", "c;a;object;")]
         public void Can_ParseTypesNode_CorrectInheritSuperTypes(string toParse, params string[] expected)
         {
