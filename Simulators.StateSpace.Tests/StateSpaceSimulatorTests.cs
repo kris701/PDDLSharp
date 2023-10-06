@@ -1,9 +1,6 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Expressions;
 using PDDLSharp.Models.Plans;
-using PDDLSharp.Models.Problem;
 using PDDLSharp.Parsers;
 using System;
 using System.Collections.Generic;

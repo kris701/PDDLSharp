@@ -5,7 +5,6 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.Plans;
-using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

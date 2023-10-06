@@ -2,12 +2,9 @@
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Expressions;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.Problem;
 using PDDLSharp.Parsers.Visitors;
 using System;
 using System.Collections.Generic;

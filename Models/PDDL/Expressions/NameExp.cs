@@ -1,5 +1,4 @@
 ﻿using PDDLSharp.Models.AST;
-using PDDLSharp.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

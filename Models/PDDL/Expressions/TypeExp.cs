@@ -1,5 +1,4 @@
 ﻿using PDDLSharp.Models.AST;
-using PDDLSharp.Models.Domain;
 using PDDLSharp.Models.PDDL;
 using System;
 using System.Collections.Generic;
@@ -50,7 +49,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             SuperTypes.Add(SuperType);
         }
 
-        public TypeExp(ASTNode node, INode? parent, string name, string superType) : base(node, parent, name)
+        public TypeExp(ASTNode node, INode parent, string name, string superType) : base(node, parent, name)
         {
             SuperType = superType;
             if (SuperType == "")
@@ -59,7 +58,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             SuperTypes.Add(SuperType);
         }
 
-        public TypeExp(INode? parent, string name, string superType) : base(parent, name)
+        public TypeExp(INode parent, string name, string superType) : base(parent, name)
         {
             SuperType = superType;
             if (SuperType == "")

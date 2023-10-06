@@ -1,5 +1,4 @@
 ﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.Domain;
 using PDDLSharp.Models;
 using PDDLSharp.Parsers.Tests.PositionTestsData;
 using System;

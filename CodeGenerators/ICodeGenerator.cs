@@ -1,7 +1,5 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;

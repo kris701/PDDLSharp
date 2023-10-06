@@ -1,8 +1,6 @@
 ﻿using PDDLSharp.CodeGenerators.Visitors;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.Domain;
 using PDDLSharp.Models.PDDL;
-using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;

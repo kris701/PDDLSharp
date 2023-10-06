@@ -1,7 +1,6 @@
 ﻿using PDDLSharp.ASTGenerators;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
-using PDDLSharp.Models.Expressions;
 using PDDLSharp.Parsers.Visitors;
 using System;
 using System.Collections.Generic;

@@ -3,7 +3,6 @@ using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.Problem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
