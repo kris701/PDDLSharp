@@ -3,8 +3,9 @@ using PDDLSharp.Analysers;
 using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Problem;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
 using System;
 using System.Diagnostics;
@@ -44,7 +45,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
         }
 
         [TestMethod]
-        [DynamicData (nameof(GetDictionaryData), DynamicDataSourceType.Method)]
+        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
         public void Can_ParseProblems_ParseOnly_STRIPS(string domain, List<string> problems)
         {
             Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");

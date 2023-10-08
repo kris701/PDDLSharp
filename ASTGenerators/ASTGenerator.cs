@@ -1,14 +1,6 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Tools;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PDDLSharp.ASTGenerators
 {
@@ -52,8 +44,8 @@ namespace PDDLSharp.ASTGenerators
             {
                 var firstP = text.IndexOf('(');
                 var lastP = text.LastIndexOf(')');
-                var innerContent = ReplaceRangeWithSpaces(text, firstP, firstP + 1);
-                innerContent = ReplaceRangeWithSpaces(innerContent, lastP, lastP + 1);
+                var innerContent = StringHelpers.ReplaceRangeWithSpacesFast(text, firstP, firstP + 1);
+                innerContent = StringHelpers.ReplaceRangeWithSpacesFast(innerContent, lastP, lastP + 1);
 
                 var children = new List<ASTNode>();
                 while (innerContent.Contains('(') && innerContent.Contains(')'))
@@ -78,7 +70,7 @@ namespace PDDLSharp.ASTGenerators
 
                     var newContent = innerContent.Substring(startP, endP - startP);
                     children.Add(GenerateASTNodeRec(newContent, thisStart + startP, thisStart + endP, lineDict, lineOffset - 1));
-                    innerContent = ReplaceRangeWithSpaces(innerContent, startP, endP);
+                    innerContent = StringHelpers.ReplaceRangeWithSpacesFast(innerContent, startP, endP);
                 }
                 var outer = $"({innerContent.Trim()})";
                 return new ASTNode(
@@ -99,21 +91,6 @@ namespace PDDLSharp.ASTGenerators
                     newText,
                     newText);
             }
-        }
-
-        // Faster string replacement
-        // From https://stackoverflow.com/a/54056154
-        public string ReplaceRangeWithSpaces(string text, int from, int to)
-        {
-            int length = to - from;
-            string replacement = new string(' ', to - from);
-            return string.Create(text.Length - length + replacement.Length, (text, from, length, replacement),
-                (span, state) =>
-                {
-                    state.text.AsSpan().Slice(0, state.from).CopyTo(span);
-                    state.replacement.AsSpan().CopyTo(span.Slice(state.from));
-                    state.text.AsSpan().Slice(state.from + state.length).CopyTo(span.Slice(state.from + state.replacement.Length));
-                });
         }
 
         public List<int> GenerateLineDict(string source)
@@ -149,7 +126,7 @@ namespace PDDLSharp.ASTGenerators
             var rightCount = text.Count(x => x == ')');
             if (leftCount != rightCount)
             {
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Parentheses missmatch! There are {leftCount} '(' but {rightCount} ')'!",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
@@ -160,7 +137,7 @@ namespace PDDLSharp.ASTGenerators
         {
             if (text.Any(char.IsUpper))
             {
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Upper cased letters are ignored in PDDL",
                     ParseErrorType.Message,
                     ParseErrorLevel.PreParsing));

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PDDLSharp.Tools;
 
 namespace PDDLSharp.ASTGenerators
 {
@@ -26,7 +22,7 @@ namespace PDDLSharp.ASTGenerators
             {
                 int from = retStr.IndexOf(";", offset);
                 int to = retStr.IndexOf(ASTTokens.BreakToken, from);
-                retStr = retStr.Remove(from, to - from).Insert(from, new string(' ', to - from));
+                retStr = StringHelpers.ReplaceRangeWithSpacesFast(retStr, from, to);
                 offset = to + 1;
             }
             return retStr;

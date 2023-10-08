@@ -10,14 +10,14 @@ namespace PDDLSharp.ErrorListeners.Tests
         [DataRow(ParseErrorType.Message, ParseErrorType.Warning)]
         [DataRow(ParseErrorType.Message, ParseErrorType.Error)]
         [DataRow(ParseErrorType.Warning, ParseErrorType.Error)]
-        [ExpectedException(typeof(ParseException))]
+        [ExpectedException(typeof(PDDLSharpException))]
         public void Can_ThrowIfErrorIsAboveLimit(ParseErrorType throwLevel, ParseErrorType newErrorLevel)
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener(throwLevel);
 
             // ACT
-            listener.AddError(new ParseError("", newErrorLevel, ParseErrorLevel.None));
+            listener.AddError(new PDDLSharpError("", newErrorLevel, ParseErrorLevel.None));
         }
 
         [TestMethod]
@@ -35,7 +35,7 @@ namespace PDDLSharp.ErrorListeners.Tests
             IErrorListener listener = new ErrorListener(throwLevel);
 
             // ACT
-            listener.AddError(new ParseError("", newErrorLevel, ParseErrorLevel.None));
+            listener.AddError(new PDDLSharpError("", newErrorLevel, ParseErrorLevel.None));
         }
     }
 }

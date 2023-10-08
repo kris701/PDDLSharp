@@ -1,11 +1,5 @@
-﻿using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.Plans
 {

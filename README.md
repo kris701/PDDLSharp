@@ -2,6 +2,8 @@
 [![Build and Publish](https://github.com/kris701/PDDLSharp/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/kris701/PDDLSharp/actions/workflows/dotnet-desktop.yml)
 ![Nuget](https://img.shields.io/nuget/v/PDDLSharp)
 ![Nuget](https://img.shields.io/nuget/dt/PDDLSharp)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/kris701/PDDLSharp/main)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/kris701/PDDLSharp)
 
 # PDDLSharp
 

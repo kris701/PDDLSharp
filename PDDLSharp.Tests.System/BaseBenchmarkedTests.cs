@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.Analysers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Parsers;
 using PDDLSharp.Tools;
 using System;

@@ -1,11 +1,9 @@
 ﻿using PDDLSharp.Analysers;
 using PDDLSharp.CodeGenerators;
-using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Parsers;
-using System;
 using System.Diagnostics;
 
 namespace PerformanceTests
@@ -19,14 +17,36 @@ namespace PerformanceTests
             Console.WriteLine("Done!");
 
             RunNTimes(100);
+            //RunNTimes2(2000);
+        }
+
+        private static void RunNTimes2(int number)
+        {
+            var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
+            var targetProblem = "benchmarks/tidybot-opt11-strips/p16.pddl";
+            //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
+            //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
+
+            IErrorListener listener = new ErrorListener();
+            PDDLParser parser = new PDDLParser(listener);
+            var decl = parser.ParseDecl(targetDomain, targetProblem);
+            Stopwatch instanceWatch = new Stopwatch();
+            instanceWatch.Start();
+            for (int i = 0; i < number; i++)
+            {
+                Console.WriteLine($"Instance {i}");
+                decl.Domain.FindTypes<NameExp>();
+            }
+            instanceWatch.Stop();
+            Console.WriteLine($"Took {instanceWatch.ElapsedMilliseconds} ms");
         }
 
         private static void RunNTimes(int number)
         {
-            //var targetDomain = "benchmarks/airport/p50-domain.pddl";
-            //var targetProblem = "benchmarks/airport/p50-airport5MUC-p15.pddl";
-            var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
-            var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
+            var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
+            var targetProblem = "benchmarks/tidybot-opt11-strips/p16.pddl";
+            //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
+            //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
@@ -56,9 +76,9 @@ namespace PerformanceTests
                 instanceWatch.Stop();
                 times[2] += instanceWatch.ElapsedMilliseconds;
             }
-            Console.WriteLine($"Parsing took         {times[0]}ms in total.\t\tAvg {times[0]/number}ms pr instance.");
-            Console.WriteLine($"Analysing took       {times[1]}ms in total.\t\tAvg {times[1]/number}ms pr instance.");
-            Console.WriteLine($"Code Generation took {times[2]}ms in total.\t\tAvg {times[2]/number}ms pr instance.");
+            Console.WriteLine($"Parsing took         {times[0]}ms in total.\t\tAvg {times[0] / number}ms pr instance.");
+            Console.WriteLine($"Analysing took       {times[1]}ms in total.\t\tAvg {times[1] / number}ms pr instance.");
+            Console.WriteLine($"Code Generation took {times[2]}ms in total.\t\tAvg {times[2] / number}ms pr instance.");
         }
     }
 }

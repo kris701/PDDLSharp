@@ -1,20 +1,11 @@
-﻿using PDDLSharp.Parsers.Visitors;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using PDDLSharp.ASTGenerators;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Tools;
 using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Problem;
-using PDDLSharp.Models.AST;
-using PDDLSharp.ASTGenerators;
-using PDDLSharp.Contextualisers;
-using PDDLSharp.Models.Plans;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Parsers.Visitors;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Parsers
 {
@@ -27,18 +18,18 @@ namespace PDDLSharp.Parsers
         public PDDLDecl ParseDecl(string domainFile, string problemFile)
         {
             if (!PDDLFileHelper.IsFileDomain(domainFile))
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"File is not a domain file: '{domainFile}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
             if (!PDDLFileHelper.IsFileProblem(problemFile))
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"File is not a problem file: '{problemFile}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
 
             if (!CompatabilityHelper.IsPDDLDomainSpported(File.ReadAllText(domainFile)))
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Domain contains unsupported packages! Results may not be accurate!",
                     ParseErrorType.Warning,
                     ParseErrorLevel.PreParsing));

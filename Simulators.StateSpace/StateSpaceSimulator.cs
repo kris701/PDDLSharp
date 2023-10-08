@@ -1,17 +1,10 @@
 ﻿using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Expressions;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.Plans;
-using PDDLSharp.Models.Problem;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace PDDLSharp.Simulators.StateSpace
 {
@@ -119,11 +112,11 @@ namespace PDDLSharp.Simulators.StateSpace
                     _tempDel.Add(op);
                 else
                     _tempAdd.Add(op);
-            } 
+            }
             else if (node is NotExp not)
             {
                 ExecuteEffect(not.Child, dict, !isNegative);
-            } 
+            }
             else if (node is WhenExp when)
             {
                 if (IsAllPredicatesTrue(when.Condition, dict, false))
@@ -155,7 +148,7 @@ namespace PDDLSharp.Simulators.StateSpace
             if (Declaration.Problem.Objects != null)
             {
                 var allOfType = Declaration.Problem.Objects.Objs.Where(x => x.Type.IsTypeOf(values[index].Type.Name));
-                foreach(var ofType in allOfType)
+                foreach (var ofType in allOfType)
                 {
                     var newDict = CopyDict(source);
                     if (newDict.ContainsKey(values[index].Name))
@@ -168,6 +161,16 @@ namespace PDDLSharp.Simulators.StateSpace
             }
 
             return returnList;
+        }
+
+        private Dictionary<string, NameExp> CopyDict(Dictionary<string, NameExp> from)
+        {
+            Dictionary<string, NameExp> newDict = new Dictionary<string, NameExp>();
+
+            foreach (var key in from.Keys)
+                newDict.Add(key, new NameExp(from[key]));
+
+            return newDict;
         }
 
         private bool IsAllPredicatesTrue(INode node, Dictionary<string, NameExp> dict, bool isNegative)
@@ -192,7 +195,7 @@ namespace PDDLSharp.Simulators.StateSpace
             }
             else if (node is IWalkable walk)
             {
-                foreach(var subNode in walk)
+                foreach (var subNode in walk)
                     if (!IsAllPredicatesTrue(subNode, dict, isNegative))
                         return false;
             }
@@ -211,16 +214,6 @@ namespace PDDLSharp.Simulators.StateSpace
             }
 
             return newObjects;
-        }
-
-        private Dictionary<string, NameExp> CopyDict(Dictionary<string, NameExp> from)
-        {
-            Dictionary<string, NameExp> newDict = new Dictionary<string, NameExp>();
-
-            foreach (var key in from.Keys)
-                newDict.Add(key, new NameExp(from[key]));
-
-            return newDict;
         }
     }
 }

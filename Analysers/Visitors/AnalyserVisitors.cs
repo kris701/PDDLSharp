@@ -1,13 +1,7 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Expressions;
-using PDDLSharp.Models.Problem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Expressions;
 using System.Xml.Linq;
 
 namespace PDDLSharp.Analysers.Visitors
@@ -36,88 +30,74 @@ namespace PDDLSharp.Analysers.Visitors
             return _predicateCache;
         }
 
-        internal void CheckForCorrectPredicateTypes(IWalkable node)
+        public void CheckForCorrectPredicateTypes(INode node, Func<PredicateExp, NameExp, NameExp, PDDLSharpError> error)
         {
-            List<PredicateExp> predicates = GetPredicateCache();
+            List<PredicateExp> declaredPredicates = GetPredicateCache();
+            var nodePredicates = node.FindTypes<PredicateExp>();
 
-            foreach (var initPred in node)
+            foreach (var pred in nodePredicates)
             {
-                if (initPred is PredicateExp pred)
-                {
-                    var target = predicates.FirstOrDefault(x => x.Name == pred.Name);
-                    if (target != null)
-                    {
-                        for (int i = 0; i < target.Arguments.Count; i++)
-                            if (!pred.Arguments[i].Type.IsTypeOf(target.Arguments[i].Type.Name))
-                                Listener.AddError(new ParseError(
-                                    $"Predicate has an incorrect object type! Expected a '{target.Arguments[i].Type.Name}' but got a '{pred.Arguments[i].Type.Name}'",
-                                    ParseErrorType.Error,
-                                    ParseErrorLevel.Analyser,
-                                    pred.Arguments[i].Line,
-                                    pred.Arguments[i].Start));
-                    }
-                }
+                var target = declaredPredicates.FirstOrDefault(x => x.Name == pred.Name);
+                if (target != null)
+                    for (int i = 0; i < target.Arguments.Count; i++)
+                        if (!pred.Arguments[i].Type.IsTypeOf(target.Arguments[i].Type.Name))
+                            Listener.AddError(error(target, target.Arguments[i], pred.Arguments[i]));
             }
         }
 
-        private void CheckForUndeclaredPredicates(IWalkable node)
+        public void CheckForUndeclaredPredicates(INode node, Func<PredicateExp, PDDLSharpError> error)
         {
-            List<PredicateExp> predicates = GetPredicateCache();
+            List<PredicateExp> declaredPredicates = GetPredicateCache();
+            var nodePredicates = node.FindTypes<PredicateExp>();
 
-            foreach (var item in node)
-            {
-                if (item is PredicateExp pred && 
-                    !predicates.Any(x => x.Name == pred.Name))
-                    Listener.AddError(new ParseError(
-                        $"Used of undeclared predicate '{pred.Name}'",
-                        ParseErrorType.Error,
-                        ParseErrorLevel.Analyser,
-                        item.Line,
-                        item.Start));
-            }
+            foreach(var pred in nodePredicates)
+                if (!declaredPredicates.Any(x => x.Name == pred.Name))
+                    Listener.AddError(error(pred));
         }
 
-        private void CheckForUniqueNames<T>(List<T> nodes, Func<T, ParseError> error) where T : INamedNode
+        public void CheckForUniqueNames(IWalkable node, Func<INamedNode, PDDLSharpError> error)
         {
-            List<string> items = new List<string>();
-            foreach (var node in nodes)
-            {
-                if (items.Contains(node.Name))
-                    Listener.AddError(error(node));
-                items.Add(node.Name);
-            }
+            var nodeNames = node.FindTypes<INamedNode>(new List<Type>() { typeof(TypeExp) });
+
+            foreach (var subNode in node)
+                if (subNode is INamedNode named)
+                    if (!OnlyOne(nodeNames, named.Name))
+                        Listener.AddError(error(named));
         }
 
-        private void CheckForUnusedParameters(ParameterExp parameters, IWalkable checkIn)
+        public void CheckForUnusedParameters(IParametized node, Func<NameExp, PDDLSharpError> error)
         {
-            var allNodes = checkIn.FindTypes<NameExp>();
-            foreach(var param in parameters.Values)
-                if (!allNodes.Any(x => x.Name == param.Name && param != x))
-                    Listener.AddError(new ParseError(
-                        $"Unused parameter detected '{param.Name}'",
-                        ParseErrorType.Warning,
-                        ParseErrorLevel.Analyser,
-                        param.Line,
-                        param.Start));
+            var allNodes = node.FindTypes<NameExp>();
+
+            foreach (var param in node.Parameters.Values)
+                if (OnlyOne(allNodes, param.Name))
+                    Listener.AddError(error(param));
         }
 
-        private void CheckForUndeclaredParameters(ParameterExp parameters, List<INode> checkIn)
+        public void CheckForUndeclaredParameters(IParametized node, Func<NameExp, PDDLSharpError> error)
         {
-            List<NameExp> allNodes = new List<NameExp>();
-            foreach (var check in checkIn)
-                allNodes.AddRange(check.FindTypes<NameExp>(new List<Type>() { typeof(ExistsExp), typeof(ForAllExp) }));
-            foreach (var node in allNodes)
-                if (node.Name.Contains("?"))
-                    if (!parameters.Values.Any(x => x.Name == node.Name))
-                        Listener.AddError(new ParseError(
-                            $"Used of undeclared parameter detected '{node.Name}'",
-                            ParseErrorType.Error,
-                            ParseErrorLevel.Analyser,
-                            node.Line,
-                            node.Start));
+            var sourceParams = new List<NameExp>();
+            if (Declaration.Domain.Constants != null)
+                sourceParams.AddRange(Declaration.Domain.Constants.Constants);
+            CheckForUndeclaredParameters(node, error, sourceParams);
+        }
+        private void CheckForUndeclaredParameters(IParametized node, Func<NameExp, PDDLSharpError> error, List<NameExp> parentParams)
+        {
+            // Normal check
+            parentParams.AddRange(node.Parameters.Values);
+            var allNames = node.FindTypes<NameExp>(new List<Type>() { typeof(ForAllExp), typeof(ExistsExp) }, true);
+            foreach(var name in allNames)
+                if (!parentParams.Any(x => x.Name == name.Name))
+                    Listener.AddError(error(name));
+
+            // Check for other parametized items
+            var allParametized = node.FindTypes<IParametized>();
+            foreach (var param in allParametized)
+                if (param != node)
+                    CheckForUndeclaredParameters(param, error, parentParams);
         }
 
-        private bool OnlyOne<T>(List<T> allItems, string targetName) where T : INamedNode
+        public bool OnlyOne<T>(List<T> allItems, string targetName) where T : INamedNode
         {
             int count = 0;
             foreach (var type in allItems)

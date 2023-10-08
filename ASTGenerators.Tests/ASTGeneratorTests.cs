@@ -84,28 +84,6 @@ namespace PDDLSharp.ASTGenerators.Tests
         }
         #endregion
 
-        #region ReplaceRangeWithSpaces
-
-        [TestMethod]
-        //        123456789
-        [DataRow("(test)", 1, 5, "(    )")]
-        [DataRow("(test)", 0, 6, "      ")]
-        [DataRow("(test (aba))", 6, 11, "(test      )")]
-        public void Can_ReplaceRangeWithSpaces(string text, int from, int to, string expected)
-        {
-            // ARRANGE
-            IErrorListener listener = new ErrorListener();
-            ASTGenerator parser = new ASTGenerator(listener);
-
-            // ACT
-            var res = parser.ReplaceRangeWithSpaces(text, from, to);
-
-            // ASSERT
-            Assert.AreEqual(expected, res);
-        }
-
-        #endregion
-
         #region GenerateLineDict
 
         [TestMethod]

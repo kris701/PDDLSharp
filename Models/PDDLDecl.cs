@@ -1,16 +1,15 @@
-﻿using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Problem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.VisualBasic;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Problem;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Xml.Linq;
-using PDDLSharp.Tools;
+using System;
+using System.Collections;
 
 namespace PDDLSharp.Models
 {
-    public class PDDLDecl
+    public class PDDLDecl : IEnumerable<INode>
     {
         public DomainDecl Domain { get; set; }
         public ProblemDecl Problem { get; set; }
@@ -36,6 +35,17 @@ namespace PDDLSharp.Models
         public override int GetHashCode()
         {
             return Domain.GetHashCode() ^ Problem.GetHashCode();
+        }
+
+        public IEnumerator<INode> GetEnumerator()
+        {
+            yield return Domain;
+            yield return Problem;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

@@ -1,15 +1,7 @@
-﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models;
-using PDDLSharp.Models.AST;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Expressions;
-using PDDLSharp.Models.Problem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Contextualisers.Visitors
 {
@@ -61,7 +53,7 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(TypesDecl node)
         {
-            
+
         }
 
         #endregion
@@ -96,15 +88,18 @@ namespace PDDLSharp.Contextualisers.Visitors
         private void InsertDefaultPredicates(PredicatesDecl decl)
         {
             if (!decl.Predicates.Any(x => x.Name == "="))
-                decl.Predicates.Add(
-                    new PredicateExp(
+            {
+                var equals = new PredicateExp(
                         new ASTNode(),
                         decl,
                         "=",
                         new List<NameExp>() {
                             new NameExp(decl, "?l"),
                             new NameExp(decl, "?r")
-                        }));
+                        });
+                equals.IsHidden = true;
+                decl.Predicates.Add(equals);
+            }
         }
 
         #endregion
@@ -122,10 +117,7 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(ActionDecl node)
         {
-            DecorateTypesNamesWithParameterType(node.Parameters, new List<INode>() {
-                node.Preconditions,
-                node.Effects
-            });
+            DecorateTypesNamesWithParameterType(node);
         }
 
         #endregion
@@ -134,11 +126,7 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(DurativeActionDecl node)
         {
-            DecorateTypesNamesWithParameterType(node.Parameters, new List<INode>() {
-                node.Condition,
-                node.Effects,
-                node.Duration
-            });
+            DecorateTypesNamesWithParameterType(node);
 
         }
 
@@ -148,10 +136,7 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(AxiomDecl node)
         {
-            DecorateTypesNamesWithParameterType(node.Vars, new List<INode>() {
-                node.Context,
-                node.Implies
-            });
+            DecorateTypesNamesWithParameterType(node);
         }
 
         #endregion

@@ -1,14 +1,7 @@
-﻿using Microsoft.VisualBasic;
-using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Expressions;
-using PDDLSharp.Models.Problem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Analysers.Visitors
 {
@@ -27,28 +20,28 @@ namespace PDDLSharp.Analysers.Visitors
         private void CheckForBasicDomain(DomainDecl domain)
         {
             if (domain.Predicates == null)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing predicates declaration.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Start));
             if (domain.Predicates != null && domain.Predicates.Predicates.Count == 0)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"No predicates defined.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Start));
             if (domain.Actions == null)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Start));
             if (domain.Actions != null && domain.Actions.Count == 0)
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
@@ -70,8 +63,8 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(RequirementsDecl node)
         {
             CheckForUniqueNames(
-                node.Requirements, 
-                (node) => new ParseError(
+                node,
+                (node) => new PDDLSharpError(
                     $"A requirement have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
@@ -95,8 +88,8 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(TimelessDecl node)
         {
             CheckForUniqueNames(
-                node.Items,
-                (node) => new ParseError(
+                node,
+                (node) => new PDDLSharpError(
                     $"A Timeless predicate have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
@@ -111,8 +104,8 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(TypesDecl node)
         {
             CheckForUniqueNames(
-                node.Types,
-                (node) => new ParseError(
+                node,
+                (node) => new PDDLSharpError(
                     $"A type have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
@@ -129,7 +122,7 @@ namespace PDDLSharp.Analysers.Visitors
             foreach (var type in node.Types)
             {
                 if (OnlyOne(allTypes, type.Name))
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Unused type detected '{type.Name}'",
                         ParseErrorType.Message,
                         ParseErrorLevel.Analyser,
@@ -145,8 +138,8 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(ConstantsDecl node)
         {
             CheckForUniqueNames(
-                node.Constants,
-                (node) => new ParseError(
+                node,
+                (node) => new PDDLSharpError(
                     $"A constant have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
@@ -161,8 +154,8 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(PredicatesDecl node)
         {
             CheckForUniqueNames(
-                node.Predicates,
-                (node) => new ParseError(
+                node,
+                (node) => new PDDLSharpError(
                     $"A predicate have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
@@ -177,9 +170,9 @@ namespace PDDLSharp.Analysers.Visitors
             allPredicates.AddRange(Declaration.Problem.FindTypes<PredicateExp>());
             foreach (var predicate in node.Predicates)
             {
-                if (OnlyOne(allPredicates, predicate.Name))
+                if (!predicate.IsHidden && OnlyOne(allPredicates, predicate.Name))
                 {
-                    Listener.AddError(new ParseError(
+                    Listener.AddError(new PDDLSharpError(
                         $"Unused predicate detected '{predicate.Name}'",
                         ParseErrorType.Message,
                         ParseErrorLevel.Analyser,
@@ -196,8 +189,8 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(FunctionsDecl node)
         {
             CheckForUniqueNames(
-                node.Functions,
-                (node) => new ParseError(
+                node,
+                (node) => new PDDLSharpError(
                     $"A function have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
@@ -211,14 +204,31 @@ namespace PDDLSharp.Analysers.Visitors
 
         public void Visit(ActionDecl node)
         {
-            
-            CheckForUndeclaredParameters(node.Parameters, new List<INode>()
-            {
-                node.Preconditions,
-                node.Effects
-            });
-            CheckForUnusedParameters(node.Parameters, node);
-            CheckForCorrectPredicateTypes(node);
+
+            CheckForUndeclaredParameters(
+                node,
+                (param) => new PDDLSharpError(
+                    $"Action '{node.Name}' contains undeclared parameter '{param.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+            CheckForUnusedParameters(
+                node,
+                (param) => new PDDLSharpError(
+                    $"Action '{node.Name}' contains unused parameter '{param.Name}'",
+                    ParseErrorType.Warning,
+                    ParseErrorLevel.Analyser,
+                    param.Line,
+                    param.Start));
+            CheckForCorrectPredicateTypes(
+                node,
+                (pred, expected, actual) => new PDDLSharpError(
+                    $"Action '{node.Name}' contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
         }
 
         #endregion
@@ -227,15 +237,30 @@ namespace PDDLSharp.Analysers.Visitors
 
         public void Visit(DurativeActionDecl node)
         {
-            CheckForUndeclaredParameters(node.Parameters, 
-                new List<INode>()
-                {
-                    node.Condition,
-                    node.Effects,
-                    node.Duration
-                });
-            CheckForUnusedParameters(node.Parameters, node);
-            CheckForCorrectPredicateTypes(node);
+            CheckForUndeclaredParameters(
+                node,
+                (param) => new PDDLSharpError(
+                    $"Durative action '{node.Name}' contains undeclared parameter '{param.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+            CheckForUnusedParameters(
+                node, 
+                (param) => new PDDLSharpError(
+                    $"Durative action '{node.Name}' contains unused parameter '{param.Name}'",
+                    ParseErrorType.Warning,
+                    ParseErrorLevel.Analyser,
+                    param.Line,
+                    param.Start));
+            CheckForCorrectPredicateTypes(
+                node,
+                (pred, expected, actual) => new PDDLSharpError(
+                    $"Durative action '{node.Name}' contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
         }
 
         #endregion
@@ -244,13 +269,30 @@ namespace PDDLSharp.Analysers.Visitors
 
         public void Visit(AxiomDecl node)
         {
-            CheckForUndeclaredParameters(node.Vars, new List<INode>()
-            {
-                node.Context,
-                node.Implies
-            });
-            CheckForUnusedParameters(node.Vars, node);
-            CheckForCorrectPredicateTypes(node);
+            CheckForUndeclaredParameters(
+                node,
+                (param) => new PDDLSharpError(
+                    $"Axiom contains undeclared parameter '{param.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+            CheckForUnusedParameters(
+                node,
+                (param) => new PDDLSharpError(
+                    $"Axiom contains unused parameter '{param.Name}'",
+                    ParseErrorType.Warning,
+                    ParseErrorLevel.Analyser,
+                    param.Line,
+                    param.Start));
+            CheckForCorrectPredicateTypes(
+                node,
+                (pred, expected, actual) => new PDDLSharpError(
+                    $"Axiom contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
         }
 
         #endregion

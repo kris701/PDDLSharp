@@ -1,9 +1,6 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Expressions;
 using PDDLSharp.Models.Plans;
-using PDDLSharp.Models.Problem;
 using PDDLSharp.Parsers;
 using System;
 using System.Collections.Generic;
@@ -147,7 +144,7 @@ namespace PDDLSharp.Simulators.StateSpace.Tests
             // ACT
             simulator.Step("pick", "ball1", "rooma", "left");
             simulator.Step("move", "rooma", "roomb");
-            simulator.Step("drop", "ball1", "roomb", "left" );
+            simulator.Step("drop", "ball1", "roomb", "left");
 
             // ASSERT
             Assert.IsTrue(simulator.State.Contains("at", "ball1", "roomb"));

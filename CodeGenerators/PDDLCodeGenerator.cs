@@ -1,13 +1,6 @@
 ﻿using PDDLSharp.CodeGenerators.Visitors;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models;
-using PDDLSharp.Models.Domain;
-using PDDLSharp.Models.Problem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PDDLSharp.Models.PDDL;
 
 namespace PDDLSharp.CodeGenerators
 {
@@ -32,13 +25,13 @@ namespace PDDLSharp.CodeGenerators
                 while (retStr.Contains($"{Environment.NewLine}{Environment.NewLine}"))
                     retStr = retStr.Replace($"{Environment.NewLine}{Environment.NewLine}", Environment.NewLine);
             }
-            catch (ParseException e)
+            catch (PDDLSharpException e)
             {
 
             }
             catch (Exception e)
             {
-                Listener.AddError(new ParseError(
+                Listener.AddError(new PDDLSharpError(
                     $"Unexpected exception occured during code generation: {e.Message}",
                     ParseErrorType.Error,
                     ParseErrorLevel.CodeGeneration));
