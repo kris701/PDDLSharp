@@ -58,12 +58,8 @@ namespace PDDLSharp.Analysers.Visitors
                 if (item is PredicateExp pred &&
                     !predicates.Any(x => x.Name == pred.Name))
                     Listener.AddError(error(pred));
-                //Listener.AddError(new PDDLSharpError(
-                //    $"Used of undeclared predicate '{pred.Name}'",
-                //    ParseErrorType.Error,
-                //    ParseErrorLevel.Analyser,
-                //    item.Line,
-                //    item.Start));
+                else if (item is IWalkable walk)
+                    CheckForUndeclaredPredicates(walk, error);
             }
         }
 

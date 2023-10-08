@@ -9,6 +9,7 @@
           (free right)
           (at ball4 rooma)
           (at ball3 rooma)
+          (wew rooma)
           (at ball2 rooma)
           (at ball1 rooma))
    (:goal (and (at ball4 roomb)

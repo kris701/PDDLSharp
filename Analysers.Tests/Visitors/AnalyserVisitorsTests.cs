@@ -15,47 +15,26 @@ using System.Threading.Tasks;
 namespace PDDLSharp.Analysers.Tests.Visitors
 {
     [TestClass]
-    public class AnalyserVisitorsTests
+    public class AnalyserVisitorsTests : BaseVisitorsTests
     {
-        private PDDLDecl GetDeclaration(string domain, string problem, IErrorListener listener)
-        {
-            PDDLParser parser = new PDDLParser(listener);
-            var decl = parser.ParseDecl(domain, problem);
-            IContextualiser contextualiser = new PDDLContextualiser(listener);
-            contextualiser.Contexturalise(decl);
-            return decl;
-        }
-
-        private INode GetNode(PDDLDecl decl, int[] target, IErrorListener listener)
-        {
-            if (target[0] == 0)
-                return GetNode(decl.Domain, 1, target, listener);
-            if (target[0] == 1)
-                return GetNode(decl.Problem, 1, target, listener);
-            return null;
-        }
-
-        private INode GetNode(IWalkable source, int index, int[] target, IErrorListener listener)
-        {
-            int counter = 0;
-            foreach(var item in source)
-            {
-                if (index == target.Length && target[index] == counter)
-                    return item;
-                else if (target[index] == counter)
-                    return item;
-                counter++;
-            }
-            return null;
-        }
-
         [TestMethod]
         [DataRow("TestFiles/gripper-domain-badaction.pddl", "TestFiles/gripper-prob01.pddl", 2, 0, 3)]
         [DataRow("TestFiles/gripper-domain-badaction.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 4)]
         [DataRow("TestFiles/gripper-domain-badaction.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 5)]
+        [DataRow("TestFiles/gripper-domain-badaction.pddl", "TestFiles/gripper-prob01.pddl", 2, 0)]
+        [DataRow("TestFiles/gripper-domain-badaction.pddl", "TestFiles/gripper-prob01.pddl", 0, 1)]
         [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 3)]
         [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 4)]
         [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 5)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 1)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 1)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 1)]
+        [DataRow("TestFiles/agricola-domain-badaction.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 9)]
+        [DataRow("TestFiles/agricola-domain-badaction.pddl", "TestFiles/agricola-prob01.pddl", 2, 0, 8)]
+        [DataRow("TestFiles/agricola-domain-badaction.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 7)]
         public void Can_CheckForCorrectPredicateTypes(string domain, string problem, int expectedErrors, params int[] targetNode)
         {
             // ARRANGE
@@ -70,6 +49,44 @@ namespace PDDLSharp.Analysers.Tests.Visitors
             analyser.CheckForCorrectPredicateTypes(
                 node,
                 (pred, expected, actual) => new PDDLSharpError(
+                    $"Err",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+
+            // ASSERT
+            Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));
+        }
+
+        [TestMethod]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 1)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01-undeclaredgoalpredicate.pddl", 1, 1)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 1)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 1)]
+        [DataRow("TestFiles/agricola-domain-undeclaredactionpredicate.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 10)]
+        [DataRow("TestFiles/agricola-domain-undeclaredactionpredicate.pddl", "TestFiles/agricola-prob01.pddl", 1, 0, 11)]
+        [DataRow("TestFiles/agricola-domain-undeclaredactionpredicate.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 12)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01-undeclaredinitpredicate.pddl", 0, 1, 2)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01-undeclaredinitpredicate.pddl", 1, 1, 3)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01-undeclaredinitpredicate.pddl", 0, 1, 4)]
+        public void Can_CheckForUndeclaredPredicates(string domain, string problem, int expectedErrors, params int[] targetNode)
+        {
+            // ARRANGE
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+            var decl = GetDeclaration(domain, problem, listener);
+            Assert.IsNotNull(decl);
+            var node = GetNode(decl, targetNode, listener) as IWalkable;
+            Assert.IsNotNull(node);
+            var analyser = new AnalyserVisitors(listener, decl);
+
+            // ACT
+            analyser.CheckForUndeclaredPredicates(
+                node,
+                (pred) => new PDDLSharpError(
                     $"Err",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
