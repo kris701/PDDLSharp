@@ -96,5 +96,41 @@ namespace PDDLSharp.Analysers.Tests.Visitors
             // ASSERT
             Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));
         }
+
+        [TestMethod]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 1)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 2)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 1, 2)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 2)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 1, 2)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01-duplicateobjects.pddl", 2, 1, 2)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 2)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 3)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 4)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 5)]
+        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 1, 2)]
+        public void Can_CheckForUniqueNames(string domain, string problem, int expectedErrors, params int[] targetNode)
+        {
+            // ARRANGE
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+            var decl = GetDeclaration(domain, problem, listener);
+            Assert.IsNotNull(decl);
+            var node = GetNode(decl, targetNode, listener) as IWalkable;
+            Assert.IsNotNull(node);
+            var analyser = new AnalyserVisitors(listener, decl);
+
+            // ACT
+            analyser.CheckForUniqueNames(
+                node,
+                (pred) => new PDDLSharpError(
+                    $"Err",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+
+            // ASSERT
+            Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));
+        }
     }
 }

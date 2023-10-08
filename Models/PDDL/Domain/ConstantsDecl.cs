@@ -1,9 +1,10 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class ConstantsDecl : BaseNode, IDecl
+    public class ConstantsDecl : BaseWalkableNode, IDecl
     {
         public List<NameExp> Constants { get; set; }
 
@@ -33,6 +34,11 @@ namespace PDDLSharp.Models.PDDL.Domain
             foreach (var constant in Constants)
                 hash *= constant.GetHashCode();
             return hash;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            return Constants.GetEnumerator();
         }
     }
 }

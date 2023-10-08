@@ -109,7 +109,7 @@ namespace PDDLSharp.Analysers.Visitors
                     node.Start));
 
             CheckForUniqueNames(
-                node.Objs,
+                node,
                 (node) => new PDDLSharpError(
                     $"An object have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,

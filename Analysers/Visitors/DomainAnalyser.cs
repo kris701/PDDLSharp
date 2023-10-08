@@ -63,7 +63,7 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(RequirementsDecl node)
         {
             CheckForUniqueNames(
-                node.Requirements,
+                node,
                 (node) => new PDDLSharpError(
                     $"A requirement have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Message,
@@ -88,7 +88,7 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(TimelessDecl node)
         {
             CheckForUniqueNames(
-                node.Items,
+                node,
                 (node) => new PDDLSharpError(
                     $"A Timeless predicate have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Message,
@@ -104,7 +104,7 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(TypesDecl node)
         {
             CheckForUniqueNames(
-                node.Types,
+                node,
                 (node) => new PDDLSharpError(
                     $"A type have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
@@ -138,7 +138,7 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(ConstantsDecl node)
         {
             CheckForUniqueNames(
-                node.Constants,
+                node,
                 (node) => new PDDLSharpError(
                     $"A constant have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
@@ -154,7 +154,7 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(PredicatesDecl node)
         {
             CheckForUniqueNames(
-                node.Predicates,
+                node,
                 (node) => new PDDLSharpError(
                     $"A predicate have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
@@ -189,7 +189,7 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(FunctionsDecl node)
         {
             CheckForUniqueNames(
-                node.Functions,
+                node,
                 (node) => new PDDLSharpError(
                     $"A function have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
