@@ -73,8 +73,9 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(ExistsExp node, int indent)
         {
-            string retStr = $"{IndentStr(indent)}(exists{Environment.NewLine}";
-            retStr += $"{Visit((dynamic)node.Parameters, indent + 1)}{Environment.NewLine}";
+            _printType = true;
+            string retStr = $"{IndentStr(indent)}(exists {Visit((dynamic)node.Parameters, indent + 1)}{Environment.NewLine}";
+            _printType = false;
             retStr += $"{Visit((dynamic)node.Expression, indent + 1)}{Environment.NewLine}";
             retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;

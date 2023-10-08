@@ -114,10 +114,7 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(ActionDecl node)
         {
-            DecorateTypesNamesWithParameterType(node.Parameters, new List<INode>() {
-                node.Preconditions,
-                node.Effects
-            });
+            DecorateTypesNamesWithParameterType(node);
         }
 
         #endregion
@@ -126,11 +123,7 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(DurativeActionDecl node)
         {
-            DecorateTypesNamesWithParameterType(node.Parameters, new List<INode>() {
-                node.Condition,
-                node.Effects,
-                node.Duration
-            });
+            DecorateTypesNamesWithParameterType(node);
 
         }
 
@@ -140,10 +133,7 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(AxiomDecl node)
         {
-            DecorateTypesNamesWithParameterType(node.Parameters, new List<INode>() {
-                node.Context,
-                node.Implies
-            });
+            DecorateTypesNamesWithParameterType(node);
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Models.PDDL.Expressions;
+﻿using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 
 namespace PDDLSharp.Contextualisers.Visitors
@@ -73,7 +74,9 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(GoalDecl node)
         {
-
+            var allParametized = node.FindTypes<IParametized>();
+            foreach(var parametized in allParametized)
+                DecorateTypesNamesWithParameterType(parametized);
         }
 
         #endregion

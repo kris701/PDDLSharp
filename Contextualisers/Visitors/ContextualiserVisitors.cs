@@ -1,4 +1,5 @@
-﻿using PDDLSharp.ErrorListeners;
+﻿using Microsoft.VisualBasic;
+using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
@@ -16,26 +17,33 @@ namespace PDDLSharp.Contextualisers.Visitors
             Declaration = declaration;
         }
 
-        private void DecorateTypesNamesWithParameterType(ParameterExp parameters, List<INode> targets)
+        public void DecorateTypesNamesWithParameterType(IParametized node)
         {
-            var allParameters = new List<NameExp>();
-            allParameters.AddRange(parameters.Values);
+            var sourceParams = new List<NameExp>();
             if (Declaration.Domain.Constants != null)
-                allParameters.AddRange(Declaration.Domain.Constants.Constants);
-
-            var allTypes = new List<NameExp>();
-            foreach (var target in targets)
-                allTypes.AddRange(target.FindTypes<NameExp>());
-
-            foreach (var name in allTypes)
+                sourceParams.AddRange(Declaration.Domain.Constants.Constants);
+            DecorateTypesNamesWithParameterType(node, sourceParams);
+        }
+        private void DecorateTypesNamesWithParameterType(IParametized node, List<NameExp> parentParams)
+        {
+            // Normal decorate
+            parentParams.AddRange(node.Parameters.Values);
+            var allNames = node.FindTypes<NameExp>(new List<Type>() { typeof(ForAllExp), typeof(ExistsExp) }, true);
+            foreach (var name in allNames)
             {
-                var target = allParameters.FirstOrDefault(x => x.Name == name.Name);
+                var target = parentParams.FirstOrDefault(x => x.Name == name.Name);
                 if (target != null)
                 {
                     name.Type.Name = target.Type.Name;
                     name.Type.SuperType = target.Type.SuperType;
                 }
             }
+
+            // Decorate for other parametized items
+            var allParametized = node.FindTypes<IParametized>();
+            foreach (var param in allParametized)
+                if (param != node)
+                    DecorateTypesNamesWithParameterType(param, parentParams);
         }
     }
 }

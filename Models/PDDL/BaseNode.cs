@@ -58,10 +58,10 @@ namespace PDDLSharp.Models.PDDL
             return returnSet;
         }
 
-        public List<T> FindTypes<T>(List<Type>? stopIf = null)
+        public List<T> FindTypes<T>(List<Type>? stopIf = null, bool ignoreFirst = false)
         {
             List<T> returnSet = new List<T>();
-            if (stopIf != null && stopIf.Contains(GetType()))
+            if (stopIf != null && !ignoreFirst && stopIf.Contains(GetType()))
                 return returnSet;
 
             List<PropertyInfo> myPropertyInfo = GetType().GetProperties().ToList();

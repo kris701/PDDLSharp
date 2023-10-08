@@ -57,7 +57,7 @@ namespace PDDLSharp.Analysers.Visitors
 
         public void CheckForUniqueNames(IWalkable node, Func<INamedNode, PDDLSharpError> error)
         {
-            var nodeNames = node.FindTypes<INamedNode>();
+            var nodeNames = node.FindTypes<INamedNode>(new List<Type>() { typeof(TypeExp) });
 
             foreach (var subNode in node)
                 if (subNode is INamedNode named)
@@ -85,7 +85,7 @@ namespace PDDLSharp.Analysers.Visitors
         {
             // Normal check
             parentParams.AddRange(node.Parameters.Values);
-            var allNames = node.FindTypes<NameExp>(new List<Type>() { typeof(ExistsExp), typeof(ForAllExp) });
+            var allNames = node.FindTypes<NameExp>(new List<Type>() { typeof(ForAllExp), typeof(ExistsExp) }, true);
             foreach(var name in allNames)
                 if (!parentParams.Any(x => x.Name == name.Name))
                     Listener.AddError(error(name));
