@@ -40,13 +40,14 @@ namespace PDDLSharp.Models.PDDL
             List<INamedNode> returnSet = new List<INamedNode>();
             if (IsHidden)
                 return returnSet;
-            List<PropertyInfo> myPropertyInfo = GetType().GetProperties().ToList();
             if (this is INamedNode node)
                 if (node.Name == name)
                     returnSet.Add(node);
-            foreach (var prop in myPropertyInfo)
+            if (_metaInfo.Count == 0)
+                _metaInfo = GetType().GetProperties().ToList();
+            foreach (var prop in _metaInfo)
             {
-                if (prop.Name.ToUpper() != "PARENT")
+                if (prop.Name != "Parent")
                 {
                     var value = prop.GetValue(this, null);
                     if (value is INode valueNode)
@@ -61,20 +62,21 @@ namespace PDDLSharp.Models.PDDL
             return returnSet;
         }
 
+        private List<PropertyInfo> _metaInfo = new List<PropertyInfo>();
         public List<T> FindTypes<T>(List<Type>? stopIf = null, bool ignoreFirst = false)
         {
             List<T> returnSet = new List<T>();
-            if (IsHidden)
-                return returnSet;
-            if (stopIf != null && !ignoreFirst && stopIf.Contains(GetType()))
+            if (IsHidden || (stopIf != null && !ignoreFirst && stopIf.Contains(GetType())))
                 return returnSet;
 
-            List<PropertyInfo> myPropertyInfo = GetType().GetProperties().ToList();
             if (this is T self)
                 returnSet.Add(self);
-            foreach (var prop in myPropertyInfo)
+
+            if (_metaInfo.Count == 0)
+                _metaInfo = GetType().GetProperties().ToList();
+            foreach (var prop in _metaInfo)
             {
-                if (prop.Name.ToUpper() != "PARENT")
+                if (prop.Name != "Parent")
                 {
                     var value = prop.GetValue(this, null);
                     if (value is INode valueNode)
@@ -100,7 +102,6 @@ namespace PDDLSharp.Models.PDDL
         public override int GetHashCode()
         {
             return 50;
-            //return Start.GetHashCode() + End.GetHashCode() + Line.GetHashCode();
         }
 
         public override bool Equals(object? obj)

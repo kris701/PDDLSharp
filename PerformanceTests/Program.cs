@@ -2,6 +2,7 @@
 using PDDLSharp.CodeGenerators;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Parsers;
 using System.Diagnostics;
 
@@ -15,7 +16,29 @@ namespace PerformanceTests
             BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
             Console.WriteLine("Done!");
 
-            RunNTimes(1);
+            //RunNTimes(1);
+            RunNTimes2(2000);
+        }
+
+        private static void RunNTimes2(int number)
+        {
+            var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
+            var targetProblem = "benchmarks/tidybot-opt11-strips/p16.pddl";
+            //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
+            //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
+
+            IErrorListener listener = new ErrorListener();
+            PDDLParser parser = new PDDLParser(listener);
+            var decl = parser.ParseDecl(targetDomain, targetProblem);
+            Stopwatch instanceWatch = new Stopwatch();
+            instanceWatch.Start();
+            for (int i = 0; i < number; i++)
+            {
+                Console.WriteLine($"Instance {i}");
+                decl.Domain.FindTypes<NameExp>();
+            }
+            instanceWatch.Stop();
+            Console.WriteLine($"Took {instanceWatch.ElapsedMilliseconds} ms");
         }
 
         private static void RunNTimes(int number)
