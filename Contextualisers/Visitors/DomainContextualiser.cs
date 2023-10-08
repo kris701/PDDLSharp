@@ -140,7 +140,7 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(AxiomDecl node)
         {
-            DecorateTypesNamesWithParameterType(node.Vars, new List<INode>() {
+            DecorateTypesNamesWithParameterType(node.Parameters, new List<INode>() {
                 node.Context,
                 node.Implies
             });

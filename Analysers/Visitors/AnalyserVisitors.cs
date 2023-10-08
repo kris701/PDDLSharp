@@ -65,24 +65,36 @@ namespace PDDLSharp.Analysers.Visitors
                         Listener.AddError(error(named));
         }
 
-        public void CheckForUnusedParameters(ParameterExp parameters, IWalkable checkIn, Func<NameExp, PDDLSharpError> error)
+        public void CheckForUnusedParameters(IParametized node, Func<NameExp, PDDLSharpError> error)
         {
-            var allNodes = checkIn.FindTypes<NameExp>();
+            var allNodes = node.FindTypes<NameExp>();
 
-            foreach (var param in parameters.Values)
-                if (!allNodes.Any(x => x.Name == param.Name && param != x))
+            foreach (var param in node.Parameters.Values)
+                if (OnlyOne(allNodes, param.Name))
                     Listener.AddError(error(param));
         }
 
-        public void CheckForUndeclaredParameters(ParameterExp parameters, List<INode> checkIn, Func<NameExp, PDDLSharpError> error)
+        public void CheckForUndeclaredParameters(IParametized node, Func<NameExp, PDDLSharpError> error)
         {
-            List<NameExp> allNodes = new List<NameExp>();
-            foreach (var check in checkIn)
-                allNodes.AddRange(check.FindTypes<NameExp>(new List<Type>() { typeof(ExistsExp), typeof(ForAllExp) }));
-            foreach (var node in allNodes)
-                if (node.Name.Contains("?"))
-                    if (!parameters.Values.Any(x => x.Name == node.Name))
-                        Listener.AddError(error(node));
+            var sourceParams = new List<NameExp>();
+            if (Declaration.Domain.Constants != null)
+                sourceParams.AddRange(Declaration.Domain.Constants.Constants);
+            CheckForUndeclaredParameters(node, error, sourceParams);
+        }
+        private void CheckForUndeclaredParameters(IParametized node, Func<NameExp, PDDLSharpError> error, List<NameExp> parentParams)
+        {
+            // Normal check
+            parentParams.AddRange(node.Parameters.Values);
+            var allNames = node.FindTypes<NameExp>(new List<Type>() { typeof(ExistsExp), typeof(ForAllExp) });
+            foreach(var name in allNames)
+                if (!parentParams.Any(x => x.Name == name.Name))
+                    Listener.AddError(error(name));
+
+            // Check for other parametized items
+            var allParametized = node.FindTypes<IParametized>();
+            foreach (var param in allParametized)
+                if (param != node)
+                    CheckForUndeclaredParameters(param, error, parentParams);
         }
 
         public bool OnlyOne<T>(List<T> allItems, string targetName) where T : INamedNode

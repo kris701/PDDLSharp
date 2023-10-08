@@ -132,5 +132,77 @@ namespace PDDLSharp.Analysers.Tests.Visitors
             // ASSERT
             Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));
         }
+
+        [TestMethod]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 3)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 4)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 5)]
+        [DataRow("TestFiles/gripper-domain-unusedparamsaction.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 3)]
+        [DataRow("TestFiles/gripper-domain-unusedparamsaction.pddl", "TestFiles/gripper-prob01.pddl", 1, 0, 4)]
+        [DataRow("TestFiles/gripper-domain-unusedparamsaction.pddl", "TestFiles/gripper-prob01.pddl", 2, 0, 5)]
+        public void Can_CheckForUnusedParameters(string domain, string problem, int expectedErrors, params int[] targetNode)
+        {
+            // ARRANGE
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+            var decl = GetDeclaration(domain, problem, listener);
+            Assert.IsNotNull(decl);
+            var node = GetNode(decl, targetNode, listener) as IParametized;
+            Assert.IsNotNull(node);
+            var analyser = new AnalyserVisitors(listener, decl);
+
+            // ACT
+            analyser.CheckForUnusedParameters(
+                node,
+                (pred) => new PDDLSharpError(
+                    $"Err",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+
+            // ASSERT
+            Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));
+        }
+
+        [TestMethod]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 3)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 4)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 5)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 6)]
+        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 7)]
+        [DataRow("TestFiles/satellite-domain-undeclaredparameter.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 3)]
+        [DataRow("TestFiles/satellite-domain-undeclaredparameter.pddl", "TestFiles/satellite-prob01.pddl", 1, 0, 4)]
+        [DataRow("TestFiles/satellite-domain-undeclaredparameter.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 5)]
+        [DataRow("TestFiles/satellite-domain-undeclaredparameter.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 6)]
+        [DataRow("TestFiles/satellite-domain-undeclaredparameter.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 7)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 3)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 4)]
+        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 5)]
+        [DataRow("TestFiles/gripper-domain-undeclaredparameter.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 3)]
+        [DataRow("TestFiles/gripper-domain-undeclaredparameter.pddl", "TestFiles/gripper-prob01.pddl", 1, 0, 4)]
+        [DataRow("TestFiles/gripper-domain-undeclaredparameter.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 5)]
+        public void Can_CheckForUndeclaredParameters(string domain, string problem, int expectedErrors, params int[] targetNode)
+        {
+            // ARRANGE
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+            var decl = GetDeclaration(domain, problem, listener);
+            Assert.IsNotNull(decl);
+            var node = GetNode(decl, targetNode, listener) as IParametized;
+            Assert.IsNotNull(node);
+            var analyser = new AnalyserVisitors(listener, decl);
+
+            // ACT
+            analyser.CheckForUndeclaredParameters(
+                node,
+                (pred) => new PDDLSharpError(
+                    $"Err",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+
+            // ASSERT
+            Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));
+        }
     }
 }

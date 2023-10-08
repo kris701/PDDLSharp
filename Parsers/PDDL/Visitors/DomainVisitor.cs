@@ -306,7 +306,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var newAxiomDecl = new AxiomDecl(node, parent, null, null, null);
 
                 // Vars
-                newAxiomDecl.Vars = new ParameterExp(
+                newAxiomDecl.Parameters = new ParameterExp(
                     node.Children[0],
                     newAxiomDecl,
                     ParseAsParameters(node.Children[0], newAxiomDecl, "parameters", node.Children[0].InnerContent.Trim()));

@@ -54,7 +54,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
         {
             string retStr = $"{IndentStr(indent)}(:axiom{Environment.NewLine}";
             _printType = true;
-            retStr += $"{IndentStr(indent + 1)}:vars {Visit(node.Vars, indent + 2)}{Environment.NewLine}";
+            retStr += $"{IndentStr(indent + 1)}:vars {Visit(node.Parameters, indent + 2)}{Environment.NewLine}";
             _printType = false;
             retStr += $"{IndentStr(indent + 1)}:context {Visit((dynamic)node.Context, indent + 2)}{Environment.NewLine}";
             retStr += $"{IndentStr(indent + 1)}:implies {Visit((dynamic)node.Implies, indent + 2)}{Environment.NewLine}";
