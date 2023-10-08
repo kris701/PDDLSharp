@@ -49,7 +49,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulators.StateSpace", "Si
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulators.StateSpace.Tests", "Simulators.StateSpace.Tests\Simulators.StateSpace.Tests.csproj", "{EB2AB0A3-14F6-48C2-A667-51AB24FD6EA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Analysers.Tests", "Analysers.Tests\Analysers.Tests.csproj", "{16492AC2-BC0C-43A3-A723-54A1B6587A56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analysers.Tests", "Analysers.Tests\Analysers.Tests.csproj", "{16492AC2-BC0C-43A3-A723-54A1B6587A56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolsTests", "ToolsTests\ToolsTests.csproj", "{4BE6578D-89E9-470C-8F8E-B802D5B788FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,6 +139,10 @@ Global
 		{16492AC2-BC0C-43A3-A723-54A1B6587A56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16492AC2-BC0C-43A3-A723-54A1B6587A56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16492AC2-BC0C-43A3-A723-54A1B6587A56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BE6578D-89E9-470C-8F8E-B802D5B788FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BE6578D-89E9-470C-8F8E-B802D5B788FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BE6578D-89E9-470C-8F8E-B802D5B788FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BE6578D-89E9-470C-8F8E-B802D5B788FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

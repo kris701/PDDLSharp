@@ -1,4 +1,6 @@
-﻿namespace PDDLSharp.ASTGenerators
+﻿using PDDLSharp.Tools;
+
+namespace PDDLSharp.ASTGenerators
 {
     public static class TextPreprocessing
     {
@@ -20,7 +22,7 @@
             {
                 int from = retStr.IndexOf(";", offset);
                 int to = retStr.IndexOf(ASTTokens.BreakToken, from);
-                retStr = retStr.Remove(from, to - from).Insert(from, new string(' ', to - from));
+                retStr = StringHelpers.ReplaceRangeWithSpacesFast(retStr, from, to);
                 offset = to + 1;
             }
             return retStr;

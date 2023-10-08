@@ -16,8 +16,8 @@ namespace PerformanceTests
             BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
             Console.WriteLine("Done!");
 
-            //RunNTimes(100);
-            RunNTimes2(2000);
+            RunNTimes(100);
+            //RunNTimes2(2000);
         }
 
         private static void RunNTimes2(int number)
