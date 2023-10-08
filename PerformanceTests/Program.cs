@@ -15,15 +15,15 @@ namespace PerformanceTests
             BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
             Console.WriteLine("Done!");
 
-            RunNTimes(100);
+            RunNTimes(1);
         }
 
         private static void RunNTimes(int number)
         {
-            //var targetDomain = "benchmarks/airport/p50-domain.pddl";
-            //var targetProblem = "benchmarks/airport/p50-airport5MUC-p15.pddl";
-            var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
-            var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
+            var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
+            var targetProblem = "benchmarks/tidybot-opt11-strips/p16.pddl";
+            //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
+            //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);

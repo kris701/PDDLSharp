@@ -8,7 +8,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
         {
             if (_printType)
             {
-                if (node.Type == null || node.Type.Name == "object" || node.Type.Name == "")
+                if (node.Type == null || node.Type.Name == "")
                     return $"{IndentStr(indent)}({node.Name})";
                 else
                     return $"{IndentStr(indent)}({node.Name} - {Visit(node.Type, 0)})";
