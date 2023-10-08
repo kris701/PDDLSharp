@@ -205,13 +205,36 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(ActionDecl node)
         {
 
-            CheckForUndeclaredParameters(node.Parameters, new List<INode>()
-            {
-                node.Preconditions,
-                node.Effects
-            });
-            CheckForUnusedParameters(node.Parameters, node);
-            CheckForCorrectPredicateTypes(node);
+            CheckForUndeclaredParameters(
+                node.Parameters, 
+                new List<INode>()
+                {
+                    node.Preconditions,
+                    node.Effects
+                },
+                (param) => new PDDLSharpError(
+                    $"Action '{node.Name}' contains undeclared parameter '{param.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+            CheckForUnusedParameters(
+                node.Parameters, 
+                node,
+                (param) => new PDDLSharpError(
+                    $"Action '{node.Name}' contains unused parameter '{param.Name}'",
+                    ParseErrorType.Warning,
+                    ParseErrorLevel.Analyser,
+                    param.Line,
+                    param.Start));
+            CheckForCorrectPredicateTypes(
+                node,
+                (pred, expected, actual) => new PDDLSharpError(
+                    $"Action '{node.Name}' contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
         }
 
         #endregion
@@ -220,15 +243,37 @@ namespace PDDLSharp.Analysers.Visitors
 
         public void Visit(DurativeActionDecl node)
         {
-            CheckForUndeclaredParameters(node.Parameters,
+            CheckForUndeclaredParameters(
+                node.Parameters,
                 new List<INode>()
                 {
                     node.Condition,
                     node.Effects,
                     node.Duration
-                });
-            CheckForUnusedParameters(node.Parameters, node);
-            CheckForCorrectPredicateTypes(node);
+                },
+                (param) => new PDDLSharpError(
+                    $"Durative action '{node.Name}' contains undeclared parameter '{param.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+            CheckForUnusedParameters(
+                node.Parameters, 
+                node,
+                (param) => new PDDLSharpError(
+                    $"Durative action '{node.Name}' contains unused parameter '{param.Name}'",
+                    ParseErrorType.Warning,
+                    ParseErrorLevel.Analyser,
+                    param.Line,
+                    param.Start));
+            CheckForCorrectPredicateTypes(
+                node,
+                (pred, expected, actual) => new PDDLSharpError(
+                    $"Durative action '{node.Name}' contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
         }
 
         #endregion
@@ -237,13 +282,36 @@ namespace PDDLSharp.Analysers.Visitors
 
         public void Visit(AxiomDecl node)
         {
-            CheckForUndeclaredParameters(node.Vars, new List<INode>()
-            {
-                node.Context,
-                node.Implies
-            });
-            CheckForUnusedParameters(node.Vars, node);
-            CheckForCorrectPredicateTypes(node);
+            CheckForUndeclaredParameters(
+                node.Vars, 
+                new List<INode>()
+                {
+                    node.Context,
+                    node.Implies
+                },
+                (param) => new PDDLSharpError(
+                    $"Axiom contains undeclared parameter '{param.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+            CheckForUnusedParameters(
+                node.Vars, 
+                node,
+                (param) => new PDDLSharpError(
+                    $"Axiom contains unused parameter '{param.Name}'",
+                    ParseErrorType.Warning,
+                    ParseErrorLevel.Analyser,
+                    param.Line,
+                    param.Start));
+            CheckForCorrectPredicateTypes(
+                node,
+                (pred, expected, actual) => new PDDLSharpError(
+                    $"Axiom contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
         }
 
         #endregion

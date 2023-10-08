@@ -24,12 +24,20 @@ namespace PDDLSharp.Parsers.Visitors
             var res = VisitAs<T>(node, parent);
             if (res is T model)
                 return model;
-            Listener.AddError(new PDDLSharpError(
-                $"Could not parse node as a '{nameof(T)}', got a '{nameof(res)}'",
-                ParseErrorType.Error,
-                ParseErrorLevel.Parsing,
-                node.Line,
-                node.Start));
+            if (res is null)
+                Listener.AddError(new PDDLSharpError(
+                    $"Could not parse node as a '{typeof(T)}', got a 'null'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Parsing,
+                    node.Line,
+                    node.Start));
+            else
+                Listener.AddError(new PDDLSharpError(
+                    $"Could not parse node as a '{typeof(T)}', got a '{res.GetType().Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Parsing,
+                    node.Line,
+                    node.Start));
             return default(T);
         }
 
@@ -75,7 +83,19 @@ namespace PDDLSharp.Parsers.Visitors
             typeof(T) == typeof(IExp) ? VisitExp(node, parent) :
 
             // Default
-            null;
+            TryCatchParsing<T>(node, parent);
+
+        private INode TryCatchParsing<T>(ASTNode node, INode? parent)
+        {
+            if (typeof(T) == typeof(INode))
+            {
+                var tryDomain = VisitDomain(node, parent);
+                if (tryDomain == null)
+                    return VisitProblem(node, parent);
+                return tryDomain;
+            }
+            return null;
+        }
 
         internal bool DoesNotContainStrayCharacters(ASTNode node, string targetName)
         {

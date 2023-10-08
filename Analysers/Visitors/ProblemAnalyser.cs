@@ -194,8 +194,22 @@ namespace PDDLSharp.Analysers.Visitors
                     node.Line,
                     node.Start));
 
-            CheckForUndeclaredPredicates(node);
-            CheckForCorrectPredicateTypes(node);
+            CheckForUndeclaredPredicates(
+                node,
+                (predicate) => new PDDLSharpError(
+                    $"Init declaration contains undeclared predicate '{predicate.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+            CheckForCorrectPredicateTypes(
+                node,
+                (pred, expected, actual) => new PDDLSharpError(
+                    $"Init declaration contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
         }
 
         #endregion
@@ -212,8 +226,22 @@ namespace PDDLSharp.Analysers.Visitors
                     node.Line,
                     node.Start));
 
-            CheckForUndeclaredPredicates(node);
-            CheckForCorrectPredicateTypes(node);
+            CheckForUndeclaredPredicates(
+                node,
+                (predicate) => new PDDLSharpError(
+                    $"Goal declaration contains undeclared predicate '{predicate.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
+            CheckForCorrectPredicateTypes(
+                node,
+                (pred, expected, actual) => new PDDLSharpError(
+                    $"Goal declaration contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
         }
 
         #endregion
@@ -223,7 +251,14 @@ namespace PDDLSharp.Analysers.Visitors
         public void Visit(MetricDecl node)
         {
             IsMetricusingOnlyNumericFluents(node);
-            CheckForUndeclaredPredicates(node);
+            CheckForUndeclaredPredicates(
+                node,
+                (predicate) => new PDDLSharpError(
+                    $"Metric declaration contains undeclared predicate '{predicate.Name}'",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Analyser,
+                    node.Line,
+                    node.Start));
         }
 
         private void IsMetricusingOnlyNumericFluents(MetricDecl node)
