@@ -88,15 +88,18 @@ namespace PDDLSharp.Contextualisers.Visitors
         private void InsertDefaultPredicates(PredicatesDecl decl)
         {
             if (!decl.Predicates.Any(x => x.Name == "="))
-                decl.Predicates.Add(
-                    new PredicateExp(
+            {
+                var equals = new PredicateExp(
                         new ASTNode(),
                         decl,
                         "=",
                         new List<NameExp>() {
                             new NameExp(decl, "?l"),
                             new NameExp(decl, "?r")
-                        }));
+                        });
+                equals.IsHidden = true;
+                decl.Predicates.Add(equals);
+            }
         }
 
         #endregion

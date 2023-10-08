@@ -10,6 +10,7 @@ namespace PDDLSharp.Models.PDDL
         public int Start { get; set; }
         public int End { get; set; }
         public int Line { get; set; }
+        public bool IsHidden { get; set; } = false;
 
         public BaseNode(ASTNode node, INode parent) : this(parent)
         {
@@ -37,6 +38,8 @@ namespace PDDLSharp.Models.PDDL
         public List<INamedNode> FindNames(string name)
         {
             List<INamedNode> returnSet = new List<INamedNode>();
+            if (IsHidden)
+                return returnSet;
             List<PropertyInfo> myPropertyInfo = GetType().GetProperties().ToList();
             if (this is INamedNode node)
                 if (node.Name == name)
@@ -61,6 +64,8 @@ namespace PDDLSharp.Models.PDDL
         public List<T> FindTypes<T>(List<Type>? stopIf = null, bool ignoreFirst = false)
         {
             List<T> returnSet = new List<T>();
+            if (IsHidden)
+                return returnSet;
             if (stopIf != null && !ignoreFirst && stopIf.Contains(GetType()))
                 return returnSet;
 

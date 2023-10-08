@@ -56,6 +56,9 @@ namespace PerformanceTests
             Console.WriteLine($"Parsing took         {times[0]}ms in total.\t\tAvg {times[0] / number}ms pr instance.");
             Console.WriteLine($"Analysing took       {times[1]}ms in total.\t\tAvg {times[1] / number}ms pr instance.");
             Console.WriteLine($"Code Generation took {times[2]}ms in total.\t\tAvg {times[2] / number}ms pr instance.");
+
+            foreach (var err in listener.Errors)
+                Console.WriteLine(err);
         }
     }
 }

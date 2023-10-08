@@ -170,7 +170,7 @@ namespace PDDLSharp.Analysers.Visitors
             allPredicates.AddRange(Declaration.Problem.FindTypes<PredicateExp>());
             foreach (var predicate in node.Predicates)
             {
-                if (OnlyOne(allPredicates, predicate.Name))
+                if (!predicate.IsHidden && OnlyOne(allPredicates, predicate.Name))
                 {
                     Listener.AddError(new PDDLSharpError(
                         $"Unused predicate detected '{predicate.Name}'",

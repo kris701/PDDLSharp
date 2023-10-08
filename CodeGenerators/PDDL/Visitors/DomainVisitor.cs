@@ -6,6 +6,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
     {
         public string Visit(DomainDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(define{Environment.NewLine}";
             if (node.Name != null)
                 retStr += $"{Visit(node.Name, indent + 1)}{Environment.NewLine}";
@@ -40,6 +42,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(ActionDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:action {node.Name}{Environment.NewLine}";
             _printType = true;
             retStr += $"{IndentStr(indent + 1)}:parameters {Visit(node.Parameters, 0)}{Environment.NewLine}";
@@ -52,6 +56,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(AxiomDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:axiom{Environment.NewLine}";
             _printType = true;
             retStr += $"{IndentStr(indent + 1)}:vars {Visit(node.Parameters, indent + 2)}{Environment.NewLine}";
@@ -64,6 +70,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(DurativeActionDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:durative-action {node.Name}{Environment.NewLine}";
             _printType = true;
             retStr += $"{IndentStr(indent + 1)}:parameters {Visit(node.Parameters, indent + 2)}{Environment.NewLine}";
@@ -77,6 +85,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(DerivedDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:derived{Environment.NewLine}";
             retStr += $"{IndentStr(indent + 1)}{Visit(node.Predicate, indent + 2)}{Environment.NewLine}";
             retStr += $"{IndentStr(indent + 1)}{Visit((dynamic)node.Expression, indent + 2)}{Environment.NewLine}";
@@ -86,6 +96,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(ConstantsDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:constants{Environment.NewLine}";
             _printType = true;
             foreach (var constant in node.Constants)
@@ -97,11 +109,15 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(DomainNameDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             return $"{IndentStr(indent)}(domain {node.Name}){Environment.NewLine}";
         }
 
         public string Visit(ExtendsDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:extends{Environment.NewLine}";
             foreach (var extends in node.Extends)
                 retStr += $"{Visit((dynamic)extends, indent + 1)}{Environment.NewLine}";
@@ -111,6 +127,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(FunctionsDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:functions{Environment.NewLine}";
             _printType = true;
             foreach (var function in node.Functions)
@@ -122,6 +140,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(PredicatesDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:predicates{Environment.NewLine}";
             _printType = true;
             foreach (var predicate in node.Predicates)
@@ -133,6 +153,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(RequirementsDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:requirements";
             foreach (var requirement in node.Requirements)
                 retStr += $" {requirement.Name}";
@@ -142,6 +164,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(TimelessDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:timeless{Environment.NewLine}";
             foreach (var timelessItem in node.Items)
                 retStr += $"{Visit((dynamic)timelessItem, indent + 1)}{Environment.NewLine}";
@@ -151,6 +175,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
 
         public string Visit(TypesDecl node, int indent)
         {
+            if (node.IsHidden)
+                return "";
             string retStr = $"{IndentStr(indent)}(:types{Environment.NewLine}";
             foreach (var type in node.Types)
             {
