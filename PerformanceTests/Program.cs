@@ -66,8 +66,7 @@ namespace PerformanceTests
                 times[0] += instanceWatch.ElapsedMilliseconds;
 
                 instanceWatch.Restart();
-                var copyDomain = decl.Domain.Copy(null);
-                var copyProblem = decl.Problem.Copy(null);
+                var copyDecl = decl.Copy();
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
 
