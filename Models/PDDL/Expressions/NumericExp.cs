@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class NumericExp : BaseNamedWalkableNode, IExp
+    public class NumericExp : BaseNamedWalkableNode<NumericExp>, IExp
     {
         public IExp Arg1 { get; set; }
         public IExp Arg2 { get; set; }
@@ -34,6 +34,14 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             yield return Arg1;
             yield return Arg2;
+        }
+
+        public override NumericExp Copy(INode newParent)
+        {
+            var newNode = new NumericExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, null, null);
+            newNode.Arg1 = ((dynamic)Arg1).Copy(newNode);
+            newNode.Arg2 = ((dynamic)Arg2).Copy(newNode);
+            return newNode;
         }
     }
 }

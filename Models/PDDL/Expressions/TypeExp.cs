@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class TypeExp : BaseNamedNode, IExp
+    public class TypeExp : BaseNamedNode<TypeExp>, IExp
     {
         // This is the primary supertype. It is needed in the code generation part
         public string SuperType { get; set; }
@@ -114,6 +114,14 @@ namespace PDDLSharp.Models.PDDL.Expressions
                 foreach (var type in SuperTypes)
                     hash *= type.GetHashCode();
             return hash;
+        }
+
+        public override TypeExp Copy(INode newParent)
+        {
+            var newNode = new TypeExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, SuperType);
+            foreach (var superType in SuperTypes)
+                newNode.SuperTypes.Add(superType);
+            return newNode;
         }
     }
 }

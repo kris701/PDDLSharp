@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class LiteralExp : BaseNode, IExp
+    public class LiteralExp : BaseNode<LiteralExp>, IExp
     {
         public int Value { get; set; }
 
@@ -26,6 +26,11 @@ namespace PDDLSharp.Models.PDDL.Expressions
             int hash = base.GetHashCode();
             hash *= Value.GetHashCode();
             return hash;
+        }
+
+        public override LiteralExp Copy(INode newParent)
+        {
+            return new LiteralExp(new ASTNode(Start, End, Line, "", ""), newParent, Value);
         }
     }
 }

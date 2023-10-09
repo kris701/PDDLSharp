@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class NameExp : BaseNamedNode, IExp
+    public class NameExp : BaseNamedNode<NameExp>, IExp
     {
         public TypeExp Type { get; set; }
 
@@ -44,6 +44,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override int GetHashCode()
         {
             return base.GetHashCode() + Type.GetHashCode();
+        }
+
+        public override NameExp Copy(INode newParent)
+        {
+            var newNode = new NameExp(new ASTNode(Start, End, Line, "", ""), newParent, Name);
+            newNode.Type = Type.Copy(newNode);
+            return newNode;
         }
     }
 }

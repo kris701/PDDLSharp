@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class WhenExp : BaseWalkableNode, IExp
+    public class WhenExp : BaseWalkableNode<WhenExp>, IExp
     {
         public IExp Condition { get; set; }
         public IExp Effect { get; set; }
@@ -37,6 +37,16 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             yield return Condition;
             yield return Effect;
+        }
+
+        public override WhenExp Copy(INode newParent)
+        {
+            var newNode = new WhenExp(new ASTNode(Start, End, Line, "", ""), newParent, null, null);
+            var newCondition = ((dynamic)Condition).Copy(newNode);
+            var newEffect = ((dynamic)Effect).Copy(newNode);
+            newNode.Condition = newCondition;
+            newNode.Effect = newEffect;
+            return newNode;
         }
     }
 }

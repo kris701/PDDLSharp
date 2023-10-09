@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class SituationDecl : BaseNamedNode, IDecl
+    public class SituationDecl : BaseNamedNode<SituationDecl>, IDecl
     {
 
         public SituationDecl(ASTNode node, INode parent, string name) : base(node, parent, name)
@@ -20,6 +20,11 @@ namespace PDDLSharp.Models.PDDL.Problem
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override SituationDecl Copy(INode newParent)
+        {
+            return new SituationDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class ImplyExp : BaseWalkableNode, IExp
+    public class ImplyExp : BaseWalkableNode<ImplyExp>, IExp
     {
         public IExp Antecedent { get; set; }
         public IExp Consequent { get; set; }
@@ -37,6 +37,16 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             yield return Antecedent;
             yield return Consequent;
+        }
+
+        public override ImplyExp Copy(INode newParent)
+        {
+            var newNode = new ImplyExp(new ASTNode(Start, End, Line, "", ""), newParent, null, null);
+            var newAntecedent = ((dynamic)Antecedent).Copy(newNode);
+            var newConsequent = ((dynamic)Consequent).Copy(newNode);
+            newNode.Antecedent = newAntecedent;
+            newNode.Consequent = newConsequent;
+            return newNode;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class TimedLiteralExp : BaseWalkableNode, IExp
+    public class TimedLiteralExp : BaseWalkableNode<TimedLiteralExp>, IExp
     {
         public int Value { get; set; }
         public IExp Literal { get; set; }
@@ -36,6 +36,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override IEnumerator<INode> GetEnumerator()
         {
             yield return Literal;
+        }
+
+        public override TimedLiteralExp Copy(INode newParent)
+        {
+            var newNode = new TimedLiteralExp(new ASTNode(Start, End, Line, "", ""), newParent, Value, null);
+            newNode.Literal = ((dynamic)Literal).Copy(newNode);
+            return newNode;
         }
     }
 }

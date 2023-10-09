@@ -4,7 +4,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class ConstantsDecl : BaseWalkableNode, IDecl
+    public class ConstantsDecl : BaseWalkableNode<ConstantsDecl>, IDecl
     {
         public List<NameExp> Constants { get; set; }
 
@@ -39,6 +39,14 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override IEnumerator<INode> GetEnumerator()
         {
             return Constants.GetEnumerator();
+        }
+
+        public override ConstantsDecl Copy(INode newParent)
+        {
+            var newNode = new ConstantsDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            foreach (var node in Constants)
+                newNode.Constants.Add(node.Copy(newNode));
+            return newNode;
         }
     }
 }

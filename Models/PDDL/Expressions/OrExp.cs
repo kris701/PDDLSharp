@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class OrExp : BaseWalkableNode, IExp
+    public class OrExp : BaseWalkableNode<OrExp>, IExp
     {
         public List<IExp> Options { get; set; }
 
@@ -36,7 +36,15 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override IEnumerator<INode> GetEnumerator()
         {
-            return Options.GetEnumerator(); ;
+            return Options.GetEnumerator();
+        }
+
+        public override OrExp Copy(INode newParent)
+        {
+            var newNode = new OrExp(new ASTNode(Start, End, Line, "", ""), newParent, new List<IExp>());
+            foreach (var node in Options)
+                newNode.Options.Add(((dynamic)node).Copy(newNode));
+            return newNode;
         }
     }
 }

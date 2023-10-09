@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class RequirementsDecl : BaseWalkableNode, IDecl
+    public class RequirementsDecl : BaseWalkableNode<RequirementsDecl>, IDecl
     {
         public List<NameExp> Requirements { get; set; }
 
@@ -38,6 +38,14 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override IEnumerator<INode> GetEnumerator()
         {
             return Requirements.GetEnumerator();
+        }
+
+        public override RequirementsDecl Copy(INode newParent)
+        {
+            var newNode = new RequirementsDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            foreach (var node in Requirements)
+                newNode.Requirements.Add(node.Copy(newNode));
+            return newNode;
         }
     }
 }

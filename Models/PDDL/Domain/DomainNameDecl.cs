@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class DomainNameDecl : BaseNamedNode, IDecl
+    public class DomainNameDecl : BaseNamedNode<DomainNameDecl>, IDecl
     {
         public DomainNameDecl(ASTNode node, INode parent, string name) : base(node, parent, name)
         {
@@ -19,6 +19,11 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override DomainNameDecl Copy(INode newParent)
+        {
+            return new DomainNameDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
         }
     }
 }

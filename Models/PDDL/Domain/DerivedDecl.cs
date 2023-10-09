@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class DerivedDecl : BaseWalkableNode, IDecl
+    public class DerivedDecl : BaseWalkableNode<DerivedDecl>, IDecl
     {
         public PredicateExp Predicate { get; set; }
         public IExp Expression { get; set; }
@@ -38,6 +38,14 @@ namespace PDDLSharp.Models.PDDL.Domain
         {
             yield return Predicate;
             yield return Expression;
+        }
+
+        public override DerivedDecl Copy(INode newParent)
+        {
+            var newNode = new DerivedDecl(new ASTNode(Start, End, Line, "", ""), newParent, null, null);
+            newNode.Predicate = Predicate.Copy(newParent);
+            newNode.Expression = ((dynamic)Expression).Copy(newParent);
+            return newNode;
         }
     }
 }

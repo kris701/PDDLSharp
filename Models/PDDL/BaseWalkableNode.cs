@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace PDDLSharp.Models.PDDL
 {
-    public abstract class BaseWalkableNode : BaseNode, IWalkable
+    public abstract class BaseWalkableNode<T> : BaseNode<T>, IWalkable
     {
         protected BaseWalkableNode(ASTNode node, INode parent) : base(node, parent)
         {

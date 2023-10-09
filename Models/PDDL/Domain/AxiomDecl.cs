@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class AxiomDecl : BaseWalkableNode, IDecl, IParametized
+    public class AxiomDecl : BaseWalkableNode<AxiomDecl>, IDecl, IParametized
     {
         public ParameterExp Parameters { get; set; }
         public IExp Context { get; set; }
@@ -44,6 +44,18 @@ namespace PDDLSharp.Models.PDDL.Domain
             yield return Parameters;
             yield return Context;
             yield return Implies;
+        }
+
+        public override AxiomDecl Copy(INode newParent)
+        {
+            var newNode = new AxiomDecl(new ASTNode(Start, End, Line, "", ""), newParent, null, null, null);
+            var newParams = Parameters.Copy(newNode);
+            var newContext = ((dynamic)Context).Copy(newNode);
+            var newImplies = ((dynamic)Implies).Copy(newNode);
+            newNode.Parameters = newParams;
+            newNode.Context = newContext;
+            newNode.Implies = newImplies;
+            return newNode;
         }
     }
 }

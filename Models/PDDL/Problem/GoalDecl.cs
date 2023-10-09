@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class GoalDecl : BaseWalkableNode, IDecl
+    public class GoalDecl : BaseWalkableNode<GoalDecl>, IDecl
     {
         public IExp GoalExp { get; set; }
 
@@ -29,6 +29,13 @@ namespace PDDLSharp.Models.PDDL.Problem
         public override IEnumerator<INode> GetEnumerator()
         {
             yield return GoalExp;
+        }
+
+        public override GoalDecl Copy(INode newParent)
+        {
+            var newNode = new GoalDecl(new ASTNode(Start, End, Line, "", ""), newParent, null);
+            newNode.GoalExp = ((dynamic)GoalExp).Copy(newNode);
+            return newNode;
         }
     }
 }

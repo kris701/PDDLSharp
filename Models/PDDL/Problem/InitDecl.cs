@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class InitDecl : BaseWalkableNode, IDecl
+    public class InitDecl : BaseWalkableNode<InitDecl>, IDecl
     {
         public List<IExp> Predicates { get; set; }
 
@@ -37,6 +37,14 @@ namespace PDDLSharp.Models.PDDL.Problem
         public override IEnumerator<INode> GetEnumerator()
         {
             return Predicates.GetEnumerator();
+        }
+
+        public override InitDecl Copy(INode newParent)
+        {
+            var newNode = new InitDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<IExp>());
+            foreach (var node in Predicates)
+                newNode.Predicates.Add(((dynamic)node).Copy(newNode));
+            return newNode;
         }
     }
 }

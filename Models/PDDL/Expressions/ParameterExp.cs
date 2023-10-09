@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class ParameterExp : BaseWalkableNode
+    public class ParameterExp : BaseWalkableNode<ParameterExp>
     {
         public List<NameExp> Values { get; set; }
 
@@ -37,6 +37,14 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override IEnumerator<INode> GetEnumerator()
         {
             return Values.GetEnumerator();
+        }
+
+        public override ParameterExp Copy(INode newParent)
+        {
+            var newNode = new ParameterExp(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            foreach (var node in Values)
+                newNode.Values.Add(((dynamic)node).Copy(newNode));
+            return newNode;
         }
     }
 }

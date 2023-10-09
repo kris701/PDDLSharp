@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class ActionDecl : BaseNamedWalkableNode, IDecl, IParametized
+    public class ActionDecl : BaseNamedWalkableNode<ActionDecl>, IDecl, IParametized
     {
         public ParameterExp Parameters { get; set; }
         public IExp Preconditions { get; set; }
@@ -44,6 +44,17 @@ namespace PDDLSharp.Models.PDDL.Domain
             yield return Parameters;
             yield return Preconditions;
             yield return Effects;
+        }
+        public override ActionDecl Copy(INode newParent)
+        {
+            var newNode = new ActionDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name, null, null, null);
+            var newParams = Parameters.Copy(newNode);
+            var newPreconditions = ((dynamic)Preconditions).Copy(newNode);
+            var newEffects = ((dynamic)Effects).Copy(newNode);
+            newNode.Parameters = newParams;
+            newNode.Preconditions = newPreconditions;
+            newNode.Effects = newEffects;
+            return newNode;
         }
     }
 }
