@@ -27,8 +27,6 @@ namespace PDDLSharp.Models.PDDL
             Start = -1;
             End = -1;
             Parent = parent;
-            _metaInfo = GetType().GetProperties().ToList();
-            _metaInfo.RemoveAll(x => x.PropertyType.IsPrimitive || x.Name == "Parent");
         }
 
         public BaseNode()
@@ -37,6 +35,12 @@ namespace PDDLSharp.Models.PDDL
             Start = -1;
             End = -1;
             Parent = null;
+        }
+
+        private void CacheMetaInfo()
+        {
+            if (_metaInfo.Count > 0)
+                return;
             _metaInfo = GetType().GetProperties().ToList();
             _metaInfo.RemoveAll(x => x.PropertyType.IsPrimitive || x.Name == "Parent");
         }
@@ -56,6 +60,8 @@ namespace PDDLSharp.Models.PDDL
             if (this is INamedNode node)
                 if (node.Name == name)
                     returnSet.Add(node);
+
+            CacheMetaInfo();
 
             foreach (var prop in _metaInfo)
             {
@@ -89,6 +95,8 @@ namespace PDDLSharp.Models.PDDL
 
             if (this is T self)
                 returnSet.Add(self);
+
+            CacheMetaInfo();
 
             foreach (var prop in _metaInfo)
             {
