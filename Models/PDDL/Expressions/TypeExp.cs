@@ -115,5 +115,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
                     hash *= type.GetHashCode();
             return hash;
         }
+
+        public override TypeExp Copy(INode newParent)
+        {
+            var newNode = new TypeExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, SuperType);
+            foreach (var superType in SuperTypes)
+                newNode.SuperTypes.Add(superType);
+            return newNode;
+        }
     }
 }

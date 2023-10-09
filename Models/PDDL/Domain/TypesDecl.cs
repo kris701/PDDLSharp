@@ -39,5 +39,13 @@ namespace PDDLSharp.Models.PDDL.Domain
         {
             return Types.GetEnumerator();
         }
+
+        public override TypesDecl Copy(INode newParent)
+        {
+            var newNode = new TypesDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<TypeExp>());
+            foreach (var node in Types)
+                newNode.Types.Add(node.Copy(newNode));
+            return newNode;
+        }
     }
 }

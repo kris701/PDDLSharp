@@ -21,5 +21,10 @@ namespace PDDLSharp.Models.PDDL.Problem
         {
             return base.GetHashCode();
         }
+
+        public override DomainNameRefDecl Copy(INode newParent)
+        {
+            return new DomainNameRefDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
+        }
     }
 }

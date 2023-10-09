@@ -45,5 +45,17 @@ namespace PDDLSharp.Models.PDDL.Domain
             yield return Context;
             yield return Implies;
         }
+
+        public override AxiomDecl Copy(INode newParent)
+        {
+            var newNode = new AxiomDecl(new ASTNode(Start, End, Line, "", ""), newParent, null, null, null);
+            var newParams = Parameters.Copy(newNode);
+            var newContext = ((dynamic)Context).Copy(newNode);
+            var newImplies = ((dynamic)Implies).Copy(newNode);
+            newNode.Parameters = newParams;
+            newNode.Context = newContext;
+            newNode.Implies = newImplies;
+            return newNode;
+        }
     }
 }

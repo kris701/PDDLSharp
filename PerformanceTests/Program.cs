@@ -56,7 +56,7 @@ namespace PerformanceTests
             generator.Readable = true;
 
             Stopwatch instanceWatch = new Stopwatch();
-            List<long> times = new List<long>() { 0, 0, 0 };
+            List<long> times = new List<long>() { 0, 0, 0, 0 };
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
@@ -66,19 +66,25 @@ namespace PerformanceTests
                 times[0] += instanceWatch.ElapsedMilliseconds;
 
                 instanceWatch.Restart();
-                analyser.Analyse(decl);
+                var copyDecl = decl.Copy();
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
+
+                instanceWatch.Restart();
+                analyser.Analyse(decl);
+                instanceWatch.Stop();
+                times[2] += instanceWatch.ElapsedMilliseconds;
 
                 instanceWatch.Restart();
                 generator.Generate(decl.Domain, "domain.pddl");
                 generator.Generate(decl.Problem, "problem.pddl");
                 instanceWatch.Stop();
-                times[2] += instanceWatch.ElapsedMilliseconds;
+                times[3] += instanceWatch.ElapsedMilliseconds;
             }
             Console.WriteLine($"Parsing took         {times[0]}ms in total.\t\tAvg {times[0] / number}ms pr instance.");
-            Console.WriteLine($"Analysing took       {times[1]}ms in total.\t\tAvg {times[1] / number}ms pr instance.");
-            Console.WriteLine($"Code Generation took {times[2]}ms in total.\t\tAvg {times[2] / number}ms pr instance.");
+            Console.WriteLine($"Copying took         {times[1]}ms in total.\t\tAvg {times[1] / number}ms pr instance.");
+            Console.WriteLine($"Analysing took       {times[2]}ms in total.\t\tAvg {times[2] / number}ms pr instance.");
+            Console.WriteLine($"Code Generation took {times[3]}ms in total.\t\tAvg {times[3] / number}ms pr instance.");
         }
     }
 }

@@ -39,5 +39,13 @@ namespace PDDLSharp.Models.PDDL.Problem
         {
             return Objs.GetEnumerator();
         }
+
+        public override ObjectsDecl Copy(INode newParent)
+        {
+            var newNode = new ObjectsDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            foreach (var node in Objs)
+                newNode.Objs.Add(node.Copy(newNode));
+            return newNode;
+        }
     }
 }

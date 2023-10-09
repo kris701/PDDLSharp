@@ -51,5 +51,18 @@ namespace PDDLSharp.Models.PDDL.Domain
             yield return Effects;
             yield return Duration;
         }
+        public override DurativeActionDecl Copy(INode newParent)
+        {
+            var newNode = new DurativeActionDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name, null, null, null, null);
+            var newParams = Parameters.Copy(newNode);
+            var newCondition = ((dynamic)Condition).Copy(newNode);
+            var newEffects = ((dynamic)Effects).Copy(newNode);
+            var newDuration = ((dynamic)Duration).Copy(newNode);
+            newNode.Parameters = newParams;
+            newNode.Condition = newCondition;
+            newNode.Effects = newEffects;
+            newNode.Duration = newDuration;
+            return newNode;
+        }
     }
 }

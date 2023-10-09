@@ -30,5 +30,12 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             yield return Child;
         }
+
+        public override NotExp Copy(INode newParent)
+        {
+            var newNode = new NotExp(new ASTNode(Start, End, Line, "", ""), newParent, null);
+            newNode.Child = ((dynamic)Child).Copy(newNode);
+            return newNode;
+        }
     }
 }

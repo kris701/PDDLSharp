@@ -27,5 +27,10 @@ namespace PDDLSharp.Models.PDDL.Expressions
             hash *= Value.GetHashCode();
             return hash;
         }
+
+        public override LiteralExp Copy(INode newParent)
+        {
+            return new LiteralExp(new ASTNode(Start, End, Line, "", ""), newParent, Value);
+        }
     }
 }

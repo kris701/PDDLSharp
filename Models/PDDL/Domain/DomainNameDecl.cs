@@ -20,5 +20,10 @@ namespace PDDLSharp.Models.PDDL.Domain
         {
             return base.GetHashCode();
         }
+
+        public override DomainNameDecl Copy(INode newParent)
+        {
+            return new DomainNameDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
+        }
     }
 }

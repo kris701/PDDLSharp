@@ -38,5 +38,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             return Values.GetEnumerator();
         }
+
+        public override ParameterExp Copy(INode newParent)
+        {
+            var newNode = new ParameterExp(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            foreach (var node in Values)
+                newNode.Values.Add(((dynamic)node).Copy(newNode));
+            return newNode;
+        }
     }
 }

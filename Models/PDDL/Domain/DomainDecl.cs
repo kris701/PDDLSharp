@@ -93,5 +93,37 @@ namespace PDDLSharp.Models.PDDL.Domain
                 foreach (var deri in Deriveds)
                     yield return deri;
         }
+
+        public override DomainDecl Copy(INode newParent)
+        {
+            var newNode = new DomainDecl(new ASTNode(Start, End, Line, "", ""));
+
+            if (Name != null)
+                newNode.Name = Name.Copy(newNode);
+            if (Requirements != null)
+                newNode.Requirements = Requirements.Copy(newNode);
+            if (Extends != null)
+                newNode.Extends = Extends.Copy(newNode);
+            if (Timeless != null)
+                newNode.Timeless = Timeless.Copy(newNode);
+            if (Types != null)
+                newNode.Types = Types.Copy(newNode);
+            if (Constants != null)
+                newNode.Constants = Constants.Copy(newNode);
+            if (Predicates != null)
+                newNode.Predicates = Predicates.Copy(newNode);
+            if (Functions != null)
+                newNode.Functions = Functions.Copy(newNode);
+            foreach (var act in Actions)
+                newNode.Actions.Add(act.Copy(newNode));
+            foreach (var act in Axioms)
+                newNode.Axioms.Add(act.Copy(newNode));
+            foreach (var act in DurativeActions)
+                newNode.DurativeActions.Add(act.Copy(newNode));
+            foreach (var act in Deriveds)
+                newNode.Deriveds.Add(act.Copy(newNode));
+
+            return newNode;
+        }
     }
 }

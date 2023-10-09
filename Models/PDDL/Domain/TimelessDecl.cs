@@ -39,5 +39,13 @@ namespace PDDLSharp.Models.PDDL.Domain
         {
             return Items.GetEnumerator();
         }
+
+        public override TimelessDecl Copy(INode newParent)
+        {
+            var newNode = new TimelessDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<PredicateExp>());
+            foreach (var node in Items)
+                newNode.Items.Add(node.Copy(newNode));
+            return newNode;
+        }
     }
 }

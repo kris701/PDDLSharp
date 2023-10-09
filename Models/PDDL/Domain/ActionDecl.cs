@@ -45,5 +45,16 @@ namespace PDDLSharp.Models.PDDL.Domain
             yield return Preconditions;
             yield return Effects;
         }
+        public override ActionDecl Copy(INode newParent)
+        {
+            var newNode = new ActionDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name, null, null, null);
+            var newParams = Parameters.Copy(newNode);
+            var newPreconditions = ((dynamic)Preconditions).Copy(newNode);
+            var newEffects = ((dynamic)Effects).Copy(newNode);
+            newNode.Parameters = newParams;
+            newNode.Preconditions = newPreconditions;
+            newNode.Effects = newEffects;
+            return newNode;
+        }
     }
 }

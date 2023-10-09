@@ -38,5 +38,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             return Arguments.GetEnumerator();
         }
+
+        public override PredicateExp Copy(INode newParent)
+        {
+            var newNode = new PredicateExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, new List<NameExp>());
+            foreach (var node in Arguments)
+                newNode.Arguments.Add(((dynamic)node).Copy(newNode));
+            return newNode;
+        }
     }
 }

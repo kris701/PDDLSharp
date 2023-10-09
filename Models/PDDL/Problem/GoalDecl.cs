@@ -30,5 +30,12 @@ namespace PDDLSharp.Models.PDDL.Problem
         {
             yield return GoalExp;
         }
+
+        public override GoalDecl Copy(INode newParent)
+        {
+            var newNode = new GoalDecl(new ASTNode(Start, End, Line, "", ""), newParent, null);
+            newNode.GoalExp = ((dynamic)GoalExp).Copy(newNode);
+            return newNode;
+        }
     }
 }

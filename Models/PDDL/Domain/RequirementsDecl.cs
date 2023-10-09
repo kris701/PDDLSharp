@@ -39,5 +39,13 @@ namespace PDDLSharp.Models.PDDL.Domain
         {
             return Requirements.GetEnumerator();
         }
+
+        public override RequirementsDecl Copy(INode newParent)
+        {
+            var newNode = new RequirementsDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            foreach (var node in Requirements)
+                newNode.Requirements.Add(node.Copy(newNode));
+            return newNode;
+        }
     }
 }

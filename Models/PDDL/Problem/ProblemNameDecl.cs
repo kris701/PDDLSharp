@@ -20,5 +20,10 @@ namespace PDDLSharp.Models.PDDL.Problem
         {
             return base.GetHashCode();
         }
+
+        public override ProblemNameDecl Copy(INode newParent)
+        {
+            return new ProblemNameDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
+        }
     }
 }

@@ -40,5 +40,13 @@ namespace PDDLSharp.Models.PDDL.Domain
         {
             return Constants.GetEnumerator();
         }
+
+        public override ConstantsDecl Copy(INode newParent)
+        {
+            var newNode = new ConstantsDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            foreach (var node in Constants)
+                newNode.Constants.Add(node.Copy(newNode));
+            return newNode;
+        }
     }
 }

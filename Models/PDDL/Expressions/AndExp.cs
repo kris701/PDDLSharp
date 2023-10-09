@@ -38,5 +38,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             return Children.GetEnumerator();
         }
+
+        public override AndExp Copy(INode newParent)
+        {
+            var newNode = new AndExp(new ASTNode(Start, End, Line, "", ""), newParent, new List<IExp>());
+            foreach (var node in Children)
+                newNode.Children.Add(((dynamic)node).Copy(newNode));
+            return newNode;
+        }
     }
 }

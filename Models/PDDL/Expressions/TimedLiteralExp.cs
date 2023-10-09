@@ -37,5 +37,12 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             yield return Literal;
         }
+
+        public override TimedLiteralExp Copy(INode newParent)
+        {
+            var newNode = new TimedLiteralExp(new ASTNode(Start, End, Line, "", ""), newParent, Value, null);
+            newNode.Literal = ((dynamic)Literal).Copy(newNode);
+            return newNode;
+        }
     }
 }

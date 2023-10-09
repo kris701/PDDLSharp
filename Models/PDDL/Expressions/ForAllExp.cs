@@ -38,5 +38,15 @@ namespace PDDLSharp.Models.PDDL.Expressions
             yield return Parameters;
             yield return Expression;
         }
+
+        public override ForAllExp Copy(INode newParent)
+        {
+            var newNode = new ForAllExp(new ASTNode(Start, End, Line, "", ""), newParent, null, null);
+            var newParams = Parameters.Copy(newNode);
+            var newExp = ((dynamic)Expression).Copy(newNode);
+            newNode.Parameters = newParams;
+            newNode.Expression = newExp;
+            return newNode;
+        }
     }
 }

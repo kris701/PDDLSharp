@@ -47,5 +47,13 @@ namespace PDDLSharp.Models
         {
             return GetEnumerator();
         }
+
+        public PDDLDecl Copy()
+        {
+            return new PDDLDecl(
+                Domain.Copy(null),
+                Problem.Copy(null)
+                );
+        }
     }
 }

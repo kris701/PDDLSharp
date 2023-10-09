@@ -37,6 +37,8 @@ namespace PDDLSharp.Models.PDDL
             Parent = null;
         }
 
+        public abstract INode Copy(INode newParent);
+
         private void CacheMetaInfo()
         {
             if (_metaInfo.Count > 0)
