@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class TimedLiteralExp : BaseWalkableNode<TimedLiteralExp>, IExp
+    public class TimedLiteralExp : BaseWalkableNode, IExp
     {
         public int Value { get; set; }
         public IExp Literal { get; set; }

@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class ActionDecl : BaseNamedWalkableNode<ActionDecl>, IDecl, IParametized
+    public class ActionDecl : BaseNamedWalkableNode, IDecl, IParametized
     {
         public ParameterExp Parameters { get; set; }
         public IExp Preconditions { get; set; }

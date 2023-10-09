@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class DomainDecl : BaseWalkableNode<DomainDecl>, IDecl
+    public class DomainDecl : BaseWalkableNode, IDecl
     {
         public DomainNameDecl? Name { get; set; }
         public RequirementsDecl? Requirements { get; set; }

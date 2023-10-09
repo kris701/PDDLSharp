@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class TypeExp : BaseNamedNode<TypeExp>, IExp
+    public class TypeExp : BaseNamedNode, IExp
     {
         // This is the primary supertype. It is needed in the code generation part
         public string SuperType { get; set; }

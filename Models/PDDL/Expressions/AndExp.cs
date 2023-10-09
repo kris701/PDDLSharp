@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class AndExp : BaseWalkableNode<AndExp>, IExp
+    public class AndExp : BaseWalkableNode, IExp
     {
         public List<IExp> Children { get; set; }
 

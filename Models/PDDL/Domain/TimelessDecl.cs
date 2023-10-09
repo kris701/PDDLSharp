@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class TimelessDecl : BaseWalkableNode<TimelessDecl>, IDecl
+    public class TimelessDecl : BaseWalkableNode, IDecl
     {
         public List<PredicateExp> Items { get; set; }
 

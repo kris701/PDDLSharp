@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class ImplyExp : BaseWalkableNode<ImplyExp>, IExp
+    public class ImplyExp : BaseWalkableNode, IExp
     {
         public IExp Antecedent { get; set; }
         public IExp Consequent { get; set; }

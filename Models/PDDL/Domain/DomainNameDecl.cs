@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class DomainNameDecl : BaseNamedNode<DomainNameDecl>, IDecl
+    public class DomainNameDecl : BaseNamedNode, IDecl
     {
         public DomainNameDecl(ASTNode node, INode parent, string name) : base(node, parent, name)
         {

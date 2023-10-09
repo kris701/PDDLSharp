@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class GoalDecl : BaseWalkableNode<GoalDecl>, IDecl
+    public class GoalDecl : BaseWalkableNode, IDecl
     {
         public IExp GoalExp { get; set; }
 

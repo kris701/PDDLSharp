@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class ProblemDecl : BaseWalkableNode<ProblemDecl>, IDecl
+    public class ProblemDecl : BaseWalkableNode, IDecl
     {
         public ProblemNameDecl? Name { get; set; }
         public DomainNameRefDecl? DomainName { get; set; }

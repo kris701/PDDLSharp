@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class NotExp : BaseWalkableNode<NotExp>, IExp
+    public class NotExp : BaseWalkableNode, IExp
     {
         public IExp Child { get; set; }
 

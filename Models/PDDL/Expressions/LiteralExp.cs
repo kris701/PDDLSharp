@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class LiteralExp : BaseNode<LiteralExp>, IExp
+    public class LiteralExp : BaseNode, IExp
     {
         public int Value { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class OrExp : BaseWalkableNode<OrExp>, IExp
+    public class OrExp : BaseWalkableNode, IExp
     {
         public List<IExp> Options { get; set; }
 

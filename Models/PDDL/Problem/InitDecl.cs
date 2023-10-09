@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class InitDecl : BaseWalkableNode<InitDecl>, IDecl
+    public class InitDecl : BaseWalkableNode, IDecl
     {
         public List<IExp> Predicates { get; set; }
 

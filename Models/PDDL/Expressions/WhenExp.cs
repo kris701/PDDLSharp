@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class WhenExp : BaseWalkableNode<WhenExp>, IExp
+    public class WhenExp : BaseWalkableNode, IExp
     {
         public IExp Condition { get; set; }
         public IExp Effect { get; set; }

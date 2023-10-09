@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class AxiomDecl : BaseWalkableNode<AxiomDecl>, IDecl, IParametized
+    public class AxiomDecl : BaseWalkableNode, IDecl, IParametized
     {
         public ParameterExp Parameters { get; set; }
         public IExp Context { get; set; }

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace PDDLSharp.Models.PDDL
 {
-    public abstract class BaseNode<T> : INode
+    public abstract class BaseNode : INode
     {
         public INode? Parent { get; }
         public int Start { get; set; }
@@ -37,7 +37,7 @@ namespace PDDLSharp.Models.PDDL
             Parent = null;
         }
 
-        public abstract T Copy(INode newParent);
+        public abstract INode Copy(INode newParent);
 
         private void CacheMetaInfo()
         {

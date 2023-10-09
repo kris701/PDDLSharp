@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class NameExp : BaseNamedNode<NameExp>, IExp
+    public class NameExp : BaseNamedNode, IExp
     {
         public TypeExp Type { get; set; }
 

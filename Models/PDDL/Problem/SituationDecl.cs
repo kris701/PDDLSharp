@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class SituationDecl : BaseNamedNode<SituationDecl>, IDecl
+    public class SituationDecl : BaseNamedNode, IDecl
     {
 
         public SituationDecl(ASTNode node, INode parent, string name) : base(node, parent, name)

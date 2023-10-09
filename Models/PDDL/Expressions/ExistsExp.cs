@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class ExistsExp : BaseWalkableNode<ExistsExp>, IExp, IParametized
+    public class ExistsExp : BaseWalkableNode, IExp, IParametized
     {
         public ParameterExp Parameters { get; set; }
         public IExp Expression { get; set; }

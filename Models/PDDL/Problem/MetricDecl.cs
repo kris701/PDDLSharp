@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class MetricDecl : BaseWalkableNode<MetricDecl>, IDecl
+    public class MetricDecl : BaseWalkableNode, IDecl
     {
         public IExp MetricExp { get; set; }
         public string MetricType { get; set; }

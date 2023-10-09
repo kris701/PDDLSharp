@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL
 {
-    public abstract class BaseNamedNode<T> : BaseNode<T>, INamedNode
+    public abstract class BaseNamedNode : BaseNode, INamedNode
     {
         public string Name { get; set; }
 

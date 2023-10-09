@@ -4,7 +4,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class ConstantsDecl : BaseWalkableNode<ConstantsDecl>, IDecl
+    public class ConstantsDecl : BaseWalkableNode, IDecl
     {
         public List<NameExp> Constants { get; set; }
 
