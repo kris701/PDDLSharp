@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
@@ -14,6 +15,8 @@ namespace PDDLSharp.States.Tests.PDDL
     [TestClass]
     public class PDDLStateSpaceTests
     {
+        #region Basics 
+
         [TestMethod]
         [DataRow(0)]
         [DataRow(1)]
@@ -164,5 +167,106 @@ namespace PDDLSharp.States.Tests.PDDL
             for (int i = 0; i < addNodes; i++)
                 Assert.IsTrue(state.Contains($"something{i}"));
         }
+
+        #endregion
+
+        #region ExecuteNode
+
+        public static IEnumerable<object[]> GetExecuteNodeData()
+        {
+            yield return new object[] { 
+                new PredicateExp("a"),
+                1
+            };
+
+            yield return new object[] {
+                new NotExp(new PredicateExp("a")),
+                0
+            };
+
+            yield return new object[] {
+                new NotExp(new NotExp(new PredicateExp("a"))),
+                1
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>()
+                {
+                    new PredicateExp("a"),
+                    new PredicateExp("b"),
+                    new PredicateExp("c"),
+                }),
+                3
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>()
+                {
+                    new PredicateExp("a"),
+                    new PredicateExp("a"),
+                    new PredicateExp("a"),
+                }),
+                1
+            };
+
+            yield return new object[] {
+                new WhenExp(new PredicateExp("a"), new PredicateExp("b")),
+                0
+            };
+
+            yield return new object[] {
+                new WhenExp(new NotExp(new PredicateExp("a")), new PredicateExp("b")),
+                1
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>()
+                {
+                    new PredicateExp("a"),
+                    new WhenExp(new PredicateExp("a"), new PredicateExp("b")),
+                }),
+                1
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>()
+                {
+                    new WhenExp(new PredicateExp("a"), new PredicateExp("b")),
+                    new PredicateExp("a"),
+                }),
+                1
+            };
+
+            yield return new object[] {
+                new ForAllExp(
+                    new ParameterExp(new List<NameExp>(){ new NameExp("?a") }),
+                    new PredicateExp("pred", new List<NameExp>(){new NameExp("?a") })),
+                2
+            };
+
+            yield return new object[] {
+                new ForAllExp(
+                    new ParameterExp(new List<NameExp>(){ new NameExp("?a"), new NameExp("?b") }),
+                    new PredicateExp("pred", new List<NameExp>(){new NameExp("?a"), new NameExp("?b") })),
+                4
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(GetExecuteNodeData), DynamicDataSourceType.Method)]
+        public void Can_ExecuteNode_ExpectedNodes(INode node, int expected)
+        {
+            // ARRANGE
+            IPDDLState state = new PDDLStateSpace(new PDDLDecl(new DomainDecl(), new ProblemDecl()));
+            state.Declaration.Problem.Objects = new ObjectsDecl(new List<NameExp>() { new NameExp("obja"), new NameExp("objb") });
+
+            // ACT
+            state.ExecuteNode(node);
+
+            // ASSERT
+            Assert.AreEqual(expected, state.Count);
+        }
+
+        #endregion
     }
 }

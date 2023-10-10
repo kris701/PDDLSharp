@@ -25,10 +25,7 @@ namespace PDDLSharp.Simulators.StateSpace
                 contextualiser.Contexturalise(Declaration);
             }
 
-            if (declaration.Problem.Init != null)
-                State = new PDDLStateSpace(declaration, declaration.Problem.Init);
-            else
-                State = new PDDLStateSpace(declaration);
+            State = new PDDLStateSpace(declaration);
         }
 
         public void ExecutePlan(ActionPlan plan)
@@ -46,10 +43,7 @@ namespace PDDLSharp.Simulators.StateSpace
         public void Reset()
         {
             Cost = 0;
-            if (Declaration.Problem.Init != null)
-                State = new PDDLStateSpace(Declaration, Declaration.Problem.Init);
-            else
-                State = new PDDLStateSpace(Declaration);
+            State = new PDDLStateSpace(Declaration);
         }
 
         public void Step(string actionName, params string[] arguments)

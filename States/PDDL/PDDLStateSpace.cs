@@ -89,9 +89,9 @@ namespace PDDLSharp.States.PDDL
             }
         }
 
-        private List<IExp> GenerateParameterPermutations(IExp node, List<NameExp> values, int index)
+        private List<INode> GenerateParameterPermutations(INode node, List<NameExp> values, int index)
         {
-            List<IExp> returnList = new List<IExp>();
+            List<INode> returnList = new List<INode>();
 
             if (index >= values.Count)
             {
@@ -104,8 +104,11 @@ namespace PDDLSharp.States.PDDL
                 var allOfType = Declaration.Problem.Objects.Objs.Where(x => x.Type.IsTypeOf(values[index].Type.Name));
                 foreach (var ofType in allOfType)
                 {
-
-                    returnList.AddRange(GenerateParameterPermutations(node, values, index + 1));
+                    var newNode = node.Copy(null);
+                    var allNames = newNode.FindNames(values[index].Name);
+                    foreach (var name in allNames)
+                        name.Name = ofType.Name;
+                    returnList.AddRange(GenerateParameterPermutations(newNode, values, index + 1));
                 }
             }
 

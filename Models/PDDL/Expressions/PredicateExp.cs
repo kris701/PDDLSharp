@@ -29,8 +29,8 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override int GetHashCode()
         {
             int hash = base.GetHashCode();
-            foreach (var arg in Arguments)
-                hash *= arg.GetHashCode();
+            for(int i = 0; i < Arguments.Count; i++)
+                hash *= Arguments[i].GetHashCode() >> (i + 1);
             return hash;
         }
 
