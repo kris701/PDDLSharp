@@ -13,48 +13,37 @@ namespace PDDLSharp.Simulators.MutexDetector
         public List<PredicateExp> FindMutexes(PDDLDecl decl)
         {
             List<PredicateExp> mutexCandidates = new List<PredicateExp>();
+            List<PredicateExp> notMutexCandidates = new List<PredicateExp>();
 
-            foreach(var act in decl.Domain.Actions)
+            foreach (var act in decl.Domain.Actions)
             {
-                Dictionary<PredicateExp, int> balance = new Dictionary<PredicateExp, int>();
+                Dictionary<string, int> balance = new Dictionary<string, int>();
 
-                var items = act.Preconditions.FindTypes<PredicateExp>();
-                items.AddRange(act.Effects.FindTypes<PredicateExp>());
+                var items = act.Effects.FindTypes<PredicateExp>();
                 foreach (var precondition in items)
                 {
-                    var simplified = SimplifyPredicate(precondition);
-                    if (!balance.ContainsKey(simplified))
-                        balance.Add(simplified, 0);
+                    if (!balance.ContainsKey(precondition.Name))
+                        balance.Add(precondition.Name, 0);
 
                     if (precondition.Parent is NotExp)
-                        balance[simplified]--;
+                        balance[precondition.Name]--;
                     else
-                        balance[simplified]++;
+                        balance[precondition.Name]++;
                 }
 
-                var names = new List<string>();
-                foreach (var key in balance.Keys)
-                    if (!names.Contains(key.Name))
-                        names.Add(key.Name);
-
-                foreach(var name in names)
+                foreach(var name in balance.Keys)
                 {
-                    bool isGood = true;
-                    foreach (var key in balance.Keys)
-                    {
-                        if (key.Name == name && balance[key] != 0)
-                        {
-                            isGood = false;
-                            break;
-                        }
-                    }
-
-                    if (isGood)
+                    if (balance[name] == 0 && !notMutexCandidates.Any(x => x.Name == name))
                     {
                         if (decl.Domain.Predicates != null)
                             mutexCandidates.Add(decl.Domain.Predicates.Predicates.First(x => x.Name == name));
                         else
-                        mutexCandidates.Add(new PredicateExp(name));
+                            mutexCandidates.Add(new PredicateExp(name));
+                    }
+                    else
+                    {
+                        notMutexCandidates.Add(new PredicateExp(name));
+                        mutexCandidates.RemoveAll(x => x.Name == name);
                     }
                 }
             }

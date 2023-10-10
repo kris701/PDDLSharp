@@ -27,7 +27,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Parsers\Parsers.csproj" />
     <ProjectReference Include="..\Simulators.MutexDetector\Simulators.MutexDetector.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestFiles\gripper-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\gripper-prob01.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\satellite-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\satellite-prob01.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
