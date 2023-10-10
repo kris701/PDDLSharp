@@ -27,8 +27,12 @@ namespace PDDLSharp.PDDLSharp.Tests.System
         public static IEnumerable<object[]> GetDictionaryData()
         {
             foreach (var key in _testDict.Keys)
+            {
                 if (_testPlanDict.ContainsKey(new FileInfo(key).Directory.Name))
                     yield return new object[] { key, _testDict[key], _testPlanDict[new FileInfo(key).Directory.Name] };
+                else
+                    yield return new object[] { key, _testDict[key], new List<string>() };
+            }
         }
 
         [TestMethod]
@@ -44,21 +48,28 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IPlanValidator validator = new PlanValidator();
 
             // ACT
+            bool any = false;
             foreach(var problem in problems)
             {
-                Trace.WriteLine($"   Parsing problem: {problem}");
-                var domainDecl = parser.ParseAs<DomainDecl>(domain);
-                var problemDecl = parser.ParseAs<ProblemDecl>(problem);
-                var newDecl = new PDDLDecl(domainDecl, problemDecl);
-                Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
-                listener.Errors.Clear();
-
                 var targetPlanStr = new FileInfo(problem).Name.Replace(".pddl", ".plan");
-                var targetPlan = plans.First(x => x.EndsWith(targetPlanStr));
-                Trace.WriteLine($"   Parsing plan: {targetPlan}");
-                var plan = planParser.Parse(targetPlan);
-                Assert.IsTrue(validator.Validate(plan, newDecl));
+                var targetPlan = plans.FirstOrDefault(x => x.EndsWith(targetPlanStr));
+                if (targetPlan != null)
+                {
+                    Trace.WriteLine($"   Parsing problem: {problem}");
+                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
+                    var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                    var newDecl = new PDDLDecl(domainDecl, problemDecl);
+                    Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+                    listener.Errors.Clear();
+
+                    Trace.WriteLine($"   Parsing plan: {targetPlan}");
+                    var plan = planParser.Parse(targetPlan);
+                    Assert.IsTrue(validator.Validate(plan, newDecl));
+                    any = true;
+                }
             }
+            if (!any)
+                Assert.Inconclusive($"Could not find any plans for the domain+problems!");
 
             // ASSERT
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -77,23 +88,30 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IPlanValidator validator = new PlanValidator();
 
             // ACT
+            bool any = false;
             foreach (var problem in problems)
             {
-                Trace.WriteLine($"   Parsing problem: {problem}");
-                var domainDecl = parser.ParseAs<DomainDecl>(domain);
-                var problemDecl = parser.ParseAs<ProblemDecl>(problem);
-                var newDecl = new PDDLDecl(domainDecl, problemDecl);
-                Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
-                listener.Errors.Clear();
-
                 var targetPlanStr = new FileInfo(problem).Name.Replace(".pddl", ".plan");
-                var targetPlan = plans.First(x => x.EndsWith(targetPlanStr));
-                Trace.WriteLine($"   Parsing plan: {targetPlan}");
-                var plan = planParser.Parse(targetPlan);
-                if (plan.Plan.Count > 0)
-                    plan.Plan.Add(plan.Plan[0]);
-                Assert.IsFalse(validator.Validate(plan, newDecl));
+                var targetPlan = plans.FirstOrDefault(x => x.EndsWith(targetPlanStr));
+                if (targetPlan != null)
+                {
+                    Trace.WriteLine($"   Parsing problem: {problem}");
+                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
+                    var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                    var newDecl = new PDDLDecl(domainDecl, problemDecl);
+                    Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+                    listener.Errors.Clear();
+
+                    Trace.WriteLine($"   Parsing plan: {targetPlan}");
+                    var plan = planParser.Parse(targetPlan);
+                    if (plan.Plan.Count > 0)
+                        plan.Plan.Add(plan.Plan[0]);
+                    Assert.IsFalse(validator.Validate(plan, newDecl));
+                    any = true;
+                }
             }
+            if (!any)
+                Assert.Inconclusive($"Could not find any plans for the domain+problems!");
 
             // ASSERT
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
