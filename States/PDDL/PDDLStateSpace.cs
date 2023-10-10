@@ -17,30 +17,36 @@ namespace PDDLSharp.States.PDDL
         {
             Declaration = declaration;
             _state = new HashSet<PredicateExp>();
-        }
-
-        public PDDLStateSpace(PDDLDecl declaration, InitDecl inits)
-        {
-            Declaration = declaration;
-            _state = new HashSet<PredicateExp>();
-            foreach (var item in inits.Predicates)
-                if (item is PredicateExp predicate)
-                    _state.Add(predicate);
+            if (declaration.Problem.Init != null)
+                foreach (var item in declaration.Problem.Init.Predicates)
+                    if (item is PredicateExp predicate)
+                        Add(predicate);
         }
 
         public int Count => _state.Count;
 
-        public void Add(PredicateExp pred) => _state.Add(pred);
-        public void Del(PredicateExp pred) => _state.Remove(pred);
+        private PredicateExp SimplifyPredicate(PredicateExp pred)
+        {
+            var newPred = new PredicateExp(pred.Name);
+            foreach (var arg in pred.Arguments)
+                newPred.Arguments.Add(new NameExp(arg.Name));
+            return newPred;
+        }
 
-        public bool Contains(PredicateExp op) => _state.Contains(op);
-        public bool Contains(string predicate, params string[] arguments)
+        private PredicateExp SimplifyPredicate(string predicate, params string[] arguments)
         {
             var newPred = new PredicateExp(predicate);
             foreach (var arg in arguments)
                 newPred.Arguments.Add(new NameExp(arg));
-            return Contains(newPred);
+            return newPred;
         }
+
+        public void Add(PredicateExp pred) => _state.Add(SimplifyPredicate(pred));
+        public void Add(string pred, params string[] arguments) => Add(SimplifyPredicate(pred, arguments));
+        public void Del(PredicateExp pred) => _state.Remove(SimplifyPredicate(pred));
+        public void Del(string pred, params string[] arguments) => Del(SimplifyPredicate(pred, arguments));
+        public bool Contains(PredicateExp pred) => _state.Contains(SimplifyPredicate(pred));
+        public bool Contains(string pred, params string[] arguments) => Contains(SimplifyPredicate(pred, arguments));
 
         public void ExecuteNode(INode node)
         {
@@ -48,9 +54,9 @@ namespace PDDLSharp.States.PDDL
             _tempDel.Clear();
             ExecuteNode(node, false);
             foreach (var item in _tempAdd)
-                _state.Add(item);
+                Add(item);
             foreach (var item in _tempDel)
-                _state.Remove(item);
+                Del(item);
         }
         private void ExecuteNode(INode node, bool isNegative)
         {
@@ -112,9 +118,9 @@ namespace PDDLSharp.States.PDDL
             if (node is PredicateExp predicate)
             {
                 if (isNegative)
-                    return !_state.Contains(predicate);
+                    return !Contains(predicate);
                 else
-                    return _state.Contains(predicate);
+                    return Contains(predicate);
             }
             else if (node is NotExp not)
             {

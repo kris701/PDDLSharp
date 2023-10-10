@@ -16,9 +16,11 @@ namespace PDDLSharp.States.PDDL
         public int Count { get; }
 
         public void Add(PredicateExp pred);
+        public void Add(string pred, params string[] arguments);
         public void Del(PredicateExp pred);
-        public bool Contains(PredicateExp op);
-        public bool Contains(string predicate, params string[] arguments);
+        public void Del(string pred, params string[] arguments);
+        public bool Contains(PredicateExp pred);
+        public bool Contains(string pred, params string[] arguments);
 
         public void ExecuteNode(INode node);
         public bool IsNodeTrue(INode node);
