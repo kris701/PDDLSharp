@@ -6,7 +6,7 @@ namespace PDDLSharp.Models.PDDL
 {
     public abstract class BaseNode : INode
     {
-        public INode? Parent { get; }
+        public INode? Parent { get; set; }
         public int Start { get; set; }
         public int End { get; set; }
         public int Line { get; set; }

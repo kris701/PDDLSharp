@@ -12,6 +12,6 @@ namespace PDDLSharp.Simulators.PlanValidator
 {
     public interface IPlanValidator
     {
-        public void Verify(ActionPlan plan, PDDLDecl decl);
+        public bool Validate(ActionPlan plan, PDDLDecl decl);
     }
 }

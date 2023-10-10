@@ -17,16 +17,24 @@ namespace PDDLSharp.Simulators.PlanValidator
         {
         }
 
-        public void Verify(ActionPlan plan, PDDLDecl decl)
+        public bool Validate(ActionPlan plan, PDDLDecl decl)
         {
-            IStateSpaceSimulator simulator = new StateSpaceSimulator(decl);
-            foreach (var step in plan.Plan)
+            try
             {
-                var argStr = new List<string>();
-                foreach (var arg in step.Arguments)
-                    argStr.Add(arg.Name);
+                IStateSpaceSimulator simulator = new StateSpaceSimulator(decl);
+                foreach (var step in plan.Plan)
+                {
+                    var argStr = new List<string>();
+                    foreach (var arg in step.Arguments)
+                        argStr.Add(arg.Name);
 
-                simulator.Step(step.ActionName, argStr.ToArray());
+                    simulator.Step(step.ActionName, argStr.ToArray());
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }
