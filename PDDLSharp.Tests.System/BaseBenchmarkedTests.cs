@@ -29,11 +29,11 @@ namespace PDDLSharp.PDDLSharp.Tests.System
         public static long MaxProblemsPrDomain = 5;
         public static Dictionary<string, List<string>> _testDict = new Dictionary<string, List<string>>();
 
-        public static async Task Setup()
+        public static async Task Setup(string git, string outPath)
         {
-            await BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
+            var targetPath = await BenchmarkFetcher.CheckAndDownloadBenchmarksAsync(git, outPath);
             Random rnd = new Random();
-            foreach (var domainPath in Directory.GetDirectories(BenchmarkFetcher.OutputPath))
+            foreach (var domainPath in Directory.GetDirectories(targetPath))
             {
                 if (!ExcludedDomains.Contains(new DirectoryInfo(domainPath).Name))
                 {

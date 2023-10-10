@@ -10,21 +10,19 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 {
     internal static class BenchmarkFetcher
     {
-        public static string OutputPath
+        private static string GetFullPath(string target)
         {
-            get
-            {
-                Assembly asm = Assembly.GetExecutingAssembly();
-                var asmPath = Path.GetDirectoryName(asm.Location);
-                if (asmPath == null)
-                    throw new Exception("Could not find the assembly path!");
-                string path = Path.Combine(asmPath, "benchmarks");
-                return path;
-            }
+            Assembly asm = Assembly.GetExecutingAssembly();
+            var asmPath = Path.GetDirectoryName(asm.Location);
+            if (asmPath == null)
+                throw new Exception("Could not find the assembly path!");
+            string path = Path.Combine(asmPath, target);
+            return path;
         }
-        public static async Task CheckAndDownloadBenchmarksAsync()
+
+        public static async Task<string> CheckAndDownloadBenchmarksAsync(string git, string outPath)
         {
-            var path = OutputPath;
+            var path = GetFullPath(outPath);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -33,7 +31,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                     StartInfo = new ProcessStartInfo()
                     {
                         FileName = "git",
-                        Arguments = $"clone https://github.com/aibasel/downward-benchmarks \"{path}\"",
+                        Arguments = $"clone {git} \"{path}\"",
                         CreateNoWindow = true,
                         UseShellExecute = false,
                         RedirectStandardError = true,
@@ -53,6 +51,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 process.BeginOutputReadLine();
                 await process.WaitForExitAsync();
             }
+            return path;
         }
     }
 }
