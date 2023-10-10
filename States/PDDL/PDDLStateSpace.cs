@@ -4,37 +4,43 @@ using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
 
-namespace PDDLSharp.Simulators.StateSpace
+namespace PDDLSharp.States.PDDL
 {
-    public class StateSpace
+    public class PDDLStateSpace : IPDDLState
     {
         public PDDLDecl Declaration { get; internal set; }
-        private HashSet<GroundedPredicate> _state;
-        private HashSet<GroundedPredicate> _tempAdd = new HashSet<GroundedPredicate>();
-        private HashSet<GroundedPredicate> _tempDel = new HashSet<GroundedPredicate>();
+        private HashSet<PredicateExp> _state;
+        private HashSet<PredicateExp> _tempAdd = new HashSet<PredicateExp>();
+        private HashSet<PredicateExp> _tempDel = new HashSet<PredicateExp>();
 
-        public StateSpace(PDDLDecl declaration)
+        public PDDLStateSpace(PDDLDecl declaration)
         {
             Declaration = declaration;
-            _state = new HashSet<GroundedPredicate>();
+            _state = new HashSet<PredicateExp>();
         }
 
-        public StateSpace(PDDLDecl declaration, InitDecl inits)
+        public PDDLStateSpace(PDDLDecl declaration, InitDecl inits)
         {
             Declaration = declaration;
-            _state = new HashSet<GroundedPredicate>();
+            _state = new HashSet<PredicateExp>();
             foreach (var item in inits.Predicates)
                 if (item is PredicateExp predicate)
-                    _state.Add(new GroundedPredicate(predicate));
+                    _state.Add(predicate);
         }
 
         public int Count => _state.Count;
 
-        public void Add(GroundedPredicate pred) => _state.Add(pred);
-        public void Del(GroundedPredicate pred) => _state.Remove(pred);
+        public void Add(PredicateExp pred) => _state.Add(pred);
+        public void Del(PredicateExp pred) => _state.Remove(pred);
 
-        public bool Contains(GroundedPredicate op) => _state.Contains(op);
-        public bool Contains(string op, params string[] arguments) => Contains(new GroundedPredicate(op, NameExpBuilder.GetNameExpFromString(arguments, Declaration)));
+        public bool Contains(PredicateExp op) => _state.Contains(op);
+        public bool Contains(string predicate, params string[] arguments)
+        {
+            var newPred = new PredicateExp(predicate);
+            foreach (var arg in arguments)
+                newPred.Arguments.Add(new NameExp(arg));
+            return Contains(newPred);
+        }
 
         public void ExecuteNode(INode node)
         {
@@ -50,11 +56,10 @@ namespace PDDLSharp.Simulators.StateSpace
         {
             if (node is PredicateExp predicate)
             {
-                var op = new GroundedPredicate(predicate);
                 if (isNegative)
-                    _tempDel.Add(op);
+                    _tempDel.Add(predicate);
                 else
-                    _tempAdd.Add(op);
+                    _tempAdd.Add(predicate);
             }
             else if (node is NotExp not)
             {
@@ -102,15 +107,14 @@ namespace PDDLSharp.Simulators.StateSpace
         }
 
         public bool IsNodeTrue(INode node) => IsNodeTrue(node, false);
-        public bool IsNodeTrue(INode node, bool isNegative)
+        private bool IsNodeTrue(INode node, bool isNegative)
         {
             if (node is PredicateExp predicate)
             {
-                var op = new GroundedPredicate(predicate);
                 if (isNegative)
-                    return !_state.Contains(op);
+                    return !_state.Contains(predicate);
                 else
-                    return _state.Contains(op);
+                    return _state.Contains(predicate);
             }
             else if (node is NotExp not)
             {
@@ -150,6 +154,13 @@ namespace PDDLSharp.Simulators.StateSpace
                         return false;
             }
             return true;
+        }
+
+        public bool IsInGoal()
+        {
+            if (Declaration.Problem.Goal == null)
+                throw new ArgumentNullException("No problem goal was declared!");
+            return IsNodeTrue(Declaration.Problem.Goal.GoalExp);
         }
     }
 }

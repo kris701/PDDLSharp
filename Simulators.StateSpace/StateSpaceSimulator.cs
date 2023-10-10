@@ -5,13 +5,14 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.Plans;
+using PDDLSharp.States.PDDL;
 
 namespace PDDLSharp.Simulators.StateSpace
 {
     public class StateSpaceSimulator : IStateSpaceSimulator
     {
         public PDDLDecl Declaration { get; internal set; }
-        public StateSpace State { get; internal set; }
+        public IPDDLState State { get; internal set; }
         public int Cost { get; internal set; } = 0;
 
         public StateSpaceSimulator(PDDLDecl declaration)
@@ -25,9 +26,9 @@ namespace PDDLSharp.Simulators.StateSpace
             }
 
             if (declaration.Problem.Init != null)
-                State = new StateSpace(declaration, declaration.Problem.Init);
+                State = new PDDLStateSpace(declaration, declaration.Problem.Init);
             else
-                State = new StateSpace(declaration);
+                State = new PDDLStateSpace(declaration);
         }
 
         public void ExecutePlan(ActionPlan plan)
@@ -46,9 +47,9 @@ namespace PDDLSharp.Simulators.StateSpace
         {
             Cost = 0;
             if (Declaration.Problem.Init != null)
-                State = new StateSpace(Declaration, Declaration.Problem.Init);
+                State = new PDDLStateSpace(Declaration, Declaration.Problem.Init);
             else
-                State = new StateSpace(Declaration);
+                State = new PDDLStateSpace(Declaration);
         }
 
         public void Step(string actionName, params string[] arguments)
