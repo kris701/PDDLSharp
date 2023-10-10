@@ -28,18 +28,6 @@ namespace PDDLSharp.Simulators.StateSpace
             State = new PDDLStateSpace(declaration);
         }
 
-        public void ExecutePlan(ActionPlan plan)
-        {
-            foreach (var step in plan.Plan)
-            {
-                var argStr = new List<string>();
-                foreach (var arg in step.Arguments)
-                    argStr.Add(arg.Name);
-
-                Step(step.ActionName, NameExpBuilder.GetNameExpFromString(argStr.ToArray(), Declaration));
-            }
-        }
-
         public void Reset()
         {
             Cost = 0;
@@ -50,7 +38,7 @@ namespace PDDLSharp.Simulators.StateSpace
         {
             if (Declaration.Problem.Objects == null)
                 throw new ArgumentException("Objects not declared in problem");
-            Step(actionName, NameExpBuilder.GetNameExpFromString(arguments, Declaration));
+            Step(actionName, GetNameExpFromString(arguments));
         }
 
         public void Step(string actionName) => Step(actionName, new List<NameExp>());
@@ -98,6 +86,24 @@ namespace PDDLSharp.Simulators.StateSpace
                     name.Name = groundArgs[i].Name;
             }
             return node;
+        }
+
+        private List<NameExp> GetNameExpFromString(string[] arguments)
+        {
+            var args = new List<NameExp>();
+            foreach (var arg in arguments)
+            {
+                NameExp? obj = null;
+                if (Declaration.Problem.Objects != null)
+                    obj = Declaration.Problem.Objects.Objs.FirstOrDefault(x => x.Name == arg.ToLower());
+                if (obj == null && Declaration.Domain.Constants != null)
+                    obj = Declaration.Domain.Constants.Constants.FirstOrDefault(x => x.Name == arg.ToLower());
+
+                if (obj == null)
+                    throw new ArgumentException($"Cannot find object (or constant) '{arg}'");
+                args.Add(new NameExp(obj));
+            }
+            return args;
         }
     }
 }
