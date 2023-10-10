@@ -29,8 +29,8 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
-            for (int i = 0; i < Children.Count; i++)
-                hash *= Children[i].GetHashCode() >> (i + 1);
+            foreach (var child in Children)
+                hash *= child.GetHashCode();
             return hash;
         }
 

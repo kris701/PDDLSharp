@@ -26,12 +26,17 @@ namespace PDDLSharp.Models.PDDL.Expressions
             Arguments = new List<NameExp>();
         }
 
+        // The other is important!
+        // Based on: https://stackoverflow.com/a/30758270
         public override int GetHashCode()
         {
-            int hash = base.GetHashCode();
-            for(int i = 0; i < Arguments.Count; i++)
-                hash *= Arguments[i].GetHashCode() >> (i + 1);
-            return hash;
+            const int seed = 487;
+            const int modifier = 31;
+            unchecked
+            {
+                return base.GetHashCode() * Arguments.Aggregate(seed, (current, item) =>
+                    (current * modifier) + item.GetHashCode());
+            }
         }
 
         public override IEnumerator<INode> GetEnumerator()

@@ -247,8 +247,12 @@ namespace PDDLSharp.States.Tests.PDDL
             yield return new object[] {
                 new ForAllExp(
                     new ParameterExp(new List<NameExp>(){ new NameExp("?a"), new NameExp("?b") }),
-                    new PredicateExp("pred", new List<NameExp>(){new NameExp("?a"), new NameExp("?b") })),
-                4
+                        new ForAllExp(
+                        new ParameterExp(new List<NameExp>(){ new NameExp("?c"), new NameExp("?d") }),
+                        new PredicateExp("pred", new List<NameExp>(){new NameExp("?a"), new NameExp("?b"), new NameExp("?c"), new NameExp("?d") })
+                        )
+                    ),
+                16
             };
         }
 
@@ -265,6 +269,194 @@ namespace PDDLSharp.States.Tests.PDDL
 
             // ASSERT
             Assert.AreEqual(expected, state.Count);
+        }
+
+        #endregion
+
+        #region IsNodeTrue
+
+        public static IEnumerable<object[]> GetIsNodeTrueData()
+        {
+            yield return new object[] {
+                new PredicateExp("a"),
+                new PredicateExp("a"),
+                true
+            };
+
+            yield return new object[] {
+                new PredicateExp("b"),
+                new PredicateExp("a"),
+                false
+            };
+
+            yield return new object[] {
+                new PredicateExp("b"),
+                new NotExp(new PredicateExp("a")),
+                true
+            };
+
+            yield return new object[] {
+                new PredicateExp("b"),
+                new NotExp(new NotExp(new PredicateExp("a"))),
+                false
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("a"),
+                    new PredicateExp("b"),
+                }),
+                new WhenExp(new PredicateExp("a"), new PredicateExp("b")),
+                true
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("a"),
+                    new PredicateExp("b"),
+                }),
+                new WhenExp(new PredicateExp("a"), new PredicateExp("c")),
+                false
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("a"),
+                    new PredicateExp("b"),
+                }),
+                new ImplyExp(new PredicateExp("c"), new PredicateExp("b")),
+                true
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("a"),
+                    new PredicateExp("b"),
+                }),
+                new ImplyExp(new PredicateExp("a"), new PredicateExp("b")),
+                true
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("a"),
+                    new PredicateExp("b"),
+                }),
+                new ImplyExp(new PredicateExp("a"), new PredicateExp("c")),
+                false
+            };
+
+            yield return new object[] {
+                new ForAllExp(
+                    new ParameterExp(new List<NameExp>(){ new NameExp("?a") }),
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("?a") })),
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("obja") }),
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("objb") }),
+                }),
+                true
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("obja") }),
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("objb") }),
+                }),
+                new ForAllExp(
+                    new ParameterExp(new List<NameExp>(){ new NameExp("?a") }),
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("?a") })),
+                true
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("obja") }),
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("objb") }),
+                }),
+                new ForAllExp(
+                    new ParameterExp(new List<NameExp>(){ new NameExp("?a"), new NameExp("?b") }),
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("?a"), new NameExp("?b") })),
+                false
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("obja") }),
+                }),
+                new ExistsExp(
+                    new ParameterExp(new List<NameExp>(){ new NameExp("?a") }),
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("?a") })),
+                true
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("objb") }),
+                }),
+                new ExistsExp(
+                    new ParameterExp(new List<NameExp>(){ new NameExp("?a") }),
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("?a") })),
+                true
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("obja") }),
+                }),
+                new ExistsExp(
+                    new ParameterExp(new List<NameExp>(){ new NameExp("?a"), new NameExp("?b") }),
+                    new PredicateExp("pred", new List<NameExp>(){ new NameExp("?a"), new NameExp("?b") })),
+                false
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("a"),
+                }),
+                new OrExp(new List<IExp>()
+                {
+                    new PredicateExp("a"),
+                    new PredicateExp("b"),
+                }),
+                true
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                    new PredicateExp("b"),
+                }),
+                new OrExp(new List<IExp>()
+                {
+                    new PredicateExp("a"),
+                    new PredicateExp("b"),
+                }),
+                true
+            };
+
+            yield return new object[] {
+                new AndExp(new List<IExp>(){
+                }),
+                new OrExp(new List<IExp>()
+                {
+                    new PredicateExp("a"),
+                    new PredicateExp("b"),
+                }),
+                false
+            };
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(GetIsNodeTrueData), DynamicDataSourceType.Method)]
+        public void Can_IsNodeTrue(INode apply, INode check, bool expected)
+        {
+            // ARRANGE
+            IPDDLState state = new PDDLStateSpace(new PDDLDecl(new DomainDecl(), new ProblemDecl()));
+            state.Declaration.Problem.Objects = new ObjectsDecl(new List<NameExp>() { new NameExp("obja"), new NameExp("objb") });
+            state.ExecuteNode(apply);
+
+            // ACT
+            // ASSERT
+            Assert.AreEqual(expected, state.IsNodeTrue(check));
         }
 
         #endregion

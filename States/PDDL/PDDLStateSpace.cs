@@ -10,8 +10,8 @@ namespace PDDLSharp.States.PDDL
     {
         public PDDLDecl Declaration { get; internal set; }
         private HashSet<PredicateExp> _state;
-        private HashSet<PredicateExp> _tempAdd = new HashSet<PredicateExp>();
-        private HashSet<PredicateExp> _tempDel = new HashSet<PredicateExp>();
+        private List<PredicateExp> _tempAdd = new List<PredicateExp>();
+        private List<PredicateExp> _tempDel = new List<PredicateExp>();
 
         public PDDLStateSpace(PDDLDecl declaration)
         {
@@ -134,6 +134,7 @@ namespace PDDLSharp.States.PDDL
                 foreach (var subNode in or)
                     if (IsNodeTrue(subNode, isNegative))
                         return true;
+                return false;
             }
             else if (node is WhenExp when)
             {
@@ -146,6 +147,14 @@ namespace PDDLSharp.States.PDDL
                 foreach (var permutation in permutations)
                     if (IsNodeTrue(permutation, isNegative))
                         return true;
+                return false;
+            }
+            else if (node is ImplyExp imply)
+            {
+                if (IsNodeTrue(imply.Antecedent) && IsNodeTrue(imply.Consequent))
+                    return true;
+                if (!IsNodeTrue(imply.Antecedent))
+                    return true;
                 return false;
             }
             else if (node is ForAllExp all)
