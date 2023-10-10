@@ -29,9 +29,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System
         public static long MaxProblemsPrDomain = 5;
         public static Dictionary<string, List<string>> _testDict = new Dictionary<string, List<string>>();
 
-        public static async Task Setup(string git, string outPath)
+        public static async Task Setup()
         {
-            var targetPath = await BenchmarkFetcher.CheckAndDownloadBenchmarksAsync(git, outPath);
+            var targetPath = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks", "benchmarks");
             Random rnd = new Random();
             foreach (var domainPath in Directory.GetDirectories(targetPath))
             {

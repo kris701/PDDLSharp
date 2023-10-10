@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.PDDLSharp.Tests.System
 {
-    internal static class BenchmarkFetcher
+    internal static class GitFetcher
     {
         private static string GetFullPath(string target)
         {
