@@ -13,5 +13,6 @@ namespace PDDLSharp.Simulators.StateSpace
         public void Step(string actionName);
         public void Step(string actionName, params string[] arguments);
         public void ExecutePlan(ActionPlan plan);
+        public bool IsInGoal();
     }
 }
