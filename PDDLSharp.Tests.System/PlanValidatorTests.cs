@@ -51,14 +51,48 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                 var newDecl = new PDDLDecl(domainDecl, problemDecl);
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+                listener.Errors.Clear();
 
                 var targetPlanStr = new FileInfo(problem).Name.Replace(".pddl", ".plan");
                 var targetPlan = plans.First(x => x.EndsWith(targetPlanStr));
                 Trace.WriteLine($"   Parsing plan: {targetPlan}");
                 var plan = planParser.Parse(targetPlan);
-                validator.Verify(plan, newDecl);
+                Assert.IsTrue(validator.Validate(plan, newDecl));
+            }
+
+            // ASSERT
+            Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
+        public void Cant_ValidatePlans_IfIncorrect(string domain, List<string> problems, List<string> plans)
+        {
+            Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}, plans: {plans.Count}");
+
+            // ARRANGE
+            IErrorListener listener = new ErrorListener();
+            IParser<INode> parser = GetParser(domain, listener);
+            IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
+            IPlanValidator validator = new PlanValidator();
+
+            // ACT
+            foreach (var problem in problems)
+            {
+                Trace.WriteLine($"   Parsing problem: {problem}");
+                var domainDecl = parser.ParseAs<DomainDecl>(domain);
+                var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                var newDecl = new PDDLDecl(domainDecl, problemDecl);
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                 listener.Errors.Clear();
+
+                var targetPlanStr = new FileInfo(problem).Name.Replace(".pddl", ".plan");
+                var targetPlan = plans.First(x => x.EndsWith(targetPlanStr));
+                Trace.WriteLine($"   Parsing plan: {targetPlan}");
+                var plan = planParser.Parse(targetPlan);
+                if (plan.Plan.Count > 0)
+                    plan.Plan.Add(plan.Plan[0]);
+                Assert.IsFalse(validator.Validate(plan, newDecl));
             }
 
             // ASSERT

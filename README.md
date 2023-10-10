@@ -101,17 +101,6 @@ IStateSpaceSimulator simulator = new StateSpaceSimulator(declaration);
 simulator.Step("actionName", "obj1", "obj2");
 ```
 
-You can also give it the output of the Plan Parser to step through:
-```csharp
-IErrorListener listener = new ErrorListener();
-IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
-ActionPlan plan = parser.Parse("planFile");
-
-PDDLDecl declaration = new PDDLDecl(...);
-IStateSpaceSimulator simulator = new StateSpaceSimulator(declaration);
-simulator.ExecutePlan(plan);
-```
-
 ## Plan Validator
 There is a simple plan validator included in PDDLSharp.
 It is capable of taking in a `ActionPlan` and a `PDDLDecl` and verify if the given plan is even possible or not.
@@ -122,9 +111,9 @@ ActionPlan plan = parser.Parse("planFile");
 
 PDDLDecl declaration = new PDDLDecl(...);
 IPlanValidator validator = new PlanValidator();
-validator.Verify(plan, declaration);
+validator.Validate(plan, declaration);
 ```
-The validator will throw an exception if it cannot verify a given plan.
+The `Validate(...)` method returns true if the plan is valid, false otherwise.
 
 # Supported Requirements
 PDDLSharp supports a large set of requirements, all the way up to PDDL 2.2:

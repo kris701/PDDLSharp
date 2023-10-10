@@ -32,11 +32,10 @@ namespace PDDLSharp.Simulators.PlanValidator.Tests
             newPlan.Plan.Add(new GroundedAction("move", "roomb", "rooma"));
 
             // ACT
-            validator.Verify(newPlan, decl);
+            Assert.IsTrue(validator.Validate(newPlan, decl));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Cant_ExecutePlan_Gripper_Move_Move_IfWrong()
         {
             // ARRANGE
@@ -48,7 +47,7 @@ namespace PDDLSharp.Simulators.PlanValidator.Tests
             newPlan.Plan.Add(new GroundedAction("move", "roomb", "rooma"));
 
             // ACT
-            validator.Verify(newPlan, decl);
+            Assert.IsFalse(validator.Validate(newPlan, decl));
         }
 
         [TestMethod]
@@ -63,11 +62,10 @@ namespace PDDLSharp.Simulators.PlanValidator.Tests
             newPlan.Plan.Add(new GroundedAction("drop", "ball1", "roomb", "left"));
 
             // ACT
-            validator.Verify(newPlan, decl);
+            Assert.IsTrue(validator.Validate(newPlan, decl));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Cant_ExecutePlan_Gripper_Pick_Move_Drop_IfWrong()
         {
             // ARRANGE
@@ -80,7 +78,7 @@ namespace PDDLSharp.Simulators.PlanValidator.Tests
             newPlan.Plan.Add(new GroundedAction("drop", "ball1", "roomb", "left"));
 
             // ACT
-            validator.Verify(newPlan, decl);
+            Assert.IsFalse(validator.Validate(newPlan, decl));
         }
     }
 }
