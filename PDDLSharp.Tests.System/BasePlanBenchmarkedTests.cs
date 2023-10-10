@@ -20,7 +20,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
         {
             await BaseBenchmarkedTests.Setup();
             var targetPath = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/kris701/PDDLBenchmarkPlans", "benchmarks-plans");
-            foreach (var domainPath in Directory.GetDirectories(Path.Join(targetPath, "Plans")))
+            foreach (var domainPath in Directory.GetDirectories(Path.Join(targetPath, "lama-first")))
             {
                 if (!ExcludedDomains.Contains(new DirectoryInfo(domainPath).Name))
                 {

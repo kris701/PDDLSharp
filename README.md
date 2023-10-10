@@ -115,6 +115,19 @@ validator.Validate(plan, declaration);
 ```
 The `Validate(...)` method returns true if the plan is valid, false otherwise.
 
+## Mutex Detector
+There is a simple predicate mutex detector included in PDDLSharp.
+It is able to find simple action predicate mutexes.
+You just give it a `PDDLDecl` and it will try and find mutex predicates in it:
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser<INode> parser = new PDDLParser(listener);
+PDDLDecl decl = new PDDLDecl(...)
+
+IMutexDetectors detector = new SimpleMutexDetector();
+var mutexes = detector.FindMutexes(decl);
+```
+
 # Supported Requirements
 PDDLSharp supports a large set of requirements, all the way up to PDDL 2.2:
 
@@ -146,3 +159,7 @@ PDDLSharp supports a large set of requirements, all the way up to PDDL 2.2:
 - [ ] UCPOP (`:ucpop`)
 - [ ] Constraints (`:constraints`)
 - [ ] Preferences (`:preferences`)
+
+# Notes
+The system tests uses the [Downward Benchmark Set](https://github.com/aibasel/downward-benchmarks) to test on.
+A repository with [solved instances](https://github.com/kris701/PDDLBenchmarkPlans) of the benchmarks are also used for the plan parsing and verification.
