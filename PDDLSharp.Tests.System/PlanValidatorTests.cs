@@ -104,8 +104,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
                     Trace.WriteLine($"   Parsing plan: {targetPlan}");
                     var plan = planParser.Parse(targetPlan);
-                    if (plan.Plan.Count > 0)
-                        plan.Plan.Add(plan.Plan[0]);
+                    DestroyPlan(plan);
                     Assert.IsFalse(validator.Validate(plan, newDecl));
                     any = true;
                 }
@@ -115,6 +114,12 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ASSERT
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+        }
+
+        private void DestroyPlan(ActionPlan plan)
+        {
+            for(int i = 0; i < plan.Plan.Count; i += 5)
+                plan.Plan.Add(plan.Plan[i]);
         }
     }
 }
