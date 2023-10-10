@@ -9,9 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Contextualisers\Contextualisers.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\States\States.csproj" />
+    <ProjectReference Include="..\Simulators.StateSpace\Simulators.StateSpace.csproj" />
   </ItemGroup>
 
 </Project>

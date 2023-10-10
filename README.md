@@ -10,6 +10,10 @@
 This is a package to make a PDDL parser, contextualiser, analyser, code generator and much more for C#. 
 The parser is fully PDDL 2.2 compatible. The package can be found through [Nuget](https://www.nuget.org/packages/PDDLSharp/) or the [Git](https://github.com/kris701/PDDLSharp/pkgs/nuget/PDDLSharp) package manager.
 
+# Parsers
+
+There is a few parsers included in PDDLSharp, each of them will be explained in the subsections.
+
 ## PDDL Parser
 The PDDL Parser is the main part of PDDLSharp.
 Its a fully fledged parser that can parser up to PDDL 2.2 files.
@@ -54,6 +58,16 @@ PDDLDecl decl = new PDDLDecl(
 analyser.Analyse(decl);
 ```
 
+## Plan Parser
+There is also a plan parser that can parse [Fast Downward](https://www.fast-downward.org/) output plans.
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
+ActionPlan plan = parser.Parse("planFile");
+```
+
+# Code Generators
+
 ## PDDL Code Generator
 To generate PDDL code from a PDDL declaration:
 ```csharp
@@ -66,14 +80,6 @@ generator.Generate(decl.Domain, "domain.pddl");
 generator.Generate(decl.Problem, "problem.pddl");
 ```
 
-## Plan Parser
-There is also a plan parser that can parse [Fast Downward](https://www.fast-downward.org/) output plans.
-```csharp
-IErrorListener listener = new ErrorListener();
-IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
-ActionPlan plan = parser.Parse("planFile");
-```
-
 ## Plan Code Generator
 To generate a [Fast Downward](https://www.fast-downward.org/) plan from a `ActionPlan` declaration:
 ```csharp
@@ -82,6 +88,8 @@ ICodeGenerator<ActionPlan> generator = new FastDownwardPlanGenerator(listener);
 ActionPlan plan = new ActionPlan(...);
 generator.Generate(plan, "planFile");
 ```
+
+# Simulators
 
 ## State Space Simulator
 There is a State Space Simulator included with PDDLSharp.
@@ -104,7 +112,21 @@ IStateSpaceSimulator simulator = new StateSpaceSimulator(declaration);
 simulator.ExecutePlan(plan);
 ```
 
-## Supported Requirements
+## Plan Validator
+There is a simple plan validator included in PDDLSharp.
+It is capable of taking in a `ActionPlan` and a `PDDLDecl` and verify if the given plan is even possible or not.
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
+ActionPlan plan = parser.Parse("planFile");
+
+PDDLDecl declaration = new PDDLDecl(...);
+IPlanValidator validator = new PlanValidator();
+validator.Verify(plan, declaration);
+```
+The validator will throw an exception if it cannot verify a given plan.
+
+# Supported Requirements
 PDDLSharp supports a large set of requirements, all the way up to PDDL 2.2:
 
 - [x] STRIPS (`:strips`)

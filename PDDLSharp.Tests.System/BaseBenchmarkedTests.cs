@@ -31,9 +31,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
         public static async Task Setup()
         {
-            await BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
+            var targetPath = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks", "benchmarks");
             Random rnd = new Random();
-            foreach (var domainPath in Directory.GetDirectories(BenchmarkFetcher.OutputPath))
+            foreach (var domainPath in Directory.GetDirectories(targetPath))
             {
                 if (!ExcludedDomains.Contains(new DirectoryInfo(domainPath).Name))
                 {

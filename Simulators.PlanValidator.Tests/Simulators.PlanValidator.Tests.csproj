@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -27,9 +27,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CodeGenerators\CodeGenerators.csproj" />
     <ProjectReference Include="..\Parsers\Parsers.csproj" />
     <ProjectReference Include="..\Simulators.PlanValidator\Simulators.PlanValidator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestFiles\gripper-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\gripper-prob01.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\satellite-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestFiles\satellite-prob01.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
