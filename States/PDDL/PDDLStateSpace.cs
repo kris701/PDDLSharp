@@ -53,10 +53,10 @@ namespace PDDLSharp.States.PDDL
             _tempAdd.Clear();
             _tempDel.Clear();
             ExecuteNode(node, false);
-            foreach (var item in _tempAdd)
-                Add(item);
             foreach (var item in _tempDel)
                 Del(item);
+            foreach (var item in _tempAdd)
+                Add(item);
         }
         private void ExecuteNode(INode node, bool isNegative)
         {
@@ -66,27 +66,36 @@ namespace PDDLSharp.States.PDDL
                     _tempDel.Add(predicate);
                 else
                     _tempAdd.Add(predicate);
+                return;
             }
             else if (node is NotExp not)
             {
                 ExecuteNode(not.Child, !isNegative);
+                return;
+            }
+            else if (node is AndExp and)
+            {
+                foreach (var child in and.Children)
+                    ExecuteNode(child, isNegative);
+                return;
             }
             else if (node is WhenExp when)
             {
-                if (IsNodeTrue(when.Condition, false))
+                if (IsNodeTrue(when.Condition))
                     ExecuteNode(when.Effect, false);
+                return;
             }
             else if (node is ForAllExp all)
             {
                 var permutations = GenerateParameterPermutations(all.Expression, all.Parameters.Values, 0);
                 foreach (var permutation in permutations)
                     ExecuteNode(permutation, isNegative);
+                return;
             }
-            else if (node is IWalkable walk)
-            {
-                foreach (var subNode in walk)
-                    ExecuteNode(subNode, isNegative);
-            }
+            else if (node is NumericExp num)
+                return;
+
+            throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
         }
 
         private List<INode> GenerateParameterPermutations(INode node, List<NameExp> values, int index)
@@ -99,53 +108,54 @@ namespace PDDLSharp.States.PDDL
                 return returnList;
             }
 
+            List<NameExp> allOfType = new List<NameExp>();
             if (Declaration.Problem.Objects != null)
+                allOfType.AddRange(Declaration.Problem.Objects.Objs.Where(x => x.Type.IsTypeOf(values[index].Type.Name)));
+            if (Declaration.Domain.Constants != null)
+                allOfType.AddRange(Declaration.Domain.Constants.Constants.Where(x => x.Type.IsTypeOf(values[index].Type.Name)));
+            foreach (var ofType in allOfType)
             {
-                var allOfType = Declaration.Problem.Objects.Objs.Where(x => x.Type.IsTypeOf(values[index].Type.Name));
-                foreach (var ofType in allOfType)
-                {
-                    var newNode = node.Copy(null);
-                    var allNames = newNode.FindNames(values[index].Name);
-                    foreach (var name in allNames)
-                        name.Name = ofType.Name;
-                    returnList.AddRange(GenerateParameterPermutations(newNode, values, index + 1));
-                }
+                var newNode = node.Copy(null);
+                var allNames = newNode.FindNames(values[index].Name);
+                foreach (var name in allNames)
+                    name.Name = ofType.Name;
+                returnList.AddRange(GenerateParameterPermutations(newNode, values, index + 1));
             }
 
             return returnList;
         }
 
-        public bool IsNodeTrue(INode node) => IsNodeTrue(node, false);
-        private bool IsNodeTrue(INode node, bool isNegative)
+        public bool IsNodeTrue(INode node)
         {
             if (node is PredicateExp predicate)
             {
-                if (isNegative)
-                    return !Contains(predicate);
-                else
-                    return Contains(predicate);
+                if (predicate.Name == "=" && predicate.Arguments.Count == 2)
+                    return predicate.Arguments[0].Name == predicate.Arguments[1].Name;
+                return Contains(predicate);
             }
             else if (node is NotExp not)
             {
-                return IsNodeTrue(not.Child, !isNegative);
+                return !IsNodeTrue(not.Child);
             }
             else if (node is OrExp or)
             {
                 foreach (var subNode in or)
-                    if (IsNodeTrue(subNode, isNegative))
+                    if (IsNodeTrue(subNode))
                         return true;
                 return false;
             }
-            else if (node is WhenExp when)
+            else if (node is AndExp and)
             {
-                if (IsNodeTrue(when.Condition, isNegative))
-                    return IsNodeTrue(when.Effect, isNegative);
+                foreach (var subNode in and)
+                    if (!IsNodeTrue(subNode))
+                        return false;
+                return true;
             }
             else if (node is ExistsExp exist)
             {
                 var permutations = GenerateParameterPermutations(exist.Expression, exist.Parameters.Values, 0);
                 foreach (var permutation in permutations)
-                    if (IsNodeTrue(permutation, isNegative))
+                    if (IsNodeTrue(permutation))
                         return true;
                 return false;
             }
@@ -161,17 +171,12 @@ namespace PDDLSharp.States.PDDL
             {
                 var permutations = GenerateParameterPermutations(all.Expression, all.Parameters.Values, 0);
                 foreach (var permutation in permutations)
-                    if (!IsNodeTrue(permutation, isNegative))
+                    if (!IsNodeTrue(permutation))
                         return false;
                 return true;
             }
-            else if (node is IWalkable walk)
-            {
-                foreach (var subNode in walk)
-                    if (!IsNodeTrue(subNode, isNegative))
-                        return false;
-            }
-            return true;
+
+            throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
         }
 
         public bool IsInGoal()
