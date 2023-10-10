@@ -22,7 +22,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
         [ClassInitialize]
         public static async Task InitialiseAsync(TestContext context)
         {
-            await Setup("https://github.com/aibasel/downward-benchmarks", "benchmarks");
+            await Setup();
         }
 
         public static IEnumerable<object[]> GetDictionaryData()
