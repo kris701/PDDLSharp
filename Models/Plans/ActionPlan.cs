@@ -10,5 +10,20 @@
             Plan = plan;
             Cost = cost;
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is ActionPlan op)
+                return op.GetHashCode() == GetHashCode();
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = Cost;
+            foreach (var arg in Plan)
+                hash ^= arg.GetHashCode();
+            return hash;
+        }
     }
 }
