@@ -7,12 +7,12 @@ namespace PDDLSharp.Models.PDDL.Domain
     {
         public List<NameExp> Requirements { get; set; }
 
-        public RequirementsDecl(ASTNode node, INode parent, List<NameExp> requirements) : base(node, parent)
+        public RequirementsDecl(ASTNode node, INode? parent, List<NameExp> requirements) : base(node, parent)
         {
             Requirements = requirements;
         }
 
-        public RequirementsDecl(INode parent, List<NameExp> requirements) : base(parent)
+        public RequirementsDecl(INode? parent, List<NameExp> requirements) : base(parent)
         {
             Requirements = requirements;
         }
@@ -20,6 +20,16 @@ namespace PDDLSharp.Models.PDDL.Domain
         public RequirementsDecl(List<NameExp> requirements) : base()
         {
             Requirements = requirements;
+        }
+
+        public RequirementsDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Requirements = new List<NameExp>();
+        }
+
+        public RequirementsDecl(INode? parent) : base(parent)
+        {
+            Requirements = new List<NameExp>();
         }
 
         public RequirementsDecl() : base()
@@ -40,9 +50,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             return Requirements.GetEnumerator();
         }
 
-        public override RequirementsDecl Copy(INode newParent)
+        public override RequirementsDecl Copy(INode? newParent = null)
         {
-            var newNode = new RequirementsDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            var newNode = new RequirementsDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Requirements)
                 newNode.Requirements.Add(node.Copy(newNode));
             return newNode;

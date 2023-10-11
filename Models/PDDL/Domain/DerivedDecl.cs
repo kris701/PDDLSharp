@@ -8,13 +8,13 @@ namespace PDDLSharp.Models.PDDL.Domain
         public PredicateExp Predicate { get; set; }
         public IExp Expression { get; set; }
 
-        public DerivedDecl(ASTNode node, INode parent, PredicateExp predicate, IExp expression) : base(node, parent)
+        public DerivedDecl(ASTNode node, INode? parent, PredicateExp predicate, IExp expression) : base(node, parent)
         {
             Predicate = predicate;
             Expression = expression;
         }
 
-        public DerivedDecl(INode parent, PredicateExp predicte, IExp expression) : base(parent)
+        public DerivedDecl(INode? parent, PredicateExp predicte, IExp expression) : base(parent)
         {
             Predicate = predicte;
             Expression = expression;
@@ -24,6 +24,24 @@ namespace PDDLSharp.Models.PDDL.Domain
         {
             Predicate = predicte;
             Expression = expression;
+        }
+
+        public DerivedDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Predicate = new PredicateExp(this, "", new List<NameExp>());
+            Expression = new AndExp(this, new List<IExp>()); ;
+        }
+
+        public DerivedDecl(INode? parent) : base(parent)
+        {
+            Predicate = new PredicateExp(this, "", new List<NameExp>());
+            Expression = new AndExp(this, new List<IExp>()); ;
+        }
+
+        public DerivedDecl() : base()
+        {
+            Predicate = new PredicateExp(this, "", new List<NameExp>());
+            Expression = new AndExp(this, new List<IExp>()); ;
         }
 
         public override int GetHashCode()
@@ -40,9 +58,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             yield return Expression;
         }
 
-        public override DerivedDecl Copy(INode newParent)
+        public override DerivedDecl Copy(INode? newParent = null)
         {
-            var newNode = new DerivedDecl(new ASTNode(Start, End, Line, "", ""), newParent, null, null);
+            var newNode = new DerivedDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             newNode.Predicate = Predicate.Copy(newParent);
             newNode.Expression = ((dynamic)Expression).Copy(newParent);
             return newNode;

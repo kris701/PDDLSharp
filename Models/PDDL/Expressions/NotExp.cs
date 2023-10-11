@@ -6,12 +6,12 @@ namespace PDDLSharp.Models.PDDL.Expressions
     {
         public IExp Child { get; set; }
 
-        public NotExp(ASTNode node, INode parent, IExp child) : base(node, parent)
+        public NotExp(ASTNode node, INode? parent, IExp child) : base(node, parent)
         {
             Child = child;
         }
 
-        public NotExp(INode parent, IExp child) : base(parent)
+        public NotExp(INode? parent, IExp child) : base(parent)
         {
             Child = child;
         }
@@ -19,6 +19,21 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public NotExp(IExp child) : base()
         {
             Child = child;
+        }
+
+        public NotExp(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Child = new AndExp(this, new List<IExp>());
+        }
+
+        public NotExp(INode? parent) : base(parent)
+        {
+            Child = new AndExp(this, new List<IExp>());
+        }
+
+        public NotExp() : base()
+        {
+            Child = new AndExp(this, new List<IExp>());
         }
 
         public override int GetHashCode()
@@ -31,9 +46,9 @@ namespace PDDLSharp.Models.PDDL.Expressions
             yield return Child;
         }
 
-        public override NotExp Copy(INode newParent)
+        public override NotExp Copy(INode? newParent = null)
         {
-            var newNode = new NotExp(new ASTNode(Start, End, Line, "", ""), newParent, null);
+            var newNode = new NotExp(new ASTNode(Start, End, Line, "", ""), newParent);
             newNode.Child = ((dynamic)Child).Copy(newNode);
             return newNode;
         }

@@ -7,13 +7,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public IExp Arg1 { get; set; }
         public IExp Arg2 { get; set; }
 
-        public NumericExp(ASTNode node, INode parent, string name, IExp arg1, IExp arg2) : base(node, parent, name)
+        public NumericExp(ASTNode node, INode? parent, string name, IExp arg1, IExp arg2) : base(node, parent, name)
         {
             Arg1 = arg1;
             Arg2 = arg2;
         }
 
-        public NumericExp(INode parent, string name, IExp arg1, IExp arg2) : base(parent, name)
+        public NumericExp(INode? parent, string name, IExp arg1, IExp arg2) : base(parent, name)
         {
             Arg1 = arg1;
             Arg2 = arg2;
@@ -23,6 +23,24 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             Arg1 = arg1;
             Arg2 = arg2;
+        }
+
+        public NumericExp(ASTNode node, INode? parent, string name) : base(node, parent, name)
+        {
+            Arg1 = new AndExp(this, new List<IExp>());
+            Arg2 = new AndExp(this, new List<IExp>());
+        }
+
+        public NumericExp(INode? parent, string name) : base(parent, name)
+        {
+            Arg1 = new AndExp(this, new List<IExp>());
+            Arg2 = new AndExp(this, new List<IExp>());
+        }
+
+        public NumericExp(string name) : base(name)
+        {
+            Arg1 = new AndExp(this, new List<IExp>());
+            Arg2 = new AndExp(this, new List<IExp>());
         }
 
         public override int GetHashCode()
@@ -36,9 +54,9 @@ namespace PDDLSharp.Models.PDDL.Expressions
             yield return Arg2;
         }
 
-        public override NumericExp Copy(INode newParent)
+        public override NumericExp Copy(INode? newParent = null)
         {
-            var newNode = new NumericExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, null, null);
+            var newNode = new NumericExp(new ASTNode(Start, End, Line, "", ""), newParent, Name);
             newNode.Arg1 = ((dynamic)Arg1).Copy(newNode);
             newNode.Arg2 = ((dynamic)Arg2).Copy(newNode);
             return newNode;

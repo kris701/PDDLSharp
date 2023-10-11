@@ -9,14 +9,14 @@ namespace PDDLSharp.Models.PDDL.Domain
         public IExp Context { get; set; }
         public IExp Implies { get; set; }
 
-        public AxiomDecl(ASTNode node, INode parent, ParameterExp vars, IExp context, IExp implies) : base(node, parent)
+        public AxiomDecl(ASTNode node, INode? parent, ParameterExp vars, IExp context, IExp implies) : base(node, parent)
         {
             Parameters = vars;
             Context = context;
             Implies = implies;
         }
 
-        public AxiomDecl(INode parent, ParameterExp vars, IExp context, IExp implies) : base(parent)
+        public AxiomDecl(INode? parent, ParameterExp vars, IExp context, IExp implies) : base(parent)
         {
             Parameters = vars;
             Context = context;
@@ -28,6 +28,27 @@ namespace PDDLSharp.Models.PDDL.Domain
             Parameters = vars;
             Context = context;
             Implies = implies;
+        }
+
+        public AxiomDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Context = new AndExp(this, new List<IExp>());
+            Implies = new AndExp(this, new List<IExp>());
+        }
+
+        public AxiomDecl(INode? parent) : base(parent)
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Context = new AndExp(this, new List<IExp>());
+            Implies = new AndExp(this, new List<IExp>());
+        }
+
+        public AxiomDecl() : base()
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Context = new AndExp(this, new List<IExp>());
+            Implies = new AndExp(this, new List<IExp>());
         }
 
         public override int GetHashCode()
@@ -46,9 +67,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             yield return Implies;
         }
 
-        public override AxiomDecl Copy(INode newParent)
+        public override AxiomDecl Copy(INode? newParent = null)
         {
-            var newNode = new AxiomDecl(new ASTNode(Start, End, Line, "", ""), newParent, null, null, null);
+            var newNode = new AxiomDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             var newParams = Parameters.Copy(newNode);
             var newContext = ((dynamic)Context).Copy(newNode);
             var newImplies = ((dynamic)Implies).Copy(newNode);

@@ -104,7 +104,7 @@ namespace PDDLSharp.Simulators.StateSpace
 
                 if (obj == null)
                     throw new ArgumentException($"Cannot find object (or constant) '{arg}'");
-                args.Add(new NameExp(obj));
+                args.Add(obj.Copy());
             }
             return args;
         }

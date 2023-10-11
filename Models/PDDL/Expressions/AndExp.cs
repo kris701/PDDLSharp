@@ -6,12 +6,12 @@ namespace PDDLSharp.Models.PDDL.Expressions
     {
         public List<IExp> Children { get; set; }
 
-        public AndExp(ASTNode node, INode parent, List<IExp> children) : base(node, parent)
+        public AndExp(ASTNode node, INode? parent, List<IExp> children) : base(node, parent)
         {
             Children = children;
         }
 
-        public AndExp(INode parent, List<IExp> children) : base(parent)
+        public AndExp(INode? parent, List<IExp> children) : base(parent)
         {
             Children = children;
         }
@@ -19,6 +19,16 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public AndExp(List<IExp> children) : base()
         {
             Children = children;
+        }
+
+        public AndExp(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Children = new List<IExp>();
+        }
+
+        public AndExp(INode? parent) : base(parent)
+        {
+            Children = new List<IExp>();
         }
 
         public AndExp() : base()
@@ -39,9 +49,9 @@ namespace PDDLSharp.Models.PDDL.Expressions
             return Children.GetEnumerator();
         }
 
-        public override AndExp Copy(INode newParent)
+        public override AndExp Copy(INode? newParent = null)
         {
-            var newNode = new AndExp(new ASTNode(Start, End, Line, "", ""), newParent, new List<IExp>());
+            var newNode = new AndExp(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Children)
                 newNode.Children.Add(((dynamic)node).Copy(newNode));
             return newNode;

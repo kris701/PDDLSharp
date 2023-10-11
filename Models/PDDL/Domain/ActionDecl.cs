@@ -9,14 +9,14 @@ namespace PDDLSharp.Models.PDDL.Domain
         public IExp Preconditions { get; set; }
         public IExp Effects { get; set; }
 
-        public ActionDecl(ASTNode node, INode parent, string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(node, parent, name)
+        public ActionDecl(ASTNode node, INode? parent, string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(node, parent, name)
         {
             Parameters = parameters;
             Preconditions = preconditions;
             Effects = effects;
         }
 
-        public ActionDecl(INode parent, string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(parent, name)
+        public ActionDecl(INode? parent, string name, ParameterExp parameters, IExp preconditions, IExp effects) : base(parent, name)
         {
             Parameters = parameters;
             Preconditions = preconditions;
@@ -28,6 +28,27 @@ namespace PDDLSharp.Models.PDDL.Domain
             Parameters = parameters;
             Preconditions = preconditions;
             Effects = effects;
+        }
+
+        public ActionDecl(ASTNode node, INode? parent, string name) : base(node, parent, name)
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Preconditions = new AndExp(this, new List<IExp>());
+            Effects = new AndExp(this, new List<IExp>());
+        }
+
+        public ActionDecl(INode? parent, string name) : base(parent, name)
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Preconditions = new AndExp(this, new List<IExp>());
+            Effects = new AndExp(this, new List<IExp>());
+        }
+
+        public ActionDecl(string name) : base(name)
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Preconditions = new AndExp(this, new List<IExp>());
+            Effects = new AndExp(this, new List<IExp>());
         }
 
         public override int GetHashCode()
@@ -45,9 +66,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             yield return Preconditions;
             yield return Effects;
         }
-        public override ActionDecl Copy(INode newParent)
+        public override ActionDecl Copy(INode? newParent = null)
         {
-            var newNode = new ActionDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name, null, null, null);
+            var newNode = new ActionDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
             var newParams = Parameters.Copy(newNode);
             var newPreconditions = ((dynamic)Preconditions).Copy(newNode);
             var newEffects = ((dynamic)Effects).Copy(newNode);

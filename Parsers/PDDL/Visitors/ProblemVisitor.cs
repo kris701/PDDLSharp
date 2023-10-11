@@ -8,7 +8,7 @@ namespace PDDLSharp.Parsers.Visitors
 {
     public partial class ParserVisitor
     {
-        public IDecl VisitProblem(ASTNode node, INode? parent)
+        public IDecl? VisitProblem(ASTNode node, INode? parent)
         {
             IDecl? returnNode;
             if ((returnNode = TryVisitProblemDeclNode(node, parent)) != null) return returnNode;
@@ -121,7 +121,7 @@ namespace PDDLSharp.Parsers.Visitors
                 DoesNodeHaveSpecificChildCount(node, ":goal", 1) &&
                 DoesNotContainStrayCharacters(node, ":goal"))
             {
-                var newGoal = new GoalDecl(node, parent, null);
+                var newGoal = new GoalDecl(node, parent);
                 newGoal.GoalExp = VisitExp(node.Children[0], newGoal);
                 return newGoal;
             }
@@ -149,7 +149,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var metricType = node.InnerContent.Substring(node.InnerContent.IndexOf(":metric") + ":metric".Length).Trim();
                 if (MetricNodeTypes.Contains(metricType))
                 {
-                    var newMetric = new MetricDecl(node, parent, metricType, null);
+                    var newMetric = new MetricDecl(node, parent, metricType);
                     newMetric.MetricExp = VisitExp(node.Children[0], newMetric);
                     return newMetric;
                 }

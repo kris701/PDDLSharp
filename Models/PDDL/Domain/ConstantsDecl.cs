@@ -8,12 +8,12 @@ namespace PDDLSharp.Models.PDDL.Domain
     {
         public List<NameExp> Constants { get; set; }
 
-        public ConstantsDecl(ASTNode node, INode parent, List<NameExp> constants) : base(node, parent)
+        public ConstantsDecl(ASTNode node, INode? parent, List<NameExp> constants) : base(node, parent)
         {
             Constants = constants;
         }
 
-        public ConstantsDecl(INode parent, List<NameExp> constants) : base(parent)
+        public ConstantsDecl(INode? parent, List<NameExp> constants) : base(parent)
         {
             Constants = constants;
         }
@@ -21,6 +21,16 @@ namespace PDDLSharp.Models.PDDL.Domain
         public ConstantsDecl(List<NameExp> constants) : base()
         {
             Constants = constants;
+        }
+
+        public ConstantsDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Constants = new List<NameExp>();
+        }
+
+        public ConstantsDecl(INode? parent) : base(parent)
+        {
+            Constants = new List<NameExp>();
         }
 
         public ConstantsDecl() : base()
@@ -41,9 +51,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             return Constants.GetEnumerator();
         }
 
-        public override ConstantsDecl Copy(INode newParent)
+        public override ConstantsDecl Copy(INode? newParent = null)
         {
-            var newNode = new ConstantsDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            var newNode = new ConstantsDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Constants)
                 newNode.Constants.Add(node.Copy(newNode));
             return newNode;

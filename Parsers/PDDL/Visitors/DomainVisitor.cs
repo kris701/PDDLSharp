@@ -10,7 +10,7 @@ namespace PDDLSharp.Parsers.Visitors
 {
     public partial class ParserVisitor
     {
-        public IDecl VisitDomain(ASTNode node, INode? parent)
+        public IDecl? VisitDomain(ASTNode node, INode? parent)
         {
             IDecl? returnNode;
             if ((returnNode = TryVisitDomainDeclNode(node, parent)) != null) return returnNode;
@@ -240,7 +240,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var nameFindStr = ReduceToSingleSpace(RemoveNodeTypeAndEscapeChars(node.InnerContent, ":action"));
                 var actionName = nameFindStr.Split(' ')[0].Trim();
 
-                var newActionDecl = new ActionDecl(node, parent, actionName, null, null, null);
+                var newActionDecl = new ActionDecl(node, parent, actionName);
 
                 // Parameters
                 newActionDecl.Parameters = new ParameterExp(
@@ -272,7 +272,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var nameFindStr = ReduceToSingleSpace(RemoveNodeTypeAndEscapeChars(node.InnerContent, ":durative-action"));
                 var actionName = nameFindStr.Split(' ')[0].Trim();
 
-                var newActionDecl = new DurativeActionDecl(node, parent, actionName, null, null, null, null);
+                var newActionDecl = new DurativeActionDecl(node, parent, actionName);
 
                 // Parameters
                 newActionDecl.Parameters = new ParameterExp(
@@ -303,7 +303,7 @@ namespace PDDLSharp.Parsers.Visitors
                 DoesNodeHaveSpecificChildCount(node, ":axiom", 3) &&
                 DoesContentContainNLooseChildren(node, ":axiom", 3))
             {
-                var newAxiomDecl = new AxiomDecl(node, parent, null, null, null);
+                var newAxiomDecl = new AxiomDecl(node, parent);
 
                 // Vars
                 newAxiomDecl.Parameters = new ParameterExp(
@@ -327,7 +327,7 @@ namespace PDDLSharp.Parsers.Visitors
             if (IsOfValidNodeType(node.InnerContent, ":derived") &&
                 DoesNodeHaveSpecificChildCount(node, ":derived", 2))
             {
-                var derivedDecl = new DerivedDecl(node, parent, null, null);
+                var derivedDecl = new DerivedDecl(node, parent);
 
                 // Predicate
                 derivedDecl.Predicate = TryVisitAs<PredicateExp>(node.Children[0], derivedDecl);

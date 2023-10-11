@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
@@ -6,12 +7,12 @@ namespace PDDLSharp.Models.PDDL.Problem
     {
         public IExp GoalExp { get; set; }
 
-        public GoalDecl(ASTNode node, INode parent, IExp goalExp) : base(node, parent)
+        public GoalDecl(ASTNode node, INode? parent, IExp goalExp) : base(node, parent)
         {
             GoalExp = goalExp;
         }
 
-        public GoalDecl(INode parent, IExp goalExp) : base(parent)
+        public GoalDecl(INode? parent, IExp goalExp) : base(parent)
         {
             GoalExp = goalExp;
         }
@@ -19,6 +20,21 @@ namespace PDDLSharp.Models.PDDL.Problem
         public GoalDecl(IExp goalExp) : base()
         {
             GoalExp = goalExp;
+        }
+
+        public GoalDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            GoalExp = new AndExp(this, new List<IExp>());
+        }
+
+        public GoalDecl(INode? parent) : base(parent)
+        {
+            GoalExp = new AndExp(this, new List<IExp>());
+        }
+
+        public GoalDecl() : base()
+        {
+            GoalExp = new AndExp(this, new List<IExp>());
         }
 
         public override int GetHashCode()
@@ -31,9 +47,9 @@ namespace PDDLSharp.Models.PDDL.Problem
             yield return GoalExp;
         }
 
-        public override GoalDecl Copy(INode newParent)
+        public override GoalDecl Copy(INode? newParent = null)
         {
-            var newNode = new GoalDecl(new ASTNode(Start, End, Line, "", ""), newParent, null);
+            var newNode = new GoalDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             newNode.GoalExp = ((dynamic)GoalExp).Copy(newNode);
             return newNode;
         }

@@ -10,7 +10,7 @@ namespace PDDLSharp.Models.PDDL.Domain
         public IExp Effects { get; set; }
         public IExp Duration { get; set; }
 
-        public DurativeActionDecl(ASTNode node, INode parent, string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(node, parent, name)
+        public DurativeActionDecl(ASTNode node, INode? parent, string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(node, parent, name)
         {
             Parameters = parameters;
             Condition = condition;
@@ -18,7 +18,7 @@ namespace PDDLSharp.Models.PDDL.Domain
             Duration = duration;
         }
 
-        public DurativeActionDecl(INode parent, string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(parent, name)
+        public DurativeActionDecl(INode? parent, string name, ParameterExp parameters, IExp condition, IExp effects, IExp duration) : base(parent, name)
         {
             Parameters = parameters;
             Condition = condition;
@@ -32,6 +32,30 @@ namespace PDDLSharp.Models.PDDL.Domain
             Condition = condition;
             Effects = effects;
             Duration = duration;
+        }
+
+        public DurativeActionDecl(ASTNode node, INode? parent, string name) : base(node, parent, name)
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Condition = new AndExp(this, new List<IExp>());
+            Effects = new AndExp(this, new List<IExp>());
+            Duration = new AndExp(this, new List<IExp>());
+        }
+
+        public DurativeActionDecl(INode? parent, string name) : base(parent, name)
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Condition = new AndExp(this, new List<IExp>());
+            Effects = new AndExp(this, new List<IExp>());
+            Duration = new AndExp(this, new List<IExp>());
+        }
+
+        public DurativeActionDecl(string name) : base(name)
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Condition = new AndExp(this, new List<IExp>());
+            Effects = new AndExp(this, new List<IExp>());
+            Duration = new AndExp(this, new List<IExp>());
         }
 
         public override int GetHashCode()
@@ -51,9 +75,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             yield return Effects;
             yield return Duration;
         }
-        public override DurativeActionDecl Copy(INode newParent)
+        public override DurativeActionDecl Copy(INode? newParent = null)
         {
-            var newNode = new DurativeActionDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name, null, null, null, null);
+            var newNode = new DurativeActionDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
             var newParams = Parameters.Copy(newNode);
             var newCondition = ((dynamic)Condition).Copy(newNode);
             var newEffects = ((dynamic)Effects).Copy(newNode);

@@ -7,12 +7,12 @@ namespace PDDLSharp.Models.PDDL.Domain
     {
         public List<TypeExp> Types { get; set; }
 
-        public TypesDecl(ASTNode node, INode parent, List<TypeExp> types) : base(node, parent)
+        public TypesDecl(ASTNode node, INode? parent, List<TypeExp> types) : base(node, parent)
         {
             Types = types;
         }
 
-        public TypesDecl(INode parent, List<TypeExp> types) : base(parent)
+        public TypesDecl(INode? parent, List<TypeExp> types) : base(parent)
         {
             Types = types;
         }
@@ -20,6 +20,16 @@ namespace PDDLSharp.Models.PDDL.Domain
         public TypesDecl(List<TypeExp> types) : base()
         {
             Types = types;
+        }
+
+        public TypesDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Types = new List<TypeExp>();
+        }
+
+        public TypesDecl(INode? parent) : base(parent)
+        {
+            Types = new List<TypeExp>();
         }
 
         public TypesDecl() : base()
@@ -40,9 +50,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             return Types.GetEnumerator();
         }
 
-        public override TypesDecl Copy(INode newParent)
+        public override TypesDecl Copy(INode? newParent = null)
         {
-            var newNode = new TypesDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<TypeExp>());
+            var newNode = new TypesDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Types)
                 newNode.Types.Add(node.Copy(newNode));
             return newNode;

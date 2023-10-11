@@ -7,12 +7,12 @@ namespace PDDLSharp.Models.PDDL.Problem
     {
         public List<NameExp> Objs { get; set; }
 
-        public ObjectsDecl(ASTNode node, INode parent, List<NameExp> types) : base(node, parent)
+        public ObjectsDecl(ASTNode node, INode? parent, List<NameExp> types) : base(node, parent)
         {
             Objs = types;
         }
 
-        public ObjectsDecl(INode parent, List<NameExp> types) : base(parent)
+        public ObjectsDecl(INode? parent, List<NameExp> types) : base(parent)
         {
             Objs = types;
         }
@@ -20,6 +20,16 @@ namespace PDDLSharp.Models.PDDL.Problem
         public ObjectsDecl(List<NameExp> types) : base()
         {
             Objs = types;
+        }
+
+        public ObjectsDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Objs = new List<NameExp>();
+        }
+
+        public ObjectsDecl(INode? parent) : base(parent)
+        {
+            Objs = new List<NameExp>();
         }
 
         public ObjectsDecl() : base()
@@ -40,9 +50,9 @@ namespace PDDLSharp.Models.PDDL.Problem
             return Objs.GetEnumerator();
         }
 
-        public override ObjectsDecl Copy(INode newParent)
+        public override ObjectsDecl Copy(INode? newParent = null)
         {
-            var newNode = new ObjectsDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            var newNode = new ObjectsDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Objs)
                 newNode.Objs.Add(node.Copy(newNode));
             return newNode;

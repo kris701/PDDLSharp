@@ -7,12 +7,12 @@ namespace PDDLSharp.Models.PDDL.Domain
     {
         public List<PredicateExp> Items { get; set; }
 
-        public TimelessDecl(ASTNode node, INode parent, List<PredicateExp> timeless) : base(node, parent)
+        public TimelessDecl(ASTNode node, INode? parent, List<PredicateExp> timeless) : base(node, parent)
         {
             Items = timeless;
         }
 
-        public TimelessDecl(INode parent, List<PredicateExp> timeless) : base(parent)
+        public TimelessDecl(INode? parent, List<PredicateExp> timeless) : base(parent)
         {
             Items = timeless;
         }
@@ -20,6 +20,16 @@ namespace PDDLSharp.Models.PDDL.Domain
         public TimelessDecl(List<PredicateExp> timeless) : base()
         {
             Items = timeless;
+        }
+
+        public TimelessDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Items = new List<PredicateExp>();
+        }
+
+        public TimelessDecl(INode? parent) : base(parent)
+        {
+            Items = new List<PredicateExp>();
         }
 
         public TimelessDecl() : base()
@@ -40,9 +50,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             return Items.GetEnumerator();
         }
 
-        public override TimelessDecl Copy(INode newParent)
+        public override TimelessDecl Copy(INode? newParent = null)
         {
-            var newNode = new TimelessDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<PredicateExp>());
+            var newNode = new TimelessDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Items)
                 newNode.Items.Add(node.Copy(newNode));
             return newNode;

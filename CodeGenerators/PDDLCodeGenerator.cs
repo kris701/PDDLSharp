@@ -25,7 +25,7 @@ namespace PDDLSharp.CodeGenerators
                 while (retStr.Contains($"{Environment.NewLine}{Environment.NewLine}"))
                     retStr = retStr.Replace($"{Environment.NewLine}{Environment.NewLine}", Environment.NewLine);
             }
-            catch (PDDLSharpException e)
+            catch (PDDLSharpException)
             {
 
             }

@@ -53,7 +53,7 @@ namespace PDDLSharp.Models.PDDL.Problem
                 yield return Metric;
         }
 
-        public override ProblemDecl Copy(INode newParent)
+        public override ProblemDecl Copy(INode? newParent = null)
         {
             var newNode = new ProblemDecl(new ASTNode(Start, End, Line, "", ""));
 

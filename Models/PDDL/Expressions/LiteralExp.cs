@@ -6,12 +6,12 @@ namespace PDDLSharp.Models.PDDL.Expressions
     {
         public int Value { get; set; }
 
-        public LiteralExp(ASTNode node, INode parent, int value) : base(node, parent)
+        public LiteralExp(ASTNode node, INode? parent, int value) : base(node, parent)
         {
             Value = value;
         }
 
-        public LiteralExp(INode parent, int value) : base(parent)
+        public LiteralExp(INode? parent, int value) : base(parent)
         {
             Value = value;
         }
@@ -28,7 +28,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             return hash;
         }
 
-        public override LiteralExp Copy(INode newParent)
+        public override LiteralExp Copy(INode? newParent = null)
         {
             return new LiteralExp(new ASTNode(Start, End, Line, "", ""), newParent, Value);
         }

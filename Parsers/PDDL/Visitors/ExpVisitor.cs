@@ -37,7 +37,7 @@ namespace PDDLSharp.Parsers.Visitors
                 node.Children.Count == 1 &&
                 node.InnerContent.Any(char.IsDigit))
             {
-                var newTimedLiteralExp = new TimedLiteralExp(node, parent, -1, null);
+                var newTimedLiteralExp = new TimedLiteralExp(node, parent, -1);
 
                 var stray = node.InnerContent.Substring(node.InnerContent.IndexOf("at") + "at".Length).Trim();
                 var value = Convert.ToInt32(stray);
@@ -55,7 +55,7 @@ namespace PDDLSharp.Parsers.Visitors
                 DoesNodeHaveSpecificChildCount(node, "imply", 2) &&
                 DoesNotContainStrayCharacters(node, "imply"))
             {
-                var newImplyExp = new ImplyExp(node, parent, null, null);
+                var newImplyExp = new ImplyExp(node, parent);
                 newImplyExp.Antecedent = VisitExp(node.Children[0], newImplyExp);
                 newImplyExp.Consequent = VisitExp(node.Children[1], newImplyExp);
 
@@ -70,7 +70,7 @@ namespace PDDLSharp.Parsers.Visitors
                 DoesNodeHaveSpecificChildCount(node, "exists", 2) &&
                 DoesNotContainStrayCharacters(node, "exists"))
             {
-                var newExistsExp = new ExistsExp(node, parent, null, null);
+                var newExistsExp = new ExistsExp(node, parent);
                 newExistsExp.Parameters = new ParameterExp(
                     node.Children[0],
                     newExistsExp,
@@ -88,7 +88,7 @@ namespace PDDLSharp.Parsers.Visitors
                 DoesNodeHaveSpecificChildCount(node, "forall", 2) &&
                 DoesNotContainStrayCharacters(node, "forall"))
             {
-                var newForAllExpression = new ForAllExp(node, parent, null, null);
+                var newForAllExpression = new ForAllExp(node, parent);
                 newForAllExpression.Parameters = new ParameterExp(
                     node.Children[0],
                     newForAllExpression,
@@ -106,7 +106,7 @@ namespace PDDLSharp.Parsers.Visitors
                 DoesNodeHaveSpecificChildCount(node, "when", 2) &&
                 DoesNotContainStrayCharacters(node, "when"))
             {
-                var newWhenExp = new WhenExp(node, parent, null, null);
+                var newWhenExp = new WhenExp(node, parent);
                 newWhenExp.Condition = VisitExp(node.Children[0], newWhenExp);
                 newWhenExp.Effect = VisitExp(node.Children[1], newWhenExp);
 
@@ -134,7 +134,7 @@ namespace PDDLSharp.Parsers.Visitors
             if (IsOfValidNodeType(node.InnerContent, "or") &&
                 DoesNotContainStrayCharacters(node, "or"))
             {
-                var newOrExp = new OrExp(node, parent, new List<IExp>());
+                var newOrExp = new OrExp(node, parent);
                 foreach (var child in node.Children)
                     newOrExp.Options.Add(VisitExp(child, newOrExp));
                 return newOrExp;
@@ -148,7 +148,7 @@ namespace PDDLSharp.Parsers.Visitors
                 DoesNodeHaveSpecificChildCount(node, "not", 1) &&
                 DoesNotContainStrayCharacters(node, "not"))
             {
-                var newNotExp = new NotExp(node, parent, null);
+                var newNotExp = new NotExp(node, parent);
                 newNotExp.Child = VisitExp(node.Children[0], newNotExp);
                 return newNotExp;
             }
@@ -163,7 +163,7 @@ namespace PDDLSharp.Parsers.Visitors
                 DoesNodeHaveSpecificChildCount(node, "predicate", 0))
             {
                 var predicateName = node.InnerContent.Split(' ')[0];
-                var newPredicateExp = new PredicateExp(node, parent, predicateName, new List<NameExp>());
+                var newPredicateExp = new PredicateExp(node, parent, predicateName);
 
                 var content = node.InnerContent.Substring(node.InnerContent.IndexOf(predicateName) + predicateName.Length);
                 newPredicateExp.Arguments = ParseAsParameters(node, newPredicateExp, predicateName, content);
@@ -189,7 +189,7 @@ namespace PDDLSharp.Parsers.Visitors
                 var numericName = node.InnerContent.Split(' ')[0].Trim();
                 if (NumericNodeTypes.Contains(numericName))
                 {
-                    var newNumericExp = new NumericExp(node, parent, numericName, null, null);
+                    var newNumericExp = new NumericExp(node, parent, numericName);
                     IExp arg1;
                     IExp arg2;
                     if (node.Children.Count == 2)

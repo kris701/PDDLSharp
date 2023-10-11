@@ -14,14 +14,14 @@ namespace PDDLSharp.Models.PDDL
 
         private List<PropertyInfo> _metaInfo = new List<PropertyInfo>();
 
-        public BaseNode(ASTNode node, INode parent) : this(parent)
+        public BaseNode(ASTNode node, INode? parent) : this(parent)
         {
             Line = node.Line;
             Start = node.Start;
             End = node.End;
         }
 
-        public BaseNode(INode parent)
+        public BaseNode(INode? parent)
         {
             Line = -1;
             Start = -1;
@@ -37,7 +37,7 @@ namespace PDDLSharp.Models.PDDL
             Parent = null;
         }
 
-        public abstract INode Copy(INode newParent);
+        public abstract INode Copy(INode? newParent = null);
 
         private void CacheMetaInfo()
         {
