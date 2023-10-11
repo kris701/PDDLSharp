@@ -77,7 +77,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
         [TestMethod]
         [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
-        public void Cant_ValidatePlans_IfIncorrect(string domain, List<string> problems, List<string> plans)
+        public void Cant_ValidatePlans_IfIncorrect_AddRandomParts(string domain, List<string> problems, List<string> plans)
         {
             Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}, plans: {plans.Count}");
 
@@ -104,7 +104,8 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
                     Trace.WriteLine($"   Parsing plan: {targetPlan}");
                     var plan = planParser.Parse(targetPlan);
-                    DestroyPlan(plan);
+                    for (int i = 0; i < plan.Plan.Count; i += 2)
+                        plan.Plan.Add(plan.Plan[i]);
                     Assert.IsFalse(validator.Validate(plan, newDecl));
                     any = true;
                 }
@@ -116,10 +117,87 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
         }
 
-        private void DestroyPlan(ActionPlan plan)
+        [TestMethod]
+        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
+        public void Cant_ValidatePlans_IfIncorrect_RemoveRandomParts(string domain, List<string> problems, List<string> plans)
         {
-            for(int i = 0; i < plan.Plan.Count; i += 5)
-                plan.Plan.Add(plan.Plan[i]);
+            Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}, plans: {plans.Count}");
+
+            // ARRANGE
+            IErrorListener listener = new ErrorListener();
+            IParser<INode> parser = GetParser(domain, listener);
+            IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
+            IPlanValidator validator = new PlanValidator();
+
+            // ACT
+            bool any = false;
+            foreach (var problem in problems)
+            {
+                var targetPlanStr = new FileInfo(problem).Name.Replace(".pddl", ".plan");
+                var targetPlan = plans.FirstOrDefault(x => x.EndsWith(targetPlanStr));
+                if (targetPlan != null)
+                {
+                    Trace.WriteLine($"   Parsing problem: {problem}");
+                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
+                    var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                    var newDecl = new PDDLDecl(domainDecl, problemDecl);
+                    Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+                    listener.Errors.Clear();
+
+                    Trace.WriteLine($"   Parsing plan: {targetPlan}");
+                    var plan = planParser.Parse(targetPlan);
+                    for (int i = 0; i < plan.Plan.Count; i += 2)
+                        plan.Plan.RemoveAt(i);
+                    Assert.IsFalse(validator.Validate(plan, newDecl));
+                    any = true;
+                }
+            }
+            if (!any)
+                Assert.Inconclusive($"Could not find any plans for the domain+problems!");
+
+            // ASSERT
+            Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
+        public void Cant_ValidatePlans_IfIncorrect_RandomObject(string domain, List<string> problems, List<string> plans)
+        {
+            Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}, plans: {plans.Count}");
+
+            // ARRANGE
+            IErrorListener listener = new ErrorListener();
+            IParser<INode> parser = GetParser(domain, listener);
+            IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
+            IPlanValidator validator = new PlanValidator();
+
+            // ACT
+            bool any = false;
+            foreach (var problem in problems)
+            {
+                var targetPlanStr = new FileInfo(problem).Name.Replace(".pddl", ".plan");
+                var targetPlan = plans.FirstOrDefault(x => x.EndsWith(targetPlanStr));
+                if (targetPlan != null)
+                {
+                    Trace.WriteLine($"   Parsing problem: {problem}");
+                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
+                    var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                    var newDecl = new PDDLDecl(domainDecl, problemDecl);
+                    Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+                    listener.Errors.Clear();
+
+                    Trace.WriteLine($"   Parsing plan: {targetPlan}");
+                    var plan = planParser.Parse(targetPlan);
+                    plan.Plan[0].Arguments[0].Name = "nonexistent";
+                    Assert.IsFalse(validator.Validate(plan, newDecl));
+                    any = true;
+                }
+            }
+            if (!any)
+                Assert.Inconclusive($"Could not find any plans for the domain+problems!");
+
+            // ASSERT
+            Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
         }
     }
 }
