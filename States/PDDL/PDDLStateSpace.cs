@@ -20,7 +20,7 @@ namespace PDDLSharp.States.PDDL
             if (declaration.Problem.Init != null)
                 foreach (var item in declaration.Problem.Init.Predicates)
                     if (item is PredicateExp predicate)
-                        Add(predicate);
+                        Add(SimplifyPredicate(predicate));
         }
 
         public int Count => _state.Count;
@@ -174,6 +174,12 @@ namespace PDDLSharp.States.PDDL
                     if (!IsNodeTrue(permutation))
                         return false;
                 return true;
+            }
+            else if (node is WhenExp when)
+            {
+                if (IsNodeTrue(when.Condition))
+                    return IsNodeTrue(when.Effect);
+                return false;
             }
 
             throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");

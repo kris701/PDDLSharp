@@ -37,10 +37,10 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
-            hash *= Parameters.GetHashCode();
-            hash *= Condition.GetHashCode();
-            hash *= Effects.GetHashCode();
-            hash *= Duration.GetHashCode();
+            hash ^= Parameters.GetHashCode();
+            hash ^= Condition.GetHashCode();
+            hash ^= Effects.GetHashCode();
+            hash ^= Duration.GetHashCode();
             return hash;
         }
 

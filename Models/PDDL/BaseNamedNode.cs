@@ -28,7 +28,7 @@ namespace PDDLSharp.Models.PDDL
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() * Name.GetHashCode();
+            return base.GetHashCode() ^ Name.GetHashCode();
         }
     }
 }

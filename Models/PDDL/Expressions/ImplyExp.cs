@@ -28,8 +28,8 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
-            hash *= Antecedent.GetHashCode();
-            hash *= Consequent.GetHashCode();
+            hash ^= Antecedent.GetHashCode();
+            hash ^= Consequent.GetHashCode();
             return hash;
         }
 

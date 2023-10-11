@@ -23,7 +23,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() * Child.GetHashCode();
+            return base.GetHashCode() ^ Child.GetHashCode();
         }
 
         public override IEnumerator<INode> GetEnumerator()

@@ -23,7 +23,7 @@ namespace PDDLSharp.Models.PDDL.Problem
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() + GoalExp.GetHashCode();
+            return base.GetHashCode() ^ GoalExp.GetHashCode();
         }
 
         public override IEnumerator<INode> GetEnumerator()

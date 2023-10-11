@@ -24,7 +24,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override int GetHashCode()
         {
             int hash = base.GetHashCode();
-            hash *= Value.GetHashCode();
+            hash ^= Value.GetHashCode();
             return hash;
         }
 
