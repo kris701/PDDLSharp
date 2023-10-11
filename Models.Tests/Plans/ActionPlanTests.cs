@@ -1,4 +1,8 @@
-﻿using PDDLSharp.Models.Plans;
+﻿using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.Plans;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,41 +14,65 @@ namespace PDDLSharp.Models.Tests.Plans
     [TestClass]
     public class ActionPlanTests
     {
-        [DataRow("pred", "prad")]
-        [DataRow("pred", "prud", "obja")]
-        [DataRow("pred", "q", "obja", "aaa")]
-        [DataRow("a", "b", "obja", "aaa")]
-        [DataRow("a", "b", "o214213bja", "aaa")]
-        [DataRow("a", "b", "o214213bja", "aaa", "qqq")]
-        public void Can_CheckIfNotEqual(string name1, string name2, params string[] args)
+        public static IEnumerable<object[]> GetIsEqualData()
         {
-            // ARRANGE
-            var op1 = new GroundedAction(name1, args);
-            var op2 = new GroundedAction(name2, args);
+            yield return new object[] {
+                new ActionPlan(new List<GroundedAction>(), 1),
+                new ActionPlan(new List<GroundedAction>(), 1),
+                true
+            };
 
-            // ACT
-            // ASSERT
-            Assert.IsFalse(op1.Equals(op2));
-            Assert.AreNotEqual(op1.GetHashCode(), op2.GetHashCode());
+            yield return new object[] {
+                new ActionPlan(new List<GroundedAction>(), 1),
+                new ActionPlan(new List<GroundedAction>(), 2),
+                false
+            };
+
+            yield return new object[] {
+                new ActionPlan(new List<GroundedAction>(){
+                    new GroundedAction("a")
+                }, 1),
+                new ActionPlan(new List<GroundedAction>(), 1),
+                false
+            };
+
+            yield return new object[] {
+                new ActionPlan(new List<GroundedAction>(){
+                    new GroundedAction("a")
+                }, 1),
+                new ActionPlan(new List<GroundedAction>(){
+                    new GroundedAction("a")
+                }, 1),
+                true
+            };
+
+            yield return new object[] {
+                new ActionPlan(new List<GroundedAction>(){
+                    new GroundedAction("a"),
+                    new GroundedAction("b")
+                }, 1),
+                new ActionPlan(new List<GroundedAction>(){
+                    new GroundedAction("b"),
+                    new GroundedAction("a")
+                }, 1),
+                false
+            };
         }
 
         [TestMethod]
-        [DataRow("pred")]
-        [DataRow("pred", "obja")]
-        [DataRow("pred", "obja", "aaa")]
-        [DataRow("a", "obja", "aaa")]
-        [DataRow("a", "o214213bja", "aaa")]
-        [DataRow("a", "o214213bja", "aaa", "qqq")]
-        public void Can_CheckIfEqual(string name, params string[] args)
+        [DynamicData(nameof(GetIsEqualData), DynamicDataSourceType.Method)]
+        public void Can_IsEqual(ActionPlan plana, ActionPlan planb, bool expected)
         {
             // ARRANGE
-            var op1 = new GroundedAction(name, args);
-            var op2 = new GroundedAction(name, args);
-
             // ACT
+            var res = plana.Equals(planb);
+
             // ASSERT
-            Assert.IsTrue(op1.Equals(op2));
-            Assert.AreEqual(op1.GetHashCode(), op2.GetHashCode());
+            Assert.AreEqual(expected, res);
+            if (expected)
+                Assert.AreEqual(plana.GetHashCode(), planb.GetHashCode());
+            else
+                Assert.AreNotEqual(plana.GetHashCode(), planb.GetHashCode());
         }
     }
 }

@@ -18,12 +18,18 @@
             return false;
         }
 
+        // The other is important!
+        // Based on: https://stackoverflow.com/a/30758270
         public override int GetHashCode()
         {
-            var hash = Cost;
-            foreach (var arg in Plan)
-                hash ^= arg.GetHashCode();
-            return hash;
+            const int seed = 487;
+            const int modifier = 31;
+            unchecked
+            {
+                return Cost * Plan.Aggregate(seed, (current, item) =>
+                    (current * modifier) + item.GetHashCode());
+            }
         }
+
     }
 }

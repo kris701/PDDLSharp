@@ -36,7 +36,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             Arguments = new List<NameExp>();
         }
 
-        // The other is important!
+        // The order is important!
         // Based on: https://stackoverflow.com/a/30758270
         public override int GetHashCode()
         {
