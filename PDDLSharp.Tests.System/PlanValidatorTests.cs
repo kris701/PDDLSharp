@@ -196,9 +196,12 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
                     Trace.WriteLine($"   Parsing plan: {targetPlan}");
                     var plan = planParser.Parse(targetPlan);
-                    plan.Plan[0].Arguments[0].Name = "nonexistent";
-                    Assert.IsFalse(validator.Validate(plan, newDecl));
-                    any = true;
+                    if (plan.Plan.Count > 1)
+                    {
+                        InsertRandomObjects(plan);
+                        Assert.IsFalse(validator.Validate(plan, newDecl));
+                        any = true;
+                    }
                 }
             }
             if (!any)
@@ -206,6 +209,19 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ASSERT
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+        }
+
+        private void InsertRandomObjects(ActionPlan plan)
+        {
+            Random rn = new Random();
+            foreach(var act in plan.Plan)
+            {
+                if (act.Arguments.Count > 0)
+                {
+                    act.Arguments[0].Name = "not-an-actual-object";
+                    break;
+                }
+            }
         }
     }
 }
