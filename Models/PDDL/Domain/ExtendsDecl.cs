@@ -7,12 +7,12 @@ namespace PDDLSharp.Models.PDDL.Domain
     {
         public List<NameExp> Extends { get; set; }
 
-        public ExtendsDecl(ASTNode node, INode parent, List<NameExp> extends) : base(node, parent)
+        public ExtendsDecl(ASTNode node, INode? parent, List<NameExp> extends) : base(node, parent)
         {
             Extends = extends;
         }
 
-        public ExtendsDecl(INode parent, List<NameExp> extends) : base(parent)
+        public ExtendsDecl(INode? parent, List<NameExp> extends) : base(parent)
         {
             Extends = extends;
         }
@@ -20,6 +20,16 @@ namespace PDDLSharp.Models.PDDL.Domain
         public ExtendsDecl(List<NameExp> extends) : base()
         {
             Extends = extends;
+        }
+
+        public ExtendsDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Extends = new List<NameExp>();
+        }
+
+        public ExtendsDecl(INode? parent) : base(parent)
+        {
+            Extends = new List<NameExp>();
         }
 
         public ExtendsDecl() : base()
@@ -40,9 +50,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             return Extends.GetEnumerator();
         }
 
-        public override ExtendsDecl Copy(INode newParent)
+        public override ExtendsDecl Copy(INode? newParent = null)
         {
-            var newNode = new ExtendsDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            var newNode = new ExtendsDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Extends)
                 newNode.Extends.Add(node.Copy(newNode));
             return newNode;

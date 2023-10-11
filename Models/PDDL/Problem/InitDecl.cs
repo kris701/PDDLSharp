@@ -6,12 +6,12 @@ namespace PDDLSharp.Models.PDDL.Problem
     {
         public List<IExp> Predicates { get; set; }
 
-        public InitDecl(ASTNode node, INode parent, List<IExp> predicates) : base(node, parent)
+        public InitDecl(ASTNode node, INode? parent, List<IExp> predicates) : base(node, parent)
         {
             Predicates = predicates;
         }
 
-        public InitDecl(INode parent, List<IExp> predicates) : base(parent)
+        public InitDecl(INode? parent, List<IExp> predicates) : base(parent)
         {
             Predicates = predicates;
         }
@@ -19,6 +19,16 @@ namespace PDDLSharp.Models.PDDL.Problem
         public InitDecl(List<IExp> predicates) : base()
         {
             Predicates = predicates;
+        }
+
+        public InitDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Predicates = new List<IExp>();
+        }
+
+        public InitDecl(INode? parent) : base(parent)
+        {
+            Predicates = new List<IExp>();
         }
 
         public InitDecl() : base()
@@ -39,9 +49,9 @@ namespace PDDLSharp.Models.PDDL.Problem
             return Predicates.GetEnumerator();
         }
 
-        public override InitDecl Copy(INode newParent)
+        public override InitDecl Copy(INode? newParent = null)
         {
-            var newNode = new InitDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<IExp>());
+            var newNode = new InitDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Predicates)
                 newNode.Predicates.Add(((dynamic)node).Copy(newNode));
             return newNode;

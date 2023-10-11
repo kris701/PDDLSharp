@@ -7,13 +7,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public int Value { get; set; }
         public IExp Literal { get; set; }
 
-        public TimedLiteralExp(ASTNode node, INode parent, int value, IExp literal) : base(node, parent)
+        public TimedLiteralExp(ASTNode node, INode? parent, int value, IExp literal) : base(node, parent)
         {
             Value = value;
             Literal = literal;
         }
 
-        public TimedLiteralExp(INode parent, int value, IExp literal) : base(parent)
+        public TimedLiteralExp(INode? parent, int value, IExp literal) : base(parent)
         {
             Value = value;
             Literal = literal;
@@ -23,6 +23,24 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             Value = value;
             Literal = literal;
+        }
+
+        public TimedLiteralExp(ASTNode node, INode? parent, int value) : base(node, parent)
+        {
+            Value = value;
+            Literal = new AndExp(this, new List<IExp>());
+        }
+
+        public TimedLiteralExp(INode? parent, int value) : base(parent)
+        {
+            Value = value;
+            Literal = new AndExp(this, new List<IExp>());
+        }
+
+        public TimedLiteralExp(int value) : base()
+        {
+            Value = value;
+            Literal = new AndExp(this, new List<IExp>());
         }
 
         public override int GetHashCode()
@@ -38,9 +56,9 @@ namespace PDDLSharp.Models.PDDL.Expressions
             yield return Literal;
         }
 
-        public override TimedLiteralExp Copy(INode newParent)
+        public override TimedLiteralExp Copy(INode? newParent = null)
         {
-            var newNode = new TimedLiteralExp(new ASTNode(Start, End, Line, "", ""), newParent, Value, null);
+            var newNode = new TimedLiteralExp(new ASTNode(Start, End, Line, "", ""), newParent, Value);
             newNode.Literal = ((dynamic)Literal).Copy(newNode);
             return newNode;
         }

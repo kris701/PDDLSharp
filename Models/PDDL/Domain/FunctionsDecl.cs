@@ -7,12 +7,12 @@ namespace PDDLSharp.Models.PDDL.Domain
     {
         public List<PredicateExp> Functions { get; set; }
 
-        public FunctionsDecl(ASTNode node, INode parent, List<PredicateExp> functions) : base(node, parent)
+        public FunctionsDecl(ASTNode node, INode? parent, List<PredicateExp> functions) : base(node, parent)
         {
             Functions = functions;
         }
 
-        public FunctionsDecl(INode parent, List<PredicateExp> functions) : base(parent)
+        public FunctionsDecl(INode? parent, List<PredicateExp> functions) : base(parent)
         {
             Functions = functions;
         }
@@ -20,6 +20,16 @@ namespace PDDLSharp.Models.PDDL.Domain
         public FunctionsDecl(List<PredicateExp> functions) : base()
         {
             Functions = functions;
+        }
+
+        public FunctionsDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Functions = new List<PredicateExp>();
+        }
+
+        public FunctionsDecl(INode? parent) : base(parent)
+        {
+            Functions = new List<PredicateExp>();
         }
 
         public FunctionsDecl() : base()
@@ -40,9 +50,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             return Functions.GetEnumerator();
         }
 
-        public override FunctionsDecl Copy(INode newParent)
+        public override FunctionsDecl Copy(INode? newParent = null)
         {
-            var newNode = new FunctionsDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<PredicateExp>());
+            var newNode = new FunctionsDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Functions)
                 newNode.Functions.Add(node.Copy(newNode));
             return newNode;

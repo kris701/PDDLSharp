@@ -6,12 +6,12 @@ namespace PDDLSharp.Models.PDDL.Expressions
     {
         public List<IExp> Options { get; set; }
 
-        public OrExp(ASTNode node, INode parent, List<IExp> options) : base(node, parent)
+        public OrExp(ASTNode node, INode? parent, List<IExp> options) : base(node, parent)
         {
             Options = options;
         }
 
-        public OrExp(INode parent, List<IExp> options) : base(parent)
+        public OrExp(INode? parent, List<IExp> options) : base(parent)
         {
             Options = options;
         }
@@ -19,6 +19,16 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public OrExp(List<IExp> options) : base()
         {
             Options = options;
+        }
+
+        public OrExp(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Options = new List<IExp>();
+        }
+
+        public OrExp(INode? parent) : base(parent)
+        {
+            Options = new List<IExp>();
         }
 
         public OrExp() : base()
@@ -39,9 +49,9 @@ namespace PDDLSharp.Models.PDDL.Expressions
             return Options.GetEnumerator();
         }
 
-        public override OrExp Copy(INode newParent)
+        public override OrExp Copy(INode? newParent = null)
         {
-            var newNode = new OrExp(new ASTNode(Start, End, Line, "", ""), newParent, new List<IExp>());
+            var newNode = new OrExp(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Options)
                 newNode.Options.Add(((dynamic)node).Copy(newNode));
             return newNode;

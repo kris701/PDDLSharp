@@ -13,7 +13,7 @@ namespace PerformanceTests
         static void Main(string[] args)
         {
             Console.WriteLine("Fetching benchmarks!");
-            BenchmarkFetcher.CheckAndDownloadBenchmarksAsync();
+            BenchmarkFetcher.CheckAndDownloadBenchmarksAsync().Wait();
             Console.WriteLine("Done!");
 
             RunNTimes(100);

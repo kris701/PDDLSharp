@@ -9,7 +9,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         // This is the set of alternative supertypes (inherited types)
         public HashSet<string> SuperTypes { get; set; }
 
-        public TypeExp(ASTNode node, INode parent, string name, string superType, HashSet<string> altTypes) : base(node, parent, name)
+        public TypeExp(ASTNode node, INode? parent, string name, string superType, HashSet<string> altTypes) : base(node, parent, name)
         {
             SuperType = superType;
             if (SuperType == "")
@@ -20,7 +20,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             SuperTypes.Add(SuperType);
         }
 
-        public TypeExp(INode parent, string name, string superType, HashSet<string> altTypes) : base(parent, name)
+        public TypeExp(INode? parent, string name, string superType, HashSet<string> altTypes) : base(parent, name)
         {
             SuperType = superType;
             if (SuperType == "")
@@ -42,22 +42,20 @@ namespace PDDLSharp.Models.PDDL.Expressions
             SuperTypes.Add(SuperType);
         }
 
-        public TypeExp(ASTNode node, INode parent, string name, string superType) : base(node, parent, name)
+        public TypeExp(ASTNode node, INode? parent, string name, string superType) : base(node, parent, name)
         {
             SuperType = superType;
             if (SuperType == "")
                 SuperType = "object";
-            SuperTypes = new HashSet<string>();
-            SuperTypes.Add(SuperType);
+            SuperTypes = new HashSet<string>() { SuperType };
         }
 
-        public TypeExp(INode parent, string name, string superType) : base(parent, name)
+        public TypeExp(INode? parent, string name, string superType) : base(parent, name)
         {
             SuperType = superType;
             if (SuperType == "")
                 SuperType = "object";
-            SuperTypes = new HashSet<string>();
-            SuperTypes.Add(SuperType);
+            SuperTypes = new HashSet<string>() { SuperType };
         }
 
         public TypeExp(string name, string superType) : base(name)
@@ -65,37 +63,25 @@ namespace PDDLSharp.Models.PDDL.Expressions
             SuperType = superType;
             if (SuperType == "")
                 SuperType = "object";
-            SuperTypes = new HashSet<string>();
-            SuperTypes.Add(SuperType);
+            SuperTypes = new HashSet<string>() { SuperType };
         }
 
-        public TypeExp(ASTNode node, INode parent, string name) : base(node, parent, name)
+        public TypeExp(ASTNode node, INode? parent, string name) : base(node, parent, name)
         {
             SuperType = "object";
-            SuperTypes = new HashSet<string>();
-            SuperTypes.Add(SuperType);
+            SuperTypes = new HashSet<string>() { SuperType };
         }
 
-        public TypeExp(INode parent, string name) : base(parent, name)
+        public TypeExp(INode? parent, string name) : base(parent, name)
         {
             SuperType = "object";
-            SuperTypes = new HashSet<string>();
-            SuperTypes.Add(SuperType);
+            SuperTypes = new HashSet<string>() { SuperType };
         }
 
         public TypeExp(string name) : base(name)
         {
             SuperType = "object";
-            SuperTypes = new HashSet<string>();
-            SuperTypes.Add(SuperType);
-        }
-
-        public TypeExp(TypeExp other) : base(other.Name)
-        {
-            SuperTypes = new HashSet<string>();
-            foreach (var superType in other.SuperTypes)
-                SuperTypes.Add(superType);
-            SuperType = other.SuperType;
+            SuperTypes = new HashSet<string>() { SuperType };
         }
 
         public bool IsTypeOf(string typeName)
@@ -116,7 +102,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             return hash;
         }
 
-        public override TypeExp Copy(INode newParent)
+        public override TypeExp Copy(INode? newParent = null)
         {
             var newNode = new TypeExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, SuperType);
             foreach (var superType in SuperTypes)

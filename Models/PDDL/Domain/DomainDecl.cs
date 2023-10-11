@@ -94,7 +94,7 @@ namespace PDDLSharp.Models.PDDL.Domain
                     yield return deri;
         }
 
-        public override DomainDecl Copy(INode newParent)
+        public override DomainDecl Copy(INode? newParent = null)
         {
             var newNode = new DomainDecl(new ASTNode(Start, End, Line, "", ""));
 

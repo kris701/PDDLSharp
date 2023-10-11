@@ -89,10 +89,10 @@ namespace PDDLSharp.Parsers.Visitors
         {
             if (typeof(T) == typeof(INode))
             {
-                var tryDomain = VisitDomain(node, parent);
-                if (tryDomain == null)
-                    return VisitProblem(node, parent);
-                return tryDomain;
+                var tryArea = VisitDomain(node, parent);
+                if (tryArea == null)
+                    tryArea = VisitProblem(node, parent);
+                return tryArea;
             }
             return null;
         }

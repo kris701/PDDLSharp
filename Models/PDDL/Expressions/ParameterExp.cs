@@ -6,12 +6,12 @@ namespace PDDLSharp.Models.PDDL.Expressions
     {
         public List<NameExp> Values { get; set; }
 
-        public ParameterExp(ASTNode node, INode parent, List<NameExp> values) : base(node, parent)
+        public ParameterExp(ASTNode node, INode? parent, List<NameExp> values) : base(node, parent)
         {
             Values = values;
         }
 
-        public ParameterExp(INode parent, List<NameExp> values) : base(parent)
+        public ParameterExp(INode? parent, List<NameExp> values) : base(parent)
         {
             Values = values;
         }
@@ -19,6 +19,16 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public ParameterExp(List<NameExp> values) : base()
         {
             Values = values;
+        }
+
+        public ParameterExp(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Values = new List<NameExp>();
+        }
+
+        public ParameterExp(INode? parent) : base(parent)
+        {
+            Values = new List<NameExp>();
         }
 
         public ParameterExp() : base()
@@ -39,9 +49,9 @@ namespace PDDLSharp.Models.PDDL.Expressions
             return Values.GetEnumerator();
         }
 
-        public override ParameterExp Copy(INode newParent)
+        public override ParameterExp Copy(INode? newParent = null)
         {
-            var newNode = new ParameterExp(new ASTNode(Start, End, Line, "", ""), newParent, new List<NameExp>());
+            var newNode = new ParameterExp(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Values)
                 newNode.Values.Add(((dynamic)node).Copy(newNode));
             return newNode;

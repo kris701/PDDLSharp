@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
@@ -7,13 +8,13 @@ namespace PDDLSharp.Models.PDDL.Problem
         public IExp MetricExp { get; set; }
         public string MetricType { get; set; }
 
-        public MetricDecl(ASTNode node, INode parent, string metricType, IExp metricExp) : base(node, parent)
+        public MetricDecl(ASTNode node, INode? parent, string metricType, IExp metricExp) : base(node, parent)
         {
             MetricType = metricType;
             MetricExp = metricExp;
         }
 
-        public MetricDecl(INode parent, string metricType, IExp metricExp) : base(parent)
+        public MetricDecl(INode? parent, string metricType, IExp metricExp) : base(parent)
         {
             MetricType = metricType;
             MetricExp = metricExp;
@@ -23,6 +24,24 @@ namespace PDDLSharp.Models.PDDL.Problem
         {
             MetricType = metricType;
             MetricExp = metricExp;
+        }
+
+        public MetricDecl(ASTNode node, INode? parent, string metricType) : base(node, parent)
+        {
+            MetricType = metricType;
+            MetricExp = new AndExp(this, new List<IExp>());
+        }
+
+        public MetricDecl(INode? parent, string metricType) : base(parent)
+        {
+            MetricType = metricType;
+            MetricExp = new AndExp(this, new List<IExp>());
+        }
+
+        public MetricDecl(string metricType) : base()
+        {
+            MetricType = metricType;
+            MetricExp = new AndExp(this, new List<IExp>());
         }
 
         public override int GetHashCode()
@@ -35,9 +54,9 @@ namespace PDDLSharp.Models.PDDL.Problem
             yield return MetricExp;
         }
 
-        public override MetricDecl Copy(INode newParent)
+        public override MetricDecl Copy(INode? newParent = null)
         {
-            var newNode = new MetricDecl(new ASTNode(Start, End, Line, "", ""), newParent, MetricType, null);
+            var newNode = new MetricDecl(new ASTNode(Start, End, Line, "", ""), newParent, MetricType);
             newNode.MetricExp = ((dynamic)MetricExp).Copy(newNode);
             return newNode;
         }

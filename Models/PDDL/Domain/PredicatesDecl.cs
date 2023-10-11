@@ -7,12 +7,12 @@ namespace PDDLSharp.Models.PDDL.Domain
     {
         public List<PredicateExp> Predicates { get; set; }
 
-        public PredicatesDecl(ASTNode node, INode parent, List<PredicateExp> predicates) : base(node, parent)
+        public PredicatesDecl(ASTNode node, INode? parent, List<PredicateExp> predicates) : base(node, parent)
         {
             Predicates = predicates;
         }
 
-        public PredicatesDecl(INode parent, List<PredicateExp> predicates) : base(parent)
+        public PredicatesDecl(INode? parent, List<PredicateExp> predicates) : base(parent)
         {
             Predicates = predicates;
         }
@@ -20,6 +20,16 @@ namespace PDDLSharp.Models.PDDL.Domain
         public PredicatesDecl(List<PredicateExp> predicates) : base()
         {
             Predicates = predicates;
+        }
+
+        public PredicatesDecl(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Predicates = new List<PredicateExp>();
+        }
+
+        public PredicatesDecl(INode? parent) : base(parent)
+        {
+            Predicates = new List<PredicateExp>();
         }
 
         public PredicatesDecl() : base()
@@ -40,9 +50,9 @@ namespace PDDLSharp.Models.PDDL.Domain
             return Predicates.GetEnumerator();
         }
 
-        public override PredicatesDecl Copy(INode newParent)
+        public override PredicatesDecl Copy(INode? newParent = null)
         {
-            var newNode = new PredicatesDecl(new ASTNode(Start, End, Line, "", ""), newParent, new List<PredicateExp>());
+            var newNode = new PredicatesDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Predicates)
                 newNode.Predicates.Add(node.Copy(newNode));
             return newNode;

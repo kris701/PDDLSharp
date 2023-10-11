@@ -7,13 +7,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public ParameterExp Parameters { get; set; }
         public IExp Expression { get; set; }
 
-        public ForAllExp(ASTNode node, INode parent, ParameterExp parameters, IExp expression) : base(node, parent)
+        public ForAllExp(ASTNode node, INode? parent, ParameterExp parameters, IExp expression) : base(node, parent)
         {
             Parameters = parameters;
             Expression = expression;
         }
 
-        public ForAllExp(INode parent, ParameterExp condition, IExp effect) : base(parent)
+        public ForAllExp(INode? parent, ParameterExp condition, IExp effect) : base(parent)
         {
             Parameters = condition;
             Expression = effect;
@@ -23,6 +23,24 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             Parameters = condition;
             Expression = effect;
+        }
+
+        public ForAllExp(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Expression = new AndExp(this, new List<IExp>());
+        }
+
+        public ForAllExp(INode? parent) : base(parent)
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Expression = new AndExp(this, new List<IExp>());
+        }
+
+        public ForAllExp() : base()
+        {
+            Parameters = new ParameterExp(this, new List<NameExp>());
+            Expression = new AndExp(this, new List<IExp>());
         }
 
         public override int GetHashCode()
@@ -39,9 +57,9 @@ namespace PDDLSharp.Models.PDDL.Expressions
             yield return Expression;
         }
 
-        public override ForAllExp Copy(INode newParent)
+        public override ForAllExp Copy(INode? newParent = null)
         {
-            var newNode = new ForAllExp(new ASTNode(Start, End, Line, "", ""), newParent, null, null);
+            var newNode = new ForAllExp(new ASTNode(Start, End, Line, "", ""), newParent);
             var newParams = Parameters.Copy(newNode);
             var newExp = ((dynamic)Expression).Copy(newNode);
             newNode.Parameters = newParams;

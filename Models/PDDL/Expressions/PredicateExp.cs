@@ -6,12 +6,12 @@ namespace PDDLSharp.Models.PDDL.Expressions
     {
         public List<NameExp> Arguments { get; set; }
 
-        public PredicateExp(ASTNode node, INode parent, string name, List<NameExp> arguments) : base(node, parent, name)
+        public PredicateExp(ASTNode node, INode? parent, string name, List<NameExp> arguments) : base(node, parent, name)
         {
             Arguments = arguments;
         }
 
-        public PredicateExp(INode parent, string name, List<NameExp> arguments) : base(parent, name)
+        public PredicateExp(INode? parent, string name, List<NameExp> arguments) : base(parent, name)
         {
             Arguments = arguments;
         }
@@ -19,6 +19,16 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public PredicateExp(string name, List<NameExp> arguments) : base(name)
         {
             Arguments = arguments;
+        }
+
+        public PredicateExp(ASTNode node, INode? parent, string name) : base(node, parent, name)
+        {
+            Arguments = new List<NameExp>();
+        }
+
+        public PredicateExp(INode? parent, string name) : base(parent, name)
+        {
+            Arguments = new List<NameExp>();
         }
 
         public PredicateExp(string name) : base(name)
@@ -44,9 +54,9 @@ namespace PDDLSharp.Models.PDDL.Expressions
             return Arguments.GetEnumerator();
         }
 
-        public override PredicateExp Copy(INode newParent)
+        public override PredicateExp Copy(INode? newParent = null)
         {
-            var newNode = new PredicateExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, new List<NameExp>());
+            var newNode = new PredicateExp(new ASTNode(Start, End, Line, "", ""), newParent, Name);
             foreach (var node in Arguments)
                 newNode.Arguments.Add(((dynamic)node).Copy(newNode));
             return newNode;

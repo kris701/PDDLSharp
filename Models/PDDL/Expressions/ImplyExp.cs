@@ -7,22 +7,40 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public IExp Antecedent { get; set; }
         public IExp Consequent { get; set; }
 
-        public ImplyExp(ASTNode node, INode parent, IExp antecedent, IExp consequent) : base(node, parent)
+        public ImplyExp(ASTNode node, INode? parent, IExp antecedent, IExp consequent) : base(node, parent)
         {
             Antecedent = antecedent;
             Consequent = consequent;
         }
 
-        public ImplyExp(INode parent, IExp antecedent, IExp Consequent) : base(parent)
+        public ImplyExp(INode? parent, IExp antecedent, IExp consequent) : base(parent)
         {
             Antecedent = antecedent;
-            this.Consequent = Consequent;
+            Consequent = consequent;
         }
 
-        public ImplyExp(IExp antecedent, IExp Consequent) : base()
+        public ImplyExp(IExp antecedent, IExp consequent) : base()
         {
             Antecedent = antecedent;
-            this.Consequent = Consequent;
+            Consequent = consequent;
+        }
+
+        public ImplyExp(ASTNode node, INode? parent) : base(node, parent)
+        {
+            Antecedent = new AndExp(this, new List<IExp>());
+            Consequent = new AndExp(this, new List<IExp>());
+        }
+
+        public ImplyExp(INode? parent) : base(parent)
+        {
+            Antecedent = new AndExp(this, new List<IExp>());
+            Consequent = new AndExp(this, new List<IExp>());
+        }
+
+        public ImplyExp() : base()
+        {
+            Antecedent = new AndExp(this, new List<IExp>());
+            Consequent = new AndExp(this, new List<IExp>());
         }
 
         public override int GetHashCode()
@@ -39,9 +57,9 @@ namespace PDDLSharp.Models.PDDL.Expressions
             yield return Consequent;
         }
 
-        public override ImplyExp Copy(INode newParent)
+        public override ImplyExp Copy(INode? newParent = null)
         {
-            var newNode = new ImplyExp(new ASTNode(Start, End, Line, "", ""), newParent, null, null);
+            var newNode = new ImplyExp(new ASTNode(Start, End, Line, "", ""), newParent);
             var newAntecedent = ((dynamic)Antecedent).Copy(newNode);
             var newConsequent = ((dynamic)Consequent).Copy(newNode);
             newNode.Antecedent = newAntecedent;
