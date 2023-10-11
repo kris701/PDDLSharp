@@ -79,8 +79,11 @@ namespace PDDLSharp.Simulators.StateSpace
 
         private ActionDecl GroundAction(ActionDecl node, List<NameExp> groundArgs)
         {
-            for(int i = 0; i < node.Parameters.Values.Count; i++)
+            for (int i = 0; i < node.Parameters.Values.Count; i++)
             {
+                if (!groundArgs[i].Type.IsTypeOf(node.Parameters.Values[i].Type.Name))
+                    throw new ArgumentException($"Given argument type is incorrect, expected a '{node.Parameters.Values[i].Type.Name}' but got a '{groundArgs[i].Type.Name}'");
+
                 var names = node.FindNames(node.Parameters.Values[i].Name);
                 foreach (var name in names)
                     name.Name = groundArgs[i].Name;
