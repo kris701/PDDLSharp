@@ -32,7 +32,7 @@ namespace PDDLSharp.Simulators.PlanValidator
                 }
                 return simulator.State.IsInGoal();
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

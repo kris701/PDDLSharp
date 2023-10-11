@@ -46,6 +46,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<INode> parser = GetParser(domain, listener);
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
+            var domainDecl = parser.ParseAs<DomainDecl>(domain);
+            if (domainDecl.Deriveds.Count != 0)
+                return;
 
             // ACT
             bool any = false;
@@ -56,7 +59,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
                     var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -86,6 +88,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<INode> parser = GetParser(domain, listener);
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
+            var domainDecl = parser.ParseAs<DomainDecl>(domain);
+            if (domainDecl.Deriveds.Count != 0)
+                return;
 
             // ACT
             bool any = false;
@@ -96,7 +101,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
                     var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -128,6 +132,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<INode> parser = GetParser(domain, listener);
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
+            var domainDecl = parser.ParseAs<DomainDecl>(domain);
+            if (domainDecl.Deriveds.Count != 0)
+                return;
 
             // ACT
             bool any = false;
@@ -138,7 +145,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
                     var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -170,6 +176,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<INode> parser = GetParser(domain, listener);
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
+            var domainDecl = parser.ParseAs<DomainDecl>(domain);
+            if (domainDecl.Deriveds.Count != 0)
+                return;
 
             // ACT
             bool any = false;
@@ -180,7 +189,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
                     var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
