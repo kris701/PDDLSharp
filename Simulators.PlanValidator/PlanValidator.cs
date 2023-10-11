@@ -30,9 +30,9 @@ namespace PDDLSharp.Simulators.PlanValidator
 
                     simulator.Step(step.ActionName, argStr.ToArray());
                 }
-                return true;
+                return simulator.State.IsInGoal();
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

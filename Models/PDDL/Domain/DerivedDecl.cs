@@ -29,8 +29,8 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
-            hash *= Predicate.GetHashCode();
-            hash *= Expression.GetHashCode();
+            hash ^= Predicate.GetHashCode();
+            hash ^= Expression.GetHashCode();
             return hash;
         }
 

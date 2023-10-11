@@ -43,7 +43,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override int GetHashCode()
         {
-            return base.GetHashCode() + Type.GetHashCode();
+            return base.GetHashCode() ^ Type.GetHashCode();
         }
 
         public override NameExp Copy(INode newParent)

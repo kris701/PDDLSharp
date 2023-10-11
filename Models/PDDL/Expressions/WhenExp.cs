@@ -28,8 +28,8 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
-            hash *= Condition.GetHashCode();
-            hash *= Effect.GetHashCode();
+            hash ^= Condition.GetHashCode();
+            hash ^= Effect.GetHashCode();
             return hash;
         }
 
