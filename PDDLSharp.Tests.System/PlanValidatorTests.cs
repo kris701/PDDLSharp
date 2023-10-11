@@ -47,8 +47,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
             var domainDecl = parser.ParseAs<DomainDecl>(domain);
-            if (domainDecl.Deriveds.Count != 0)
-                return;
 
             // ACT
             bool any = false;
@@ -89,8 +87,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
             var domainDecl = parser.ParseAs<DomainDecl>(domain);
-            if (domainDecl.Deriveds.Count != 0)
-                return;
 
             // ACT
             bool any = false;
@@ -133,8 +129,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
             var domainDecl = parser.ParseAs<DomainDecl>(domain);
-            if (domainDecl.Deriveds.Count != 0)
-                return;
 
             // ACT
             bool any = false;
@@ -177,8 +171,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
             var domainDecl = parser.ParseAs<DomainDecl>(domain);
-            if (domainDecl.Deriveds.Count != 0)
-                return;
 
             // ACT
             bool any = false;

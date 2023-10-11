@@ -1,8 +1,10 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
+using System;
 
 namespace PDDLSharp.States.PDDL
 {
@@ -129,8 +131,20 @@ namespace PDDLSharp.States.PDDL
         {
             if (node is PredicateExp predicate)
             {
+                // Handle Equality predicate
                 if (predicate.Name == "=" && predicate.Arguments.Count == 2)
                     return predicate.Arguments[0].Name == predicate.Arguments[1].Name;
+
+                // Handle Deriveds
+                if (Declaration.Domain.Deriveds.Count != 0)
+                {
+                    var all = Declaration.Domain.Deriveds.Where(x => x.Predicate.Name == predicate.Name);
+                    foreach (var first in all)
+                        if (TryHandleAsDerived(predicate, first))
+                            return true;
+                    if (all.Count() > 0)
+                        return false;
+                }
                 return Contains(predicate);
             }
             else if (node is NotExp not)
@@ -183,6 +197,20 @@ namespace PDDLSharp.States.PDDL
             }
 
             throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
+        }
+
+        private bool TryHandleAsDerived(PredicateExp predicate, DerivedDecl derivedDecl)
+        {
+            var newTestNode = derivedDecl.Expression.Copy();
+            if (derivedDecl.Predicate.Arguments.Count != predicate.Arguments.Count)
+                throw new ArgumentException("Derived predicate did not match definition!");
+            for (int i = 0; i < derivedDecl.Predicate.Arguments.Count; i++)
+            {
+                var all = newTestNode.FindNames(derivedDecl.Predicate.Arguments[i].Name);
+                foreach (var name in all)
+                    name.Name = predicate.Arguments[i].Name;
+            }
+            return IsNodeTrue(newTestNode);
         }
 
         public bool IsInGoal()
