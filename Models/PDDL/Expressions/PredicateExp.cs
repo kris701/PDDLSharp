@@ -36,7 +36,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             Arguments = new List<NameExp>();
         }
 
-        // The other is important!
+        // The order is important!
         // Based on: https://stackoverflow.com/a/30758270
         public override int GetHashCode()
         {
@@ -60,6 +60,15 @@ namespace PDDLSharp.Models.PDDL.Expressions
             foreach (var node in Arguments)
                 newNode.Arguments.Add(((dynamic)node).Copy(newNode));
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            for (int i = 0; i < Arguments.Count; i++)
+            {
+                if (Arguments[i] == node && with is NameExp name)
+                    Arguments[i] = name;
+            }
         }
     }
 }

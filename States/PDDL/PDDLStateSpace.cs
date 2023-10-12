@@ -1,8 +1,10 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
+using System;
 
 namespace PDDLSharp.States.PDDL
 {
@@ -127,10 +129,28 @@ namespace PDDLSharp.States.PDDL
 
         public bool IsNodeTrue(INode node)
         {
-            if (node is PredicateExp predicate)
+            if (node is DerivedPredicateExp derivedPredicate)
             {
+                foreach (var derivedDecl in derivedPredicate.GetDecls())
+                {
+                    var newTestNode = derivedDecl.Expression.Copy();
+                    for (int i = 0; i < derivedDecl.Predicate.Arguments.Count; i++)
+                    {
+                        var all = newTestNode.FindNames(derivedDecl.Predicate.Arguments[i].Name);
+                        foreach (var name in all)
+                            name.Name = derivedPredicate.Arguments[i].Name;
+                    }
+                    if (IsNodeTrue(newTestNode))
+                        return true;
+                }
+                return false;
+            }
+            else if (node is PredicateExp predicate)
+            {
+                // Handle Equality predicate
                 if (predicate.Name == "=" && predicate.Arguments.Count == 2)
                     return predicate.Arguments[0].Name == predicate.Arguments[1].Name;
+
                 return Contains(predicate);
             }
             else if (node is NotExp not)

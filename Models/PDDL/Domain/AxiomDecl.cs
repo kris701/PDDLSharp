@@ -78,5 +78,15 @@ namespace PDDLSharp.Models.PDDL.Domain
             newNode.Implies = newImplies;
             return newNode;
         }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Parameters == node && with is ParameterExp param)
+                Parameters = param;
+            if (Context == node && with is IExp exp1)
+                Context = exp1;
+            if (Implies == node && with is IExp exp2)
+                Implies = exp2;
+        }
     }
 }

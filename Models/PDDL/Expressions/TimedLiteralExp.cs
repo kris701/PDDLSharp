@@ -62,5 +62,11 @@ namespace PDDLSharp.Models.PDDL.Expressions
             newNode.Literal = ((dynamic)Literal).Copy(newNode);
             return newNode;
         }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Literal == node && with is IExp exp1)
+                Literal = exp1;
+        }
     }
 }

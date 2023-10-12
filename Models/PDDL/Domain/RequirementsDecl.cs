@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using System;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -56,6 +57,15 @@ namespace PDDLSharp.Models.PDDL.Domain
             foreach (var node in Requirements)
                 newNode.Requirements.Add(node.Copy(newNode));
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            for (int i = 0; i < Requirements.Count; i++)
+            {
+                if (Requirements[i] == node && with is NameExp name)
+                    Requirements[i] = name;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using System.Linq.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
@@ -65,6 +66,14 @@ namespace PDDLSharp.Models.PDDL.Expressions
             newNode.Antecedent = newAntecedent;
             newNode.Consequent = newConsequent;
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Antecedent == node && with is IExp exp1)
+                Antecedent = exp1;
+            if (Consequent == node && with is IExp exp2)
+                Consequent = exp2;
         }
     }
 }

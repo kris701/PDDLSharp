@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using System;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
@@ -56,6 +57,15 @@ namespace PDDLSharp.Models.PDDL.Problem
             foreach (var node in Objs)
                 newNode.Objs.Add(node.Copy(newNode));
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            for (var i = 0; i < Objs.Count; i++)
+            {
+                if (Objs[i] == node && with is NameExp exp)
+                    Objs[i] = exp;
+            }
         }
     }
 }

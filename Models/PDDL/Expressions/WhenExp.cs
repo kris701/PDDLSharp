@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using System.Linq.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
@@ -65,6 +66,14 @@ namespace PDDLSharp.Models.PDDL.Expressions
             newNode.Condition = newCondition;
             newNode.Effect = newEffect;
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Condition == node && with is IExp exp1)
+                Condition = exp1;
+            if (Effect == node && with is IExp exp2)
+                Effect = exp2;
         }
     }
 }

@@ -1,10 +1,14 @@
-﻿using PDDLSharp.ASTGenerators;
+﻿using PDDLSharp;
+using PDDLSharp.ASTGenerators;
 using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.Tests;
+using PDDLSharp.Models.Tests.PDDL;
 using PDDLSharp.Parsers.Visitors;
 using System;
 using System.Collections.Generic;
@@ -13,7 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace PDDLSharp.Models.Tests
+namespace PDDLSharp.Models.Tests.PDDL
 {
     [TestClass]
     public class INodeTests

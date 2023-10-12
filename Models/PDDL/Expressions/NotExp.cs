@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using System.Linq.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
@@ -51,6 +52,12 @@ namespace PDDLSharp.Models.PDDL.Expressions
             var newNode = new NotExp(new ASTNode(Start, End, Line, "", ""), newParent);
             newNode.Child = ((dynamic)Child).Copy(newNode);
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Child == node && with is IExp exp)
+                Child = exp;
         }
     }
 }

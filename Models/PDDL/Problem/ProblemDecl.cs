@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
@@ -73,6 +74,24 @@ namespace PDDLSharp.Models.PDDL.Problem
                 newNode.Metric = Metric.Copy(newNode);
 
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Name == node && with is ProblemNameDecl name)
+                Name = name;
+            if (DomainName == node && with is DomainNameRefDecl domainName)
+                DomainName = domainName;
+            if (Situation == node && with is SituationDecl situ)
+                Situation = situ;
+            if (Objects == node && with is ObjectsDecl objs)
+                Objects = objs;
+            if (Init == node && with is InitDecl init)
+                Init = init;
+            if (Goal == node && with is GoalDecl goal)
+                Goal = goal;
+            if (Metric == node && with is MetricDecl metric)
+                Metric = metric;
         }
     }
 }

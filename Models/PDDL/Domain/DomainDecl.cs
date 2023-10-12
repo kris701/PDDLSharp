@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -124,6 +125,47 @@ namespace PDDLSharp.Models.PDDL.Domain
                 newNode.Deriveds.Add(act.Copy(newNode));
 
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Name == node && with is DomainNameDecl name)
+                Name = name;
+            if (Requirements == node && with is RequirementsDecl req)
+                Requirements = req;
+            if (Extends == node && with is ExtendsDecl ext)
+                Extends = ext;
+            if (Timeless == node && with is TimelessDecl time)
+                Timeless = time;
+            if (Types == node && with is TypesDecl types)
+                Types = types;
+            if (Constants == node && with is ConstantsDecl cons)
+                Constants = cons;
+            if (Predicates == node && with is PredicatesDecl preds)
+                Predicates = preds;
+            if (Functions == node && with is FunctionsDecl func)
+                Functions = func;
+
+            for (int i = 0; i < Actions.Count; i++)
+            {
+                if (Actions[i] == node && with is ActionDecl act)
+                    Actions[i] = act;
+            }
+            for (int i = 0; i < DurativeActions.Count; i++)
+            {
+                if (DurativeActions[i] == node && with is DurativeActionDecl act)
+                    DurativeActions[i] = act;
+            }
+            for (int i = 0; i < Axioms.Count; i++)
+            {
+                if (Axioms[i] == node && with is AxiomDecl act)
+                    Axioms[i] = act;
+            }
+            for (int i = 0; i < Deriveds.Count; i++)
+            {
+                if (Deriveds[i] == node && with is DerivedDecl act)
+                    Deriveds[i] = act;
+            }
         }
     }
 }

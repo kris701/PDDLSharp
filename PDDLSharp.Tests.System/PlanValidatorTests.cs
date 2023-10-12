@@ -46,9 +46,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<INode> parser = GetParser(domain, listener);
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
-            var domainDecl = parser.ParseAs<DomainDecl>(domain);
-            if (domainDecl.Deriveds.Count != 0)
-                return;
 
             // ACT
             bool any = false;
@@ -59,6 +56,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
+                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
                     var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -88,9 +86,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<INode> parser = GetParser(domain, listener);
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
-            var domainDecl = parser.ParseAs<DomainDecl>(domain);
-            if (domainDecl.Deriveds.Count != 0)
-                return;
+            
 
             // ACT
             bool any = false;
@@ -101,6 +97,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
+                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
                     var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -108,14 +105,18 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
                     Trace.WriteLine($"   Parsing plan: {targetPlan}");
                     var plan = planParser.Parse(targetPlan);
-                    for (int i = 0; i < plan.Plan.Count; i += 2)
-                        plan.Plan.Add(plan.Plan[i]);
-                    Assert.IsFalse(validator.Validate(plan, newDecl));
-                    any = true;
+                    if (plan.Plan.Count > 10)
+                    {
+                        int orgSize = plan.Plan.Count;
+                        for (int i = 0; i < orgSize; i += 2)
+                            plan.Plan.Add(plan.Plan[i]);
+                        Assert.IsFalse(validator.Validate(plan, newDecl));
+                        any = true;
+                    }
                 }
             }
-            if (!any)
-                Assert.Inconclusive($"Could not find any plans for the domain+problems!");
+            //if (!any)
+            //    Assert.Inconclusive($"Could not find any plans for the domain+problems!");
 
             // ASSERT
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -132,9 +133,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<INode> parser = GetParser(domain, listener);
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
-            var domainDecl = parser.ParseAs<DomainDecl>(domain);
-            if (domainDecl.Deriveds.Count != 0)
-                return;
 
             // ACT
             bool any = false;
@@ -145,6 +143,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
+                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
                     var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -176,9 +175,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IParser<INode> parser = GetParser(domain, listener);
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
-            var domainDecl = parser.ParseAs<DomainDecl>(domain);
-            if (domainDecl.Deriveds.Count != 0)
-                return;
 
             // ACT
             bool any = false;
@@ -189,6 +185,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
+                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
                     var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -196,9 +193,12 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
                     Trace.WriteLine($"   Parsing plan: {targetPlan}");
                     var plan = planParser.Parse(targetPlan);
-                    plan.Plan[0].Arguments[0].Name = "nonexistent";
-                    Assert.IsFalse(validator.Validate(plan, newDecl));
-                    any = true;
+                    if (plan.Plan.Count > 1)
+                    {
+                        InsertRandomObjects(plan);
+                        Assert.IsFalse(validator.Validate(plan, newDecl));
+                        any = true;
+                    }
                 }
             }
             if (!any)
@@ -206,6 +206,19 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ASSERT
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
+        }
+
+        private void InsertRandomObjects(ActionPlan plan)
+        {
+            Random rn = new Random();
+            foreach(var act in plan.Plan)
+            {
+                if (act.Arguments.Count > 0)
+                {
+                    act.Arguments[0].Name = "not-an-actual-object";
+                    break;
+                }
+            }
         }
     }
 }

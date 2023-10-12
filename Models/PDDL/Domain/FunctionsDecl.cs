@@ -57,5 +57,14 @@ namespace PDDLSharp.Models.PDDL.Domain
                 newNode.Functions.Add(node.Copy(newNode));
             return newNode;
         }
+
+        public override void Replace(INode node, INode with)
+        {
+            for (int i = 0; i < Functions.Count; i++)
+            {
+                if (Functions[i] == node && with is PredicateExp pred)
+                    Functions[i] = pred;
+            }
+        }
     }
 }
