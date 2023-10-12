@@ -65,5 +65,13 @@ namespace PDDLSharp.Models.PDDL.Domain
             newNode.Expression = ((dynamic)Expression).Copy(newParent);
             return newNode;
         }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Predicate == node && node is PredicateExp pred)
+                Predicate = pred;
+            if (Expression == node && node is IExp exp1)
+                Expression = exp1;
+        }
     }
 }

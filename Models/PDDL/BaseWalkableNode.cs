@@ -28,5 +28,7 @@ namespace PDDLSharp.Models.PDDL
         {
             return GetEnumerator();
         }
+
+        public abstract void Replace(INode node, INode with);
     }
 }

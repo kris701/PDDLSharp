@@ -56,5 +56,14 @@ namespace PDDLSharp.Models.PDDL.Expressions
                 newNode.Values.Add(((dynamic)node).Copy(newNode));
             return newNode;
         }
+
+        public override void Replace(INode node, INode with)
+        {
+            for (int i = 0; i < Values.Count; i++)
+            {
+                if (Values[i] == node && with is NameExp name)
+                    Values[i] = name;
+            }
+        }
     }
 }

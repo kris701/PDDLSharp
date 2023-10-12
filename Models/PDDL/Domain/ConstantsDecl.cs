@@ -58,5 +58,14 @@ namespace PDDLSharp.Models.PDDL.Domain
                 newNode.Constants.Add(node.Copy(newNode));
             return newNode;
         }
+
+        public override void Replace(INode node, INode with)
+        {
+            for (int i = 0; i < Constants.Count; i++)
+            {
+                if (Constants[i] == node && with is NameExp name)
+                    Constants[i] = name;
+            }
+        }
     }
 }

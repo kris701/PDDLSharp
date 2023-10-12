@@ -66,5 +66,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
             newNode.Expression = newExp;
             return newNode;
         }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Parameters == node && node is ParameterExp param)
+                Parameters = param;
+            if (Expression == node && node is IExp exp)
+                Expression = exp;
+        }
     }
 }

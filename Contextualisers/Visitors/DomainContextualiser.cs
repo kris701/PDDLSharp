@@ -1,7 +1,9 @@
-﻿using PDDLSharp.Models.AST;
+﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using System;
 
 namespace PDDLSharp.Contextualisers.Visitors
 {
@@ -145,7 +147,38 @@ namespace PDDLSharp.Contextualisers.Visitors
 
         public void Visit(DerivedDecl node)
         {
+            var targets = Declaration.Domain.FindNames(node.Predicate.Name);
+            targets.AddRange(Declaration.Problem.FindNames(node.Predicate.Name));
 
+            for(int i = 0; i < targets.Count; i++)
+            {
+                if (targets[i] is DerivedPredicateExp derivedPred)
+                {
+                    derivedPred.DerivedDecls.Add(node);
+                }
+                else if (targets[i] is PredicateExp pred && pred.Parent is not DerivedDecl)
+                {
+                    if (pred.Arguments.Count != node.Predicate.Arguments.Count)
+                        Listener.AddError(new PDDLSharpError(
+                            $"Derived declaration expected {node.Predicate.Arguments.Count} but here {pred.Arguments.Count} is given!",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Contexturaliser,
+                            pred.Line,
+                            pred.Start
+                                ));
+
+                    var copy = pred.Copy(pred.Parent);
+                    var newNode = new DerivedPredicateExp(copy.Parent, copy.Name, copy.Arguments, new List<DerivedDecl>() { node });
+                    if (copy.Parent is IWalkable walk)
+                        walk.Replace(node, newNode);
+                    //if (copy.Parent is AndExp and)
+                    //{
+                    //    and.Children.Remove(pred);
+                    //    and.Children.Add(new DerivedPredicateExp(copy.Parent, copy.Name, copy.Arguments, new List<DerivedDecl>() { node }));
+                    //}
+                    //targets[i] = new DerivedPredicateExp(copy.Parent, copy.Name, copy.Arguments, new List<DerivedDecl>() { node });
+                }
+            }
         }
 
         #endregion

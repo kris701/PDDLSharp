@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -124,6 +125,32 @@ namespace PDDLSharp.Models.PDDL.Domain
                 newNode.Deriveds.Add(act.Copy(newNode));
 
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Name == node && node is DomainNameDecl name)
+                Name = name;
+            if (Requirements == node && node is RequirementsDecl req)
+                Requirements = req;
+            if (Extends == node && node is ExtendsDecl ext)
+                Extends = ext;
+            if (Timeless == node && node is TimelessDecl time)
+                Timeless = time;
+            if (Types == node && node is TypesDecl types)
+                Types = types;
+            if (Constants == node && node is ConstantsDecl cons)
+                Constants = cons;
+            if (Predicates == node && node is PredicatesDecl preds)
+                Predicates = preds;
+            if (Functions == node && node is FunctionsDecl func)
+                Functions = func;
+
+            for (int i = 0; i < Actions.Count; i++)
+            {
+                if (Actions[i] == node && with is ActionDecl act)
+                    Actions[i] = act;
+            }
         }
     }
 }
