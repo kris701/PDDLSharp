@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -56,6 +57,15 @@ namespace PDDLSharp.Models.PDDL.Domain
             foreach (var node in Predicates)
                 newNode.Predicates.Add(node.Copy(newNode));
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            for (int i = 0; i < Predicates.Count; i++)
+            {
+                if (Predicates[i] == node && with is PredicateExp pred)
+                    Predicates[i] = pred;
+            }
         }
     }
 }

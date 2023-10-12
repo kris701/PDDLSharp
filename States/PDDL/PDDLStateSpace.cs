@@ -140,7 +140,8 @@ namespace PDDLSharp.States.PDDL
                         foreach (var name in all)
                             name.Name = derivedPredicate.Arguments[i].Name;
                     }
-                    return IsNodeTrue(newTestNode);
+                    if (IsNodeTrue(newTestNode))
+                        return true;
                 }
                 return false;
             }

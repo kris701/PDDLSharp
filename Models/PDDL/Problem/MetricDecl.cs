@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using System;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
@@ -59,6 +60,12 @@ namespace PDDLSharp.Models.PDDL.Problem
             var newNode = new MetricDecl(new ASTNode(Start, End, Line, "", ""), newParent, MetricType);
             newNode.MetricExp = ((dynamic)MetricExp).Copy(newNode);
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (MetricExp == node && node is IExp exp)
+                MetricExp = exp;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using System.Linq.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
@@ -52,6 +53,12 @@ namespace PDDLSharp.Models.PDDL.Problem
             var newNode = new GoalDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             newNode.GoalExp = ((dynamic)GoalExp).Copy(newNode);
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (GoalExp == node && node is IExp exp)
+                GoalExp = exp;
         }
     }
 }

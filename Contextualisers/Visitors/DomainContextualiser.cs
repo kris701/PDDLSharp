@@ -170,7 +170,7 @@ namespace PDDLSharp.Contextualisers.Visitors
                     var copy = pred.Copy(pred.Parent);
                     var newNode = new DerivedPredicateExp(copy.Parent, copy.Name, copy.Arguments, new List<DerivedDecl>() { node });
                     if (copy.Parent is IWalkable walk)
-                        walk.Replace(node, newNode);
+                        walk.Replace(pred, newNode);
                     //if (copy.Parent is AndExp and)
                     //{
                     //    and.Children.Remove(pred);

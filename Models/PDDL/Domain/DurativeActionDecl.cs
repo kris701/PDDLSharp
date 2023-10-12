@@ -88,5 +88,17 @@ namespace PDDLSharp.Models.PDDL.Domain
             newNode.Duration = newDuration;
             return newNode;
         }
+
+        public override void Replace(INode node, INode with)
+        {
+            if (Parameters == node && node is ParameterExp param)
+                Parameters = param;
+            if (Condition == node && node is IExp exp1)
+                Condition = exp1;
+            if (Effects == node && node is IExp exp2)
+                Effects = exp2;
+            if (Duration == node && node is IExp exp3)
+                Duration = exp3;
+        }
     }
 }

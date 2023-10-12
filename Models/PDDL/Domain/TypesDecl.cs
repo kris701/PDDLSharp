@@ -57,5 +57,14 @@ namespace PDDLSharp.Models.PDDL.Domain
                 newNode.Types.Add(node.Copy(newNode));
             return newNode;
         }
+
+        public override void Replace(INode node, INode with)
+        {
+            for (int i = 0; i < Types.Count; i++)
+            {
+                if (Types[i] == node && with is TypeExp type)
+                    Types[i] = type;
+            }
+        }
     }
 }

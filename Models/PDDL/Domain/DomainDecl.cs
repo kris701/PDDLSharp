@@ -151,6 +151,21 @@ namespace PDDLSharp.Models.PDDL.Domain
                 if (Actions[i] == node && with is ActionDecl act)
                     Actions[i] = act;
             }
+            for (int i = 0; i < DurativeActions.Count; i++)
+            {
+                if (DurativeActions[i] == node && with is DurativeActionDecl act)
+                    DurativeActions[i] = act;
+            }
+            for (int i = 0; i < Axioms.Count; i++)
+            {
+                if (Axioms[i] == node && with is AxiomDecl act)
+                    Axioms[i] = act;
+            }
+            for (int i = 0; i < Deriveds.Count; i++)
+            {
+                if (Deriveds[i] == node && with is DerivedDecl act)
+                    Deriveds[i] = act;
+            }
         }
     }
 }

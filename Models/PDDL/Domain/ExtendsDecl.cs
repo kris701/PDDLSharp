@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Models.AST;
+﻿using Microsoft.VisualBasic;
+using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
@@ -56,6 +57,15 @@ namespace PDDLSharp.Models.PDDL.Domain
             foreach (var node in Extends)
                 newNode.Extends.Add(node.Copy(newNode));
             return newNode;
+        }
+
+        public override void Replace(INode node, INode with)
+        {
+            for (int i = 0; i < Extends.Count; i++)
+            {
+                if (Extends[i] == node && with is NameExp name)
+                    Extends[i] = name;
+            }
         }
     }
 }
