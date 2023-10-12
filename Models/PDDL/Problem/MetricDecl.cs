@@ -64,7 +64,7 @@ namespace PDDLSharp.Models.PDDL.Problem
 
         public override void Replace(INode node, INode with)
         {
-            if (MetricExp == node && node is IExp exp)
+            if (MetricExp == node && with is IExp exp)
                 MetricExp = exp;
         }
     }

@@ -70,9 +70,9 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override void Replace(INode node, INode with)
         {
-            if (Condition == node && node is IExp exp1)
+            if (Condition == node && with is IExp exp1)
                 Condition = exp1;
-            if (Effect == node && node is IExp exp2)
+            if (Effect == node && with is IExp exp2)
                 Effect = exp2;
         }
     }

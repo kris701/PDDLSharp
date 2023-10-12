@@ -57,7 +57,7 @@ namespace PDDLSharp.Models.PDDL.Problem
 
         public override void Replace(INode node, INode with)
         {
-            if (GoalExp == node && node is IExp exp)
+            if (GoalExp == node && with is IExp exp)
                 GoalExp = exp;
         }
     }

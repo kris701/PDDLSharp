@@ -81,11 +81,11 @@ namespace PDDLSharp.Models.PDDL.Domain
 
         public override void Replace(INode node, INode with)
         {
-            if (Parameters == node && node is ParameterExp param)
+            if (Parameters == node && with is ParameterExp param)
                 Parameters = param;
-            if (Context == node && node is IExp exp1)
+            if (Context == node && with is IExp exp1)
                 Context = exp1;
-            if (Implies == node && node is IExp exp2)
+            if (Implies == node && with is IExp exp2)
                 Implies = exp2;
         }
     }

@@ -65,7 +65,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override void Replace(INode node, INode with)
         {
-            if (Literal == node && node is IExp exp1)
+            if (Literal == node && with is IExp exp1)
                 Literal = exp1;
         }
     }

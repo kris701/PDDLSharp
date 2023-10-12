@@ -56,7 +56,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override void Replace(INode node, INode with)
         {
-            if (Child == node && node is IExp exp)
+            if (Child == node && with is IExp exp)
                 Child = exp;
         }
     }

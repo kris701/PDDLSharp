@@ -154,7 +154,7 @@ namespace PDDLSharp.Contextualisers.Visitors
             {
                 if (targets[i] is DerivedPredicateExp derivedPred)
                 {
-                    derivedPred.DerivedDecls.Add(node);
+                    derivedPred.AddDecl(node);
                 }
                 else if (targets[i] is PredicateExp pred && pred.Parent is not DerivedDecl)
                 {
@@ -171,12 +171,6 @@ namespace PDDLSharp.Contextualisers.Visitors
                     var newNode = new DerivedPredicateExp(copy.Parent, copy.Name, copy.Arguments, new List<DerivedDecl>() { node });
                     if (copy.Parent is IWalkable walk)
                         walk.Replace(pred, newNode);
-                    //if (copy.Parent is AndExp and)
-                    //{
-                    //    and.Children.Remove(pred);
-                    //    and.Children.Add(new DerivedPredicateExp(copy.Parent, copy.Name, copy.Arguments, new List<DerivedDecl>() { node }));
-                    //}
-                    //targets[i] = new DerivedPredicateExp(copy.Parent, copy.Name, copy.Arguments, new List<DerivedDecl>() { node });
                 }
             }
         }

@@ -131,7 +131,7 @@ namespace PDDLSharp.States.PDDL
         {
             if (node is DerivedPredicateExp derivedPredicate)
             {
-                foreach (var derivedDecl in derivedPredicate.DerivedDecls)
+                foreach (var derivedDecl in derivedPredicate.GetDecls())
                 {
                     var newTestNode = derivedDecl.Expression.Copy();
                     for (int i = 0; i < derivedDecl.Predicate.Arguments.Count; i++)

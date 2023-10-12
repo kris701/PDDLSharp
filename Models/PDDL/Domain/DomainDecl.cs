@@ -129,21 +129,21 @@ namespace PDDLSharp.Models.PDDL.Domain
 
         public override void Replace(INode node, INode with)
         {
-            if (Name == node && node is DomainNameDecl name)
+            if (Name == node && with is DomainNameDecl name)
                 Name = name;
-            if (Requirements == node && node is RequirementsDecl req)
+            if (Requirements == node && with is RequirementsDecl req)
                 Requirements = req;
-            if (Extends == node && node is ExtendsDecl ext)
+            if (Extends == node && with is ExtendsDecl ext)
                 Extends = ext;
-            if (Timeless == node && node is TimelessDecl time)
+            if (Timeless == node && with is TimelessDecl time)
                 Timeless = time;
-            if (Types == node && node is TypesDecl types)
+            if (Types == node && with is TypesDecl types)
                 Types = types;
-            if (Constants == node && node is ConstantsDecl cons)
+            if (Constants == node && with is ConstantsDecl cons)
                 Constants = cons;
-            if (Predicates == node && node is PredicatesDecl preds)
+            if (Predicates == node && with is PredicatesDecl preds)
                 Predicates = preds;
-            if (Functions == node && node is FunctionsDecl func)
+            if (Functions == node && with is FunctionsDecl func)
                 Functions = func;
 
             for (int i = 0; i < Actions.Count; i++)
