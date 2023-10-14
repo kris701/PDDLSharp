@@ -90,7 +90,7 @@ namespace PDDLSharp.Toolkit.StateSpace
             }
             else if (node is ForAllExp all)
             {
-                var permutations = GenerateParameterPermutations(all.Expression, all.Parameters.Values, 0);
+                var permutations = GenerateParameterPermutations(all.Expression, all.Parameters.Values);
                 foreach (var permutation in permutations)
                     ExecuteNode(permutation, isNegative);
                 return;
@@ -147,7 +147,7 @@ namespace PDDLSharp.Toolkit.StateSpace
             }
             else if (node is ExistsExp exist)
             {
-                var permutations = GenerateParameterPermutations(exist.Expression, exist.Parameters.Values, 0);
+                var permutations = GenerateParameterPermutations(exist.Expression, exist.Parameters.Values);
                 foreach (var permutation in permutations)
                     if (IsNodeTrue(permutation))
                         return true;
@@ -163,7 +163,7 @@ namespace PDDLSharp.Toolkit.StateSpace
             }
             else if (node is ForAllExp all)
             {
-                var permutations = GenerateParameterPermutations(all.Expression, all.Parameters.Values, 0);
+                var permutations = GenerateParameterPermutations(all.Expression, all.Parameters.Values);
                 foreach (var permutation in permutations)
                     if (!IsNodeTrue(permutation))
                         return false;
@@ -191,7 +191,7 @@ namespace PDDLSharp.Toolkit.StateSpace
                 _objCache[typeName].AddRange(Declaration.Domain.Constants.Constants.Where(x => x.Type.IsTypeOf(typeName)));
             return _objCache[typeName];
         }
-        private List<INode> GenerateParameterPermutations(INode node, List<NameExp> values, int index)
+        private List<INode> GenerateParameterPermutations(INode node, List<NameExp> values, int index = 0)
         {
             List<INode> returnList = new List<INode>();
 
