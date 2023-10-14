@@ -1,4 +1,5 @@
-﻿using PDDLSharp.ASTGenerators;
+﻿using PDDLSharp.ASTGenerators.PDDL;
+using PDDLSharp.ASTGenerators;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
@@ -46,7 +47,7 @@ namespace PDDLSharp.Parsers
 
         public override U ParseAs<U>(string file)
         {
-            IGenerator astParser = new ASTGenerator(Listener);
+            IGenerator astParser = new PDDLASTGenerator(Listener);
             var absAST = astParser.Generate(new FileInfo(file));
 
             var visitor = new ParserVisitor(Listener);

@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.ASTGenerators;
+using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
@@ -20,7 +21,7 @@ namespace PDDLSharp.Parsers.Tests.Visitors
         private ASTNode GetParsed(string toParse)
         {
             IErrorListener listener = new ErrorListener();
-            IGenerator parser = new ASTGenerator(listener);
+            IGenerator parser = new PDDLASTGenerator(listener);
             return parser.Generate(toParse);
         }
 

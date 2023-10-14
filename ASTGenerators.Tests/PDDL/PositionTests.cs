@@ -1,5 +1,6 @@
 ﻿using PDDLSharp;
 using PDDLSharp.ASTGenerators;
+using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ASTGenerators.Tests;
 using PDDLSharp.ASTGenerators.Tests.PDDL;
 using PDDLSharp.ASTGenerators.Tests.PositionTestsData;
@@ -18,7 +19,7 @@ namespace PDDLSharp.ASTGenerators.Tests.PDDL
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IGenerator parser = new ASTGenerator(listener);
+            IGenerator parser = new PDDLASTGenerator(listener);
             var expectedNode = PositionNode.ParseExpectedFile(expectedFile);
 
             // ACT

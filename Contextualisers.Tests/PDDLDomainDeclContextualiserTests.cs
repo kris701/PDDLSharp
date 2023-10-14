@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.ASTGenerators;
+using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
@@ -29,7 +30,7 @@ namespace PDDLSharp.Contextualisers.Tests
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            IGenerator parser = new ASTGenerator(listener);
+            IGenerator parser = new PDDLASTGenerator(listener);
             var node = parser.Generate(toParse);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
@@ -56,7 +57,7 @@ namespace PDDLSharp.Contextualisers.Tests
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            IGenerator parser = new ASTGenerator(listener);
+            IGenerator parser = new PDDLASTGenerator(listener);
             var node = parser.Generate(toParse);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
@@ -82,7 +83,7 @@ namespace PDDLSharp.Contextualisers.Tests
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            IGenerator parser = new ASTGenerator(listener);
+            IGenerator parser = new PDDLASTGenerator(listener);
             var node = parser.Generate(toParse);
             DomainDecl? decl = new ParserVisitor(listener).TryVisitAs<DomainDecl>(node, null) as DomainDecl;
             Assert.IsNotNull(decl);
