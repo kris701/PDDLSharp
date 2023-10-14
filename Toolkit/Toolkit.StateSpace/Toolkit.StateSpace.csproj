@@ -11,7 +11,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Contextualisers\Contextualisers.csproj" />
     <ProjectReference Include="..\..\Models\Models.csproj" />
-    <ProjectReference Include="..\..\States\States.csproj" />
   </ItemGroup>
 
 </Project>

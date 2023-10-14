@@ -1,13 +1,12 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.Plans;
-using PDDLSharp.States.PDDL;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
     public interface IStateSpaceSimulator
     {
         public PDDLDecl Declaration { get; }
-        public IPDDLState State { get; }
+        public PDDLStateSpace State { get; }
         public int Cost { get; }
 
         public void Reset();

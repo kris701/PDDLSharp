@@ -7,9 +7,9 @@ using PDDLSharp.Models.Plans;
 using System;
 using System.Reflection;
 
-namespace PDDLSharp.States.PDDL
+namespace PDDLSharp.Toolkit.StateSpace
 {
-    public class PDDLStateSpace : IPDDLState
+    public class PDDLStateSpace
     {
         public PDDLDecl Declaration { get; internal set; }
         private HashSet<PredicateExp> _state;

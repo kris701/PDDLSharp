@@ -5,14 +5,13 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.Plans;
-using PDDLSharp.States.PDDL;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
     public class StateSpaceSimulator : IStateSpaceSimulator
     {
         public PDDLDecl Declaration { get; internal set; }
-        public IPDDLState State { get; internal set; }
+        public PDDLStateSpace State { get; internal set; }
         public int Cost { get; internal set; } = 0;
 
         public StateSpaceSimulator(PDDLDecl declaration)
@@ -68,13 +67,6 @@ namespace PDDLSharp.Toolkit.StateSpace
             if (targetAction == null)
                 throw new ArgumentNullException($"Could not find an action called '{actionName}'");
             return targetAction;
-        }
-
-        public bool IsInGoal()
-        {
-            if (Declaration.Problem.Goal == null)
-                throw new ArgumentException("Goal not set!");
-            return State.IsNodeTrue(Declaration.Problem.Goal.GoalExp);
         }
 
         private ActionDecl GroundAction(ActionDecl node, List<NameExp> groundArgs)
