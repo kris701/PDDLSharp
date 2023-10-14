@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 namespace PDDLSharp.PDDLSharp.Tests.System.Contextualisers
 {
     [TestClass]
-    public class ContextualiserTests : BaseBenchmarkedTests
+    public class PDDLContextualiserTests : BaseBenchmarkedTests
     {
         [ClassInitialize]
         public static async Task InitialiseAsync(TestContext context)

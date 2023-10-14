@@ -18,7 +18,7 @@ using System.Diagnostics;
 namespace PDDLSharp.PDDLSharp.Tests.System.Parsers
 {
     [TestClass]
-    public class ParserTests : BaseBenchmarkedTests
+    public class PDDLParserTests : BaseBenchmarkedTests
     {
         [ClassInitialize]
         public static async Task InitialiseAsync(TestContext context)

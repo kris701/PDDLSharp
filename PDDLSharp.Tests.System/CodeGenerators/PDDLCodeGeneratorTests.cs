@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
 {
     [TestClass]
-    public class CodeGeneratorTests : BaseBenchmarkedTests
+    public class PDDLCodeGeneratorTests : BaseBenchmarkedTests
     {
         [ClassInitialize]
         public static async Task InitialiseAsync(TestContext context)
