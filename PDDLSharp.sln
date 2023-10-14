@@ -51,7 +51,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.StateSpace.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analysers.Tests", "Analysers.Tests\Analysers.Tests.csproj", "{16492AC2-BC0C-43A3-A723-54A1B6587A56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolsTests", "ToolsTests\ToolsTests.csproj", "{4BE6578D-89E9-470C-8F8E-B802D5B788FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools.Tests", "Tools.Tests\Tools.Tests.csproj", "{4BE6578D-89E9-470C-8F8E-B802D5B788FD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.PlanValidator", "Toolkit\Toolkit.PlanValidator\Toolkit.PlanValidator.csproj", "{EFAC1297-DD56-4F5C-AD3C-53E0B059C20A}"
 EndProject
