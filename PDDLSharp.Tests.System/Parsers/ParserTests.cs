@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PDDLSharp;
 using PDDLSharp.Analysers;
 using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
@@ -7,10 +8,14 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
+using PDDLSharp.PDDLSharp;
+using PDDLSharp.PDDLSharp.Tests;
+using PDDLSharp.PDDLSharp.Tests.System;
+using PDDLSharp.PDDLSharp.Tests.System.Parsers;
 using System;
 using System.Diagnostics;
 
-namespace PDDLSharp.PDDLSharp.Tests.System
+namespace PDDLSharp.PDDLSharp.Tests.System.Parsers
 {
     [TestClass]
     public class ParserTests : BaseBenchmarkedTests

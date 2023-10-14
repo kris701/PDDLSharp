@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Analysers;
+﻿using PDDLSharp;
+using PDDLSharp.Analysers;
 using PDDLSharp.CodeGenerators;
 using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
@@ -7,6 +8,10 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
+using PDDLSharp.PDDLSharp;
+using PDDLSharp.PDDLSharp.Tests;
+using PDDLSharp.PDDLSharp.Tests.System;
+using PDDLSharp.PDDLSharp.Tests.System.CodeGenerators;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.PDDLSharp.Tests.System
+namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
 {
     [TestClass]
     public class CodeGeneratorTests : BaseBenchmarkedTests

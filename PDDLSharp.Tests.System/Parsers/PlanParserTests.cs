@@ -10,8 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
+using PDDLSharp;
+using PDDLSharp.PDDLSharp;
+using PDDLSharp.PDDLSharp.Tests;
+using PDDLSharp.PDDLSharp.Tests.System;
+using PDDLSharp.PDDLSharp.Tests.System.Parsers;
 
-namespace PDDLSharp.PDDLSharp.Tests.System
+namespace PDDLSharp.PDDLSharp.Tests.System.Parsers
 {
     [TestClass]
     public class PlanParserTests : BasePlanBenchmarkedTests
@@ -46,7 +51,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
             // ACT
             bool any = false;
-            foreach(var problem in problems)
+            foreach (var problem in problems)
             {
                 var targetPlanStr = new FileInfo(problem).Name.Replace(".pddl", ".plan");
                 var targetPlan = plans.FirstOrDefault(x => x.EndsWith(targetPlanStr));

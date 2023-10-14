@@ -1,4 +1,4 @@
-﻿using PDDLSharp.Analysers;
+﻿using PDDLSharp;
 using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
@@ -6,6 +6,10 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
+using PDDLSharp.PDDLSharp;
+using PDDLSharp.PDDLSharp.Tests;
+using PDDLSharp.PDDLSharp.Tests.System;
+using PDDLSharp.PDDLSharp.Tests.System.Contextualisers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,10 +17,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.PDDLSharp.Tests.System
+namespace PDDLSharp.PDDLSharp.Tests.System.Contextualisers
 {
     [TestClass]
-    public class AnalysersTests : BaseBenchmarkedTests
+    public class ContextualiserTests : BaseBenchmarkedTests
     {
         [ClassInitialize]
         public static async Task InitialiseAsync(TestContext context)
@@ -32,7 +36,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 
         [TestMethod]
         [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
-        public void Can_ParseProblemAndDomain_Analyse_STRIPS(string domain, List<string> problems)
+        public void Can_ParseProblemAndDomain_Contextualise_STRIPS(string domain, List<string> problems)
         {
             Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");
 
@@ -40,7 +44,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             IErrorListener listener = new ErrorListener();
             IParser<INode> parser = GetParser(domain, listener);
             IContextualiser contextualiser = new PDDLContextualiser(listener);
-            IAnalyser analyser = new PDDLAnalyser(listener);
+            Random rnd = new Random();
 
             // ACT
             foreach (var problem in problems)
@@ -50,7 +54,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                 var problemDecl = parser.ParseAs<ProblemDecl>(problem);
                 var decl = new PDDLDecl(domainDecl, problemDecl);
                 contextualiser.Contexturalise(decl);
-                analyser.Analyse(decl);
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                 listener.Errors.Clear();
             }
