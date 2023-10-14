@@ -20,7 +20,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IGenerator parser = new ASTGenerator(listener);
+            IGenerator parser = new PDDLASTGenerator(listener);
 
             // ACT
             var res = parser.Generate(toParse);
@@ -38,7 +38,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IGenerator parser = new ASTGenerator(listener);
+            IGenerator parser = new PDDLASTGenerator(listener);
 
             // ACT
             var res = parser.Generate(toParse);
@@ -56,7 +56,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IGenerator parser = new ASTGenerator(listener);
+            IGenerator parser = new PDDLASTGenerator(listener);
 
             // ACT
             var res = parser.Generate(toParse);
@@ -75,7 +75,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IGenerator parser = new ASTGenerator(listener);
+            IGenerator parser = new PDDLASTGenerator(listener);
 
             // ACT
             var res = parser.Generate(toParse);
@@ -96,7 +96,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            ASTGenerator parser = new ASTGenerator(listener);
+            PDDLASTGenerator parser = new PDDLASTGenerator(listener);
 
             // ACT
             var res = parser.GenerateLineDict(text);
@@ -122,7 +122,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            ASTGenerator parser = new ASTGenerator(listener);
+            PDDLASTGenerator parser = new PDDLASTGenerator(listener);
             var dict = parser.GenerateLineDict(text);
 
             // ACT
@@ -140,7 +140,7 @@ namespace PDDLSharp.ASTGenerators.Tests
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            ASTGenerator parser = new ASTGenerator(listener);
+            PDDLASTGenerator parser = new PDDLASTGenerator(listener);
             var dict = parser.GenerateLineDict(text);
 
             // ACT
