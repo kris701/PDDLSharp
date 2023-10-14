@@ -9,7 +9,7 @@ using PDDLSharp.Models.AST;
 namespace PDDLSharp.ASTGenerators.Tests.PDDL
 {
     [TestClass]
-    public class ASTGeneratorTests
+    public class PDDLASTGeneratorTests
     {
         #region Overall
         [TestMethod]
