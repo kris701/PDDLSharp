@@ -188,7 +188,7 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         private bool CheckPermutationsStepwise(INode node, ParameterExp parameters, Func<INode, bool?> stopFunc, bool defaultReturn = true)
         {
-            var allPermuations = GenerateParameterPermutations(parameters);
+            var allPermuations = GenerateParameterPermutations(parameters.Values, new List<string>(parameters.Values.Count));
             for (int i = 0; i < allPermuations.Count; i++) {
                 var res = stopFunc(GenerateNewParametized(node, parameters, allPermuations[i]));
                 if (res != null)
@@ -197,47 +197,52 @@ namespace PDDLSharp.Toolkit.StateSpace
             return defaultReturn;
         }
 
-        private INode GenerateNewParametized(INode node, ParameterExp replace, ParameterExp with)
+        private INode GenerateNewParametized(INode node, ParameterExp replace, List<string> with)
         {
             var checkNode = node.Copy();
             for(int i = 0; i < replace.Values.Count; i++)
             {
                 var allRefs = checkNode.FindNames(replace.Values[i].Name);
                 foreach (var name in allRefs)
-                    name.Name = with.Values[i].Name;
+                    name.Name = with[i];
             }
 
             return checkNode;
         }
 
-        private List<ParameterExp> GenerateParameterPermutations(ParameterExp parameters, int index = 0)
+        private List<List<string>> GenerateParameterPermutations(List<NameExp> parameters, List<string> carried, int index = 0)
         {
-            List<ParameterExp> returnList = new List<ParameterExp>();
+            List<List<string>> returnList = new List<List<string>>();
 
-            List<NameExp> allOfType = GetObjsForType(parameters.Values[index].Type.Name);
+            List<string> allOfType = GetObjsForType(parameters[index].Type.Name);
             foreach (var ofType in allOfType)
             {
-                var newParam = parameters.Copy();
-                newParam.Values[index] = ofType;
-                if (index >= parameters.Values.Count - 1)
+                var newParam = new List<string>(carried);
+                newParam.Add(ofType);
+                if (index >= parameters.Count - 1)
                     returnList.Add(newParam);
                 else
-                    returnList.AddRange(GenerateParameterPermutations(newParam, index + 1));
+                    returnList.AddRange(GenerateParameterPermutations(parameters, newParam, index + 1));
             }
 
             return returnList;
         }
 
-        private Dictionary<string, List<NameExp>> _objCache = new Dictionary<string, List<NameExp>>();
-        private List<NameExp> GetObjsForType(string typeName)
+        private Dictionary<string, List<string>> _objCache = new Dictionary<string, List<string>>();
+        private List<string> GetObjsForType(string typeName)
         {
             if (_objCache.ContainsKey(typeName))
                 return _objCache[typeName];
-            _objCache.Add(typeName, new List<NameExp>());
+
+            var addItems = new List<NameExp>();
             if (Declaration.Problem.Objects != null)
-                _objCache[typeName].AddRange(Declaration.Problem.Objects.Objs.Where(x => x.Type.IsTypeOf(typeName)));
+                addItems.AddRange(Declaration.Problem.Objects.Objs.Where(x => x.Type.IsTypeOf(typeName)));
             if (Declaration.Domain.Constants != null)
-                _objCache[typeName].AddRange(Declaration.Domain.Constants.Constants.Where(x => x.Type.IsTypeOf(typeName)));
+                addItems.AddRange(Declaration.Domain.Constants.Constants.Where(x => x.Type.IsTypeOf(typeName)));
+
+            _objCache.Add(typeName, new List<string>());
+            foreach (var item in addItems)
+                _objCache[typeName].Add(item.Name);
             return _objCache[typeName];
         }
 

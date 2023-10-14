@@ -110,7 +110,7 @@ namespace PDDLSharp.Toolit.Tests.System
                     {
                         int orgSize = plan.Plan.Count;
                         for (int i = 0; i < orgSize; i += 2)
-                            plan.Plan.Add(plan.Plan[i]);
+                            plan.Plan.Insert(i, plan.Plan[i]);
                         Assert.IsFalse(validator.Validate(plan, newDecl));
                         any = true;
                     }
