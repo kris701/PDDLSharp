@@ -1,5 +1,9 @@
-﻿using PDDLSharp.ASTGenerators;
+﻿using PDDLSharp;
+using PDDLSharp.ASTGenerators;
 using PDDLSharp.ASTGenerators.PDDL;
+using PDDLSharp.Contextualisers;
+using PDDLSharp.Contextualisers.Tests;
+using PDDLSharp.Contextualisers.Tests.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
@@ -13,7 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace PDDLSharp.Contextualisers.Tests
+namespace PDDLSharp.Contextualisers.Tests.PDDL
 {
     [TestClass]
     public class PDDLDomainDeclContextualiserTests
