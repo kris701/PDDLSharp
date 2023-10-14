@@ -49,7 +49,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
             ICodeGenerator<ActionPlan> generator = new FastDownwardPlanGenerator(listener);
 
             // ACT
-            foreach(var plan in plans)
+            foreach (var plan in plans)
             {
                 Trace.WriteLine($"Testing plan '{plan}'");
                 var orgPlan = parser.Parse(plan);

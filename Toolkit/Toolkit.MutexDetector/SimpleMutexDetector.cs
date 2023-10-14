@@ -1,10 +1,5 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.MutexDetector
 {
@@ -31,7 +26,7 @@ namespace PDDLSharp.Toolkit.MutexDetector
                         balance[precondition.Name]++;
                 }
 
-                foreach(var name in balance.Keys)
+                foreach (var name in balance.Keys)
                 {
                     if (balance[name] == 0 && !notMutexCandidates.Any(x => x.Name == name))
                     {

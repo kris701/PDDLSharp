@@ -1,16 +1,16 @@
-﻿using PDDLSharp.Models.PDDL.Expressions;
+﻿using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Parsers;
+using PDDLSharp.Toolkit.MutexDetector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Toolkit.MutexDetector;
-using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Parsers;
-using PDDLSharp.ErrorListeners;
 
 namespace PDDLSharp.Toolkit.MutexDetectors.Tests
 {
@@ -153,7 +153,7 @@ namespace PDDLSharp.Toolkit.MutexDetectors.Tests
             PDDLParser parser = new PDDLParser(listener);
             var decl = parser.ParseDecl(domain, problem);
             IMutexDetectors detector = new SimpleMutexDetector();
-            
+
             // ACT
             var mutexes = detector.FindMutexes(decl);
 

@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Parsers;
 using System;
 using System.Collections.Generic;

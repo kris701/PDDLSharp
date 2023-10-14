@@ -2,7 +2,6 @@
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
-using System.Xml.Linq;
 
 namespace PDDLSharp.Analysers.Visitors
 {
@@ -50,7 +49,7 @@ namespace PDDLSharp.Analysers.Visitors
             List<PredicateExp> declaredPredicates = GetPredicateCache();
             var nodePredicates = node.FindTypes<PredicateExp>();
 
-            foreach(var pred in nodePredicates)
+            foreach (var pred in nodePredicates)
                 if (!declaredPredicates.Any(x => x.Name == pred.Name))
                     Listener.AddError(error(pred));
         }
@@ -86,7 +85,7 @@ namespace PDDLSharp.Analysers.Visitors
             // Normal check
             parentParams.AddRange(node.Parameters.Values);
             var allNames = node.FindTypes<NameExp>(new List<Type>() { typeof(ForAllExp), typeof(ExistsExp) }, true);
-            foreach(var name in allNames)
+            foreach (var name in allNames)
                 if (!parentParams.Any(x => x.Name == name.Name))
                     Listener.AddError(error(name));
 

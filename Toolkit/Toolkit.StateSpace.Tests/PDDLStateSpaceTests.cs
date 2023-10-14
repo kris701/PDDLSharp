@@ -173,7 +173,7 @@ namespace PDDLSharp.Toolkit.StateSpace.Tests
 
         public static IEnumerable<object[]> GetExecuteNodeData()
         {
-            yield return new object[] { 
+            yield return new object[] {
                 new PredicateExp("a"),
                 1
             };

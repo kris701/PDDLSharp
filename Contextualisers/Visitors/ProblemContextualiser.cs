@@ -75,7 +75,7 @@ namespace PDDLSharp.Contextualisers.Visitors
         public void Visit(GoalDecl node)
         {
             var allParametized = node.FindTypes<IParametized>();
-            foreach(var parametized in allParametized)
+            foreach (var parametized in allParametized)
                 DecorateTypesNamesWithParameterType(parametized);
         }
 

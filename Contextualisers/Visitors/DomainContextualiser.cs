@@ -3,7 +3,6 @@ using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
-using System;
 
 namespace PDDLSharp.Contextualisers.Visitors
 {
@@ -150,7 +149,7 @@ namespace PDDLSharp.Contextualisers.Visitors
             var targets = Declaration.Domain.FindNames(node.Predicate.Name);
             targets.AddRange(Declaration.Problem.FindNames(node.Predicate.Name));
 
-            for(int i = 0; i < targets.Count; i++)
+            for (int i = 0; i < targets.Count; i++)
             {
                 if (targets[i] is DerivedPredicateExp derivedPred)
                 {

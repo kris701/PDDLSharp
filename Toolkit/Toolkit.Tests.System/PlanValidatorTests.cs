@@ -1,17 +1,17 @@
 ﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers;
+using PDDLSharp.Toolkit.PlanValidator;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.Plans;
-using PDDLSharp.Toolkit.PlanValidator;
-using PDDLSharp.Models;
 
 namespace PDDLSharp.Toolit.Tests.System
 {
@@ -49,7 +49,7 @@ namespace PDDLSharp.Toolit.Tests.System
 
             // ACT
             bool any = false;
-            foreach(var problem in problems)
+            foreach (var problem in problems)
             {
                 var targetPlanStr = new FileInfo(problem).Name.Replace(".pddl", ".plan");
                 var targetPlan = plans.FirstOrDefault(x => x.EndsWith(targetPlanStr));
@@ -86,7 +86,7 @@ namespace PDDLSharp.Toolit.Tests.System
             IParser<INode> parser = GetParser(domain, listener);
             IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
-            
+
 
             // ACT
             bool any = false;
@@ -211,7 +211,7 @@ namespace PDDLSharp.Toolit.Tests.System
         private void InsertRandomObjects(ActionPlan plan)
         {
             Random rn = new Random();
-            foreach(var act in plan.Plan)
+            foreach (var act in plan.Plan)
             {
                 if (act.Arguments.Count > 0)
                 {

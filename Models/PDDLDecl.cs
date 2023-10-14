@@ -1,10 +1,6 @@
-﻿using Microsoft.VisualBasic;
-using PDDLSharp.Models.PDDL;
+﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Xml.Linq;
-using System;
 using System.Collections;
 
 namespace PDDLSharp.Models

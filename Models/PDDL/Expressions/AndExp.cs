@@ -59,7 +59,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override void Replace(INode node, INode with)
         {
-            for(int i = 0; i < Children.Count; i++)
+            for (int i = 0; i < Children.Count; i++)
             {
                 if (Children[i] == node && with is IExp asExp)
                     Children[i] = asExp;

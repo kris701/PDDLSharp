@@ -1,5 +1,4 @@
 ﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 
@@ -246,7 +245,7 @@ namespace PDDLSharp.Analysers.Visitors
                     node.Line,
                     node.Start));
             CheckForUnusedParameters(
-                node, 
+                node,
                 (param) => new PDDLSharpError(
                     $"Durative action '{node.Name}' contains unused parameter '{param.Name}'",
                     ParseErrorType.Warning,

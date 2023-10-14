@@ -1,5 +1,4 @@
 ﻿using PDDLSharp.Models;
-using PDDLSharp.Models.Plans;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
