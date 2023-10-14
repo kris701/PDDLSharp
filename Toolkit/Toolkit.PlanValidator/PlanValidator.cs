@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDLSharp.Simulators.StateSpace;
+using PDDLSharp.Toolkit.StateSpace;
 using System.Xml.Linq;
 
-namespace PDDLSharp.Simulators.PlanValidator
+namespace PDDLSharp.Toolkit.PlanValidator
 {
     public class PlanValidator : IPlanValidator
     {

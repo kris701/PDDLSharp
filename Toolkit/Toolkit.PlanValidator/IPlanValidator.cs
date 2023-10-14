@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.Plans;
-using PDDLSharp.Simulators.StateSpace;
+using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.States.PDDL;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Simulators.PlanValidator
+namespace PDDLSharp.Toolkit.PlanValidator
 {
     public interface IPlanValidator
     {

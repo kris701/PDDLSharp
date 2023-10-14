@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Simulators.MutexDetector;
+using PDDLSharp.Toolkit.MutexDetector;
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
 using PDDLSharp.ErrorListeners;
 
-namespace PDDLSharp.Simulators.MutexDetectors.Tests
+namespace PDDLSharp.Toolkit.MutexDetectors.Tests
 {
     [TestClass]
     public class SimpleMutexDetectorTests

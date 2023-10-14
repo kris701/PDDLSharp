@@ -6,9 +6,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Toolit.Tests.System
+namespace PDDLSharp.Tools
 {
-    internal static class GitFetcher
+    public static class GitFetcher
     {
         private static string GetFullPath(string target)
         {

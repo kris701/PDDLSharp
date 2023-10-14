@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Toolit.Tests.System
+namespace PDDLSharp.Toolit.Tests.System
 {
     public class BaseBenchmarkedTests
     {

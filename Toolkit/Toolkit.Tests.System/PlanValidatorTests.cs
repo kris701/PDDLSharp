@@ -10,10 +10,10 @@ using System.Text;
 using System.Threading.Tasks;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
-using PDDLSharp.Simulators.PlanValidator;
+using PDDLSharp.Toolkit.PlanValidator;
 using PDDLSharp.Models;
 
-namespace Toolit.Tests.System
+namespace PDDLSharp.Toolit.Tests.System
 {
     [TestClass]
     public class PlanValidatorTests : BasePlanBenchmarkedTests
@@ -115,8 +115,8 @@ namespace Toolit.Tests.System
                     }
                 }
             }
-            //if (!any)
-            //    Assert.Inconclusive($"Could not find any plans for the domain+problems!");
+            if (!any)
+                Assert.Inconclusive($"Could not find any plans for the domain+problems!");
 
             // ASSERT
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));

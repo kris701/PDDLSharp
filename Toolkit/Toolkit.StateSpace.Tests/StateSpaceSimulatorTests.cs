@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Simulators.StateSpace.Tests
+namespace PDDLSharp.Toolkit.StateSpace.Tests
 {
     [TestClass]
     public class StateSpaceSimulatorTests

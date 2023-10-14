@@ -7,7 +7,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.States.PDDL;
 
-namespace PDDLSharp.Simulators.StateSpace
+namespace PDDLSharp.Toolkit.StateSpace
 {
     public class StateSpaceSimulator : IStateSpaceSimulator
     {

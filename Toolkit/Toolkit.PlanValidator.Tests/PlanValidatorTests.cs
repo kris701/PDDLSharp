@@ -3,14 +3,14 @@ using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers;
-using PDDLSharp.Simulators.StateSpace;
+using PDDLSharp.Toolkit.StateSpace;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Simulators.PlanValidator.Tests
+namespace PDDLSharp.Toolkit.PlanValidator.Tests
 {
     [TestClass]
     public class PlanValidatorTests

@@ -4,7 +4,7 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Parsers;
-using PDDLSharp.Simulators.PlanValidator;
+using PDDLSharp.Toolkit.PlanValidator;
 using System.Diagnostics;
 
 namespace PerformanceTests
