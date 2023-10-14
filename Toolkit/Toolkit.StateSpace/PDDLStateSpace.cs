@@ -59,128 +59,106 @@ namespace PDDLSharp.Toolkit.StateSpace
         }
         private void ExecuteNode(INode node, bool isNegative)
         {
-            if (node is PredicateExp predicate)
+            switch (node)
             {
-                if (isNegative)
-                    _tempDel.Add(predicate);
-                else
-                    _tempAdd.Add(predicate);
-                return;
-            }
-            else if (node is NotExp not)
-            {
-                ExecuteNode(not.Child, !isNegative);
-                return;
-            }
-            else if (node is AndExp and)
-            {
-                foreach (var child in and.Children)
-                    ExecuteNode(child, isNegative);
-                return;
-            }
-            else if (node is WhenExp when)
-            {
-                if (IsNodeTrue(when.Condition))
-                    ExecuteNode(when.Effect, false);
-                return;
-            }
-            else if (node is ForAllExp all)
-            {
-                CheckPermutationsStepwise(
+                case PredicateExp predicate:
+                    if (isNegative)
+                        _tempDel.Add(predicate);
+                    else
+                        _tempAdd.Add(predicate);
+                    return;
+                case NotExp not:
+                    ExecuteNode(not.Child, !isNegative);
+                    return;
+                case AndExp and:
+                    foreach (var child in and.Children)
+                        ExecuteNode(child, isNegative);
+                    return;
+                case ForAllExp all:
+                    CheckPermutationsStepwise(
                     all.Expression,
                     all.Parameters,
                     (x) => {
                         ExecuteNode(x, isNegative);
                         return null;
                     });
-                return;
+                    return;
+                case WhenExp whe:
+                    if (IsNodeTrue(whe.Condition))
+                        ExecuteNode(whe.Effect, false);
+                    return;
+                case NumericExp num:
+                    return;
             }
-            else if (node is NumericExp num)
-                return;
 
             throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
         }
 
         public bool IsNodeTrue(INode node)
         {
-            if (node is DerivedPredicateExp derivedPredicate)
+            switch (node)
             {
-                foreach (var derivedDecl in derivedPredicate.GetDecls())
-                {
-                    var newTestNode = derivedDecl.Expression.Copy();
-                    for (int i = 0; i < derivedDecl.Predicate.Arguments.Count; i++)
+                case DerivedPredicateExp derivedPredicate:
+                    foreach (var derivedDecl in derivedPredicate.GetDecls())
                     {
-                        var all = newTestNode.FindNames(derivedDecl.Predicate.Arguments[i].Name);
-                        foreach (var name in all)
-                            name.Name = derivedPredicate.Arguments[i].Name;
-                    }
-                    if (IsNodeTrue(newTestNode))
-                        return true;
-                }
-                return false;
-            }
-            else if (node is PredicateExp predicate)
-            {
-                // Handle Equality predicate
-                if (predicate.Name == "=" && predicate.Arguments.Count == 2)
-                    return predicate.Arguments[0].Name == predicate.Arguments[1].Name;
-
-                return Contains(predicate);
-            }
-            else if (node is NotExp not)
-            {
-                return !IsNodeTrue(not.Child);
-            }
-            else if (node is OrExp or)
-            {
-                foreach (var subNode in or)
-                    if (IsNodeTrue(subNode))
-                        return true;
-                return false;
-            }
-            else if (node is AndExp and)
-            {
-                foreach (var subNode in and)
-                    if (!IsNodeTrue(subNode))
-                        return false;
-                return true;
-            }
-            else if (node is ExistsExp exist)
-            {
-                return CheckPermutationsStepwise(
-                    exist.Expression,
-                    exist.Parameters,
-                    (x) => {
-                        if (IsNodeTrue(x))
+                        var newTestNode = derivedDecl.Expression.Copy();
+                        for (int i = 0; i < derivedDecl.Predicate.Arguments.Count; i++)
+                        {
+                            var all = newTestNode.FindNames(derivedDecl.Predicate.Arguments[i].Name);
+                            foreach (var name in all)
+                                name.Name = derivedPredicate.Arguments[i].Name;
+                        }
+                        if (IsNodeTrue(newTestNode))
                             return true;
-                        return null;
-                    },
-                    false);
-            }
-            else if (node is ImplyExp imply)
-            {
-                if (IsNodeTrue(imply.Antecedent) && IsNodeTrue(imply.Consequent))
-                    return true;
-                if (!IsNodeTrue(imply.Antecedent))
-                    return true;
-                return false;
-            }
-            else if (node is ForAllExp all)
-            {
-                return CheckPermutationsStepwise(
-                    all.Expression, 
-                    all.Parameters, 
-                    (x) => {
-                        if (!IsNodeTrue(x))
+                    }
+                    return false;
+                case PredicateExp predicate:
+                    // Handle Equality predicate
+                    if (predicate.Name == "=" && predicate.Arguments.Count == 2)
+                        return predicate.Arguments[0].Name == predicate.Arguments[1].Name;
+
+                    return Contains(predicate);
+                case NotExp not:
+                    return !IsNodeTrue(not.Child);
+                case OrExp or:
+                    foreach (var subNode in or)
+                        if (IsNodeTrue(subNode))
+                            return true;
+                    return false;
+                case AndExp and:
+                    foreach (var subNode in and)
+                        if (!IsNodeTrue(subNode))
                             return false;
-                        return null;
-                    });
-            }
-            else if (node is WhenExp when)
-            {
-                if (IsNodeTrue(when.Condition))
-                    return IsNodeTrue(when.Effect);
-                return false;
+                    return true;
+                case ExistsExp exist:
+                    return CheckPermutationsStepwise(
+                        exist.Expression,
+                        exist.Parameters,
+                        (x) => {
+                            if (IsNodeTrue(x))
+                                return true;
+                            return null;
+                        },
+                        false);
+                case ImplyExp imply:
+                    if (IsNodeTrue(imply.Antecedent) && IsNodeTrue(imply.Consequent))
+                        return true;
+                    if (!IsNodeTrue(imply.Antecedent))
+                        return true;
+                    return false;
+                case ForAllExp all:
+                    return CheckPermutationsStepwise(
+                        all.Expression,
+                        all.Parameters,
+                        (x) => {
+                            if (!IsNodeTrue(x))
+                                return false;
+                            return null;
+                        });
+                case WhenExp whe:
+                    if (IsNodeTrue(whe.Condition))
+                        return IsNodeTrue(whe.Effect);
+                    return false;
             }
 
             throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
