@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CodeGenerators\CodeGenerators.csproj" />
     <ProjectReference Include="..\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\Toolkit\Toolkit.PlanValidator\Toolkit.PlanValidator.csproj" />
   </ItemGroup>
 
 </Project>

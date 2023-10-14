@@ -59,7 +59,7 @@ namespace PDDLSharp.Models.PDDL.Problem
 
         public override void Replace(INode node, INode with)
         {
-            for(var i = 0; i < Predicates.Count; i++)
+            for (var i = 0; i < Predicates.Count; i++)
             {
                 if (Predicates[i] == node && with is IExp exp)
                     Predicates[i] = exp;

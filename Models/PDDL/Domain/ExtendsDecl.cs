@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using PDDLSharp.Models.AST;
+﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain

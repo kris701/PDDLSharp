@@ -1,9 +1,13 @@
 ﻿using PDDLSharp.Analysers;
+using PDDLSharp.Analysers.PDDL;
 using PDDLSharp.CodeGenerators;
+using PDDLSharp.CodeGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.PDDL;
+using PDDLSharp.Parsers.Plans;
+using PDDLSharp.Toolkit.PlanValidator;
 using System.Diagnostics;
 
 namespace PerformanceTests
@@ -13,11 +17,47 @@ namespace PerformanceTests
         static void Main(string[] args)
         {
             Console.WriteLine("Fetching benchmarks!");
-            BenchmarkFetcher.CheckAndDownloadBenchmarksAsync().Wait();
+            GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks", "benchmarks").Wait();
+            GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/kris701/PDDLBenchmarkPlans", "benchmarks-plans").Wait();
             Console.WriteLine("Done!");
 
-            RunNTimes(100);
+            //RunNTimes(100);
             //RunNTimes2(2000);
+            RunNTimes3(1);
+        }
+
+        private static void RunNTimes3(int number)
+        {
+            var targetDomain = "benchmarks/psr-large/domain.pddl";
+            var targetProblem = "benchmarks/psr-large/p24-s166-n15-l3-f10.pddl";
+            var targetPlan = "benchmarks-plans/lama-first/psr-large/p24-s166-n15-l3-f10.plan";
+
+            IErrorListener listener = new ErrorListener();
+            PDDLParser parser = new PDDLParser(listener);
+            FastDownwardPlanParser planParser = new FastDownwardPlanParser(listener);
+            IPlanValidator validator = new PlanValidator();
+
+            Stopwatch instanceWatch = new Stopwatch();
+            List<long> times = new List<long>() { 0, 0 };
+            for (int i = 0; i < number; i++)
+            {
+                Console.WriteLine($"Instance {i}");
+                Console.WriteLine($"    Parsing");
+                instanceWatch.Start();
+                var decl = parser.ParseDecl(targetDomain, targetProblem);
+                var plan = planParser.Parse(targetPlan);
+                instanceWatch.Stop();
+                times[0] += instanceWatch.ElapsedMilliseconds;
+
+                Console.WriteLine($"    Validating");
+                instanceWatch.Restart();
+                validator.Validate(plan, decl);
+                instanceWatch.Stop();
+                times[1] += instanceWatch.ElapsedMilliseconds;
+
+            }
+            Console.WriteLine($"Parsing took         {times[0]}ms in total.\t\tAvg {times[0] / number}ms pr instance.");
+            Console.WriteLine($"Validating took      {times[1]}ms in total.\t\tAvg {times[1] / number}ms pr instance.");
         }
 
         private static void RunNTimes2(int number)

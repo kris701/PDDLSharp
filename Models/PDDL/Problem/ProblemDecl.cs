@@ -1,5 +1,4 @@
 ﻿using PDDLSharp.Models.AST;
-using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
