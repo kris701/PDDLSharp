@@ -45,13 +45,5 @@ namespace PDDLSharp.Toolkit.MutexDetector
 
             return mutexCandidates;
         }
-
-        private PredicateExp SimplifyPredicate(PredicateExp pred)
-        {
-            var newPred = new PredicateExp(pred.Name);
-            foreach (var arg in pred.Arguments)
-                newPred.Arguments.Add(new NameExp(arg.Name));
-            return newPred;
-        }
     }
 }

@@ -33,7 +33,6 @@ namespace PDDLSharp.PDDLSharp.Tests.System
         public static async Task Setup()
         {
             var targetPath = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks", "benchmarks");
-            Random rnd = new Random();
             foreach (var domainPath in Directory.GetDirectories(targetPath))
             {
                 if (!ExcludedDomains.Contains(new DirectoryInfo(domainPath).Name))
@@ -44,7 +43,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                         if (!_testDict.ContainsKey(domainFile))
                         {
                             _testDict.Add(domainFile, new List<string>());
-                            foreach (var problem in Directory.GetFiles(domainPath).OrderBy(x => rnd.Next()))
+                            foreach (var problem in Directory.GetFiles(domainPath))
                             {
                                 if (problem != domainFile && problem.EndsWith(".pddl") && new FileInfo(problem).Length < MaxFileSize && PDDLFileHelper.IsFileProblem(problem))
                                     _testDict[domainFile].Add(problem);
