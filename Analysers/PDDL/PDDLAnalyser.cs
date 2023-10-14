@@ -3,7 +3,7 @@ using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 
-namespace PDDLSharp.Analysers
+namespace PDDLSharp.Analysers.PDDL
 {
     public class PDDLAnalyser : IAnalyser
     {
