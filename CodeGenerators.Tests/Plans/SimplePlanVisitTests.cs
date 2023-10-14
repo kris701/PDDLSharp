@@ -1,10 +1,14 @@
+using PDDLSharp;
+using PDDLSharp.CodeGenerators;
+using PDDLSharp.CodeGenerators.Tests;
+using PDDLSharp.CodeGenerators.Tests.Plans;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.Plans;
 using System;
 
-namespace PDDLSharp.CodeGenerators.Tests
+namespace PDDLSharp.CodeGenerators.Tests.Plans
 {
     [TestClass]
     public class SimplePlanVisitTests

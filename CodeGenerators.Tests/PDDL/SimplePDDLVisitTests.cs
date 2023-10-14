@@ -1,3 +1,7 @@
+using PDDLSharp;
+using PDDLSharp.CodeGenerators;
+using PDDLSharp.CodeGenerators.Tests;
+using PDDLSharp.CodeGenerators.Tests.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
@@ -6,7 +10,7 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using System;
 
-namespace PDDLSharp.CodeGenerators.Tests
+namespace PDDLSharp.CodeGenerators.Tests.PDDL
 {
     [TestClass]
     public class SimplePDDLVisitTests
