@@ -4,11 +4,11 @@ using PDDLSharp.Tools;
 
 namespace PDDLSharp.ASTGenerators.PDDL
 {
-    public class ASTGenerator : IGenerator
+    public class PDDLASTGenerator : IGenerator
     {
         public IErrorListener Listener { get; }
 
-        public ASTGenerator(IErrorListener listener)
+        public PDDLASTGenerator(IErrorListener listener)
         {
             Listener = listener;
         }

@@ -1,4 +1,8 @@
-﻿using PDDLSharp.ASTGenerators.PDDL;
+﻿using PDDLSharp;
+using PDDLSharp.ASTGenerators;
+using PDDLSharp.ASTGenerators.PDDL;
+using PDDLSharp.ASTGenerators.Tests;
+using PDDLSharp.ASTGenerators.Tests.PDDL;
 using PDDLSharp.ASTGenerators.Tests.PositionTestsData;
 using PDDLSharp.Models.AST;
 using System;
@@ -7,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.ASTGenerators.Tests
+namespace PDDLSharp.ASTGenerators.Tests.PDDL
 {
     [TestClass]
     public class TextPreprocessingTests
