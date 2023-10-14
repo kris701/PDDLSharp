@@ -7,16 +7,6 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <AssemblyName>PDDLSharp.$(MSBuildProjectName)</AssemblyName>
-    <RootNamespace>PDDLSharp.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <WarningLevel>0</WarningLevel>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <WarningLevel>0</WarningLevel>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,8 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CodeGenerators\CodeGenerators.csproj" />
-    <ProjectReference Include="..\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\..\ErrorListeners\ErrorListeners.csproj" />
+    <ProjectReference Include="..\..\Models\Models.csproj" />
+    <ProjectReference Include="..\..\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\Toolkit.PlanValidator\Toolkit.PlanValidator.csproj" />
   </ItemGroup>
 
 </Project>

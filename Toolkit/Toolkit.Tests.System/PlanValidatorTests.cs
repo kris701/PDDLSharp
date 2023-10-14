@@ -13,7 +13,7 @@ using PDDLSharp.Models.Plans;
 using PDDLSharp.Simulators.PlanValidator;
 using PDDLSharp.Models;
 
-namespace PDDLSharp.PDDLSharp.Tests.System
+namespace Toolit.Tests.System
 {
     [TestClass]
     public class PlanValidatorTests : BasePlanBenchmarkedTests
