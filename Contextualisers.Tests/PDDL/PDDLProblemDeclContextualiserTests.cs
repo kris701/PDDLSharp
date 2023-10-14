@@ -2,6 +2,7 @@
 using PDDLSharp.ASTGenerators;
 using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.Contextualisers;
+using PDDLSharp.Contextualisers.PDDL;
 using PDDLSharp.Contextualisers.Tests;
 using PDDLSharp.Contextualisers.Tests.PDDL;
 using PDDLSharp.ErrorListeners;
