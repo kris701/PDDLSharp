@@ -1,5 +1,6 @@
 using PDDLSharp;
 using PDDLSharp.CodeGenerators;
+using PDDLSharp.CodeGenerators.Plans;
 using PDDLSharp.CodeGenerators.Tests;
 using PDDLSharp.CodeGenerators.Tests.Plans;
 using PDDLSharp.ErrorListeners;
