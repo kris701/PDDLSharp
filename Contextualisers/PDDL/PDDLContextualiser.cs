@@ -5,7 +5,7 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 
-namespace PDDLSharp.Contextualisers
+namespace PDDLSharp.Contextualisers.PDDL
 {
     public class PDDLContextualiser : IContextualiser
     {
