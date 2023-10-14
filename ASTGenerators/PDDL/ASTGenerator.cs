@@ -2,7 +2,7 @@
 using PDDLSharp.Models.AST;
 using PDDLSharp.Tools;
 
-namespace PDDLSharp.ASTGenerators
+namespace PDDLSharp.ASTGenerators.PDDL
 {
     public class ASTGenerator : IGenerator
     {

@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Tools;
 
-namespace PDDLSharp.ASTGenerators
+namespace PDDLSharp.ASTGenerators.PDDL
 {
     public static class TextPreprocessing
     {
