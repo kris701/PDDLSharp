@@ -15,9 +15,9 @@ namespace PDDLSharp.Toolkit.PlanValidator
         public bool Validate(ActionPlan plan, PDDLDecl decl)
         {
             Step = 0;
+            IStateSpaceSimulator simulator = new StateSpaceSimulator(decl);
             try
             {
-                IStateSpaceSimulator simulator = new StateSpaceSimulator(decl);
                 foreach (var step in plan.Plan)
                 {
                     var argStr = new List<string>();

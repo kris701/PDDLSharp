@@ -51,7 +51,7 @@ namespace PerformanceTests
 
                 Console.WriteLine($"    Validating");
                 instanceWatch.Restart();
-                validator.Validate(plan, decl);
+                var res = validator.Validate(plan, decl);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
 

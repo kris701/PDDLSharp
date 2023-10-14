@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
+using System.Xml.Linq;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
@@ -85,9 +86,13 @@ namespace PDDLSharp.Toolkit.StateSpace
             }
             else if (node is ForAllExp all)
             {
-                var permutations = GenerateParameterPermutations(all.Expression, all.Parameters.Values);
-                foreach (var permutation in permutations)
-                    ExecuteNode(permutation, isNegative);
+                CheckPermutationsStepwise(
+                    all.Expression,
+                    all.Parameters,
+                    (x) => {
+                        ExecuteNode(x, isNegative);
+                        return null;
+                    });
                 return;
             }
             else if (node is NumericExp num)
@@ -142,11 +147,15 @@ namespace PDDLSharp.Toolkit.StateSpace
             }
             else if (node is ExistsExp exist)
             {
-                var permutations = GenerateParameterPermutations(exist.Expression, exist.Parameters.Values);
-                foreach (var permutation in permutations)
-                    if (IsNodeTrue(permutation))
-                        return true;
-                return false;
+                return CheckPermutationsStepwise(
+                    exist.Expression,
+                    exist.Parameters,
+                    (x) => {
+                        if (IsNodeTrue(x))
+                            return true;
+                        return null;
+                    },
+                    false);
             }
             else if (node is ImplyExp imply)
             {
@@ -158,11 +167,14 @@ namespace PDDLSharp.Toolkit.StateSpace
             }
             else if (node is ForAllExp all)
             {
-                var permutations = GenerateParameterPermutations(all.Expression, all.Parameters.Values);
-                foreach (var permutation in permutations)
-                    if (!IsNodeTrue(permutation))
-                        return false;
-                return true;
+                return CheckPermutationsStepwise(
+                    all.Expression, 
+                    all.Parameters, 
+                    (x) => {
+                        if (!IsNodeTrue(x))
+                            return false;
+                        return null;
+                    });
             }
             else if (node is WhenExp when)
             {
@@ -172,6 +184,48 @@ namespace PDDLSharp.Toolkit.StateSpace
             }
 
             throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
+        }
+
+        private bool CheckPermutationsStepwise(INode node, ParameterExp parameters, Func<INode, bool?> stopFunc, bool defaultReturn = true)
+        {
+            var allPermuations = GenerateParameterPermutations(parameters);
+            for (int i = 0; i < allPermuations.Count; i++) {
+                var res = stopFunc(GenerateNewParametized(node, parameters, allPermuations[i]));
+                if (res != null)
+                    return (bool)res;
+            }
+            return defaultReturn;
+        }
+
+        private INode GenerateNewParametized(INode node, ParameterExp replace, ParameterExp with)
+        {
+            var checkNode = node.Copy();
+            for(int i = 0; i < replace.Values.Count; i++)
+            {
+                var allRefs = checkNode.FindNames(replace.Values[i].Name);
+                foreach (var name in allRefs)
+                    name.Name = with.Values[i].Name;
+            }
+
+            return checkNode;
+        }
+
+        private List<ParameterExp> GenerateParameterPermutations(ParameterExp parameters, int index = 0)
+        {
+            List<ParameterExp> returnList = new List<ParameterExp>();
+
+            List<NameExp> allOfType = GetObjsForType(parameters.Values[index].Type.Name);
+            foreach (var ofType in allOfType)
+            {
+                var newParam = parameters.Copy();
+                newParam.Values[index] = ofType;
+                if (index >= parameters.Values.Count - 1)
+                    returnList.Add(newParam);
+                else
+                    returnList.AddRange(GenerateParameterPermutations(newParam, index + 1));
+            }
+
+            return returnList;
         }
 
         private Dictionary<string, List<NameExp>> _objCache = new Dictionary<string, List<NameExp>>();
@@ -185,28 +239,6 @@ namespace PDDLSharp.Toolkit.StateSpace
             if (Declaration.Domain.Constants != null)
                 _objCache[typeName].AddRange(Declaration.Domain.Constants.Constants.Where(x => x.Type.IsTypeOf(typeName)));
             return _objCache[typeName];
-        }
-        private List<INode> GenerateParameterPermutations(INode node, List<NameExp> values, int index = 0)
-        {
-            List<INode> returnList = new List<INode>();
-
-            if (index >= values.Count)
-            {
-                returnList.Add(node);
-                return returnList;
-            }
-
-            List<NameExp> allOfType = GetObjsForType(values[index].Type.Name);
-            foreach (var ofType in allOfType)
-            {
-                var newNode = node.Copy(null);
-                var allNames = newNode.FindNames(values[index].Name);
-                foreach (var name in allNames)
-                    name.Name = ofType.Name;
-                returnList.AddRange(GenerateParameterPermutations(newNode, values, index + 1));
-            }
-
-            return returnList;
         }
 
         public bool IsInGoal()
