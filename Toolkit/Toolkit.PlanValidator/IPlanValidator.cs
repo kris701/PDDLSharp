@@ -12,6 +12,7 @@ namespace PDDLSharp.Simulators.PlanValidator
 {
     public interface IPlanValidator
     {
+        public int Step { get; }
         public bool Validate(ActionPlan plan, PDDLDecl decl);
     }
 }

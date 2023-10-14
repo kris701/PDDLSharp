@@ -13,12 +13,15 @@ namespace PDDLSharp.Simulators.PlanValidator
 {
     public class PlanValidator : IPlanValidator
     {
+        public int Step { get; internal set; }
+
         public PlanValidator()
         {
         }
 
         public bool Validate(ActionPlan plan, PDDLDecl decl)
         {
+            Step = 0;
             try
             {
                 IStateSpaceSimulator simulator = new StateSpaceSimulator(decl);
@@ -29,6 +32,7 @@ namespace PDDLSharp.Simulators.PlanValidator
                         argStr.Add(arg.Name);
 
                     simulator.Step(step.ActionName, argStr.ToArray());
+                    Step++;
                 }
                 return simulator.State.IsInGoal();
             }

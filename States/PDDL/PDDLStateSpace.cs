@@ -5,6 +5,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
 using System;
+using System.Reflection;
 
 namespace PDDLSharp.States.PDDL
 {
@@ -100,33 +101,6 @@ namespace PDDLSharp.States.PDDL
             throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
         }
 
-        private List<INode> GenerateParameterPermutations(INode node, List<NameExp> values, int index)
-        {
-            List<INode> returnList = new List<INode>();
-
-            if (index >= values.Count)
-            {
-                returnList.Add(node);
-                return returnList;
-            }
-
-            List<NameExp> allOfType = new List<NameExp>();
-            if (Declaration.Problem.Objects != null)
-                allOfType.AddRange(Declaration.Problem.Objects.Objs.Where(x => x.Type.IsTypeOf(values[index].Type.Name)));
-            if (Declaration.Domain.Constants != null)
-                allOfType.AddRange(Declaration.Domain.Constants.Constants.Where(x => x.Type.IsTypeOf(values[index].Type.Name)));
-            foreach (var ofType in allOfType)
-            {
-                var newNode = node.Copy(null);
-                var allNames = newNode.FindNames(values[index].Name);
-                foreach (var name in allNames)
-                    name.Name = ofType.Name;
-                returnList.AddRange(GenerateParameterPermutations(newNode, values, index + 1));
-            }
-
-            return returnList;
-        }
-
         public bool IsNodeTrue(INode node)
         {
             if (node is DerivedPredicateExp derivedPredicate)
@@ -203,6 +177,41 @@ namespace PDDLSharp.States.PDDL
             }
 
             throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
+        }
+
+        private Dictionary<string, List<NameExp>> _objCache = new Dictionary<string, List<NameExp>>();
+        private List<NameExp> GetObjsForType(string typeName)
+        {
+            if (_objCache.ContainsKey(typeName))
+                return _objCache[typeName];
+            _objCache.Add(typeName, new List<NameExp>());
+            if (Declaration.Problem.Objects != null)
+                _objCache[typeName].AddRange(Declaration.Problem.Objects.Objs.Where(x => x.Type.IsTypeOf(typeName)));
+            if (Declaration.Domain.Constants != null)
+                _objCache[typeName].AddRange(Declaration.Domain.Constants.Constants.Where(x => x.Type.IsTypeOf(typeName)));
+            return _objCache[typeName];
+        }
+        private List<INode> GenerateParameterPermutations(INode node, List<NameExp> values, int index)
+        {
+            List<INode> returnList = new List<INode>();
+
+            if (index >= values.Count)
+            {
+                returnList.Add(node);
+                return returnList;
+            }
+
+            List<NameExp> allOfType = GetObjsForType(values[index].Type.Name);
+            foreach (var ofType in allOfType)
+            {
+                var newNode = node.Copy(null);
+                var allNames = newNode.FindNames(values[index].Name);
+                foreach (var name in allNames)
+                    name.Name = ofType.Name;
+                returnList.AddRange(GenerateParameterPermutations(newNode, values, index + 1));
+            }
+
+            return returnList;
         }
 
         public bool IsInGoal()

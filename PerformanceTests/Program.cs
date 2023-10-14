@@ -20,14 +20,14 @@ namespace PerformanceTests
 
             //RunNTimes(100);
             //RunNTimes2(2000);
-            RunNTimes3(100);
+            RunNTimes3(1);
         }
 
         private static void RunNTimes3(int number)
         {
             var targetDomain = "benchmarks/psr-large/domain.pddl";
-            var targetProblem = "benchmarks/psr-large/p01-s29-n2-l5-f30.pddl";
-            var targetPlan = "benchmarks-plans/lama-first/psr-large/p01-s29-n2-l5-f30.plan";
+            var targetProblem = "benchmarks/psr-large/p24-s166-n15-l3-f10.pddl";
+            var targetPlan = "benchmarks-plans/lama-first/psr-large/p24-s166-n15-l3-f10.plan";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
@@ -39,12 +39,14 @@ namespace PerformanceTests
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
+                Console.WriteLine($"    Parsing");
                 instanceWatch.Start();
                 var decl = parser.ParseDecl(targetDomain, targetProblem);
                 var plan = planParser.Parse(targetPlan);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 
+                Console.WriteLine($"    Validating");
                 instanceWatch.Restart();
                 validator.Validate(plan, decl);
                 instanceWatch.Stop();
