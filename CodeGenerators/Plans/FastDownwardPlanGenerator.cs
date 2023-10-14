@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.Plans;
 
-namespace PDDLSharp.CodeGenerators
+namespace PDDLSharp.CodeGenerators.Plans
 {
     public class FastDownwardPlanGenerator : ICodeGenerator<ActionPlan>
     {

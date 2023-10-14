@@ -2,7 +2,7 @@
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 
-namespace PDDLSharp.CodeGenerators
+namespace PDDLSharp.CodeGenerators.PDDL
 {
     public class PDDLCodeGenerator : ICodeGenerator<INode>
     {
