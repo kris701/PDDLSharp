@@ -5,7 +5,8 @@ using PDDLSharp.CodeGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.PDDL;
+using PDDLSharp.Parsers.Plans;
 using PDDLSharp.Toolkit.PlanValidator;
 using System.Diagnostics;
 

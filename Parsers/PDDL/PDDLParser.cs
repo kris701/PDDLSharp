@@ -8,7 +8,7 @@ using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers.Visitors;
 using PDDLSharp.Tools;
 
-namespace PDDLSharp.Parsers
+namespace PDDLSharp.Parsers.PDDL
 {
     public class PDDLParser : BaseParser<INode>
     {
@@ -54,7 +54,7 @@ namespace PDDLSharp.Parsers
             var result = visitor.TryVisitAs<U>(absAST, null);
             if (result is U act)
                 return act;
-            return default(U);
+            return default;
         }
     }
 }

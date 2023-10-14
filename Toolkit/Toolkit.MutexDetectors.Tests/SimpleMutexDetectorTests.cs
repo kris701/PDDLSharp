@@ -5,6 +5,7 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.MutexDetector;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.Plans;
 
-namespace PDDLSharp.Parsers
+namespace PDDLSharp.Parsers.Plans
 {
     public class FastDownwardPlanParser : BaseParser<ActionPlan>
     {

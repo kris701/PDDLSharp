@@ -2,6 +2,7 @@
 using PDDLSharp.Models;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.PDDL;
 using System;
 using System.Collections.Generic;
 using System.Linq;

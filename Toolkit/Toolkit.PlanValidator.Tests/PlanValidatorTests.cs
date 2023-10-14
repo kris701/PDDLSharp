@@ -3,6 +3,7 @@ using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.StateSpace;
 using System;
 using System.Collections.Generic;
