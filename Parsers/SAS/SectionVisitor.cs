@@ -253,7 +253,7 @@ namespace PDDLSharp.Parsers.SAS
                                 var effectConditionCount = int.Parse(split[0]);
                                 for (int j = 1; j < effectConditionCount; j += 2)
                                 {
-                                    effectConditions.Add(new ValuePair(int.Parse(split[i]), int.Parse(split[i + 1])));
+                                    effectConditions.Add(new ValuePair(int.Parse(split[j]), int.Parse(split[j + 1])));
                                 }
                                 effectOffset += effectConditionCount;
                             }
@@ -302,11 +302,12 @@ namespace PDDLSharp.Parsers.SAS
                 else
                 {
                     List<ValuePair> conditions = ParseLinesAsPairs(lineSplit.ToList().GetRange(1, count));
-                    var lastSplit = lineSplit[1 + count].Split(' ');
-                    if (lastSplit.Length != 3)
+                    var lastSplit = lineSplit[1 + count].Split(' ').ToList();
+                    lastSplit.RemoveAll(x => x.Trim() == "");
+                    if (lastSplit.Count != 3)
                     {
                         Listener.AddError(new PDDLSharpError(
-                            $"Axiom denotion did not match the declared! Got '{lastSplit.Length}' but expected '3'",
+                            $"Axiom denotion did not match the declared! Got '{lastSplit.Count}' but expected '3'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Parsing));
                     }

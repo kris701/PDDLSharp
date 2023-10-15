@@ -21,5 +21,13 @@ namespace PDDLSharp.Models.SAS.Sections
             VariablePrecondition = variablePrecondition;
             NewVariableValue = newVariableValue;
         }
+
+        public AxiomDecl(List<ValuePair> conditions, int effectedVariable, int variablePrecondition, int newVariableValue)
+        {
+            Conditions = conditions;
+            EffectedVariable = effectedVariable;
+            VariablePrecondition = variablePrecondition;
+            NewVariableValue = newVariableValue;
+        }
     }
 }

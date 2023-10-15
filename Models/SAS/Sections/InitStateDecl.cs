@@ -16,6 +16,11 @@ namespace PDDLSharp.Models.SAS.Sections
             Inits = inits;
         }
 
+        public InitStateDecl(List<int> inits)
+        {
+            Inits = inits;
+        }
+
         public override string? ToString()
         {
             var retStr = "";

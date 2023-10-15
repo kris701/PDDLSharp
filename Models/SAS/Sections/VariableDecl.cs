@@ -20,6 +20,13 @@ namespace PDDLSharp.Models.SAS.Sections
             SymbolicNames = symbolicNames;
         }
 
+        public VariableDecl(string variableName, int axiomLayer, List<string> symbolicNames)
+        {
+            VariableName = variableName;
+            AxiomLayer = axiomLayer;
+            SymbolicNames = symbolicNames;
+        }
+
         public override string? ToString()
         {
             return $"{VariableName}";

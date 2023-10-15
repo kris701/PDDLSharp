@@ -15,5 +15,10 @@ namespace PDDLSharp.Models.SAS.Sections
         {
             Group = group;
         }
+
+        public MutexDecl(List<ValuePair> group)
+        {
+            Group = group;
+        }
     }
 }

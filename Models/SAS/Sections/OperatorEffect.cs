@@ -20,5 +20,16 @@ namespace PDDLSharp.Models.SAS.Sections
             VariablePrecondition = variablePrecondition;
             VariableEffect = variableEffect;
         }
+
+        public override string? ToString()
+        {
+            var retStr = $"{EffectConditions.Count} ";
+            foreach (var condition in EffectConditions)
+                retStr += $"{condition} ";
+            retStr += $"{EffectedVariable} ";
+            retStr += $"{VariablePrecondition} ";
+            retStr += $"{VariableEffect}";
+            return retStr;
+        }
     }
 }

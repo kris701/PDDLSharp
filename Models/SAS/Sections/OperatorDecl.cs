@@ -22,6 +22,14 @@ namespace PDDLSharp.Models.SAS.Sections
             Cost = cost;
         }
 
+        public OperatorDecl(string name, List<ValuePair> prevailConditions, List<OperatorEffect> effects, int cost)
+        {
+            Name = name;
+            PrevailConditions = prevailConditions;
+            Effects = effects;
+            Cost = cost;
+        }
+
         public override string? ToString()
         {
             return $"{Name}";

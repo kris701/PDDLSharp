@@ -16,6 +16,11 @@ namespace PDDLSharp.Models.SAS.Sections
             Goals = goals;
         }
 
+        public GoalStateDecl(List<ValuePair> goals)
+        {
+            Goals = goals;
+        }
+
         public override string? ToString()
         {
             var retStr = "";

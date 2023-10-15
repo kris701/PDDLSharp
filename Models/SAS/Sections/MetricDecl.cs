@@ -16,6 +16,11 @@ namespace PDDLSharp.Models.SAS.Sections
             IsUsingMetrics = isUsingMetrics;
         }
 
+        public MetricDecl(bool isUsingMetrics)
+        {
+            IsUsingMetrics = isUsingMetrics;
+        }
+
         public override string? ToString()
         {
             if (IsUsingMetrics)

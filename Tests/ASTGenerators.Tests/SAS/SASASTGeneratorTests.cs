@@ -59,7 +59,7 @@ namespace PDDLSharp.ASTGenerators.Tests.SAS
             var res = parser.Generate(toParse);
 
             // ASSERT
-            Assert.AreEqual(expectedContent, res.Children[0].InnerContent);
+            Assert.AreEqual(expectedContent.Trim(), res.Children[0].InnerContent.Trim());
         }
 
         [TestMethod]

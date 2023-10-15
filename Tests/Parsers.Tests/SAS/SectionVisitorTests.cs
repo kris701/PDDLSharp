@@ -388,6 +388,7 @@ namespace PDDLSharp.Parsers.Tests.SAS
         [DataRow("begin_operator\na\n0\n2\n0 0 0 0\n 1 0 1 6 1 0\n1\nend_operator\n", "a", 0, 2, 1)]
         [DataRow("begin_operator\na\n1\n0 1\n2\n0 0 0 0\n 1 0 1 6 1 0\n1\nend_operator\n", "a", 1, 2, 1)]
         [DataRow("begin_operator\na\n2\n0 1\n2 0\n2\n0 0 0 0\n 1 0 1 6 1 0\n1\nend_operator\n", "a", 2, 2, 1)]
+        [DataRow("begin_operator\nab\n2\n0 1\n2 0\n2\n0 0 0 0\n 2 0 1 0 2 6 1 0\n1\nend_operator\n", "ab", 2, 2, 1)]
         public void Can_VisitOperatorNode(string toParse, string expectedName, int expectedPrevails, int expectedEffect, int expectedCost)
         {
             // ARRANGE
