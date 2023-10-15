@@ -21,18 +21,22 @@ namespace PDDLSharp.ASTGenerators.SAS
 
         public ASTNode Generate(string text)
         {
+            text = SASTextPreprocessing.ReplaceSpecialCharacters(text);
+
             var returnNode = new ASTNode(0, text.Length, text, text);
             int offset = 0;
             while (offset != -1)
             {
                 var begin = text.IndexOf("begin_", offset);
                 var end = text.IndexOf("end_", offset);
-                var areaText = text.Substring(begin, end - begin);
+                var endLength = text.Substring(text.IndexOf("end_", offset), text.IndexOf(SASASTTokens.BreakToken, end)).Length;
+                var outerText = text.Substring(begin, end - begin + endLength);
+                var innerText = outerText.Substring(outerText.IndexOf(SASASTTokens.BreakToken), outerText.LastIndexOf(SASASTTokens.BreakToken) - outerText.IndexOf(SASASTTokens.BreakToken));
                 returnNode.Children.Add(new ASTNode(
                     begin,
                     end,
-                    areaText,
-                    areaText
+                    outerText,
+                    innerText
                     ));
             }
             return returnNode;

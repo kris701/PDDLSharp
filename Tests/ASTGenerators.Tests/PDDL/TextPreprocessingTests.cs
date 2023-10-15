@@ -25,7 +25,7 @@ namespace PDDLSharp.ASTGenerators.Tests.PDDL
         {
             // ARRANGE
             // ACT
-            var result = TextPreprocessing.ReplaceSpecialCharacters(text);
+            var result = PDDLTextPreprocessing.ReplaceSpecialCharacters(text);
 
             // ASSERT
             Assert.AreEqual(expectedText, result);
@@ -40,7 +40,7 @@ namespace PDDLSharp.ASTGenerators.Tests.PDDL
         {
             // ARRANGE
             // ACT
-            var result = TextPreprocessing.ReplaceCommentsWithWhiteSpace(text);
+            var result = PDDLTextPreprocessing.ReplaceCommentsWithWhiteSpace(text);
 
             // ASSERT
             Assert.AreEqual(expectedText, result);
@@ -55,7 +55,7 @@ namespace PDDLSharp.ASTGenerators.Tests.PDDL
         {
             // ARRANGE
             // ACT
-            var result = TextPreprocessing.TokenizeSpecials(text);
+            var result = PDDLTextPreprocessing.TokenizeSpecials(text);
 
             // ASSERT
             Assert.AreEqual(expectedText, result);
