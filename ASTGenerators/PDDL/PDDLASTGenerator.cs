@@ -4,18 +4,13 @@ using PDDLSharp.Tools;
 
 namespace PDDLSharp.ASTGenerators.PDDL
 {
-    public class PDDLASTGenerator : IGenerator
+    public class PDDLASTGenerator : BaseASTGenerator
     {
-        public IErrorListener Listener { get; }
-
-        public PDDLASTGenerator(IErrorListener listener)
+        public PDDLASTGenerator(IErrorListener listener) : base(listener)
         {
-            Listener = listener;
         }
 
-        public ASTNode Generate(FileInfo file) => Generate(File.ReadAllText(file.FullName));
-
-        public ASTNode Generate(string text)
+        public override ASTNode Generate(string text)
         {
             PreCheck(text);
             text = text.ToLower();
@@ -24,7 +19,7 @@ namespace PDDLSharp.ASTGenerators.PDDL
             text = PDDLTextPreprocessing.TokenizeSpecials(text);
 
             int end = GetEndIndex(text);
-            var lineDict = GenerateLineDict(text);
+            var lineDict = GenerateLineDict(text, PDDLASTTokens.BreakToken);
             var node = GenerateASTNodeRec(text, 0, end, lineDict, 0);
             return node;
         }
@@ -91,27 +86,6 @@ namespace PDDLSharp.ASTGenerators.PDDL
                     newText,
                     newText);
             }
-        }
-
-        public List<int> GenerateLineDict(string source)
-        {
-            List<int> lineDict = new List<int>();
-            int offset = source.IndexOf(PDDLASTTokens.BreakToken);
-            while (offset != -1)
-            {
-                lineDict.Add(offset);
-                offset = source.IndexOf(PDDLASTTokens.BreakToken, offset + 1);
-            }
-            return lineDict;
-        }
-
-        public int GetLineNumber(List<int> lineDict, int start, int offset)
-        {
-            int length = lineDict.Count;
-            for (int i = offset; i < length; i++)
-                if (start < lineDict[i])
-                    return i + 1;
-            return lineDict.Count + 1;
         }
 
         private void PreCheck(string text)

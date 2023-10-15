@@ -8,23 +8,21 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.ASTGenerators.SAS
 {
-    public class SASASTGenerator : IGenerator
+    public class SASASTGenerator : BaseASTGenerator
     {
-        public IErrorListener Listener { get; }
-
-        public SASASTGenerator(IErrorListener listener)
+        public SASASTGenerator(IErrorListener listener) : base(listener)
         {
-            Listener = listener;
         }
 
-        public ASTNode Generate(FileInfo file) => Generate(File.ReadAllText(file.FullName));
-
-        public ASTNode Generate(string text)
+        public override ASTNode Generate(string text)
         {
             text = SASTextPreprocessing.ReplaceSpecialCharacters(text);
 
+            var lineDict = GenerateLineDict(text, SASASTTokens.BreakToken);
+
             var returnNode = new ASTNode(0, text.Length, text, text);
             int offset = 0;
+            int lineOffset = 0;
             while (offset != -1)
             {
                 var begin = text.IndexOf("begin_", offset);
@@ -33,16 +31,19 @@ namespace PDDLSharp.ASTGenerators.SAS
                     break;
                 var lastBreak = text.IndexOf(SASASTTokens.BreakToken, offset);
                 var endLength = text.Substring(offset, lastBreak - offset).Length;
-                var outerText = text.Substring(begin, offset - begin + endLength).Trim();
-                var innerText = outerText.Substring(outerText.IndexOf(SASASTTokens.BreakToken) + 1, outerText.LastIndexOf(SASASTTokens.BreakToken) - outerText.IndexOf(SASASTTokens.BreakToken) - 1).Trim();
+                var outerText = text.Substring(begin, offset - begin + endLength);
+                var innerText = outerText.Substring(outerText.IndexOf(SASASTTokens.BreakToken) + 1, outerText.LastIndexOf(SASASTTokens.BreakToken) - outerText.IndexOf(SASASTTokens.BreakToken) - 1);
+                lineOffset = GetLineNumber(lineDict, begin, lineOffset);
                 returnNode.Children.Add(new ASTNode(
-                    begin,
-                    offset,
-                    outerText,
-                    innerText
+                    begin + 1,
+                    offset + endLength,
+                    lineOffset,
+                    outerText.Trim(),
+                    innerText.Trim()
                     ));
             }
             return returnNode;
         }
+
     }
 }

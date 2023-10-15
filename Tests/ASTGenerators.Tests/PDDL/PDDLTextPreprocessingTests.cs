@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace PDDLSharp.ASTGenerators.Tests.PDDL
 {
     [TestClass]
-    public class TextPreprocessingTests
+    public class PDDLTextPreprocessingTests
     {
         [TestMethod]
         [DataRow("", "")]
