@@ -1,6 +1,10 @@
-﻿using PDDLSharp.ASTGenerators;
+﻿using PDDLSharp;
+using PDDLSharp.ASTGenerators;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
+using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.Tests;
+using PDDLSharp.Parsers.Tests.PDDL.Visitors;
 using PDDLSharp.Parsers.Visitors;
 using System;
 using System.Collections.Generic;
@@ -8,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Parsers.Tests.Visitors
+namespace PDDLSharp.Parsers.Tests.PDDL.Visitors
 {
     [TestClass]
     public class ParserVisitorTests

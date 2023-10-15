@@ -46,18 +46,22 @@
     <None Update="PlanTestData\plan3.plan">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="PositionTestsData\construction-domain-expected.txt">
+    <None Update="PDDL\PositionTestsData\construction-domain-expected.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="PositionTestsData\construction-domain.pddl">
+    <None Update="PDDL\PositionTestsData\construction-domain.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="PositionTestsData\gripper-domain-expected.txt">
+    <None Update="PDDL\PositionTestsData\gripper-domain-expected.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="PositionTestsData\gripper-domain.pddl">
+    <None Update="PDDL\PositionTestsData\gripper-domain.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SAS\" />
   </ItemGroup>
 
 </Project>

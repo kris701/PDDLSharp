@@ -9,8 +9,8 @@ using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Parsers.Tests;
 using PDDLSharp.Parsers.Tests;
-using PDDLSharp.Parsers.Tests.PositionTestsData;
-using PDDLSharp.Parsers.Tests.Visitors;
+using PDDLSharp.Parsers.Tests.PDDL;
+using PDDLSharp.Parsers.Tests.PDDL.PositionTestsData;
 using PDDLSharp.Parsers.Visitors;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Parsers.Tests
+namespace PDDLSharp.Parsers.Tests.PDDL
 {
     [TestClass]
     public class PositionTests
