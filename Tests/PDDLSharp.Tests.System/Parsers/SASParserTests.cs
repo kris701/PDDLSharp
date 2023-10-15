@@ -47,7 +47,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.Parsers
             foreach (var sas in sass)
             {
                 Trace.WriteLine($"   Parsing SAS: {sas}");
-                var plan = parser.Parse(sas);
+                var plan = parser.Parse(new FileInfo(sas));
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                 listener.Errors.Clear();
             }

@@ -16,20 +16,20 @@ namespace PDDLSharp.Parsers.PDDL
         {
         }
 
-        public PDDLDecl ParseDecl(string domainFile, string problemFile)
+        public PDDLDecl ParseDecl(FileInfo domainFile, FileInfo problemFile)
         {
-            if (!PDDLFileHelper.IsFileDomain(domainFile))
+            if (!PDDLFileHelper.IsFileDomain(domainFile.FullName))
                 Listener.AddError(new PDDLSharpError(
                     $"File is not a domain file: '{domainFile}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
-            if (!PDDLFileHelper.IsFileProblem(problemFile))
+            if (!PDDLFileHelper.IsFileProblem(problemFile.FullName))
                 Listener.AddError(new PDDLSharpError(
                     $"File is not a problem file: '{problemFile}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.PreParsing));
 
-            if (!CompatabilityHelper.IsPDDLDomainSpported(File.ReadAllText(domainFile)))
+            if (!CompatabilityHelper.IsPDDLDomainSpported(File.ReadAllText(domainFile.FullName)))
                 Listener.AddError(new PDDLSharpError(
                     $"Domain contains unsupported packages! Results may not be accurate!",
                     ParseErrorType.Warning,
@@ -40,15 +40,10 @@ namespace PDDLSharp.Parsers.PDDL
                 ParseAs<ProblemDecl>(problemFile));
         }
 
-        public override INode Parse(string file)
-        {
-            return ParseAs<INode>(file);
-        }
-
-        public override U ParseAs<U>(string file)
+        public override U ParseAs<U>(string text)
         {
             IGenerator astParser = new PDDLASTGenerator(Listener);
-            var absAST = astParser.Generate(new FileInfo(file));
+            var absAST = astParser.Generate(text);
 
             var visitor = new ParserVisitor(Listener);
             var result = visitor.TryVisitAs<U>(absAST, null);

@@ -17,11 +17,9 @@ namespace PDDLSharp.ASTGenerators.SAS
         public override ASTNode Generate(string text)
         {
             text = SASTextPreprocessing.ReplaceSpecialCharacters(text);
+            text = SASTextPreprocessing.TokenizeSpecials(text);
 
             var lineDict = GenerateLineDict(text, SASASTTokens.BreakToken);
-
-            text = text.Replace("begin_", "begin?");
-            text = text.Replace("end_", "end?");
 
             var returnNode = new ASTNode(0, text.Length, 1, text, text);
             int offset = 0;

@@ -68,7 +68,7 @@ namespace PerformanceTests
                 Console.WriteLine($"Instance {i}");
                 Console.WriteLine($"    Parsing");
                 instanceWatch.Start();
-                var decl = parser.ParseDecl(targetDomain, targetProblem);
+                var decl = parser.ParseDecl(new FileInfo(targetDomain), new FileInfo(targetProblem));
                 var plan = planParser.Parse(targetPlan);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
@@ -93,7 +93,7 @@ namespace PerformanceTests
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
-            var decl = parser.ParseDecl(targetDomain, targetProblem);
+            var decl = parser.ParseDecl(new FileInfo(targetDomain), new FileInfo(targetProblem));
             Stopwatch instanceWatch = new Stopwatch();
             instanceWatch.Start();
             for (int i = 0; i < number; i++)
@@ -125,7 +125,7 @@ namespace PerformanceTests
             {
                 Console.WriteLine($"Instance {i}");
                 instanceWatch.Start();
-                var decl = parser.ParseDecl(targetDomain, targetProblem);
+                var decl = parser.ParseDecl(new FileInfo(targetDomain), new FileInfo(targetProblem));
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 

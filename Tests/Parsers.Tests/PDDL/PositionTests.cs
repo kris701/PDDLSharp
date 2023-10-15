@@ -1,5 +1,6 @@
 ﻿using PDDLSharp;
 using PDDLSharp.ASTGenerators;
+using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
@@ -32,9 +33,10 @@ namespace PDDLSharp.Parsers.Tests.PDDL
             var expectedNode = PositionNode.ParseExpectedFile(expectedFile);
             IErrorListener listener = new ErrorListener();
             IParser<INode> pddlParser = new PDDLParser(listener);
+            var text = File.ReadAllText(testFile).Replace(Environment.NewLine, $"{PDDLASTTokens.BreakToken}");
 
             // ACT
-            var node = pddlParser.ParseAs<DomainDecl>(testFile);
+            var node = pddlParser.ParseAs<DomainDecl>(new FileInfo(testFile));
 
             // ASSERT
             IsNodePositionValid(node, expectedNode);

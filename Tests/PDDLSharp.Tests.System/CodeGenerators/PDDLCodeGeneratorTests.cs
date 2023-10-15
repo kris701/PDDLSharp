@@ -51,9 +51,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
             ICodeGenerator<INode> generator = new PDDLCodeGenerator(listener);
 
             // ACT
-            var domainDecl = parser.ParseAs<DomainDecl>(domain);
+            var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
             generator.Generate(domainDecl, "temp.pddl");
-            var newDomainDecl = parser.ParseAs<DomainDecl>("temp.pddl");
+            var newDomainDecl = parser.ParseAs<DomainDecl>(new FileInfo("temp.pddl"));
 
             // ASSERT
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -75,9 +75,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
             {
                 Trace.WriteLine($"   Testing problem: {problem}");
 
-                var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
                 generator.Generate(problemDecl, "temp.pddl");
-                var newProblemDecl = parser.ParseAs<ProblemDecl>("temp.pddl");
+                var newProblemDecl = parser.ParseAs<ProblemDecl>(new FileInfo("temp.pddl"));
 
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                 listener.Errors.Clear();
@@ -105,14 +105,14 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
                 Trace.WriteLine($"   Testing problem: {problem}");
 
                 var decl = new PDDLDecl(
-                    parser.ParseAs<DomainDecl>(domain),
-                    parser.ParseAs<ProblemDecl>(problem)
+                    parser.ParseAs<DomainDecl>(new FileInfo(domain)),
+                    parser.ParseAs<ProblemDecl>(new FileInfo(problem))
                     );
                 contextualiser.Contexturalise(decl);
                 analyser.Analyse(decl);
                 generator.Generate(decl.Domain, "temp_domain.pddl");
                 generator.Generate(decl.Problem, "temp_problem.pddl");
-                var newDecl = new PDDLDecl(parser.ParseAs<DomainDecl>("temp_domain.pddl"), parser.ParseAs<ProblemDecl>("temp_problem.pddl"));
+                var newDecl = new PDDLDecl(parser.ParseAs<DomainDecl>(new FileInfo("temp_domain.pddl")), parser.ParseAs<ProblemDecl>(new FileInfo("temp_problem.pddl")));
                 contextualiser.Contexturalise(newDecl);
                 analyser.Analyse(newDecl);
 

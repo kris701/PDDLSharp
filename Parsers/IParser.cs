@@ -6,7 +6,9 @@ namespace PDDLSharp.Parsers
     {
         public IErrorListener Listener { get; }
 
-        public T Parse(string file);
-        public U ParseAs<U>(string file) where U : T;
+        public T Parse(FileInfo file);
+        public T Parse(string text);
+        public U ParseAs<U>(FileInfo file) where U : T;
+        public U ParseAs<U>(string text) where U : T;
     }
 }

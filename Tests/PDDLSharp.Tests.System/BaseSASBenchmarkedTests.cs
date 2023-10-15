@@ -15,7 +15,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 {
     public class BaseSASBenchmarkedTests : BaseBenchmarkedTests
     {
-        public static long MaxSASFileSize = 1000000;
+        public static long MaxSASFileSize = 100000;
         public static long MaxSASsPrDomain = 5;
         public static Dictionary<string, List<string>> _testSASDict = new Dictionary<string, List<string>>();
 

@@ -18,7 +18,7 @@ namespace PDDLSharp.Analysers.Tests.Visitors
         internal PDDLDecl GetDeclaration(string domain, string problem, IErrorListener listener)
         {
             PDDLParser parser = new PDDLParser(listener);
-            var decl = parser.ParseDecl(domain, problem);
+            var decl = parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
             IContextualiser contextualiser = new PDDLContextualiser(listener);
             contextualiser.Contexturalise(decl);
             return decl;

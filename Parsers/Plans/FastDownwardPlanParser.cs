@@ -9,11 +9,12 @@ namespace PDDLSharp.Parsers.Plans
         {
         }
 
-        public override ActionPlan Parse(string file)
+        public override U ParseAs<U>(string text)
         {
             var plan = new List<GroundedAction>();
             int cost = 0;
-            foreach (var line in File.ReadAllLines(file))
+            var lines = text.Split(Environment.NewLine);
+            foreach (var line in lines)
             {
                 if (!line.StartsWith(";") && line.Trim() != "")
                 {
@@ -28,7 +29,7 @@ namespace PDDLSharp.Parsers.Plans
                 else if (line.Trim().StartsWith(";"))
                     cost = int.Parse(line.Substring(line.IndexOf("=") + 1, line.IndexOf("(") - line.IndexOf("=") - 1));
             }
-            return new ActionPlan(plan, cost);
+            return (U)new ActionPlan(plan, cost);
         }
     }
 }
