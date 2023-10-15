@@ -17,19 +17,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASTGenerators", "ASTGenerat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers", "Parsers\Parsers.csproj", "{123A2A13-5DBB-41A3-80C6-FD4D85901984}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASTGenerators.Tests", "ASTGenerators.Tests\ASTGenerators.Tests.csproj", "{CDE823EF-0C28-4D56-B8B4-9B3D520464EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASTGenerators.Tests", "Tests\ASTGenerators.Tests\ASTGenerators.Tests.csproj", "{CDE823EF-0C28-4D56-B8B4-9B3D520464EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contextualisers.Tests", "Contextualisers.Tests\Contextualisers.Tests.csproj", "{121214B0-7DFD-4B32-A642-2EF5B8808C52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contextualisers.Tests", "Tests\Contextualisers.Tests\Contextualisers.Tests.csproj", "{121214B0-7DFD-4B32-A642-2EF5B8808C52}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers.Tests", "Parsers.Tests\Parsers.Tests.csproj", "{D072A50D-687A-4BED-9E3B-E420D1455CFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsers.Tests", "Tests\Parsers.Tests\Parsers.Tests.csproj", "{D072A50D-687A-4BED-9E3B-E420D1455CFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models.Tests", "Models.Tests\Models.Tests.csproj", "{0AF4F189-B735-49D1-B47D-42A410E71345}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models.Tests", "Tests\Models.Tests\Models.Tests.csproj", "{0AF4F189-B735-49D1-B47D-42A410E71345}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDDLSharp.Tests.System", "PDDLSharp.Tests.System\PDDLSharp.Tests.System.csproj", "{323D934C-0370-48CB-9374-369BEFD58CF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDDLSharp.Tests.System", "Tests\PDDLSharp.Tests.System\PDDLSharp.Tests.System.csproj", "{323D934C-0370-48CB-9374-369BEFD58CF8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerators", "CodeGenerators\CodeGenerators.csproj", "{902EB2E1-CEBD-47FC-9274-07446F7B6ED1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerators.Tests", "CodeGenerators.Tests\CodeGenerators.Tests.csproj", "{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerators.Tests", "Tests\CodeGenerators.Tests\CodeGenerators.Tests.csproj", "{2871F6A6-CF5F-42D4-802D-3C32DA4993E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDDLSharp", "PDDLSharp\PDDLSharp.csproj", "{2025C675-7610-4EFE-92A2-40ACED7D68FE}"
 EndProject
@@ -44,27 +44,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceTests", "PerformanceTests\PerformanceTests.csproj", "{F2DFDEC5-F9EF-4E97-9ECB-08846CCA66ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorListeners.Tests", "ErrorListeners.Tests\ErrorListeners.Tests.csproj", "{0D8146BF-4BA1-421D-A4FE-A1BC190343DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorListeners.Tests", "Tests\ErrorListeners.Tests\ErrorListeners.Tests.csproj", "{0D8146BF-4BA1-421D-A4FE-A1BC190343DD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.StateSpace", "Toolkit\Toolkit.StateSpace\Toolkit.StateSpace.csproj", "{741E5650-7C79-43E0-9034-1F353A04954F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.StateSpace.Tests", "Toolkit\Toolkit.StateSpace.Tests\Toolkit.StateSpace.Tests.csproj", "{EB2AB0A3-14F6-48C2-A667-51AB24FD6EA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.StateSpace.Tests", "Toolkit\Tests\Toolkit.StateSpace.Tests\Toolkit.StateSpace.Tests.csproj", "{EB2AB0A3-14F6-48C2-A667-51AB24FD6EA3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analysers.Tests", "Analysers.Tests\Analysers.Tests.csproj", "{16492AC2-BC0C-43A3-A723-54A1B6587A56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analysers.Tests", "Tests\Analysers.Tests\Analysers.Tests.csproj", "{16492AC2-BC0C-43A3-A723-54A1B6587A56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools.Tests", "Tools.Tests\Tools.Tests.csproj", "{4BE6578D-89E9-470C-8F8E-B802D5B788FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools.Tests", "Tests\Tools.Tests\Tools.Tests.csproj", "{4BE6578D-89E9-470C-8F8E-B802D5B788FD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.PlanValidator", "Toolkit\Toolkit.PlanValidator\Toolkit.PlanValidator.csproj", "{EFAC1297-DD56-4F5C-AD3C-53E0B059C20A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.PlanValidator.Tests", "Toolkit\Toolkit.PlanValidator.Tests\Toolkit.PlanValidator.Tests.csproj", "{A7D9465D-560F-44FB-A21C-9A2EF689CC17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.PlanValidator.Tests", "Toolkit\Tests\Toolkit.PlanValidator.Tests\Toolkit.PlanValidator.Tests.csproj", "{A7D9465D-560F-44FB-A21C-9A2EF689CC17}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.MutexDetector", "Toolkit\Toolkit.MutexDetector\Toolkit.MutexDetector.csproj", "{9A993269-4878-449E-A92B-A1571520463D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.MutexDetectors.Tests", "Toolkit\Toolkit.MutexDetectors.Tests\Toolkit.MutexDetectors.Tests.csproj", "{71CACD47-007E-4F40-A89E-681EEF68495F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.MutexDetectors.Tests", "Toolkit\Tests\Toolkit.MutexDetectors.Tests\Toolkit.MutexDetectors.Tests.csproj", "{71CACD47-007E-4F40-A89E-681EEF68495F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tookit", "Tookit", "{884017F5-D4E7-4631-A6EB-361BDB63F130}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Tests.System", "Toolkit\Toolkit.Tests.System\Toolkit.Tests.System.csproj", "{0454F1F2-BF9C-4E18-B40B-146E9DC192D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Tests.System", "Toolkit\Tests\Toolkit.Tests.System\Toolkit.Tests.System.csproj", "{0454F1F2-BF9C-4E18-B40B-146E9DC192D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3E9E1F41-BF75-4D07-8FD1-3FED670863D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A1F7B33E-DC44-4954-965F-09A549BA0813}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -181,13 +185,23 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{CDE823EF-0C28-4D56-B8B4-9B3D520464EA} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
+		{121214B0-7DFD-4B32-A642-2EF5B8808C52} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
+		{D072A50D-687A-4BED-9E3B-E420D1455CFD} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
+		{0AF4F189-B735-49D1-B47D-42A410E71345} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
+		{323D934C-0370-48CB-9374-369BEFD58CF8} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
+		{2871F6A6-CF5F-42D4-802D-3C32DA4993E9} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
+		{0D8146BF-4BA1-421D-A4FE-A1BC190343DD} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
 		{741E5650-7C79-43E0-9034-1F353A04954F} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
-		{EB2AB0A3-14F6-48C2-A667-51AB24FD6EA3} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
+		{EB2AB0A3-14F6-48C2-A667-51AB24FD6EA3} = {A1F7B33E-DC44-4954-965F-09A549BA0813}
+		{16492AC2-BC0C-43A3-A723-54A1B6587A56} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
+		{4BE6578D-89E9-470C-8F8E-B802D5B788FD} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
 		{EFAC1297-DD56-4F5C-AD3C-53E0B059C20A} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
-		{A7D9465D-560F-44FB-A21C-9A2EF689CC17} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
+		{A7D9465D-560F-44FB-A21C-9A2EF689CC17} = {A1F7B33E-DC44-4954-965F-09A549BA0813}
 		{9A993269-4878-449E-A92B-A1571520463D} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
-		{71CACD47-007E-4F40-A89E-681EEF68495F} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
-		{0454F1F2-BF9C-4E18-B40B-146E9DC192D0} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
+		{71CACD47-007E-4F40-A89E-681EEF68495F} = {A1F7B33E-DC44-4954-965F-09A549BA0813}
+		{0454F1F2-BF9C-4E18-B40B-146E9DC192D0} = {A1F7B33E-DC44-4954-965F-09A549BA0813}
+		{A1F7B33E-DC44-4954-965F-09A549BA0813} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4318FA26-2735-43B3-A9D9-1FFB4E409256}

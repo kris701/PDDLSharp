@@ -27,10 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ASTGenerators\ASTGenerators.csproj" />
-    <ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\..\CodeGenerators\CodeGenerators.csproj" />
+    <ProjectReference Include="..\..\Models\Models.csproj" />
   </ItemGroup>
 
 </Project>
