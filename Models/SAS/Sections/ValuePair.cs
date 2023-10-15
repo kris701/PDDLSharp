@@ -16,5 +16,10 @@ namespace PDDLSharp.Models.SAS.Sections
             Left = left;
             Right = right;
         }
+
+        public override string? ToString()
+        {
+            return $"{Left} {Right}";
+        }
     }
 }

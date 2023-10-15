@@ -11,15 +11,18 @@ namespace PDDLSharp.Models.SAS.Sections
     {
         public string VariableName { get; set; }
         public int AxiomLayer { get; set; }
-        public int VariableRange { get; set; }
         public List<string> SymbolicNames { get; set; }
 
-        public VariableDecl(ASTNode node, string variableName, int axiomLayer, int variableRange, List<string> symbolicNames) : base(node)
+        public VariableDecl(ASTNode node, string variableName, int axiomLayer, List<string> symbolicNames) : base(node)
         {
             VariableName = variableName;
             AxiomLayer = axiomLayer;
-            VariableRange = variableRange;
             SymbolicNames = symbolicNames;
+        }
+
+        public override string? ToString()
+        {
+            return $"{VariableName}";
         }
     }
 }

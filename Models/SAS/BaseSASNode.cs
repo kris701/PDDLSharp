@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Models.SAS
 {
-    public class BaseSASNode : INode
+    public class BaseSASNode : ISASNode
     {
         public int Start { get; set; }
         public int End { get; set; }

@@ -20,9 +20,9 @@ namespace PDDLSharp.Parsers.SAS
             Listener = listener;
         }
 
-        public INode? VisitSections(ASTNode node)
+        public ISASNode? VisitSections(ASTNode node)
         {
-            INode? returnNode;
+            ISASNode? returnNode;
             if ((returnNode = TryParseAsVersion(node)) != null) return returnNode;
             if ((returnNode = TryParseAsMetric(node)) != null) return returnNode;
             if ((returnNode = TryParseAsVariable(node)) != null) return returnNode;
@@ -39,7 +39,7 @@ namespace PDDLSharp.Parsers.SAS
             return returnNode;
         }
 
-        private INode? TryParseAsVersion(ASTNode node)
+        private ISASNode? TryParseAsVersion(ASTNode node)
         {
             if (IsNodeOfType(node, "version") &&
                 MustBeDigitsOnly(node.InnerContent, "version"))
@@ -50,7 +50,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private INode? TryParseAsMetric(ASTNode node)
+        private ISASNode? TryParseAsMetric(ASTNode node)
         {
             if (IsNodeOfType(node, "metric") &&
                 MustBeDigitsOnly(node.InnerContent, "metric"))
@@ -61,7 +61,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private INode? TryParseAsVariable(ASTNode node)
+        private ISASNode? TryParseAsVariable(ASTNode node)
         {
             if (IsNodeOfType(node, "variable"))
             {
@@ -76,21 +76,20 @@ namespace PDDLSharp.Parsers.SAS
                     if (MustBeDigitsOnly(lineSplit[1], "variable axiom layer") &&
                         MustBeDigitsOnly(lineSplit[2], "variable range"))
                     {
-                        var variableName = lineSplit[0];
+                        var variableName = lineSplit[0].Trim();
                         var axiomLayer = int.Parse(lineSplit[1]);
-                        var variableRange = int.Parse(lineSplit[2]);
                         List<string> symbolicNames = new List<string>();
                         foreach (var item in lineSplit.Skip(3))
-                            symbolicNames.Add(item);
+                            symbolicNames.Add(item.Trim());
 
-                        return new VariableDecl(node, variableName, axiomLayer, variableRange, symbolicNames);
+                        return new VariableDecl(node, variableName, axiomLayer, symbolicNames);
                     }
                 }
             }
             return null;
         }
 
-        private INode? TryParseAsMutex(ASTNode node)
+        private ISASNode? TryParseAsMutex(ASTNode node)
         {
             if (IsNodeOfType(node, "mutex_group"))
             {
@@ -115,7 +114,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private INode? TryParseAsInitState(ASTNode node)
+        private ISASNode? TryParseAsInitState(ASTNode node)
         {
             if (IsNodeOfType(node, "state"))
             {
@@ -128,7 +127,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private INode? TryParseAsGoalState(ASTNode node)
+        private ISASNode? TryParseAsGoalState(ASTNode node)
         {
             if (IsNodeOfType(node, "goal"))
             {
@@ -153,7 +152,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private INode? TryParseAsOperator(ASTNode node)
+        private ISASNode? TryParseAsOperator(ASTNode node)
         {
             if (IsNodeOfType(node, "operator"))
             {
@@ -165,7 +164,7 @@ namespace PDDLSharp.Parsers.SAS
                         ParseErrorLevel.Parsing));
                 else
                 {
-                    var name = lineSplit[0];
+                    var name = lineSplit[0].Trim();
                     int offset = 0;
 
                     List<ValuePair> pervails = new List<ValuePair>();
@@ -184,7 +183,7 @@ namespace PDDLSharp.Parsers.SAS
                     if (lineSplit[2 + offset] != "0")
                     {
                         var count = int.Parse(lineSplit[2 + offset]);
-                        for (int i = 2 + offset; i < count + 2 + offset; i++)
+                        for (int i = 2 + offset + 1; i <= count + 2 + offset; i++)
                         {
                             List<ValuePair> effectConditions = new List<ValuePair>();
 
@@ -217,7 +216,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private INode? TryParseAsAxiom(ASTNode node)
+        private ISASNode? TryParseAsAxiom(ASTNode node)
         {
             if (IsNodeOfType(node, "rule"))
             {
@@ -258,9 +257,9 @@ namespace PDDLSharp.Parsers.SAS
 
         private bool MustBeDigitsOnly(string str, string nodeType)
         {
-            foreach (char c in str)
+            foreach (char c in str.Trim())
             {
-                if (c < '0' || c > '9')
+                if ((c < '0' || c > '9') && c != '-')
                 {
                     Listener.AddError(new PDDLSharpError(
                         $"Node '{nodeType}' must be digits only, but got '{str}'.",

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Models.SAS
 {
-    public interface INode
+    public interface ISASNode
     {
         public int Start { get; set; }
         public int End { get; set; }

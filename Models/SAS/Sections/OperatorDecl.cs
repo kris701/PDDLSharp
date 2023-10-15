@@ -21,5 +21,10 @@ namespace PDDLSharp.Models.SAS.Sections
             Effects = effects;
             Cost = cost;
         }
+
+        public override string? ToString()
+        {
+            return $"{Name}";
+        }
     }
 }

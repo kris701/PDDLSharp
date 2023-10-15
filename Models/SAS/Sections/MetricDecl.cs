@@ -15,5 +15,12 @@ namespace PDDLSharp.Models.SAS.Sections
         {
             IsUsingMetrics = isUsingMetrics;
         }
+
+        public override string? ToString()
+        {
+            if (IsUsingMetrics)
+                return "true";
+            return "false";
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace PDDLSharp.ASTGenerators.SAS
 
             var lineDict = GenerateLineDict(text, SASASTTokens.BreakToken);
 
-            var returnNode = new ASTNode(0, text.Length, text, text);
+            var returnNode = new ASTNode(0, text.Length, 1, text, text);
             int offset = 0;
             int lineOffset = 0;
             while (offset != -1)

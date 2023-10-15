@@ -15,5 +15,10 @@ namespace PDDLSharp.Models.SAS.Sections
         {
             Version = version;
         }
+
+        public override string? ToString()
+        {
+            return $"{Version}";
+        }
     }
 }
