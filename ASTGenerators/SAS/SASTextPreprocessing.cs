@@ -10,5 +10,12 @@ namespace PDDLSharp.ASTGenerators.SAS
             text = text.Replace('\t', ' ');
             return text;
         }
+
+        public static string TokenizeSpecials(string text)
+        {
+            text = text.Replace("begin_", SASASTTokens.BeginToken);
+            text = text.Replace("end_", SASASTTokens.EndToken);
+            return text;
+        }
     }
 }

@@ -57,14 +57,14 @@ namespace PDDLSharp.Toolit.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
-                    var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                    var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
+                    var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                     listener.Errors.Clear();
 
                     Trace.WriteLine($"   Parsing plan: {targetPlan}");
-                    var plan = planParser.Parse(targetPlan);
+                    var plan = planParser.Parse(new FileInfo(targetPlan));
                     Assert.IsTrue(validator.Validate(plan, newDecl));
                     any = true;
                 }
@@ -98,14 +98,14 @@ namespace PDDLSharp.Toolit.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
-                    var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                    var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
+                    var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                     listener.Errors.Clear();
 
                     Trace.WriteLine($"   Parsing plan: {targetPlan}");
-                    var plan = planParser.Parse(targetPlan);
+                    var plan = planParser.Parse(new FileInfo(targetPlan));
                     if (plan.Plan.Count > 10)
                     {
                         int orgSize = plan.Plan.Count;
@@ -144,14 +144,14 @@ namespace PDDLSharp.Toolit.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
-                    var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                    var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
+                    var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                     listener.Errors.Clear();
 
                     Trace.WriteLine($"   Parsing plan: {targetPlan}");
-                    var plan = planParser.Parse(targetPlan);
+                    var plan = planParser.Parse(new FileInfo(targetPlan));
                     for (int i = 0; i < plan.Plan.Count; i += 2)
                         plan.Plan.RemoveAt(i);
                     Assert.IsFalse(validator.Validate(plan, newDecl));
@@ -186,14 +186,14 @@ namespace PDDLSharp.Toolit.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
-                    var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                    var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
+                    var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
                     var newDecl = new PDDLDecl(domainDecl, problemDecl);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                     listener.Errors.Clear();
 
                     Trace.WriteLine($"   Parsing plan: {targetPlan}");
-                    var plan = planParser.Parse(targetPlan);
+                    var plan = planParser.Parse(new FileInfo(targetPlan));
                     if (plan.Plan.Count > 1)
                     {
                         InsertRandomObjects(plan);

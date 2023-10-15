@@ -27,8 +27,8 @@ A usage example of how to use the PDDL parser:
 IErrorListener listener = new ErrorListener();
 IParser<INode> parser = new PDDLParser(listener);
 PDDLDecl decl = new PDDLDecl(
-    parser.ParseAs<DomainDecl>("domain.pddl"),
-    parser.ParseAs<ProblemDecl>("problem.pddl")
+    parser.ParseAs<DomainDecl>(new FileInfo("domain.pddl")),
+    parser.ParseAs<ProblemDecl>(new FileInfo("problem.pddl"))
 )
 ```
 
@@ -36,7 +36,7 @@ To parse a file as a specific PDDL object:
 ```csharp
 IErrorListener listener = new ErrorListener();
 IParser<INode> parser = new PDDLParser(listener);
-ActionDecl decl = parser.ParseAs<ActionDecl>("action-file.pddl");
+ActionDecl decl = parser.ParseAs<ActionDecl>(new FileInfo("action-file.pddl"));
 ```
 
 To contextualise a domain/problem:
@@ -44,8 +44,8 @@ To contextualise a domain/problem:
 IErrorListener listener = new ErrorListener();
 IParser<INode> parser = new PDDLParser(listener);
 PDDLDecl decl = new PDDLDecl(
-    parser.ParseAs<DomainDecl>("domain.pddl"),
-    parser.ParseAs<ProblemDecl>("problem.pddl")
+    parser.ParseAs<DomainDecl>(new FileInfo("domain.pddl")),
+    parser.ParseAs<ProblemDecl>(new FileInfo("problem.pddl"))
 )
 contextualiser.Contexturalise(decl);
 ```
@@ -56,8 +56,8 @@ IErrorListener listener = new ErrorListener();
 IParser<INode> parser = new PDDLParser(listener);
 IAnalyser analyser = new PDDLAnalyser(listener);
 PDDLDecl decl = new PDDLDecl(
-    parser.ParseAs<DomainDecl>("domain.pddl"),
-    parser.ParseAs<ProblemDecl>("problem.pddl")
+    parser.ParseAs<DomainDecl>(new FileInfo("domain.pddl")),
+    parser.ParseAs<ProblemDecl>(new FileInfo("problem.pddl"))
 )
 analyser.Analyse(decl);
 ```
@@ -67,7 +67,7 @@ There is also a plan parser that can parse [Fast Downward](https://www.fast-down
 ```csharp
 IErrorListener listener = new ErrorListener();
 IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
-ActionPlan plan = parser.Parse("planFile");
+ActionPlan plan = parser.Parse(new FileInfo("planFile.plan"));
 ```
 
 ## SAS Parser
@@ -75,7 +75,7 @@ There is also a SAS parser that can parse [Fast Downward](https://www.fast-downw
 ```csharp
 IErrorListener listener = new ErrorListener();
 IParser<ISASNode> parser = new SASParser(listener);
-SASDecl sas = parser.ParseAs<SASDecl>("file.sas");
+SASDecl sas = parser.ParseAs<SASDecl>(new FileInfo("file.sas"));
 ```
 
 # Code Generators
@@ -129,7 +129,7 @@ It is capable of taking in a `ActionPlan` and a `PDDLDecl` and verify if the giv
 ```csharp
 IErrorListener listener = new ErrorListener();
 IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
-ActionPlan plan = parser.Parse("planFile");
+ActionPlan plan = parser.Parse(new FileInfo("planFile"));
 
 PDDLDecl declaration = new PDDLDecl(...);
 IPlanValidator validator = new PlanValidator();

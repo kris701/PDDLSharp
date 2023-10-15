@@ -33,7 +33,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
 
         [TestMethod]
         [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
-        public void Can_Parse_Generate_Parse_Domain(string domain, List<string> sass)
+        public void Can_Parse_Generate_Parse(string domain, List<string> sass)
         {
             Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, sass: {sass.Count}");
 
@@ -46,9 +46,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
             foreach (var sas in sass)
             {
                 Trace.WriteLine($"Testing sas '{sas}'");
-                var orgPlan = parser.Parse(sas);
+                var orgPlan = parser.Parse(new FileInfo(sas));
                 generator.Generate(orgPlan, "temp.sas");
-                var newPlan = parser.Parse("temp.sas");
+                var newPlan = parser.Parse(new FileInfo("temp.sas"));
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
             }
 

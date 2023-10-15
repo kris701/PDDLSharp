@@ -60,12 +60,12 @@ namespace PDDLSharp.PDDLSharp.Tests.System.Parsers
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(domain);
-                    var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                    var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
+                    var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
 
                     Trace.WriteLine($"   Parsing plan: {targetPlan}");
-                    var plan = planParser.Parse(targetPlan);
+                    var plan = planParser.Parse(new FileInfo(targetPlan));
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                     listener.Errors.Clear();
                     any = true;

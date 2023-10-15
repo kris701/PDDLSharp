@@ -29,7 +29,7 @@ namespace PDDLSharp.Parsers.Tests.Plans
             IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
 
             // ACT
-            var res = parser.Parse(testFile);
+            var res = parser.Parse(new FileInfo(testFile));
 
             // ASSERT
             Assert.AreEqual(expectedActionCount, res.Plan.Count);
@@ -47,7 +47,7 @@ namespace PDDLSharp.Parsers.Tests.Plans
             IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
 
             // ACT
-            var res = parser.Parse(testFile);
+            var res = parser.Parse(new FileInfo(testFile));
 
             // ASSERT
             Assert.AreEqual(expectedCost, res.Cost);
@@ -65,7 +65,7 @@ namespace PDDLSharp.Parsers.Tests.Plans
             IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
 
             // ACT
-            var res = parser.Parse(testFile);
+            var res = parser.Parse(new FileInfo(testFile));
 
             // ASSERT
             Assert.AreEqual(expectedActionNames.Length, res.Plan.Count);
@@ -84,7 +84,7 @@ namespace PDDLSharp.Parsers.Tests.Plans
             IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
 
             // ACT
-            var res = parser.Parse(testFile);
+            var res = parser.Parse(new FileInfo(testFile));
 
             // ASSERT
             Assert.IsTrue(res.Plan.Count > id);

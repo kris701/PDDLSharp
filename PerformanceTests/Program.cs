@@ -29,14 +29,14 @@ namespace PerformanceTests
             //RunNTimes(100);
             //RunNTimes2(2000);
             //RunNTimes3(1);
-            RunNTimes4(1);
+            RunNTimes4(100);
         }
 
         private static void RunNTimes4(int number)
         {
-            var targetDomain = "benchmarks/gripper/domain.pddl";
-            var targetProblem = "benchmarks/gripper/prob01.pddl";
-            var targetSAS = "benchmarks-plans/lama-first/gripper/prob01.sas";
+            var targetDomain = "benchmarks/psr-large/domain.pddl";
+            var targetProblem = "benchmarks/psr-large/p24-s166-n15-l3-f10.pddl";
+            var targetSAS = "benchmarks-plans/lama-first/psr-large/p24-s166-n15-l3-f10.sas";
 
             IErrorListener listener = new ErrorListener();
             IParser<ISASNode> sasParser = new SASParser(listener);
@@ -44,7 +44,7 @@ namespace PerformanceTests
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
-                var test = sasParser.Parse(targetSAS);
+                var test = sasParser.Parse(new FileInfo(targetSAS));
 
             }
         }
@@ -68,7 +68,7 @@ namespace PerformanceTests
                 Console.WriteLine($"Instance {i}");
                 Console.WriteLine($"    Parsing");
                 instanceWatch.Start();
-                var decl = parser.ParseDecl(targetDomain, targetProblem);
+                var decl = parser.ParseDecl(new FileInfo(targetDomain), new FileInfo(targetProblem));
                 var plan = planParser.Parse(targetPlan);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
@@ -93,7 +93,7 @@ namespace PerformanceTests
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
-            var decl = parser.ParseDecl(targetDomain, targetProblem);
+            var decl = parser.ParseDecl(new FileInfo(targetDomain), new FileInfo(targetProblem));
             Stopwatch instanceWatch = new Stopwatch();
             instanceWatch.Start();
             for (int i = 0; i < number; i++)
@@ -125,7 +125,7 @@ namespace PerformanceTests
             {
                 Console.WriteLine($"Instance {i}");
                 instanceWatch.Start();
-                var decl = parser.ParseDecl(targetDomain, targetProblem);
+                var decl = parser.ParseDecl(new FileInfo(targetDomain), new FileInfo(targetProblem));
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 

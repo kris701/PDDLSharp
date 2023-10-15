@@ -51,8 +51,8 @@ namespace PDDLSharp.PDDLSharp.Tests.System.Contextualisers
             foreach (var problem in problems)
             {
                 Trace.WriteLine($"   Parsing problem: {problem}");
-                var domainDecl = parser.ParseAs<DomainDecl>(domain);
-                var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
+                var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
                 var decl = new PDDLDecl(domainDecl, problemDecl);
                 contextualiser.Contexturalise(decl);
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));

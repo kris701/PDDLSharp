@@ -11,10 +11,9 @@ namespace PDDLSharp.Parsers
             Listener = listener;
         }
 
-        public abstract T Parse(string file);
-        public virtual U ParseAs<U>(string file) where U : T
-        {
-            return (U)Parse(file);
-        }
+        public T Parse(FileInfo file) => Parse(File.ReadAllText(file.FullName));
+        public T Parse(string text) => ParseAs<T>(text);
+        public U ParseAs<U>(FileInfo file) where U : T => ParseAs<U>(File.ReadAllText(file.FullName));
+        public abstract U ParseAs<U>(string text) where U : T;
     }
 }

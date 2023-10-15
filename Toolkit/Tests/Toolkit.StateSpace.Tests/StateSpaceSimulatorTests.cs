@@ -18,7 +18,7 @@ namespace PDDLSharp.Toolkit.StateSpace.Tests
         {
             IErrorListener listener = new ErrorListener(ParseErrorType.Error);
             PDDLParser parser = new PDDLParser(listener);
-            return parser.ParseDecl(domain, problem);
+            return parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
         }
 
         #region Gripper

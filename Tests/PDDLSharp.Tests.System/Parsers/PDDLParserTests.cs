@@ -43,7 +43,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.Parsers
             IParser<INode> parser = GetParser(domain, listener);
 
             // ACT
-            parser.ParseAs<DomainDecl>(domain);
+            parser.ParseAs<DomainDecl>(new FileInfo(domain));
 
             // ASSERT
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
@@ -63,7 +63,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.Parsers
             foreach (var problem in problems)
             {
                 Trace.WriteLine($"   Parsing problem: {problem}");
-                var decl = parser.ParseAs<ProblemDecl>(problem);
+                var decl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                 listener.Errors.Clear();
             }
@@ -86,8 +86,8 @@ namespace PDDLSharp.PDDLSharp.Tests.System.Parsers
             foreach (var problem in problems)
             {
                 Trace.WriteLine($"   Parsing problem: {problem}");
-                var domainDecl = parser.ParseAs<DomainDecl>(domain);
-                var problemDecl = parser.ParseAs<ProblemDecl>(problem);
+                var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
+                var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
                 Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                 listener.Errors.Clear();
             }

@@ -54,9 +54,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
             foreach (var plan in plans)
             {
                 Trace.WriteLine($"Testing plan '{plan}'");
-                var orgPlan = parser.Parse(plan);
+                var orgPlan = parser.Parse(new FileInfo(plan));
                 generator.Generate(orgPlan, "temp.plan");
-                var newPlan = parser.Parse("temp.plan");
+                var newPlan = parser.Parse(new FileInfo("temp.plan"));
                 Assert.IsTrue(orgPlan.Equals(newPlan));
             }
 

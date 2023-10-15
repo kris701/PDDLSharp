@@ -21,9 +21,10 @@ namespace PDDLSharp.ASTGenerators.Tests.PDDL
             IErrorListener listener = new ErrorListener();
             IGenerator parser = new PDDLASTGenerator(listener);
             var expectedNode = PositionNode.ParseExpectedFile(expectedFile);
+            var text = File.ReadAllText(testFile).Replace(Environment.NewLine, $"{PDDLASTTokens.BreakToken}");
 
             // ACT
-            var node = parser.Generate(new FileInfo(testFile));
+            var node = parser.Generate(text);
 
             // ASSERT
             IsNodePositionValid(node, expectedNode);

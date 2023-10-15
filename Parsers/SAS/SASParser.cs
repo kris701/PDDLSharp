@@ -20,15 +20,10 @@ namespace PDDLSharp.Parsers.SAS
         {
         }
 
-        public override ISASNode Parse(string file)
-        {
-            return ParseAs<ISASNode>(file);
-        }
-
-        public override U ParseAs<U>(string file)
+        public override U ParseAs<U>(string text)
         {
             IGenerator astParser = new SASASTGenerator(Listener);
-            var absAST = astParser.Generate(new FileInfo(file));
+            var absAST = astParser.Generate(text);
 
             var visitor = new SectionVisitor(Listener);
             var result = visitor.VisitAs<U>(absAST);

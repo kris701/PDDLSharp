@@ -152,7 +152,7 @@ namespace PDDLSharp.Toolkit.MutexDetectors.Tests
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
-            var decl = parser.ParseDecl(domain, problem);
+            var decl = parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
             IMutexDetectors detector = new SimpleMutexDetector();
 
             // ACT
