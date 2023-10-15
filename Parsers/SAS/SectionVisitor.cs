@@ -336,8 +336,8 @@ namespace PDDLSharp.Parsers.SAS
 
         private bool IsNodeOfType(ASTNode node, string name)
         {
-            return node.OuterContent.StartsWith($"begin_{name}") &&
-                   node.OuterContent.EndsWith($"end_{name}");
+            return node.OuterContent.Trim().StartsWith($"begin_{name}") &&
+                   node.OuterContent.Trim().EndsWith($"end_{name}");
         }
 
         private bool MustBeDigitsOnly(string str, string nodeType)
