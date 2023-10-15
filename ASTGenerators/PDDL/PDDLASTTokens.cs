@@ -1,6 +1,6 @@
-﻿namespace PDDLSharp.ASTGenerators
+﻿namespace PDDLSharp.ASTGenerators.PDDL
 {
-    public class ASTTokens
+    public class PDDLASTTokens
     {
         public static readonly string TypeToken = "=t=";
         public static readonly char BreakToken = '\n';

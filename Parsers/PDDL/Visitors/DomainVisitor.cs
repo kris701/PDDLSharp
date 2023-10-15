@@ -1,4 +1,4 @@
-﻿using PDDLSharp.ASTGenerators;
+﻿using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
@@ -116,7 +116,7 @@ namespace PDDLSharp.Parsers.Visitors
 
                 // Initial parse
                 List<TypeExp> typeExps = new List<TypeExp>();
-                str = str.Replace(ASTTokens.BreakToken, ' ').Trim();
+                str = str.Replace(PDDLASTTokens.BreakToken, ' ').Trim();
                 var typesDefSplit = str.Split(' ').ToList();
                 typesDefSplit.Reverse();
                 typesDefSplit.RemoveAll(x => x.Trim() == "");
@@ -125,9 +125,9 @@ namespace PDDLSharp.Parsers.Visitors
                 foreach (var typeDef in typesDefSplit)
                 {
                     string newType = "";
-                    if (typeDef.Contains(ASTTokens.TypeToken))
+                    if (typeDef.Contains(PDDLASTTokens.TypeToken))
                     {
-                        var split = typeDef.Split(ASTTokens.TypeToken).ToList();
+                        var split = typeDef.Split(PDDLASTTokens.TypeToken).ToList();
                         split.RemoveAll(x => x.Trim() == "");
 
                         if (split.Count == 1)

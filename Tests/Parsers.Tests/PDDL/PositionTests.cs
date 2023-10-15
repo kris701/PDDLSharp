@@ -9,8 +9,8 @@ using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Parsers.Tests;
 using PDDLSharp.Parsers.Tests;
-using PDDLSharp.Parsers.Tests.PositionTestsData;
-using PDDLSharp.Parsers.Tests.Visitors;
+using PDDLSharp.Parsers.Tests.PDDL;
+using PDDLSharp.Parsers.Tests.PDDL.PositionTestsData;
 using PDDLSharp.Parsers.Visitors;
 using System;
 using System.Collections.Generic;
@@ -18,14 +18,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Parsers.Tests
+namespace PDDLSharp.Parsers.Tests.PDDL
 {
     [TestClass]
     public class PositionTests
     {
         [TestMethod]
-        [DataRow("PositionTestsData/gripper-domain.pddl", "PositionTestsData/gripper-domain-expected.txt")]
-        [DataRow("PositionTestsData/construction-domain.pddl", "PositionTestsData/construction-domain-expected.txt")]
+        [DataRow("PDDL/PositionTestsData/gripper-domain.pddl", "PDDL/PositionTestsData/gripper-domain-expected.txt")]
+        [DataRow("PDDL/PositionTestsData/construction-domain.pddl", "PDDL/PositionTestsData/construction-domain-expected.txt")]
         public void Can_ASTParser_SetCorrectPossitions(string testFile, string expectedFile)
         {
             // ARRANGE

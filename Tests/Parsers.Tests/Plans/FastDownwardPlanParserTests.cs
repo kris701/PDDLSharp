@@ -1,15 +1,18 @@
-﻿using PDDLSharp.ErrorListeners;
+﻿using PDDLSharp;
+using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.Plans;
+using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.Plans;
-using PDDLSharp.Parsers.Tests.PositionTestsData;
+using PDDLSharp.Parsers.Tests;
+using PDDLSharp.Parsers.Tests.Plans;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Parsers.Tests
+namespace PDDLSharp.Parsers.Tests.Plans
 {
     [TestClass]
     public class FastDownwardPlanParserTests

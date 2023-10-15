@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PDDLSharp;
+using PDDLSharp.ASTGenerators;
+using PDDLSharp.ASTGenerators.Tests;
+using PDDLSharp.ASTGenerators.Tests.PDDL.PositionTestsData;
 
-namespace PDDLSharp.Parsers.Tests.PositionTestsData
+namespace PDDLSharp.ASTGenerators.Tests.PDDL.PositionTestsData
 {
     internal class PositionNode
     {
@@ -17,8 +21,8 @@ namespace PDDLSharp.Parsers.Tests.PositionTestsData
         public PositionNode(string line)
         {
             var split = line.Split(':');
-            Start = Int32.Parse(split[0]);
-            End = Int32.Parse(split[1]);
+            Start = int.Parse(split[0]);
+            End = int.Parse(split[1]);
             NodeType = split[2];
             Layer = line.Count(x => x == '\t');
         }

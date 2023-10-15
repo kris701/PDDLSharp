@@ -1,12 +1,17 @@
 ﻿using PDDLSharp.Analysers;
 using PDDLSharp.Analysers.PDDL;
+using PDDLSharp.ASTGenerators;
+using PDDLSharp.ASTGenerators.SAS;
 using PDDLSharp.CodeGenerators;
 using PDDLSharp.CodeGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.SAS;
+using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Parsers.Plans;
+using PDDLSharp.Parsers.SAS;
 using PDDLSharp.Toolkit.PlanValidator;
 using System.Diagnostics;
 
@@ -23,8 +28,27 @@ namespace PerformanceTests
 
             //RunNTimes(100);
             //RunNTimes2(2000);
-            RunNTimes3(1);
+            //RunNTimes3(1);
+            RunNTimes4(1);
         }
+
+        private static void RunNTimes4(int number)
+        {
+            var targetDomain = "benchmarks/gripper/domain.pddl";
+            var targetProblem = "benchmarks/gripper/prob01.pddl";
+            var targetSAS = "benchmarks-plans/lama-first/gripper/prob01.sas";
+
+            IErrorListener listener = new ErrorListener();
+            IParser<ISASNode> sasParser = new SASParser(listener);
+
+            for (int i = 0; i < number; i++)
+            {
+                Console.WriteLine($"Instance {i}");
+                var test = sasParser.Parse(targetSAS);
+
+            }
+        }
+
 
         private static void RunNTimes3(int number)
         {

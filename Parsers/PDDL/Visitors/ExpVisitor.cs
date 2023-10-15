@@ -1,4 +1,4 @@
-﻿using PDDLSharp.ASTGenerators;
+﻿using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
@@ -236,11 +236,11 @@ namespace PDDLSharp.Parsers.Visitors
 
         public IExp? TryVisitNameNode(ASTNode node, INode? parent)
         {
-            if (node.InnerContent.Contains(ASTTokens.TypeToken) &&
+            if (node.InnerContent.Contains(PDDLASTTokens.TypeToken) &&
                 DoesNodeHaveSpecificChildCount(node, "name", 0))
             {
-                var left = node.InnerContent.Substring(0, node.InnerContent.IndexOf(ASTTokens.TypeToken)).Trim();
-                var right = node.InnerContent.Substring(node.InnerContent.IndexOf(ASTTokens.TypeToken) + 3).Trim();
+                var left = node.InnerContent.Substring(0, node.InnerContent.IndexOf(PDDLASTTokens.TypeToken)).Trim();
+                var right = node.InnerContent.Substring(node.InnerContent.IndexOf(PDDLASTTokens.TypeToken) + 3).Trim();
 
                 if (left == "")
                 {

@@ -3,7 +3,6 @@ using PDDLSharp.ASTGenerators;
 using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ASTGenerators.Tests;
 using PDDLSharp.ASTGenerators.Tests.PDDL;
-using PDDLSharp.ASTGenerators.Tests.PositionTestsData;
 using PDDLSharp.Models.AST;
 using System;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ using System.Threading.Tasks;
 namespace PDDLSharp.ASTGenerators.Tests.PDDL
 {
     [TestClass]
-    public class TextPreprocessingTests
+    public class PDDLTextPreprocessingTests
     {
         [TestMethod]
         [DataRow("", "")]
@@ -25,7 +24,7 @@ namespace PDDLSharp.ASTGenerators.Tests.PDDL
         {
             // ARRANGE
             // ACT
-            var result = TextPreprocessing.ReplaceSpecialCharacters(text);
+            var result = PDDLTextPreprocessing.ReplaceSpecialCharacters(text);
 
             // ASSERT
             Assert.AreEqual(expectedText, result);
@@ -40,7 +39,7 @@ namespace PDDLSharp.ASTGenerators.Tests.PDDL
         {
             // ARRANGE
             // ACT
-            var result = TextPreprocessing.ReplaceCommentsWithWhiteSpace(text);
+            var result = PDDLTextPreprocessing.ReplaceCommentsWithWhiteSpace(text);
 
             // ASSERT
             Assert.AreEqual(expectedText, result);
@@ -55,7 +54,7 @@ namespace PDDLSharp.ASTGenerators.Tests.PDDL
         {
             // ARRANGE
             // ACT
-            var result = TextPreprocessing.TokenizeSpecials(text);
+            var result = PDDLTextPreprocessing.TokenizeSpecials(text);
 
             // ASSERT
             Assert.AreEqual(expectedText, result);
