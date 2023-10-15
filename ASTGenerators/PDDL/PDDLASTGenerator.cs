@@ -19,9 +19,9 @@ namespace PDDLSharp.ASTGenerators.PDDL
         {
             PreCheck(text);
             text = text.ToLower();
-            text = TextPreprocessing.ReplaceSpecialCharacters(text);
-            text = TextPreprocessing.ReplaceCommentsWithWhiteSpace(text);
-            text = TextPreprocessing.TokenizeSpecials(text);
+            text = PDDLTextPreprocessing.ReplaceSpecialCharacters(text);
+            text = PDDLTextPreprocessing.ReplaceCommentsWithWhiteSpace(text);
+            text = PDDLTextPreprocessing.TokenizeSpecials(text);
 
             int end = GetEndIndex(text);
             var lineDict = GenerateLineDict(text);

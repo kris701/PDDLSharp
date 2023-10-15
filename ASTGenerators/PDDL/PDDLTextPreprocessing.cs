@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.ASTGenerators.PDDL
 {
-    public static class TextPreprocessing
+    public static class PDDLTextPreprocessing
     {
         public static string ReplaceSpecialCharacters(string text)
         {
