@@ -4,7 +4,6 @@ using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ASTGenerators.SAS;
 using PDDLSharp.ASTGenerators.Tests;
 using PDDLSharp.ASTGenerators.Tests.PDDL;
-using PDDLSharp.ASTGenerators.Tests.PositionTestsData;
 using PDDLSharp.Models.AST;
 using System;
 using System.Collections.Generic;

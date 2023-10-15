@@ -7,7 +7,6 @@ using PDDLSharp;
 using PDDLSharp.ASTGenerators;
 using PDDLSharp.ASTGenerators.Tests;
 using PDDLSharp.ASTGenerators.Tests.PDDL.PositionTestsData;
-using PDDLSharp.ASTGenerators.Tests.PositionTestsData;
 
 namespace PDDLSharp.ASTGenerators.Tests.PDDL.PositionTestsData
 {

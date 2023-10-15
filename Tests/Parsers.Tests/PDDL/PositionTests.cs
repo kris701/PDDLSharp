@@ -24,8 +24,8 @@ namespace PDDLSharp.Parsers.Tests.PDDL
     public class PositionTests
     {
         [TestMethod]
-        [DataRow("PositionTestsData/gripper-domain.pddl", "PositionTestsData/gripper-domain-expected.txt")]
-        [DataRow("PositionTestsData/construction-domain.pddl", "PositionTestsData/construction-domain-expected.txt")]
+        [DataRow("PDDL/PositionTestsData/gripper-domain.pddl", "PDDL/PositionTestsData/gripper-domain-expected.txt")]
+        [DataRow("PDDL/PositionTestsData/construction-domain.pddl", "PDDL/PositionTestsData/construction-domain-expected.txt")]
         public void Can_ASTParser_SetCorrectPossitions(string testFile, string expectedFile)
         {
             // ARRANGE
