@@ -70,6 +70,14 @@ IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
 ActionPlan plan = parser.Parse("planFile");
 ```
 
+## SAS Parser
+There is also a SAS parser that can parse [Fast Downward](https://www.fast-downward.org/) intermediate output SAS format.
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser<ISASNode> parser = new SASParser(listener);
+SASDecl sas = parser.ParseAs<SASDecl>("file.sas");
+```
+
 # Code Generators
 
 ## PDDL Code Generator
@@ -91,6 +99,15 @@ IErrorListener listener = new ErrorListener();
 ICodeGenerator<ActionPlan> generator = new FastDownwardPlanGenerator(listener);
 ActionPlan plan = new ActionPlan(...);
 generator.Generate(plan, "planFile");
+```
+
+## SAS Code Generator
+To generate a [Fast Downward](https://www.fast-downward.org/) intermediate output from a `SASDecl` declaration:
+```csharp
+IErrorListener listener = new ErrorListener();
+ICodeGenerator<ISASNode> generator = new SASCodeGenerator(listener);
+SASDecl sas = new SASDecl(...);
+generator.Generate(sas, "output.sas");
 ```
 
 # Toolkit
