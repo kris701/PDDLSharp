@@ -3,6 +3,7 @@ using PDDLSharp.ASTGenerators;
 using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ASTGenerators.Tests;
 using PDDLSharp.ASTGenerators.Tests.PDDL;
+using PDDLSharp.ASTGenerators.Tests.PDDL.PositionTestsData;
 using PDDLSharp.ASTGenerators.Tests.PositionTestsData;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
