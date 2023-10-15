@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" />
+    <ProjectReference Include="..\..\ErrorListeners\ErrorListeners.csproj" />
   </ItemGroup>
 
 </Project>

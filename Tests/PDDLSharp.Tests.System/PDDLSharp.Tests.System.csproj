@@ -27,8 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CodeGenerators\CodeGenerators.csproj" />
-    <ProjectReference Include="..\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\..\CodeGenerators\CodeGenerators.csproj" />
+    <ProjectReference Include="..\..\Models\Models.csproj" />
+    <ProjectReference Include="..\..\Parsers\Parsers.csproj" />
   </ItemGroup>
 
 </Project>
