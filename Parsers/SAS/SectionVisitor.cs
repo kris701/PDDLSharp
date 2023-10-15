@@ -20,17 +20,31 @@ namespace PDDLSharp.Parsers.SAS
             Listener = listener;
         }
 
-        public ISASNode? VisitSections(ASTNode node)
+        public ISASNode? VisitAs<T>(ASTNode node) where T : ISASNode =>
+            // Domain
+            typeof(T) == typeof(SASDecl)        ? TryVisitAsSASDecl(node) :
+            typeof(T) == typeof(VersionDecl)    ? TryVisitAsVersion(node) :
+            typeof(T) == typeof(MetricDecl)     ? TryVisitAsMetric(node) :
+            typeof(T) == typeof(VariableDecl)   ? TryVisitAsVariable(node) :
+            typeof(T) == typeof(MutexDecl)      ? TryVisitAsMutex(node) :
+            typeof(T) == typeof(InitStateDecl)  ? TryVisitAsInitState(node) :
+            typeof(T) == typeof(GoalStateDecl)  ? TryVisitAsGoalState(node) :
+            typeof(T) == typeof(OperatorDecl)   ? TryVisitAsOperator(node) :
+            typeof(T) == typeof(AxiomDecl)      ? TryVisitAsAxiom(node) :
+            VisitSections(node);
+
+        private ISASNode? VisitSections(ASTNode node)
         {
             ISASNode? returnNode;
-            if ((returnNode = TryParseAsVersion(node)) != null) return returnNode;
-            if ((returnNode = TryParseAsMetric(node)) != null) return returnNode;
-            if ((returnNode = TryParseAsVariable(node)) != null) return returnNode;
-            if ((returnNode = TryParseAsMutex(node)) != null) return returnNode;
-            if ((returnNode = TryParseAsInitState(node)) != null) return returnNode;
-            if ((returnNode = TryParseAsGoalState(node)) != null) return returnNode;
-            if ((returnNode = TryParseAsOperator(node)) != null) return returnNode;
-            if ((returnNode = TryParseAsAxiom(node)) != null) return returnNode;
+            if ((returnNode = TryVisitAsSASDecl(node)) != null) return returnNode;
+            if ((returnNode = TryVisitAsVersion(node)) != null) return returnNode;
+            if ((returnNode = TryVisitAsMetric(node)) != null) return returnNode;
+            if ((returnNode = TryVisitAsVariable(node)) != null) return returnNode;
+            if ((returnNode = TryVisitAsMutex(node)) != null) return returnNode;
+            if ((returnNode = TryVisitAsInitState(node)) != null) return returnNode;
+            if ((returnNode = TryVisitAsGoalState(node)) != null) return returnNode;
+            if ((returnNode = TryVisitAsOperator(node)) != null) return returnNode;
+            if ((returnNode = TryVisitAsAxiom(node)) != null) return returnNode;
 
             Listener.AddError(new PDDLSharpError(
                 $"Could not parse content of AST node: {node.OuterContent}",
@@ -39,7 +53,33 @@ namespace PDDLSharp.Parsers.SAS
             return returnNode;
         }
 
-        private ISASNode? TryParseAsVersion(ASTNode node)
+        private ISASNode? TryVisitAsSASDecl(ASTNode node)
+        {
+            if (node.Children.Count != 0)
+            {
+                var retNode = new SASDecl(node);
+                foreach (var child in node.Children)
+                {
+                    var visited = VisitSections(child);
+
+                    switch (visited)
+                    {
+                        case VersionDecl n: retNode.Version = n; break;
+                        case MetricDecl n: retNode.Metric = n; break;
+                        case VariableDecl n: retNode.Variables.Add(n); break;
+                        case MutexDecl n: retNode.Mutexes.Add(n); break;
+                        case InitStateDecl n: retNode.InitState = n; break;
+                        case GoalStateDecl n: retNode.GoalState = n; break;
+                        case OperatorDecl n: retNode.Operators.Add(n); break;
+                        case AxiomDecl n: retNode.Axioms.Add(n); break;
+                    }
+                }
+                return retNode;
+            }
+            return null;
+        }
+
+        private ISASNode? TryVisitAsVersion(ASTNode node)
         {
             if (IsNodeOfType(node, "version") &&
                 MustBeDigitsOnly(node.InnerContent, "version"))
@@ -50,7 +90,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private ISASNode? TryParseAsMetric(ASTNode node)
+        private ISASNode? TryVisitAsMetric(ASTNode node)
         {
             if (IsNodeOfType(node, "metric") &&
                 MustBeDigitsOnly(node.InnerContent, "metric"))
@@ -61,7 +101,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private ISASNode? TryParseAsVariable(ASTNode node)
+        private ISASNode? TryVisitAsVariable(ASTNode node)
         {
             if (IsNodeOfType(node, "variable"))
             {
@@ -89,7 +129,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private ISASNode? TryParseAsMutex(ASTNode node)
+        private ISASNode? TryVisitAsMutex(ASTNode node)
         {
             if (IsNodeOfType(node, "mutex_group"))
             {
@@ -114,7 +154,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private ISASNode? TryParseAsInitState(ASTNode node)
+        private ISASNode? TryVisitAsInitState(ASTNode node)
         {
             if (IsNodeOfType(node, "state"))
             {
@@ -127,7 +167,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private ISASNode? TryParseAsGoalState(ASTNode node)
+        private ISASNode? TryVisitAsGoalState(ASTNode node)
         {
             if (IsNodeOfType(node, "goal"))
             {
@@ -152,7 +192,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private ISASNode? TryParseAsOperator(ASTNode node)
+        private ISASNode? TryVisitAsOperator(ASTNode node)
         {
             if (IsNodeOfType(node, "operator"))
             {
@@ -216,7 +256,7 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private ISASNode? TryParseAsAxiom(ASTNode node)
+        private ISASNode? TryVisitAsAxiom(ASTNode node)
         {
             if (IsNodeOfType(node, "rule"))
             {

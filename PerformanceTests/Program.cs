@@ -39,7 +39,7 @@ namespace PerformanceTests
             var targetSAS = "benchmarks-plans/lama-first/gripper/prob01.sas";
 
             IErrorListener listener = new ErrorListener();
-            IParser<SASDecl> sasParser = new SASParser(listener);
+            IParser<ISASNode> sasParser = new SASParser(listener);
 
             for (int i = 0; i < number; i++)
             {
