@@ -407,6 +407,154 @@ namespace PDDLSharp.Parsers.Tests.SAS
             }
         }
 
+        [TestMethod]
+        [DataRow("begin_operator\n0\n0\n0\nend_operator\n")]
+        [DataRow("begin_operator\n\n0\n0\n0\nend_operator\n")]
+        public void Cant_VisitOperatorNode_IfNoName(string toParse)
+        {
+            // ARRANGE
+            var node = GetParsed(toParse);
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+
+            // ACT
+            ISASNode? res = new SectionVisitor(listener).TryVisitAsOperator(node.Children[0]);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("begin_operator\na\n\n0\n0\n0\nend_operator\n")]
+        [DataRow("begin_operator\na\n\n0\n0\n\n0\nend_operator\n")]
+        [DataRow("begin_operator\na\n\n0\n\n0\n\n0\nend_operator\n")]
+        public void Cant_VisitOperatorNode_IfContainsEmptyLines(string toParse)
+        {
+            // ARRANGE
+            var node = GetParsed(toParse);
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+
+            // ACT
+            ISASNode? res = new SectionVisitor(listener).TryVisitAsOperator(node.Children[0]);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("begin_operator\na\n5\n0\n0\nend_operator\n")]
+        [DataRow("begin_operator\na\n0\n0 1\n0\n0\nend_operator\n")]
+        [DataRow("begin_operator\na\n0\n0 1\n4 1\n0\n0\nend_operator\n")]
+        public void Cant_VisitOperatorNode_PrevailCountNotMatch(string toParse)
+        {
+            // ARRANGE
+            var node = GetParsed(toParse);
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+
+            // ACT
+            ISASNode? res = new SectionVisitor(listener).TryVisitAsOperator(node.Children[0]);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("begin_operator\na\n0\n1\n0\nend_operator\n")]
+        [DataRow("begin_operator\na\n0\n0\n0 0 0 0\n0\nend_operator\n")]
+        public void Cant_VisitOperatorNode_EffectCountNotMatch(string toParse)
+        {
+            // ARRANGE
+            var node = GetParsed(toParse);
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+
+            // ACT
+            ISASNode? res = new SectionVisitor(listener).TryVisitAsOperator(node.Children[0]);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("begin_operator\na\n0\n0\nend_operator\n")]
+        [DataRow("begin_operator\na\n0\n0\n\nend_operator\n")]
+        public void Cant_VisitOperatorNode_IfEffectCostMissing(string toParse)
+        {
+            // ARRANGE
+            var node = GetParsed(toParse);
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+
+            // ACT
+            ISASNode? res = new SectionVisitor(listener).TryVisitAsOperator(node.Children[0]);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        #endregion
+
+        #region Axiom Node
+
+        [TestMethod]
+        [DataRow("begin_rule\n0\n0 0 0\nend_rule\n", 0, 0, 0, 0)]
+        [DataRow("begin_rule\n0\n1 0 0\nend_rule\n", 0, 1, 0, 0)]
+        [DataRow("begin_rule\n0\n1 0 5\nend_rule\n", 0, 1, 0, 5)]
+        [DataRow("begin_rule\n0\n1 10 5\nend_rule\n", 0, 1, 10, 5)]
+        [DataRow("begin_rule\n1\n0 1\n1 10 5\nend_rule\n", 1, 1, 10, 5)]
+        [DataRow("begin_rule\n2\n0 1\n5 1\n1 10 5\nend_rule\n", 2, 1, 10, 5)]
+        public void Can_VisitAxiomNode(string toParse, int expectedConditions, int expectedEffectedVariable, int expectedVariablePrecondition, int expectedNewVariableValue)
+        {
+            // ARRANGE
+            var node = GetParsed(toParse);
+
+            // ACT
+            ISASNode? res = new SectionVisitor(null).TryVisitAsAxiom(node.Children[0]);
+
+            // ASSERT
+            Assert.IsInstanceOfType(res, typeof(AxiomDecl));
+            if (res is AxiomDecl ver)
+            {
+                Assert.AreEqual(expectedConditions, ver.Conditions.Count);
+                Assert.AreEqual(expectedEffectedVariable, ver.EffectedVariable);
+                Assert.AreEqual(expectedVariablePrecondition, ver.VariablePrecondition);
+                Assert.AreEqual(expectedNewVariableValue, ver.NewVariableValue);
+            }
+        }
+
+        [TestMethod]
+        [DataRow("begin_rule\n1\n0 0 0\nend_rule\n")]
+        [DataRow("begin_rule\n10\n0 0 0\nend_rule\n")]
+        [DataRow("begin_rule\n0\n0 1\n0 0 0\nend_rule\n")]
+        [DataRow("begin_rule\n1\n0 1\n5 0\n0 0 0\nend_rule\n")]
+        public void Cant_VisitAxiomNode_IfConditionCountNotMatch(string toParse)
+        {
+            // ARRANGE
+            var node = GetParsed(toParse);
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+
+            // ACT
+            ISASNode? res = new SectionVisitor(listener).TryVisitAsAxiom(node.Children[0]);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
+        [TestMethod]
+        [DataRow("begin_rule\n0\n0\nend_rule\n")]
+        [DataRow("begin_rule\n0\n0 0\nend_rule\n")]
+        [DataRow("begin_rule\n0\n0 0 0 0\nend_rule\n")]
+        [DataRow("begin_rule\n0\n0 0 0 0 0\nend_rule\n")]
+        public void Cant_VisitAxiomNode_IfDenotionNotValid(string toParse)
+        {
+            // ARRANGE
+            var node = GetParsed(toParse);
+            IErrorListener listener = new ErrorListener(ParseErrorType.Error);
+
+            // ACT
+            ISASNode? res = new SectionVisitor(listener).TryVisitAsAxiom(node.Children[0]);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+        }
+
         #endregion
     }
 }

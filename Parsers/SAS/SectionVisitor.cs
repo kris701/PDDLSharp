@@ -211,6 +211,7 @@ namespace PDDLSharp.Parsers.SAS
         public ISASNode? TryVisitAsOperator(ASTNode node)
         {
             if (IsNodeOfType(node, "operator") &&
+                MustNotContainEmptyLines(node.InnerContent, "operator") &&
                 MustContainAtLeastNLines(node.InnerContent, "operator", 4))
             {
                 var lineSplit = node.InnerContent.Split(SASASTTokens.BreakToken);
@@ -218,45 +219,67 @@ namespace PDDLSharp.Parsers.SAS
                 int offset = 0;
 
                 List<ValuePair> pervails = new List<ValuePair>();
-                if (lineSplit[1] != "0")
+                try
                 {
-                    var count = int.Parse(lineSplit[1]);
-                    pervails.AddRange(ParseLinesAsPairs(lineSplit.ToList().GetRange(2, count)));
-                    offset += count;
+                    var pervailsCount = int.Parse(lineSplit[1]);
+                    if (pervailsCount != 0)
+                    {
+                        pervails.AddRange(ParseLinesAsPairs(lineSplit.ToList().GetRange(2, pervailsCount)));
+                        offset += pervailsCount;
+                    }
+                }
+                catch
+                {
+                    Listener.AddError(new PDDLSharpError(
+                        $"Operator prevails was malformed! Either the prevail count did not match or some of the pairs are badly typed",
+                        ParseErrorType.Error,
+                        ParseErrorLevel.Parsing));
                 }
 
                 List<OperatorEffect> effects = new List<OperatorEffect>();
-                if (lineSplit[2 + offset] != "0")
+                try
                 {
-                    var count = int.Parse(lineSplit[2 + offset]);
-                    for (int i = 2 + offset + 1; i <= count + 2 + offset; i++)
+                    if (lineSplit[2 + offset] != "0")
                     {
-                        List<ValuePair> effectConditions = new List<ValuePair>();
-
-                        var split = lineSplit[i].Trim().Split(' ');
-                        int effectOffset = 0;
-                        if (split[0] != "0")
+                        var count = int.Parse(lineSplit[2 + offset]);
+                        for (int i = 2 + offset + 1; i <= count + 2 + offset; i++)
                         {
-                            var effectConditionCount = int.Parse(split[0]);
-                            for(int j = 1; j < effectConditionCount; j += 2)
+                            List<ValuePair> effectConditions = new List<ValuePair>();
+
+                            var split = lineSplit[i].Trim().Split(' ');
+                            int effectOffset = 0;
+                            if (split[0] != "0")
                             {
-                                effectConditions.Add(new ValuePair(int.Parse(split[i]), int.Parse(split[i + 1])));
+                                var effectConditionCount = int.Parse(split[0]);
+                                for (int j = 1; j < effectConditionCount; j += 2)
+                                {
+                                    effectConditions.Add(new ValuePair(int.Parse(split[i]), int.Parse(split[i + 1])));
+                                }
+                                effectOffset += effectConditionCount;
                             }
-                            effectOffset += effectConditionCount;
+
+                            var effectedVariable = int.Parse(split[1 + effectOffset]);
+                            var variablePrecondition = int.Parse(split[2 + effectOffset]);
+                            var variableEffect = int.Parse(split[3 + effectOffset]);
+
+                            effects.Add(new OperatorEffect(effectConditions, effectedVariable, variablePrecondition, variableEffect));
                         }
-
-                        var effectedVariable = int.Parse(split[1 + effectOffset]);
-                        var variablePrecondition = int.Parse(split[2 + effectOffset]);
-                        var variableEffect = int.Parse(split[3 + effectOffset]);
-
-                        effects.Add(new OperatorEffect(effectConditions, effectedVariable, variablePrecondition, variableEffect));
+                        offset += count;
                     }
-                    offset += count;
+                }
+                catch
+                {
+                    Listener.AddError(new PDDLSharpError(
+                        $"Operator effects was malformed! Either the effect count did not match or some of the string is badly typed",
+                        ParseErrorType.Error,
+                        ParseErrorLevel.Parsing));
                 }
 
-                int cost = int.Parse(lineSplit[3 + offset]);
-
-                return new OperatorDecl(node, name, pervails, effects, cost);
+                if (MustBeDigitsOnly(lineSplit[3 + offset], "operator cost"))
+                {
+                    int cost = int.Parse(lineSplit[3 + offset]);
+                    return new OperatorDecl(node, name, pervails, effects, cost);
+                }
             }
             return null;
         }
@@ -264,25 +287,38 @@ namespace PDDLSharp.Parsers.SAS
         public ISASNode? TryVisitAsAxiom(ASTNode node)
         {
             if (IsNodeOfType(node, "rule") &&
+                MustNotContainEmptyLines(node.InnerContent, "rule") &&
                 MustContainAtLeastNLines(node.InnerContent, "rule", 2))
             {
                 var lineSplit = node.InnerContent.Split(SASASTTokens.BreakToken);
-                List<ValuePair> conditions = new List<ValuePair>();
-                int offset = 0;
-                foreach (var item in lineSplit.Skip(1))
+                int count = int.Parse(lineSplit[0]);
+                if (count != lineSplit.Length - 2)
                 {
-                    var split = item.Trim().Split(' ');
-                    if (split.Length == 3)
-                        break;
-                    conditions.Add(new ValuePair(int.Parse(split[0]), int.Parse(split[1])));
-                    offset++;
+                    Listener.AddError(new PDDLSharpError(
+                        $"Axiom fact count did not match the declared! Got '{lineSplit.Length - 2}' but expected '{count}'",
+                        ParseErrorType.Error,
+                        ParseErrorLevel.Parsing));
                 }
-                var lastSplit = lineSplit[1 + offset].Split(' ');
-                var effectedVariable = int.Parse(lastSplit[0]);
-                var variablePrecondition = int.Parse(lastSplit[1]);
-                var newVariableValue = int.Parse(lastSplit[2]);
+                else
+                {
+                    List<ValuePair> conditions = ParseLinesAsPairs(lineSplit.ToList().GetRange(1, count));
+                    var lastSplit = lineSplit[1 + count].Split(' ');
+                    if (lastSplit.Length != 3)
+                    {
+                        Listener.AddError(new PDDLSharpError(
+                            $"Axiom denotion did not match the declared! Got '{lastSplit.Length}' but expected '3'",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Parsing));
+                    }
+                    else
+                    {
+                        var effectedVariable = int.Parse(lastSplit[0]);
+                        var variablePrecondition = int.Parse(lastSplit[1]);
+                        var newVariableValue = int.Parse(lastSplit[2]);
 
-                return new AxiomDecl(node, conditions, effectedVariable, variablePrecondition, newVariableValue);
+                        return new AxiomDecl(node, conditions, effectedVariable, variablePrecondition, newVariableValue);
+                    }
+                }
             }
             return null;
         }
