@@ -1,4 +1,8 @@
 
+<p align="center">
+    <img src="https://github.com/kris701/PDDLSharp/assets/22596587/6c7c3516-bb1e-4713-ad17-e2eaff67107b" width="200" height="200" />
+</p>
+
 [![Build and Publish](https://github.com/kris701/PDDLSharp/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/kris701/PDDLSharp/actions/workflows/dotnet-desktop.yml)
 ![Nuget](https://img.shields.io/nuget/v/PDDLSharp)
 ![Nuget](https://img.shields.io/nuget/dt/PDDLSharp)
@@ -89,7 +93,8 @@ ActionPlan plan = new ActionPlan(...);
 generator.Generate(plan, "planFile");
 ```
 
-# Simulators
+# Toolkit
+PDDLSharp includes a few tools, that can be found in the namespace `PDDLSharp.Toolkit`.
 
 ## State Space Simulator
 There is a State Space Simulator included with PDDLSharp.
