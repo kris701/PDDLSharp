@@ -13,15 +13,15 @@ namespace PDDLSharp.ASTGenerators.PDDL
 
         public static string ReplaceCommentsWithWhiteSpace(string text)
         {
-            if (!text.EndsWith(ASTTokens.BreakToken))
-                text += ASTTokens.BreakToken;
+            if (!text.EndsWith(PDDLASTTokens.BreakToken))
+                text += PDDLASTTokens.BreakToken;
 
             var retStr = text;
             int offset = 0;
             while (retStr.Contains(";"))
             {
                 int from = retStr.IndexOf(";", offset);
-                int to = retStr.IndexOf(ASTTokens.BreakToken, from);
+                int to = retStr.IndexOf(PDDLASTTokens.BreakToken, from);
                 retStr = StringHelpers.ReplaceRangeWithSpacesFast(retStr, from, to);
                 offset = to + 1;
             }
@@ -30,8 +30,8 @@ namespace PDDLSharp.ASTGenerators.PDDL
 
         public static string TokenizeSpecials(string text)
         {
-            text = text.Replace("\n- ", $"\n{ASTTokens.TypeToken}");
-            text = text.Replace(" - ", ASTTokens.TypeToken);
+            text = text.Replace("\n- ", $"\n{PDDLASTTokens.TypeToken}");
+            text = text.Replace(" - ", PDDLASTTokens.TypeToken);
             return text;
         }
     }

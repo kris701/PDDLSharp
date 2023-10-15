@@ -1,4 +1,4 @@
-﻿using PDDLSharp.ASTGenerators;
+﻿using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
@@ -170,14 +170,14 @@ namespace PDDLSharp.Parsers.Visitors
                 if (param != "" && param != nodeType)
                 {
                     var typedParam = param;
-                    if (typedParam.Contains(ASTTokens.TypeToken))
+                    if (typedParam.Contains(PDDLASTTokens.TypeToken))
                     {
-                        currentType = typedParam.Substring(typedParam.IndexOf(ASTTokens.TypeToken) + ASTTokens.TypeToken.Length);
-                        if (typedParam.Substring(0, typedParam.IndexOf(ASTTokens.TypeToken)).Trim() == "")
+                        currentType = typedParam.Substring(typedParam.IndexOf(PDDLASTTokens.TypeToken) + PDDLASTTokens.TypeToken.Length);
+                        if (typedParam.Substring(0, typedParam.IndexOf(PDDLASTTokens.TypeToken)).Trim() == "")
                             continue;
                     }
-                    else if (!typedParam.Contains(ASTTokens.TypeToken) && currentType != "")
-                        typedParam = $"{typedParam}{ASTTokens.TypeToken}{currentType}";
+                    else if (!typedParam.Contains(PDDLASTTokens.TypeToken) && currentType != "")
+                        typedParam = $"{typedParam}{PDDLASTTokens.TypeToken}{currentType}";
 
                     var parsed = VisitAs<NameExp>(new ASTNode(
                         offset - param.Length,

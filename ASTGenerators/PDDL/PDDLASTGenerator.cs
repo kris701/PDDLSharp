@@ -96,11 +96,11 @@ namespace PDDLSharp.ASTGenerators.PDDL
         public List<int> GenerateLineDict(string source)
         {
             List<int> lineDict = new List<int>();
-            int offset = source.IndexOf(ASTTokens.BreakToken);
+            int offset = source.IndexOf(PDDLASTTokens.BreakToken);
             while (offset != -1)
             {
                 lineDict.Add(offset);
-                offset = source.IndexOf(ASTTokens.BreakToken, offset + 1);
+                offset = source.IndexOf(PDDLASTTokens.BreakToken, offset + 1);
             }
             return lineDict;
         }
