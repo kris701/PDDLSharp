@@ -33,7 +33,7 @@ namespace PDDLSharp.Parsers.SAS
             typeof(T) == typeof(AxiomDecl)      ? TryVisitAsAxiom(node) :
             VisitSections(node);
 
-        private ISASNode? VisitSections(ASTNode node)
+        public ISASNode? VisitSections(ASTNode node)
         {
             ISASNode? returnNode;
             if ((returnNode = TryVisitAsSASDecl(node)) != null) return returnNode;
@@ -53,7 +53,7 @@ namespace PDDLSharp.Parsers.SAS
             return returnNode;
         }
 
-        private ISASNode? TryVisitAsSASDecl(ASTNode node)
+        public ISASNode? TryVisitAsSASDecl(ASTNode node)
         {
             if (node.Children.Count != 0)
             {
@@ -79,10 +79,11 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private ISASNode? TryVisitAsVersion(ASTNode node)
+        public ISASNode? TryVisitAsVersion(ASTNode node)
         {
             if (IsNodeOfType(node, "version") &&
-                MustBeDigitsOnly(node.InnerContent, "version"))
+                MustBeDigitsOnly(node.InnerContent, "version") &&
+                MustNotContainEmptyLines(node.InnerContent, "version"))
             {
                 var version = int.Parse(node.InnerContent);
                 return new VersionDecl(node, version);
@@ -90,31 +91,43 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private ISASNode? TryVisitAsMetric(ASTNode node)
+        public ISASNode? TryVisitAsMetric(ASTNode node)
         {
             if (IsNodeOfType(node, "metric") &&
-                MustBeDigitsOnly(node.InnerContent, "metric"))
+                MustBeDigitsOnly(node.InnerContent, "metric") &&
+                MustNotContainEmptyLines(node.InnerContent, "metric"))
             {
                 var choice = int.Parse(node.InnerContent);
-                return new MetricDecl(node, choice == 1);
+                if (choice != 0 && choice != 1)
+                    Listener.AddError(new PDDLSharpError(
+                        $"Metric value must be 1 or 0, but it was {choice}.",
+                        ParseErrorType.Error,
+                        ParseErrorLevel.Parsing));
+                else
+                    return new MetricDecl(node, choice == 1);
             }
             return null;
         }
 
-        private ISASNode? TryVisitAsVariable(ASTNode node)
+        public ISASNode? TryVisitAsVariable(ASTNode node)
         {
-            if (IsNodeOfType(node, "variable"))
+            if (IsNodeOfType(node, "variable") &&
+                MustNotContainEmptyLines(node.InnerContent, "variable") &&
+                MustContainAtLeastNLines(node.InnerContent, "variable", 3))
             {
                 var lineSplit = node.InnerContent.Split(SASASTTokens.BreakToken);
-                if (lineSplit.Length < 3)
-                    Listener.AddError(new PDDLSharpError(
-                        $"Variable node must be at least 3 lines, but it has {lineSplit.Length} lines.",
-                        ParseErrorType.Error,
-                        ParseErrorLevel.Parsing));
-                else
+                if (MustBeDigitsOnly(lineSplit[1], "variable axiom layer") &&
+                    MustBeDigitsOnly(lineSplit[2], "variable range"))
                 {
-                    if (MustBeDigitsOnly(lineSplit[1], "variable axiom layer") &&
-                        MustBeDigitsOnly(lineSplit[2], "variable range"))
+                    int variableRange = int.Parse(lineSplit[2]);
+                    if (variableRange != lineSplit.Length - 3)
+                    {
+                        Listener.AddError(new PDDLSharpError(
+                            $"Variable range did not match the declared! Got '{lineSplit.Length - 3}' but expected '{variableRange}'",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Parsing));
+                    }
+                    else
                     {
                         var variableName = lineSplit[0].Trim();
                         var axiomLayer = int.Parse(lineSplit[1]);
@@ -129,164 +142,160 @@ namespace PDDLSharp.Parsers.SAS
             return null;
         }
 
-        private ISASNode? TryVisitAsMutex(ASTNode node)
+        public ISASNode? TryVisitAsMutex(ASTNode node)
         {
-            if (IsNodeOfType(node, "mutex_group"))
+            if (IsNodeOfType(node, "mutex_group") &&
+                MustNotContainEmptyLines(node.InnerContent, "mutex_group") &&
+                MustContainAtLeastNLines(node.InnerContent, "mutex_group", 1))
             {
                 var lineSplit = node.InnerContent.Split(SASASTTokens.BreakToken);
-                if (lineSplit.Length < 1)
-                    Listener.AddError(new PDDLSharpError(
-                        $"Mutex group node must be at least 1 line, but it has {lineSplit.Length} lines.",
-                        ParseErrorType.Error,
-                        ParseErrorLevel.Parsing));
-                else
+                if (MustBeDigitsOnly(lineSplit[0], "mutex_group"))
                 {
-                    List<ValuePair> group = new List<ValuePair>();
-                    foreach (var item in lineSplit.Skip(1))
+                    int count = int.Parse(lineSplit[0]);
+                    if (count != lineSplit.Length - 1)
                     {
-                        var split = item.Trim().Split(' ');
-                        group.Add(new ValuePair(int.Parse(split[0]), int.Parse(split[1])));
+                        Listener.AddError(new PDDLSharpError(
+                            $"Mutex fact count did not match the declared! Got '{lineSplit.Length - 1}' but expected '{count}'",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Parsing));
                     }
+                    else
+                    {
+                        List<ValuePair> group = ParseLinesAsPairs(lineSplit.Skip(1).ToList());
 
-                    return new MutexDecl(node, group);
+                        return new MutexDecl(node, group);
+                    }
                 }
             }
             return null;
         }
 
-        private ISASNode? TryVisitAsInitState(ASTNode node)
+        public ISASNode? TryVisitAsInitState(ASTNode node)
         {
             if (IsNodeOfType(node, "state"))
             {
                 var lineSplit = node.InnerContent.Split(SASASTTokens.BreakToken);
                 List<int> state = new List<int>();
-                foreach (var var in lineSplit)
-                    state.Add(int.Parse(var));
+                if (lineSplit[0].Trim() != "")
+                    foreach (var var in lineSplit)
+                        state.Add(int.Parse(var));
                 return new InitStateDecl(node, state);
             }
             return null;
         }
 
-        private ISASNode? TryVisitAsGoalState(ASTNode node)
+        public ISASNode? TryVisitAsGoalState(ASTNode node)
         {
-            if (IsNodeOfType(node, "goal"))
+            if (IsNodeOfType(node, "goal") &&
+                MustNotContainEmptyLines(node.InnerContent, "goal") &&
+                MustContainAtLeastNLines(node.InnerContent, "goal", 1))
             {
                 var lineSplit = node.InnerContent.Split(SASASTTokens.BreakToken);
-                if (lineSplit.Length < 1)
+                int count = int.Parse(lineSplit[0]);
+                if (count != lineSplit.Length - 1)
+                {
                     Listener.AddError(new PDDLSharpError(
-                        $"Goal state node must be at least 1 line, but it has {lineSplit.Length} lines.",
+                        $"Goal count did not match the declared! Got '{lineSplit.Length - 1}' but expected '{count}'",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing));
+                }
                 else
                 {
-                    List<ValuePair> goals = new List<ValuePair>();
-                    foreach (var item in lineSplit.Skip(1))
-                    {
-                        var split = item.Trim().Split(' ');
-                        goals.Add(new ValuePair(int.Parse(split[0]), int.Parse(split[1])));
-                    }
-
+                    List<ValuePair> goals = ParseLinesAsPairs(lineSplit.Skip(1).ToList());
                     return new GoalStateDecl(node, goals);
                 }
             }
             return null;
         }
 
-        private ISASNode? TryVisitAsOperator(ASTNode node)
+        public ISASNode? TryVisitAsOperator(ASTNode node)
         {
-            if (IsNodeOfType(node, "operator"))
+            if (IsNodeOfType(node, "operator") &&
+                MustContainAtLeastNLines(node.InnerContent, "operator", 4))
             {
                 var lineSplit = node.InnerContent.Split(SASASTTokens.BreakToken);
-                if (lineSplit.Length < 4)
-                    Listener.AddError(new PDDLSharpError(
-                        $"Operator node must be at least 4 lines, but it has {lineSplit.Length} lines.",
-                        ParseErrorType.Error,
-                        ParseErrorLevel.Parsing));
-                else
+                var name = lineSplit[0].Trim();
+                int offset = 0;
+
+                List<ValuePair> pervails = new List<ValuePair>();
+                if (lineSplit[1] != "0")
                 {
-                    var name = lineSplit[0].Trim();
-                    int offset = 0;
-
-                    List<ValuePair> pervails = new List<ValuePair>();
-                    if (lineSplit[1] != "0")
-                    {
-                        var count = int.Parse(lineSplit[1]);
-                        for(int i = 2; i < count + 2; i++)
-                        {
-                            var split = lineSplit[i].Trim().Split(' ');
-                            pervails.Add(new ValuePair(int.Parse(split[0]), int.Parse(split[1])));
-                        }
-                        offset += count;
-                    }
-
-                    List<OperatorEffect> effects = new List<OperatorEffect>();
-                    if (lineSplit[2 + offset] != "0")
-                    {
-                        var count = int.Parse(lineSplit[2 + offset]);
-                        for (int i = 2 + offset + 1; i <= count + 2 + offset; i++)
-                        {
-                            List<ValuePair> effectConditions = new List<ValuePair>();
-
-                            var split = lineSplit[i].Trim().Split(' ');
-                            int effectOffset = 0;
-                            if (split[0] != "0")
-                            {
-                                var effectConditionCount = int.Parse(split[0]);
-                                for(int j = 1; j < effectConditionCount; j += 2)
-                                {
-                                    effectConditions.Add(new ValuePair(int.Parse(split[i]), int.Parse(split[i + 1])));
-                                }
-                                effectOffset += effectConditionCount;
-                            }
-
-                            var effectedVariable = int.Parse(split[1 + effectOffset]);
-                            var variablePrecondition = int.Parse(split[2 + effectOffset]);
-                            var variableEffect = int.Parse(split[3 + effectOffset]);
-
-                            effects.Add(new OperatorEffect(effectConditions, effectedVariable, variablePrecondition, variableEffect));
-                        }
-                        offset += count;
-                    }
-
-                    int cost = int.Parse(lineSplit[3 + offset]);
-
-                    return new OperatorDecl(node, name, pervails, effects, cost);
+                    var count = int.Parse(lineSplit[1]);
+                    pervails.AddRange(ParseLinesAsPairs(lineSplit.ToList().GetRange(2, count)));
+                    offset += count;
                 }
+
+                List<OperatorEffect> effects = new List<OperatorEffect>();
+                if (lineSplit[2 + offset] != "0")
+                {
+                    var count = int.Parse(lineSplit[2 + offset]);
+                    for (int i = 2 + offset + 1; i <= count + 2 + offset; i++)
+                    {
+                        List<ValuePair> effectConditions = new List<ValuePair>();
+
+                        var split = lineSplit[i].Trim().Split(' ');
+                        int effectOffset = 0;
+                        if (split[0] != "0")
+                        {
+                            var effectConditionCount = int.Parse(split[0]);
+                            for(int j = 1; j < effectConditionCount; j += 2)
+                            {
+                                effectConditions.Add(new ValuePair(int.Parse(split[i]), int.Parse(split[i + 1])));
+                            }
+                            effectOffset += effectConditionCount;
+                        }
+
+                        var effectedVariable = int.Parse(split[1 + effectOffset]);
+                        var variablePrecondition = int.Parse(split[2 + effectOffset]);
+                        var variableEffect = int.Parse(split[3 + effectOffset]);
+
+                        effects.Add(new OperatorEffect(effectConditions, effectedVariable, variablePrecondition, variableEffect));
+                    }
+                    offset += count;
+                }
+
+                int cost = int.Parse(lineSplit[3 + offset]);
+
+                return new OperatorDecl(node, name, pervails, effects, cost);
             }
             return null;
         }
 
-        private ISASNode? TryVisitAsAxiom(ASTNode node)
+        public ISASNode? TryVisitAsAxiom(ASTNode node)
         {
-            if (IsNodeOfType(node, "rule"))
+            if (IsNodeOfType(node, "rule") &&
+                MustContainAtLeastNLines(node.InnerContent, "rule", 2))
             {
                 var lineSplit = node.InnerContent.Split(SASASTTokens.BreakToken);
-                if (lineSplit.Length < 2)
-                    Listener.AddError(new PDDLSharpError(
-                        $"Axiom node must be at least 2 lines, but it has {lineSplit.Length} lines.",
-                        ParseErrorType.Error,
-                        ParseErrorLevel.Parsing));
-                else
+                List<ValuePair> conditions = new List<ValuePair>();
+                int offset = 0;
+                foreach (var item in lineSplit.Skip(1))
                 {
-                    List<ValuePair> conditions = new List<ValuePair>();
-                    int offset = 0;
-                    foreach (var item in lineSplit.Skip(1))
-                    {
-                        var split = item.Trim().Split(' ');
-                        if (split.Length == 3)
-                            break;
-                        conditions.Add(new ValuePair(int.Parse(split[0]), int.Parse(split[1])));
-                        offset++;
-                    }
-                    var lastSplit = lineSplit[1 + offset].Split(' ');
-                    var effectedVariable = int.Parse(lastSplit[0]);
-                    var variablePrecondition = int.Parse(lastSplit[1]);
-                    var newVariableValue = int.Parse(lastSplit[2]);
-
-                    return new AxiomDecl(node, conditions, effectedVariable, variablePrecondition, newVariableValue);
+                    var split = item.Trim().Split(' ');
+                    if (split.Length == 3)
+                        break;
+                    conditions.Add(new ValuePair(int.Parse(split[0]), int.Parse(split[1])));
+                    offset++;
                 }
+                var lastSplit = lineSplit[1 + offset].Split(' ');
+                var effectedVariable = int.Parse(lastSplit[0]);
+                var variablePrecondition = int.Parse(lastSplit[1]);
+                var newVariableValue = int.Parse(lastSplit[2]);
+
+                return new AxiomDecl(node, conditions, effectedVariable, variablePrecondition, newVariableValue);
             }
             return null;
+        }
+
+        private List<ValuePair> ParseLinesAsPairs(List<string> lines)
+        {
+            var pairs = new List<ValuePair>();
+            foreach (var item in lines)
+            {
+                var split = item.Trim().Split(' ');
+                pairs.Add(new ValuePair(int.Parse(split[0]), int.Parse(split[1])));
+            }
+            return pairs;
         }
 
         private bool IsNodeOfType(ASTNode node, string name)
@@ -307,6 +316,34 @@ namespace PDDLSharp.Parsers.SAS
                         ParseErrorLevel.Parsing));
                     return false;
                 }
+            }
+            return true;
+        }
+
+        private bool MustNotContainEmptyLines(string str, string nodeType)
+        {
+            var lines = str.Split(SASASTTokens.BreakToken);
+            if (lines.Any(x => x.Replace($"{SASASTTokens.BreakToken}", "").Trim() == ""))
+            {
+                Listener.AddError(new PDDLSharpError(
+                    $"No lines must be empty! But node '{nodeType}' contains empty lines.",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Parsing));
+                return false;
+            }
+            return true;
+        }
+
+        private bool MustContainAtLeastNLines(string str, string nodeType, int n)
+        {
+            var lines = str.Split(SASASTTokens.BreakToken);
+            if (lines.Length < n)
+            {
+                Listener.AddError(new PDDLSharpError(
+                    $"Node '{nodeType}' must contain at least {n} lines but got {lines}!",
+                    ParseErrorType.Error,
+                    ParseErrorLevel.Parsing));
+                return false;
             }
             return true;
         }

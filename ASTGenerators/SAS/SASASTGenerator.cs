@@ -32,14 +32,16 @@ namespace PDDLSharp.ASTGenerators.SAS
                 var lastBreak = text.IndexOf(SASASTTokens.BreakToken, offset);
                 var endLength = text.Substring(offset, lastBreak - offset).Length;
                 var outerText = text.Substring(begin, offset - begin + endLength);
-                var innerText = outerText.Substring(outerText.IndexOf(SASASTTokens.BreakToken) + 1, outerText.LastIndexOf(SASASTTokens.BreakToken) - outerText.IndexOf(SASASTTokens.BreakToken) - 1);
+                string innerText = "";
+                if (outerText.Count(x => x == SASASTTokens.BreakToken) > 1)
+                    innerText = outerText.Substring(outerText.IndexOf(SASASTTokens.BreakToken) + 1, outerText.LastIndexOf(SASASTTokens.BreakToken) - outerText.IndexOf(SASASTTokens.BreakToken) - 1);
                 lineOffset = GetLineNumber(lineDict, begin, lineOffset);
                 returnNode.Children.Add(new ASTNode(
                     begin + 1,
                     offset + endLength,
                     lineOffset,
-                    outerText.Trim(),
-                    innerText.Trim()
+                    outerText,
+                    innerText
                     ));
             }
             return returnNode;
