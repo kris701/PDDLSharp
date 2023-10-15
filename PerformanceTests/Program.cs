@@ -29,14 +29,14 @@ namespace PerformanceTests
             //RunNTimes(100);
             //RunNTimes2(2000);
             //RunNTimes3(1);
-            RunNTimes4(1);
+            RunNTimes4(100);
         }
 
         private static void RunNTimes4(int number)
         {
-            var targetDomain = "benchmarks/gripper/domain.pddl";
-            var targetProblem = "benchmarks/gripper/prob01.pddl";
-            var targetSAS = "benchmarks-plans/lama-first/gripper/prob01.sas";
+            var targetDomain = "benchmarks/psr-large/domain.pddl";
+            var targetProblem = "benchmarks/psr-large/p24-s166-n15-l3-f10.pddl";
+            var targetSAS = "benchmarks-plans/lama-first/psr-large/p24-s166-n15-l3-f10.sas";
 
             IErrorListener listener = new ErrorListener();
             IParser<ISASNode> sasParser = new SASParser(listener);

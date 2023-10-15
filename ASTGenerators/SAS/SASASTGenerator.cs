@@ -20,15 +20,19 @@ namespace PDDLSharp.ASTGenerators.SAS
 
             var lineDict = GenerateLineDict(text, SASASTTokens.BreakToken);
 
+            text = text.Replace("begin_", "begin?");
+            text = text.Replace("end_", "end?");
+
             var returnNode = new ASTNode(0, text.Length, 1, text, text);
             int offset = 0;
             int lineOffset = 0;
             while (offset != -1)
             {
-                var begin = text.IndexOf("begin_", offset);
-                offset = text.IndexOf("end_", offset + 1);
-                if (offset == -1)
+                var begin = text.IndexOf('?', offset);
+                offset = text.IndexOf('?', begin + 1);
+                if (offset == -1 || begin == -1)
                     break;
+                begin -= 5;
                 var lastBreak = text.IndexOf(SASASTTokens.BreakToken, offset);
                 var endLength = text.Substring(offset, lastBreak - offset).Length;
                 var outerText = text.Substring(begin, offset - begin + endLength);
@@ -40,9 +44,10 @@ namespace PDDLSharp.ASTGenerators.SAS
                     begin + 1,
                     offset + endLength,
                     lineOffset,
-                    outerText,
-                    innerText
+                    outerText.Replace("begin?", "begin_").Replace("end?", "end_"),
+                    innerText.Replace("begin?", "begin_").Replace("end?", "end_")
                     ));
+                offset++;
             }
             return returnNode;
         }

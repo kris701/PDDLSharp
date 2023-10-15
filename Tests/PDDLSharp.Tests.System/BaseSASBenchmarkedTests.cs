@@ -15,7 +15,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 {
     public class BaseSASBenchmarkedTests : BaseBenchmarkedTests
     {
-        public static long MaxFileSize = 100000;
+        public static long MaxSASFileSize = 1000000;
         public static long MaxSASsPrDomain = 5;
         public static Dictionary<string, List<string>> _testSASDict = new Dictionary<string, List<string>>();
 
@@ -33,9 +33,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                         _testSASDict.Add(domainName, new List<string>());
                         foreach (var sas in Directory.GetFiles(domainPath))
                         {
-                            if (sas.EndsWith(".sas") && new FileInfo(sas).Length < MaxFileSize)
+                            if (sas.EndsWith(".sas") && new FileInfo(sas).Length < MaxSASFileSize)
                                 _testSASDict[domainName].Add(sas);
-                            if (_testSASDict[domainName].Count >= MaxProblemsPrDomain)
+                            if (_testSASDict[domainName].Count >= MaxSASsPrDomain)
                                 break;
                         }
                     }
