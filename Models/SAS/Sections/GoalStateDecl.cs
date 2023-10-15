@@ -15,5 +15,13 @@ namespace PDDLSharp.Models.SAS.Sections
         {
             Goals = goals;
         }
+
+        public override string? ToString()
+        {
+            var retStr = "";
+            foreach (var value in Goals)
+                retStr += $"{value}, ";
+            return retStr.Trim();
+        }
     }
 }
