@@ -29,7 +29,7 @@ namespace Toolkit.StaticPredicateDetectors
                 }
                 foreach (var action in decl.Domain.Axioms)
                 {
-                    var effects = action.Effects.FindTypes<PredicateExp>();
+                    var effects = action.Implies.FindTypes<PredicateExp>();
                     allPredicates.RemoveAll(x => effects.Any(y => y.Name == x.Name));
                 }
                 foreach (var pred in allPredicates)
