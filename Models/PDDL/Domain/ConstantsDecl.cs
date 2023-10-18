@@ -66,5 +66,17 @@ namespace PDDLSharp.Models.PDDL.Domain
                     Constants[i] = name;
             }
         }
+
+        public override void Add(INode node)
+        {
+            if (node is NameExp exp)
+                Constants.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is NameExp exp)
+                Constants.Remove(exp);
+        }
     }
 }

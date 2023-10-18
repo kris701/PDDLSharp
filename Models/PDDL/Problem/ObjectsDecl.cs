@@ -66,5 +66,17 @@ namespace PDDLSharp.Models.PDDL.Problem
                     Objs[i] = exp;
             }
         }
+
+        public override void Add(INode node)
+        {
+            if (node is NameExp exp)
+                Objs.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is NameExp exp)
+                Objs.Remove(exp);
+        }
     }
 }

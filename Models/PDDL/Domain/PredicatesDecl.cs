@@ -66,5 +66,17 @@ namespace PDDLSharp.Models.PDDL.Domain
                     Predicates[i] = pred;
             }
         }
+
+        public override void Add(INode node)
+        {
+            if (node is PredicateExp exp)
+                Predicates.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is PredicateExp exp)
+                Predicates.Remove(exp);
+        }
     }
 }

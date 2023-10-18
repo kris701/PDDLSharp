@@ -65,5 +65,17 @@ namespace PDDLSharp.Models.PDDL.Expressions
                     Options[i] = asExp;
             }
         }
+
+        public override void Add(INode node)
+        {
+            if (node is IExp exp)
+                Options.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is IExp exp)
+                Options.Remove(exp);
+        }
     }
 }

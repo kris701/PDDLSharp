@@ -66,5 +66,17 @@ namespace PDDLSharp.Models.PDDL.Domain
                     Requirements[i] = name;
             }
         }
+
+        public override void Add(INode node)
+        {
+            if (node is NameExp exp)
+                Requirements.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is NameExp exp)
+                Requirements.Remove(exp);
+        }
     }
 }

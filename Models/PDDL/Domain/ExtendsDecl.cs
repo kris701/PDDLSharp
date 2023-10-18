@@ -66,5 +66,17 @@ namespace PDDLSharp.Models.PDDL.Domain
                     Extends[i] = name;
             }
         }
+
+        public override void Add(INode node)
+        {
+            if (node is NameExp exp)
+                Extends.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is NameExp exp)
+                Extends.Remove(exp);
+        }
     }
 }

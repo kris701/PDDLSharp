@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using System;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -65,6 +66,18 @@ namespace PDDLSharp.Models.PDDL.Domain
                 if (Items[i] == node && with is PredicateExp pred)
                     Items[i] = pred;
             }
+        }
+
+        public override void Add(INode node)
+        {
+            if (node is PredicateExp exp)
+                Items.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is PredicateExp exp)
+                Items.Remove(exp);
         }
     }
 }

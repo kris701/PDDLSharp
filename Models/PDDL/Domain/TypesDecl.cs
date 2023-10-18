@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using System;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -65,6 +66,18 @@ namespace PDDLSharp.Models.PDDL.Domain
                 if (Types[i] == node && with is TypeExp type)
                     Types[i] = type;
             }
+        }
+
+        public override void Add(INode node)
+        {
+            if (node is TypeExp exp)
+                Types.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is TypeExp exp)
+                Types.Remove(exp);
         }
     }
 }
