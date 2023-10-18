@@ -146,8 +146,21 @@ IErrorListener listener = new ErrorListener();
 IParser<INode> parser = new PDDLParser(listener);
 PDDLDecl decl = new PDDLDecl(...)
 
-IMutexDetectors detector = new SimpleMutexDetector();
+IMutexDetectors detector = new EffectBalanceMutexes();
 var mutexes = detector.FindMutexes(decl);
+```
+
+## Static Predicate Detector
+There is a simple static predicate detector included in PDDLSharp.
+It is able to find predicates that are not ever set in action effects.
+You just give it a `PDDLDecl` and it will try and find static predicates in it:
+```csharp
+IErrorListener listener = new ErrorListener();
+IParser<INode> parser = new PDDLParser(listener);
+PDDLDecl decl = new PDDLDecl(...)
+
+IStaticPredicateDetectors detector = new SimpleStaticPredicateDetector();
+var predicates = detector.FindStaticPredicates(decl);
 ```
 
 # Supported Requirements
