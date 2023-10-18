@@ -58,7 +58,7 @@
 		<ProjectReference Include="..\Toolkit\Toolkit.MutexDetector\Toolkit.MutexDetector.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Toolkit\Toolkit.PlanValidator\Toolkit.PlanValidator.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Toolkit\Toolkit.StateSpace\Toolkit.StateSpace.csproj" PrivateAssets="all" />
-		<ProjectReference Include="..\Toolkit\Toolkit.StaticPredicateDetectors\Toolkit.StaticPredicateDetectors.csproj" />
+		<ProjectReference Include="..\Toolkit\Toolkit.StaticPredicateDetectors\Toolkit.StaticPredicateDetectors.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Tools\Tools.csproj" PrivateAssets="all" />
   </ItemGroup>
 
