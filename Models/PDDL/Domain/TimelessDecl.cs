@@ -4,7 +4,7 @@ using System;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class TimelessDecl : BaseWalkableNode, IDecl
+    public class TimelessDecl : BaseListableNode, IDecl
     {
         public List<PredicateExp> Items { get; set; }
 

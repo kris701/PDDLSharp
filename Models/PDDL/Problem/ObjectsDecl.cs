@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class ObjectsDecl : BaseWalkableNode, IDecl
+    public class ObjectsDecl : BaseListableNode, IDecl
     {
         public List<NameExp> Objs { get; set; }
 

@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class ConstantsDecl : BaseWalkableNode, IDecl
+    public class ConstantsDecl : BaseListableNode, IDecl
     {
         public List<NameExp> Constants { get; set; }
 

@@ -30,15 +30,5 @@ namespace PDDLSharp.Models.PDDL
         }
 
         public abstract void Replace(INode node, INode with);
-
-        public virtual void Add(INode node)
-        {
-            // Default does nothing
-        }
-
-        public virtual void Remove(INode node)
-        {
-            // Default does nothing
-        }
     }
 }

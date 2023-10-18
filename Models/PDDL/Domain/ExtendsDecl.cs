@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class ExtendsDecl : BaseWalkableNode, IDecl
+    public class ExtendsDecl : BaseListableNode, IDecl
     {
         public List<NameExp> Extends { get; set; }
 

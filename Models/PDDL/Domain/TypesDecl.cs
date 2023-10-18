@@ -4,7 +4,7 @@ using System;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class TypesDecl : BaseWalkableNode, IDecl
+    public class TypesDecl : BaseListableNode, IDecl
     {
         public List<TypeExp> Types { get; set; }
 

@@ -7,11 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PDDLSharp.Models.PDDL.Problem;
 
 namespace PDDLSharp.Models.Tests.PDDL
 {
     [TestClass]
-    public class IWalkableTests
+    public class IListableTests
     {
         public static IEnumerable<object[]> GetTestData()
         {
@@ -28,6 +29,11 @@ namespace PDDLSharp.Models.Tests.PDDL
 
             yield return new object[]
             {
+                new OrExp(),
+                new PredicateExp("pred")
+            };
+            yield return new object[]
+            {
                 new OrExp(new List<IExp>(){ new PredicateExp("pred2"), new PredicateExp("pred1") }),
                 new PredicateExp("pred")
             };
@@ -37,11 +43,49 @@ namespace PDDLSharp.Models.Tests.PDDL
                 new ParameterExp(new List<NameExp>(){ new NameExp("?a"), new NameExp("?b") }),
                 new NameExp("?c")
             };
+            yield return new object[]
+            {
+                new ParameterExp(),
+                new NameExp("?c")
+            };
 
+            yield return new object[]
+            {
+                new FunctionsDecl(),
+                new PredicateExp("func3")
+            };
             yield return new object[]
             {
                 new FunctionsDecl(new List<PredicateExp>(){ new PredicateExp("func1"), new PredicateExp("func2") }),
                 new PredicateExp("func3")
+            };
+
+            yield return new object[]
+            {
+                new TimelessDecl(),
+                new PredicateExp("pred2")
+            };
+            yield return new object[]
+{
+                new TimelessDecl(new List<PredicateExp>(){ new PredicateExp("pred1") }),
+                new PredicateExp("pred2")
+};
+
+            yield return new object[]
+            {
+                new TypesDecl(),
+                new TypeExp("type3")
+            };
+            yield return new object[]
+            {
+                new TypesDecl(new List<TypeExp>(){ new TypeExp("type1"), new TypeExp("type2") }),
+                new TypeExp("type3")
+            };
+
+            yield return new object[]
+            {
+                new ObjectsDecl(new List<NameExp>(){ new NameExp("obj1"), new NameExp("obj2") }),
+                new NameExp("obj3")
             };
         }
 
@@ -49,92 +93,75 @@ namespace PDDLSharp.Models.Tests.PDDL
         // These tests are not exhaustive!
         [TestMethod]
         [DynamicData(nameof(GetTestData), DynamicDataSourceType.Method)]
-        public void Can_Add(IWalkable node, INode add)
+        public void Can_Add(IListable node, INode add)
         {
             // ARRANGE
+            Assert.IsTrue(!node.Contains(add));
+
             // ACT
-            foreach (var child in node)
-                Assert.AreNotEqual(child, add);
 
             node.Add(add);
 
             // ASSERT
-            int howMany = 0;
-            foreach (var child in node)
-                if (child == add)
-                    howMany++;
-            Assert.AreEqual(1, howMany);
+            Assert.IsTrue(node.Contains(add));
         }
 
         // This is just a test with some random sets of nodes.
         // These tests are not exhaustive!
         [TestMethod]
         [DynamicData(nameof(GetTestData), DynamicDataSourceType.Method)]
-        public void Can_Add_Duplicate(IWalkable node, INode add)
+        public void Can_Add_Duplicate(IListable node, INode add)
         {
             // ARRANGE
-            // ACT
-            foreach (var child in node)
-                Assert.AreNotEqual(child, add);
+            Assert.IsTrue(!node.Contains(add));
 
+            // ACT
             node.Add(add);
             node.Add(add);
 
             // ASSERT
-            int howMany = 0;
-            foreach (var child in node)
-                if (child == add)
-                    howMany++;
-            Assert.AreEqual(2, howMany);
+            Assert.AreEqual(2, node.Count(add));
         }
 
         // This is just a test with some random sets of nodes.
         // These tests are not exhaustive!
         [TestMethod]
         [DynamicData(nameof(GetTestData), DynamicDataSourceType.Method)]
-        public void Can_Remove(IWalkable node, INode add)
+        public void Can_Remove(IListable node, INode add)
         {
             // ARRANGE
+            Assert.IsTrue(!node.Contains(add));
             node.Add(add);
-            int howMany = 0;
-            foreach (var child in node)
-                if (child == add)
-                    howMany++;
-            Assert.AreEqual(1, howMany);
+            Assert.IsTrue(node.Contains(add));
 
             // ACT
-
             node.Remove(add);
 
             // ASSERT
-            foreach (var child in node)
-                Assert.AreNotEqual(child, add);
+            Assert.IsTrue(!node.Contains(add));
         }
 
         // This is just a test with some random sets of nodes.
         // These tests are not exhaustive!
         [TestMethod]
         [DynamicData(nameof(GetTestData), DynamicDataSourceType.Method)]
-        public void Cant_Remove_IfNotThere(IWalkable node, INode add)
+        public void Cant_Remove_IfNotThere(IListable node, INode add)
         {
             // ARRANGE
-            foreach (var child in node)
-                Assert.AreNotEqual(child, add);
+            Assert.IsTrue(!node.Contains(add));
 
             // ACT
-
             node.Remove(add);
 
             // ASSERT
-            foreach (var child in node)
-                Assert.AreNotEqual(child, add);
+            Assert.IsTrue(!node.Contains(add));
         }
 
         // This is just a test with some random sets of nodes.
         // These tests are not exhaustive!
         [TestMethod]
         [DynamicData(nameof(GetTestData), DynamicDataSourceType.Method)]
-        public void Can_Replace(IWalkable node, INode with)
+        public void Can_Replace(IListable node, INode with)
         {
             // ARRANGE
             INode target = null;
@@ -148,25 +175,14 @@ namespace PDDLSharp.Models.Tests.PDDL
             }
             if (target == null)
                 return;
-
-            foreach (var child in node)
-                Assert.AreNotEqual(child, with);
+            Assert.IsTrue(!node.Contains(with));
 
             // ACT
-
             node.Replace(target, with);
 
             // ASSERT
-            int howMany = 0;
-            foreach (var child in node)
-                if (child == with)
-                    howMany++;
-            Assert.AreEqual(1, howMany);
-            howMany = 0;
-            foreach (var child in node)
-                if (child == target)
-                    howMany++;
-            Assert.AreEqual(0, howMany);
+            Assert.IsTrue(node.Contains(with));
+            Assert.IsTrue(!node.Contains(target));
         }
     }
 }
