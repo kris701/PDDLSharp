@@ -33,12 +33,12 @@ namespace PDDLSharp.Models.PDDL
 
         public virtual void Add(INode node)
         {
-            // Default does nothing
+            throw new NotImplementedException();
         }
 
         public virtual void Remove(INode node)
         {
-            // Default does nothing
+            throw new NotImplementedException();
         }
     }
 }
