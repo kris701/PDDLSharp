@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class ParameterExp : BaseWalkableNode
+    public class ParameterExp : BaseListableNode
     {
         public List<NameExp> Values { get; set; }
 
@@ -64,6 +64,18 @@ namespace PDDLSharp.Models.PDDL.Expressions
                 if (Values[i] == node && with is NameExp name)
                     Values[i] = name;
             }
+        }
+
+        public override void Add(INode node)
+        {
+            if (node is NameExp exp)
+                Values.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is NameExp exp)
+                Values.Remove(exp);
         }
     }
 }

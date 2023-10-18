@@ -1,8 +1,9 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class DomainDecl : BaseWalkableNode, IDecl
+    public class DomainDecl : BaseListableNode, IDecl
     {
         public DomainNameDecl? Name { get; set; }
         public RequirementsDecl? Requirements { get; set; }
@@ -165,6 +166,30 @@ namespace PDDLSharp.Models.PDDL.Domain
                 if (Deriveds[i] == node && with is DerivedDecl act)
                     Deriveds[i] = act;
             }
+        }
+
+        public override void Add(INode node)
+        {
+            if (node is ActionDecl act)
+                Actions.Add(act);
+            else if (node is DurativeActionDecl dact)
+                DurativeActions.Add(dact);
+            else if (node is AxiomDecl axi)
+                Axioms.Add(axi);
+            else if (node is DerivedDecl der)
+                Deriveds.Add(der);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is ActionDecl act)
+                Actions.Remove(act);
+            else if (node is DurativeActionDecl dact)
+                DurativeActions.Remove(dact);
+            else if (node is AxiomDecl axi)
+                Axioms.Remove(axi);
+            else if (node is DerivedDecl der)
+                Deriveds.Remove(der);
         }
     }
 }

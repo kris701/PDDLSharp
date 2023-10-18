@@ -1,9 +1,10 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using System;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class TypesDecl : BaseWalkableNode, IDecl
+    public class TypesDecl : BaseListableNode, IDecl
     {
         public List<TypeExp> Types { get; set; }
 
@@ -65,6 +66,18 @@ namespace PDDLSharp.Models.PDDL.Domain
                 if (Types[i] == node && with is TypeExp type)
                     Types[i] = type;
             }
+        }
+
+        public override void Add(INode node)
+        {
+            if (node is TypeExp exp)
+                Types.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is TypeExp exp)
+                Types.Remove(exp);
         }
     }
 }

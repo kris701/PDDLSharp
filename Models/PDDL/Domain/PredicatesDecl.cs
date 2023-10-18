@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class PredicatesDecl : BaseWalkableNode, IDecl
+    public class PredicatesDecl : BaseListableNode, IDecl
     {
         public List<PredicateExp> Predicates { get; set; }
 
@@ -65,6 +65,18 @@ namespace PDDLSharp.Models.PDDL.Domain
                 if (Predicates[i] == node && with is PredicateExp pred)
                     Predicates[i] = pred;
             }
+        }
+
+        public override void Add(INode node)
+        {
+            if (node is PredicateExp exp)
+                Predicates.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is PredicateExp exp)
+                Predicates.Remove(exp);
         }
     }
 }

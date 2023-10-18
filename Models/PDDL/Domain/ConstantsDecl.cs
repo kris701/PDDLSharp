@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
-    public class ConstantsDecl : BaseWalkableNode, IDecl
+    public class ConstantsDecl : BaseListableNode, IDecl
     {
         public List<NameExp> Constants { get; set; }
 
@@ -65,6 +65,18 @@ namespace PDDLSharp.Models.PDDL.Domain
                 if (Constants[i] == node && with is NameExp name)
                     Constants[i] = name;
             }
+        }
+
+        public override void Add(INode node)
+        {
+            if (node is NameExp exp)
+                Constants.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is NameExp exp)
+                Constants.Remove(exp);
         }
     }
 }

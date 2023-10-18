@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class ObjectsDecl : BaseWalkableNode, IDecl
+    public class ObjectsDecl : BaseListableNode, IDecl
     {
         public List<NameExp> Objs { get; set; }
 
@@ -65,6 +65,18 @@ namespace PDDLSharp.Models.PDDL.Problem
                 if (Objs[i] == node && with is NameExp exp)
                     Objs[i] = exp;
             }
+        }
+
+        public override void Add(INode node)
+        {
+            if (node is NameExp exp)
+                Objs.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is NameExp exp)
+                Objs.Remove(exp);
         }
     }
 }

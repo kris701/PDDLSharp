@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
-    public class InitDecl : BaseWalkableNode, IDecl
+    public class InitDecl : BaseListableNode, IDecl
     {
         public List<IExp> Predicates { get; set; }
 
@@ -64,6 +64,18 @@ namespace PDDLSharp.Models.PDDL.Problem
                 if (Predicates[i] == node && with is IExp exp)
                     Predicates[i] = exp;
             }
+        }
+
+        public override void Add(INode node)
+        {
+            if (node is IExp exp)
+                Predicates.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is IExp exp)
+                Predicates.Remove(exp);
         }
     }
 }

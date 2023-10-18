@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class AndExp : BaseWalkableNode, IExp
+    public class AndExp : BaseListableNode, IExp
     {
         public List<IExp> Children { get; set; }
 
@@ -64,6 +64,18 @@ namespace PDDLSharp.Models.PDDL.Expressions
                 if (Children[i] == node && with is IExp asExp)
                     Children[i] = asExp;
             }
+        }
+
+        public override void Add(INode node)
+        {
+            if (node is IExp exp)
+                Children.Add(exp);
+        }
+
+        public override void Remove(INode node)
+        {
+            if (node is IExp exp)
+                Children.Remove(exp);
         }
     }
 }
