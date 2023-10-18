@@ -30,15 +30,22 @@ namespace PDDLSharp.Models.PDDL
         }
 
         public abstract void Replace(INode node, INode with);
-
-        public virtual void Add(INode node)
+        public abstract void Add(INode node);
+        public void AddRange(List<INode> nodes)
         {
-            // Default does nothing
+            foreach (var node in nodes)
+                Add(node);
         }
-
-        public virtual void Remove(INode node)
+        public abstract void Remove(INode node);
+        public void RemoveAll(INode node)
         {
-            // Default does nothing
+            while (Contains(node))
+                Remove(node);
+        }
+        public void RemoveRange(List<INode> nodes)
+        {
+            foreach (var node in nodes)
+                Remove(node);
         }
 
         public bool Contains(INode node)
@@ -47,6 +54,13 @@ namespace PDDLSharp.Models.PDDL
                 if (subNode == node)
                     return true;
             return false;
+        }
+        public bool ContainsAll(List<INode> nodes)
+        {
+            foreach (var node in nodes)
+                if (!Contains(node))
+                    return false;
+            return true;
         }
 
         public int Count(INode node)

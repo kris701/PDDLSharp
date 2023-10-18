@@ -89,6 +89,72 @@ namespace PDDLSharp.Models.Tests.PDDL
             };
         }
 
+        public static IEnumerable<object[]> GetRemoveAllTestData()
+        {
+            yield return new object[]
+            {
+                new AndExp(),
+                new PredicateExp("pred")
+            };
+
+            yield return new object[]
+            {
+                new OrExp(),
+                new PredicateExp("pred")
+            };
+
+            yield return new object[]
+            {
+                new ParameterExp(),
+                new NameExp("?c")
+            };
+
+            yield return new object[]
+            {
+                new FunctionsDecl(),
+                new PredicateExp("func3")
+            };
+
+            yield return new object[]
+            {
+                new TypesDecl(),
+                new TypeExp("type3")
+            };
+        }
+
+        public static IEnumerable<object[]> GetRangeTestData()
+        {
+            yield return new object[]
+            {
+                new AndExp(),
+                new List<INode>(){ new PredicateExp("pred") , new PredicateExp("pred1") , new PredicateExp("pred2") }
+            };
+
+            yield return new object[]
+            {
+                new OrExp(),
+                new List<INode>(){ new PredicateExp("pred") , new PredicateExp("pred1") , new PredicateExp("pred2") }
+            };
+
+            yield return new object[]
+            {
+                new ParameterExp(),
+                new List<INode>(){ new NameExp("?a") , new NameExp("?b") , new NameExp("?c") }
+            };
+
+            yield return new object[]
+            {
+                new FunctionsDecl(),
+                new List<INode>(){ new PredicateExp("func") , new PredicateExp("func1") , new PredicateExp("func2") }
+            };
+
+            yield return new object[]
+            {
+                new TypesDecl(),
+                new List<INode>(){ new TypeExp("type") , new TypeExp("type1") , new TypeExp("type2") }
+            };
+        }
+
         // This is just a test with some random sets of nodes.
         // These tests are not exhaustive!
         [TestMethod]
@@ -96,7 +162,7 @@ namespace PDDLSharp.Models.Tests.PDDL
         public void Can_Add(IListable node, INode add)
         {
             // ARRANGE
-            Assert.IsTrue(!node.Contains(add));
+            Assert.IsFalse(node.Contains(add));
 
             // ACT
 
@@ -106,6 +172,21 @@ namespace PDDLSharp.Models.Tests.PDDL
             Assert.IsTrue(node.Contains(add));
         }
 
+        [TestMethod]
+        [DynamicData(nameof(GetRangeTestData), DynamicDataSourceType.Method)]
+        public void Can_AddRange(IListable node, List<INode> adds)
+        {
+            // ARRANGE
+            Assert.IsFalse(node.ContainsAll(adds));
+
+            // ACT
+
+            node.AddRange(adds);
+
+            // ASSERT
+            Assert.IsTrue(node.ContainsAll(adds));
+        }
+
         // This is just a test with some random sets of nodes.
         // These tests are not exhaustive!
         [TestMethod]
@@ -113,7 +194,7 @@ namespace PDDLSharp.Models.Tests.PDDL
         public void Can_Add_Duplicate(IListable node, INode add)
         {
             // ARRANGE
-            Assert.IsTrue(!node.Contains(add));
+            Assert.IsFalse(node.Contains(add));
 
             // ACT
             node.Add(add);
@@ -130,7 +211,7 @@ namespace PDDLSharp.Models.Tests.PDDL
         public void Can_Remove(IListable node, INode add)
         {
             // ARRANGE
-            Assert.IsTrue(!node.Contains(add));
+            Assert.IsFalse(node.Contains(add));
             node.Add(add);
             Assert.IsTrue(node.Contains(add));
 
@@ -138,7 +219,42 @@ namespace PDDLSharp.Models.Tests.PDDL
             node.Remove(add);
 
             // ASSERT
-            Assert.IsTrue(!node.Contains(add));
+            Assert.IsFalse(node.Contains(add));
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(GetRangeTestData), DynamicDataSourceType.Method)]
+        public void Can_RemoveRange(IListable node, List<INode> adds)
+        {
+            // ARRANGE
+            Assert.IsFalse(node.ContainsAll(adds));
+            node.AddRange(adds);
+            Assert.IsTrue(node.ContainsAll(adds));
+
+            // ACT
+            node.RemoveRange(adds);
+
+            // ASSERT
+            Assert.IsFalse(node.ContainsAll(adds));
+        }
+
+        // This is just a test with some random sets of nodes.
+        // These tests are not exhaustive!
+        [TestMethod]
+        [DynamicData(nameof(GetRemoveAllTestData), DynamicDataSourceType.Method)]
+        public void Can_RemoveAll(IListable node, INode add)
+        {
+            // ARRANGE
+            Assert.AreEqual(0, node.Count(add));
+            for (int i = 0; i < 10; i++)
+                node.Add(add);
+            Assert.AreEqual(10, node.Count(add));
+
+            // ACT
+            node.RemoveAll(add);
+
+            // ASSERT
+            Assert.AreEqual(0, node.Count(add));
         }
 
         // This is just a test with some random sets of nodes.
@@ -148,13 +264,13 @@ namespace PDDLSharp.Models.Tests.PDDL
         public void Cant_Remove_IfNotThere(IListable node, INode add)
         {
             // ARRANGE
-            Assert.IsTrue(!node.Contains(add));
+            Assert.IsFalse(node.Contains(add));
 
             // ACT
             node.Remove(add);
 
             // ASSERT
-            Assert.IsTrue(!node.Contains(add));
+            Assert.IsFalse(node.Contains(add));
         }
 
         // This is just a test with some random sets of nodes.
@@ -175,14 +291,14 @@ namespace PDDLSharp.Models.Tests.PDDL
             }
             if (target == null)
                 return;
-            Assert.IsTrue(!node.Contains(with));
+            Assert.IsFalse(node.Contains(with));
 
             // ACT
             node.Replace(target, with);
 
             // ASSERT
             Assert.IsTrue(node.Contains(with));
-            Assert.IsTrue(!node.Contains(target));
+            Assert.IsFalse(node.Contains(target));
         }
     }
 }
