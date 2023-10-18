@@ -111,7 +111,7 @@ namespace PDDLSharp.Toolkit.MutexDetectors.Tests
         public void Can_DetectMutex(List<ActionDecl> actions, List<PredicateExp> expectedPredicates)
         {
             // ARRANGE
-            IMutexDetectors detector = new SimpleMutexDetector();
+            IMutexDetectors detector = new EffectBalanceMutexes();
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Domain.Actions = actions;
 
@@ -153,7 +153,7 @@ namespace PDDLSharp.Toolkit.MutexDetectors.Tests
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
             var decl = parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
-            IMutexDetectors detector = new SimpleMutexDetector();
+            IMutexDetectors detector = new EffectBalanceMutexes();
 
             // ACT
             var mutexes = detector.FindMutexes(decl);

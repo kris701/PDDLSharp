@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Toolkit.MutexDetector
 {
-    public class SimpleMutexDetector : IMutexDetectors
+    public class EffectBalanceMutexes : IMutexDetectors
     {
         public List<PredicateExp> FindMutexes(PDDLDecl decl)
         {
