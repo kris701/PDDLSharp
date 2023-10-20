@@ -70,9 +70,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3E9E1F41
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A1F7B33E-DC44-4954-965F-09A549BA0813}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.StaticPredicateDetectors", "Toolkit\Toolkit.StaticPredicateDetectors\Toolkit.StaticPredicateDetectors.csproj", "{7EB18915-2165-44EE-8D06-EBAA1D8F925B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.StaticPredicateDetectors", "Toolkit\Toolkit.StaticPredicateDetectors\Toolkit.StaticPredicateDetectors.csproj", "{7EB18915-2165-44EE-8D06-EBAA1D8F925B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.StaticPredicateDetectors.Tests", "Toolkit\Tests\Toolkit.StaticPredicateDetectors.Tests\Toolkit.StaticPredicateDetectors.Tests.csproj", "{107D3438-A075-40FF-910F-83CA00CECD80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.StaticPredicateDetectors.Tests", "Toolkit\Tests\Toolkit.StaticPredicateDetectors.Tests\Toolkit.StaticPredicateDetectors.Tests.csproj", "{107D3438-A075-40FF-910F-83CA00CECD80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Grounders", "Toolkit\Toolkit.Grounders\Toolkit.Grounders.csproj", "{7DA1B3A0-D1E1-450A-9FC6-EFFDEE6A9B76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -192,6 +194,10 @@ Global
 		{107D3438-A075-40FF-910F-83CA00CECD80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{107D3438-A075-40FF-910F-83CA00CECD80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{107D3438-A075-40FF-910F-83CA00CECD80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DA1B3A0-D1E1-450A-9FC6-EFFDEE6A9B76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DA1B3A0-D1E1-450A-9FC6-EFFDEE6A9B76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DA1B3A0-D1E1-450A-9FC6-EFFDEE6A9B76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DA1B3A0-D1E1-450A-9FC6-EFFDEE6A9B76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,6 +222,7 @@ Global
 		{A1F7B33E-DC44-4954-965F-09A549BA0813} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
 		{7EB18915-2165-44EE-8D06-EBAA1D8F925B} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
 		{107D3438-A075-40FF-910F-83CA00CECD80} = {A1F7B33E-DC44-4954-965F-09A549BA0813}
+		{7DA1B3A0-D1E1-450A-9FC6-EFFDEE6A9B76} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4318FA26-2735-43B3-A9D9-1FFB4E409256}
