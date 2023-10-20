@@ -163,6 +163,26 @@ IStaticPredicateDetectors detector = new SimpleStaticPredicateDetector();
 var predicates = detector.FindStaticPredicates(decl);
 ```
 
+## Predicate Grounder
+There is a predicate grounder included in PDDLSharp.
+It is able to take in a predicate, and instanciate it with all possible valid combinations of objects (and constants).
+```csharp
+PDDLDecl decl = new PDDLDecl(...)
+IGrounder<PredicateExp, PredicateExp> grounder = new PredicateGrounder(decl);
+PredicateExp predicate = new PredicateExp(...);
+List<PredicateExp> groundedPredicates = grounder.Ground(predicate);
+```
+
+## Action Grounder
+There is a action grounder included in PDDLSharp.
+It is able to take in a action, and instanciate it with all possible valid combinations of objects (and constants).
+```csharp
+PDDLDecl decl = new PDDLDecl(...)
+IGrounder<ActionDecl, GroundedAction> grounder = new ActionGrounder(decl);
+ActionDecl action = new ActionDecl(...);
+List<GroundedAction> groundedActions = grounder.Ground(action);
+```
+
 # Supported Requirements
 PDDLSharp supports a large set of requirements, all the way up to PDDL 2.2:
 

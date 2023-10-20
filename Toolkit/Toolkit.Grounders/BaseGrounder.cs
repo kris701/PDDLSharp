@@ -12,13 +12,12 @@ namespace PDDLSharp.Toolkit.Grounders
     public abstract class BaseGrounder<T, U> : IGrounder<T, U>
     {
         public PDDLDecl Declaration { get; }
+        private Dictionary<string, List<string>> _objCache = new Dictionary<string, List<string>>();
 
         protected BaseGrounder(PDDLDecl declaration)
         {
             Declaration = declaration;
         }
-
-        private Dictionary<string, List<string>> _objCache = new Dictionary<string, List<string>>();
 
         public abstract List<U> Ground(T item);
 
