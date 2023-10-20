@@ -32,7 +32,7 @@ namespace PDDLSharp.Toolkit.Grounders
             return groundedActions;
         }
 
-        private List<List<string>> GenerateParameterPermutations(List<NameExp> parameters, List<string> carried, int index = 0)
+        public List<List<string>> GenerateParameterPermutations(List<NameExp> parameters, List<string> carried, int index = 0)
         {
             List<List<string>> returnList = new List<List<string>>();
 
