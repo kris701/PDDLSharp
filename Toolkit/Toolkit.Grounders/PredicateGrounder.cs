@@ -19,6 +19,9 @@ namespace PDDLSharp.Toolkit.Grounders
         {
             List<PredicateExp> newPredicates = new List<PredicateExp>();
 
+            if (item.Arguments.Count == 0)
+                return new List<PredicateExp>() { item.Copy() };
+
             var allPermuations = GenerateParameterPermutations(item.Arguments);
             foreach (var premutation in allPermuations)
             {

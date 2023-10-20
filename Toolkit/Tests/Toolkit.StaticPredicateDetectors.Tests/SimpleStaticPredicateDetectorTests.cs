@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Toolkit.StaticPredicateDetectors.Tests
+namespace PDDLSharp.Toolkit.StaticPredicateDetectors.Tests
 {
     [TestClass]
     public class SimpleStaticPredicateDetectorTests
