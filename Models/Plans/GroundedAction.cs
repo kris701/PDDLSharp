@@ -27,7 +27,7 @@ namespace PDDLSharp.Models.Plans
             ActionName = action.Name;
             Arguments = new List<NameExp>();
             foreach (var arg in arguments)
-                Arguments.Add(new NameExp(null, arg));
+                Arguments.Add(new NameExp(arg));
         }
 
         public GroundedAction(ActionDecl action, List<NameExp> arguments)

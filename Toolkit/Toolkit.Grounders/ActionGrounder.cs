@@ -21,6 +21,9 @@ namespace PDDLSharp.Toolkit.Grounders
         {
             List<GroundedAction> groundedActions = new List<GroundedAction>();
 
+            if (item.Parameters.Values.Count == 0)
+                return new List<GroundedAction>() { new GroundedAction(item) };
+
             var allPermuations = GenerateParameterPermutations(item.Parameters.Values);
             foreach (var premutation in allPermuations)
                 groundedActions.Add(new GroundedAction(item.Name, premutation.ToArray()));

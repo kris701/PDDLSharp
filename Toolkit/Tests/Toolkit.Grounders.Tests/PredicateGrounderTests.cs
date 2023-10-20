@@ -5,7 +5,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Toolkit.Grounders;
 
-namespace Toolkit.Grounders.Tests
+namespace PDDLSharp.Toolkit.Grounders.Tests
 {
     [TestClass]
     public class PredicateGrounderTests
