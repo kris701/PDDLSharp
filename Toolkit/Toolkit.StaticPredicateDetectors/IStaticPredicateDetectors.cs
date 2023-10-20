@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Toolkit.StaticPredicateDetectors
+namespace PDDLSharp.Toolkit.StaticPredicateDetectors
 {
     public interface IStaticPredicateDetectors
     {
