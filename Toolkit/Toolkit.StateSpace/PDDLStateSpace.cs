@@ -169,7 +169,7 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         private bool CheckPermutationsStepwise(INode node, ParameterExp parameters, Func<INode, bool?> stopFunc, bool defaultReturn = true)
         {
-            var allPermuations = _grounder.GenerateParameterPermutations(parameters.Values, new List<string>(parameters.Values.Count));
+            var allPermuations = _grounder.GenerateParameterPermutations(parameters.Values);
             for (int i = 0; i < allPermuations.Count; i++) {
                 var res = stopFunc(GenerateNewParametized(node, parameters, allPermuations[i]));
                 if (res != null)
