@@ -12,12 +12,12 @@ namespace PDDLSharp.Toolkit.StateSpace
         private HashSet<PredicateExp> _state;
         private List<PredicateExp> _tempAdd = new List<PredicateExp>();
         private List<PredicateExp> _tempDel = new List<PredicateExp>();
-        private ActionGrounder _grounder;
+        private ParametizedGrounder _grounder;
 
         public PDDLStateSpace(PDDLDecl declaration)
         {
             Declaration = declaration;
-            _grounder = new ActionGrounder(declaration);
+            _grounder = new ParametizedGrounder(declaration);
             _state = new HashSet<PredicateExp>();
             if (declaration.Problem.Init != null)
                 foreach (var item in declaration.Problem.Init.Predicates)

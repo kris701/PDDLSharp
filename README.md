@@ -168,19 +168,29 @@ There is a predicate grounder included in PDDLSharp.
 It is able to take in a predicate, and instanciate it with all possible valid combinations of objects (and constants).
 ```csharp
 PDDLDecl decl = new PDDLDecl(...)
-IGrounder<PredicateExp, PredicateExp> grounder = new PredicateGrounder(decl);
+IGrounder<PredicateExp> grounder = new PredicateGrounder(decl);
 PredicateExp predicate = new PredicateExp(...);
 List<PredicateExp> groundedPredicates = grounder.Ground(predicate);
 ```
 
-## Action Grounder
-There is a action grounder included in PDDLSharp.
-It is able to take in a action, and instanciate it with all possible valid combinations of objects (and constants).
+## `IParametized` Grounder
+Another grounder that is included is one that can ground `IParametized` nodes.
+This is nodes such as `ActionDecl`, `ForAllExp`, `ExistsExp`, etc.
+It takes in an `IParametized` node and makes grounded copies of it.
 ```csharp
 PDDLDecl decl = new PDDLDecl(...)
-IGrounder<ActionDecl, GroundedAction> grounder = new ActionGrounder(decl);
+IGrounder<IParametized> grounder = new ParametizedGrounder(decl);
 ActionDecl action = new ActionDecl(...);
-List<GroundedAction> groundedActions = grounder.Ground(action);
+List<IParametized> groundedActions = grounder.Ground(action);
+```
+
+## Sequential Macro Generator
+PDDLSharp also have a simple sequential macro generator. It can generate lifted macros based on reoccuring sequences in `ActionPlan`s
+```csharp
+PDDLDecl decl = new PDDLDecl(...)
+IMacroGenerator<List<ActionPlan>> generator = new SequentialMacroGenerator(decl);
+List<ActionPlan> plans = new List<ActionPlan>(...);
+List<ActionDecl> macros = generator.FindMacros(plans);
 ```
 
 # Supported Requirements

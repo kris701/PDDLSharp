@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Grounders
 {
-    public interface IGrounder<T, U>
+    public interface IGrounder<T>
     {
-        public List<U> Ground(T item);
+        public List<T> Ground(T item);
         public List<List<string>> GenerateParameterPermutations(List<NameExp> parameters);
     }
 }
