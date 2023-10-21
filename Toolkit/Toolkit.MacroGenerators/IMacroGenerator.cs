@@ -12,6 +12,6 @@ namespace PDDLSharp.Toolkit.MacroGenerators
     public interface IMacroGenerator<T>
     {
         public PDDLDecl Declaration { get; }
-        public List<ActionDecl> FindMacros(T from, int amount);
+        public List<ActionDecl> FindMacros(T from, int amount = int.MaxValue);
     }
 }

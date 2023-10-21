@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.Plans;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,13 @@ namespace PDDLSharp.Toolkit.MacroGenerators
     public class SequentialMacroGenerator : IMacroGenerator<List<ActionPlan>>
     {
         public PDDLDecl Declaration { get; }
-        public double SignificanceFactor { get; set; } = 1.5;
 
         public SequentialMacroGenerator(PDDLDecl declaration)
         {
             Declaration = declaration;
         }
 
-        public List<ActionDecl> FindMacros(List<ActionPlan> from, int amount)
+        public List<ActionDecl> FindMacros(List<ActionPlan> from, int amount = int.MaxValue)
         {
             var actionBlocks = GetBlocks(from);
             var occurenceCount = GetOccurenceDict(actionBlocks);
@@ -62,8 +62,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators
             {
                 occurenceCount = occurenceCount.Where(x => x.Value > 1).ToDictionary(pair => pair.Key, pair => pair.Value);
                 occurenceCount.OrderBy(x => x.Value);
-                if (n > occurenceCount.Count)
-                    n = occurenceCount.Count;
+                n = Math.Min(n, occurenceCount.Count);
                 foreach (var occurence in occurenceCount.Keys.Take(n))
                     topn.Add(occurence);
             }
@@ -79,10 +78,11 @@ namespace PDDLSharp.Toolkit.MacroGenerators
                 var instance = new List<ActionDecl>();
                 foreach(var action in block.Actions)
                 {
-                    ActionDecl target = Declaration.Domain.Actions.Single(x => x.Name == action.ActionName).Copy();
+                    ActionDecl target = Declaration.Domain.Actions.First(x => x.Name == action.ActionName).Copy();
+                    var allNames = target.FindTypes<NameExp>();
                     for(int i = 0; i < action.Arguments.Count; i++)
                     {
-                        var allRefs = target.FindNames(target.Parameters.Values[i].Name);
+                        var allRefs = allNames.Where(x => x.Name == target.Parameters.Values[i].Name);
                         foreach (var referene in allRefs)
                             referene.Name = $"?{action.Arguments[i].Name}";
                     }
