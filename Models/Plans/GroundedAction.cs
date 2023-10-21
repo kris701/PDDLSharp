@@ -55,7 +55,7 @@ namespace PDDLSharp.Models.Plans
         {
             var hash = ActionName.GetHashCode();
             foreach (var arg in Arguments)
-                hash ^= arg.GetHashCode();
+                hash ^= arg.Name.GetHashCode();
             return hash;
         }
     }

@@ -13,7 +13,6 @@ namespace PDDLSharp.Toolkit.MacroGenerators
     public class SequentialMacroGenerator : IMacroGenerator<List<ActionPlan>>
     {
         public PDDLDecl Declaration { get; }
-        public int MacroLimit { get; set; } = 10;
         public double SignificanceFactor { get; set; } = 1.5;
 
         public SequentialMacroGenerator(PDDLDecl declaration)
@@ -21,82 +20,64 @@ namespace PDDLSharp.Toolkit.MacroGenerators
             Declaration = declaration;
         }
 
-        public List<ActionDecl> FindMacros(List<ActionPlan> from)
+        public List<ActionDecl> FindMacros(List<ActionPlan> from, int amount)
         {
             var actionBlocks = GetBlocks(from);
             var occurenceCount = GetOccurenceDict(actionBlocks);
-            var significantBlocks = GetSignificants(actionBlocks, occurenceCount);
-            var instances = GetActionInstancesFromGrounded(significantBlocks);
+            var getTopNBlocks = GetTopN(occurenceCount, amount);
+            var instances = GetActionInstancesFromGrounded(getTopNBlocks);
             var macros = CombineBlocks(instances);
-            var distinctMacros = RemoveDuplicates(macros);
 
-            return distinctMacros;
+            return macros;
         }
 
-        private List<List<GroundedAction>> GetBlocks(List<ActionPlan> from)
+        private List<ActionSequence> GetBlocks(List<ActionPlan> from)
         {
-            var actionBlocks = new List<List<GroundedAction>>();
+            var actionBlocks = new List<ActionSequence>();
             foreach (var plan in from)
                 for (int blockSize = plan.Plan.Count; blockSize > 1; blockSize--)
                     for (int offset = 0; offset + blockSize <= plan.Plan.Count; offset++)
-                        actionBlocks.Add(plan.Plan.GetRange(offset, blockSize));
+                        actionBlocks.Add(new ActionSequence(plan.Plan.GetRange(offset, blockSize)));
             return actionBlocks;
         }
 
-        private Dictionary<string, int> GetOccurenceDict(List<List<GroundedAction>> actionBlocks)
+        private Dictionary<ActionSequence, int> GetOccurenceDict(List<ActionSequence> actionBlocks)
         {
-            Dictionary<string, int> occurenceCount = new Dictionary<string, int>();
+            Dictionary<ActionSequence, int> occurenceCount = new Dictionary<ActionSequence, int>();
             foreach (var block in actionBlocks)
             {
-                var compound = GetCompoundName(block);
-                if (occurenceCount.ContainsKey(compound))
-                    occurenceCount[compound]++;
+                if (occurenceCount.ContainsKey(block))
+                    occurenceCount[block]++;
                 else
-                    occurenceCount.Add(compound, 1);
+                    occurenceCount.Add(block, 1);
             }
             return occurenceCount;
         }
 
-        private string GetCompoundName(List<GroundedAction> actions)
+        private List<ActionSequence> GetTopN(Dictionary<ActionSequence, int> occurenceCount, int n)
         {
-            string name = "";
-            foreach (var action in actions)
-                name += action.ActionName;
-            return name;
-        }
+            List<ActionSequence> topn = new List<ActionSequence>();
 
-        private List<List<GroundedAction>> GetSignificants(List<List<GroundedAction>> actionBlocks, Dictionary<string, int> occurenceCount)
-        {
-            List<List<GroundedAction>> significants = new List<List<GroundedAction>>();
             if (occurenceCount.Keys.Count > 0)
             {
-                List<string> added = new List<string>();
-                double avrCount = occurenceCount.Average(x => x.Value);
-                foreach (var block in actionBlocks)
-                {
-                    var compound = GetCompoundName(block);
-                    if (added.Contains(compound))
-                        continue;
-                    if ((double)occurenceCount[compound] / avrCount > SignificanceFactor)
-                    {
-                        significants.Add(block);
-                        added.Add(compound);
-                    }
-                    if (added.Count >= MacroLimit)
-                        break;
-                }
+                occurenceCount = occurenceCount.Where(x => x.Value > 1).ToDictionary(pair => pair.Key, pair => pair.Value);
+                occurenceCount.OrderBy(x => x.Value);
+                if (n > occurenceCount.Count)
+                    n = occurenceCount.Count;
+                foreach (var occurence in occurenceCount.Keys.Take(n))
+                    topn.Add(occurence);
             }
 
-            return significants;
+            return topn;
         }
 
-        private List<List<ActionDecl>> GetActionInstancesFromGrounded(List<List<GroundedAction>> actionBlocks)
+        private List<List<ActionDecl>> GetActionInstancesFromGrounded(List<ActionSequence> actionBlocks)
         {
             var instances = new List<List<ActionDecl>>();
             foreach (var block in actionBlocks)
             {
                 var instance = new List<ActionDecl>();
-                foreach(var action in block)
+                foreach(var action in block.Actions)
                 {
                     ActionDecl target = Declaration.Domain.Actions.Single(x => x.Name == action.ActionName).Copy();
                     for(int i = 0; i < action.Arguments.Count; i++)
@@ -119,11 +100,6 @@ namespace PDDLSharp.Toolkit.MacroGenerators
             foreach (var instance in instances)
                 macros.Add(combiner.Combine(instance));
             return macros;
-        }
-
-        private List<ActionDecl> RemoveDuplicates(List<ActionDecl> macros)
-        {
-            return macros.DistinctBy(x => x.GetHashCode()).ToList();
         }
     }
 }
