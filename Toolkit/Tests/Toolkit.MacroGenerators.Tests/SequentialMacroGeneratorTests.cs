@@ -40,6 +40,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
                 plans.Add(planParser.Parse(new FileInfo(file)));
             var decl = new PDDLDecl(domain, new ProblemDecl());
             IMacroGenerator<List<ActionPlan>> generator = new SequentialMacroGenerator(decl);
+            generator.MacroLimit = int.MaxValue;
 
             // ACT
             var macros = generator.FindMacros(plans);

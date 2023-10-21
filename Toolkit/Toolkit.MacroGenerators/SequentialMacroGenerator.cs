@@ -82,7 +82,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators
                         significants.Add(block);
                         added.Add(compound);
                     }
-                    if (added.Count > MacroLimit)
+                    if (added.Count >= MacroLimit)
                         break;
                 }
             }
