@@ -13,6 +13,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators
     public class SequentialMacroGenerator : IMacroGenerator<List<ActionPlan>>
     {
         public PDDLDecl Declaration { get; }
+        public int MacroLimit { get; set; } = 10;
         public double SignificanceFactor { get; set; } = 1.5;
 
         public SequentialMacroGenerator(PDDLDecl declaration)
@@ -81,6 +82,8 @@ namespace PDDLSharp.Toolkit.MacroGenerators
                         significants.Add(block);
                         added.Add(compound);
                     }
+                    if (added.Count > MacroLimit)
+                        break;
                 }
             }
 

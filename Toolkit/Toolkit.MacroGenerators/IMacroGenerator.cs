@@ -12,6 +12,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators
     public interface IMacroGenerator<T>
     {
         public PDDLDecl Declaration { get; }
+        public int MacroLimit { get; set; }
         public List<ActionDecl> FindMacros(T from);
     }
 }

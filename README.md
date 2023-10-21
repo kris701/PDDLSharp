@@ -184,6 +184,15 @@ ActionDecl action = new ActionDecl(...);
 List<IParametized> groundedActions = grounder.Ground(action);
 ```
 
+## Sequential Macro Generator
+PDDLSharp also have a simple sequential macro generator. It can generate lifted macros based on reoccuring sequences in `ActionPlan`s
+```csharp
+PDDLDecl decl = new PDDLDecl(...)
+IMacroGenerator<List<ActionPlan>> generator = new SequentialMacroGenerator(decl);
+List<ActionPlan> plans = new List<ActionPlan>(...);
+List<ActionDecl> macros = generator.FindMacros(plans);
+```
+
 # Supported Requirements
 PDDLSharp supports a large set of requirements, all the way up to PDDL 2.2:
 
