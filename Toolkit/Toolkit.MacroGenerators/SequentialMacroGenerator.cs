@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.Plans;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using static System.Collections.Specialized.BitVector32;
 
 namespace PDDLSharp.Toolkit.MacroGenerators
 {
@@ -24,8 +26,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators
         {
             var actionBlocks = GetBlocks(from);
             var occurenceCount = GetOccurenceDict(actionBlocks);
-            var getTopNBlocks = GetTopN(occurenceCount, amount);
-            var instances = GetActionInstancesFromGrounded(getTopNBlocks);
+            var instances = GetActionInstancesFromGrounded(occurenceCount, amount);
             var macros = CombineBlocks(instances);
 
             return macros;
@@ -54,52 +55,84 @@ namespace PDDLSharp.Toolkit.MacroGenerators
             return occurenceCount;
         }
 
-        private List<ActionSequence> GetTopN(Dictionary<ActionSequence, int> occurenceCount, int n)
+        private List<List<ActionDecl>> GetActionInstancesFromGrounded(Dictionary<ActionSequence, int> occurenceCount, int n)
         {
-            List<ActionSequence> topn = new List<ActionSequence>();
+            var instances = new List<List<ActionDecl>>();
 
-            if (occurenceCount.Keys.Count > 0)
+            if (occurenceCount.Count > 0)
             {
+                // Select only occurences that is larger than 1.
                 occurenceCount = occurenceCount.Where(x => x.Value > 1).ToDictionary(pair => pair.Key, pair => pair.Value);
                 occurenceCount.OrderBy(x => x.Value);
                 n = Math.Min(n, occurenceCount.Count);
-                foreach (var occurence in occurenceCount.Keys.Take(n))
-                    topn.Add(occurence);
-            }
 
-            return topn;
-        }
-
-        private List<List<ActionDecl>> GetActionInstancesFromGrounded(List<ActionSequence> actionBlocks)
-        {
-            var instances = new List<List<ActionDecl>>();
-            var cache = new Dictionary<GroundedAction, ActionDecl>();
-            foreach (var block in actionBlocks)
-            {
-                var instance = new List<ActionDecl>();
-                foreach(var action in block.Actions)
+                var cache = new Dictionary<GroundedAction, ActionDecl>();
+                foreach (var occurence in occurenceCount.Keys)
                 {
-                    if (cache.ContainsKey(action))
+                    var instance = new List<ActionDecl>();
+                    foreach (var action in occurence.Actions)
                     {
-                        instance.Add(cache[action]);
-                    }
-                    else
-                    {
-                        ActionDecl target = Declaration.Domain.Actions.First(x => x.Name == action.ActionName).Copy();
-                        var allNames = target.FindTypes<NameExp>();
-                        for (int i = 0; i < action.Arguments.Count; i++)
+                        if (cache.ContainsKey(action))
                         {
-                            var allRefs = allNames.Where(x => x.Name == target.Parameters.Values[i].Name).ToList();
-                            foreach (var referene in allRefs)
-                                referene.Name = $"?{action.Arguments[i].Name}";
+                            instance.Add(cache[action]);
                         }
-                        cache.Add(action, target);
-                        instance.Add(target);
+                        else
+                        {
+                            ActionDecl target = GenerateActionInstance(action);
+                            cache.Add(action, target);
+                            instance.Add(target);
+                        }
                     }
+                    if (IsActionChainValid(instance))
+                        instances.Add(instance);
+                    if (instances.Count >= n)
+                        break;
                 }
-                instances.Add(instance);
             }
             return instances;
+        }
+
+        private ActionDecl GenerateActionInstance(GroundedAction action)
+        {
+            ActionDecl target = Declaration.Domain.Actions.First(x => x.Name == action.ActionName).Copy();
+            var allNames = target.FindTypes<NameExp>();
+            for (int i = 0; i < action.Arguments.Count; i++)
+            {
+                var allRefs = allNames.Where(x => x.Name == target.Parameters.Values[i].Name).ToList();
+                foreach (var referene in allRefs)
+                    referene.Name = $"?{action.Arguments[i].Name}";
+            }
+            return target;
+        }
+
+        private bool IsActionChainValid(List<ActionDecl> actions)
+        {
+            var covered = new bool[actions.Count];
+            for(int current = 0; current < actions.Count; current++)
+            {
+                if (covered[current] == false)
+                {
+                    var currentEffect = GetExpAsAndExp(actions[current].Effects);
+                    for (int seek = current + 1; seek < actions.Count; seek++)
+                    {
+                        var seekAnd = GetExpAsAndExp(actions[seek].Preconditions);
+                        if (seekAnd.Children.Any(x => currentEffect.Children.Contains(x)))
+                        {
+                            covered[current] = true;
+                            covered[seek] = true;
+                        }
+                    }
+                }
+            }
+            bool isCovered = covered.All(x => x == true);
+            return isCovered;
+        }
+
+        private AndExp GetExpAsAndExp(IExp from)
+        {
+            if (from is AndExp and)
+                return and;
+            return new AndExp(new List<IExp>() { from }); ;
         }
 
         private List<ActionDecl> CombineBlocks(List<List<ActionDecl>> instances)
