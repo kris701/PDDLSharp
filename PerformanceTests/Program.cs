@@ -1,7 +1,5 @@
 ﻿using PDDLSharp.Analysers;
 using PDDLSharp.Analysers.PDDL;
-using PDDLSharp.ASTGenerators;
-using PDDLSharp.ASTGenerators.SAS;
 using PDDLSharp.CodeGenerators;
 using PDDLSharp.CodeGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
@@ -32,7 +30,7 @@ namespace PerformanceTests
             //RunNTimes2(2000);
             //RunNTimes3(1);
             //RunNTimes4(100);
-            RunNTimes5(20);
+            RunNTimes5(50);
         }
 
         private static void RunNTimes5(int number)

@@ -1,12 +1,12 @@
-﻿using System;
+﻿using PDDLSharp;
+using PDDLSharp.ASTGenerators;
+using PDDLSharp.ASTGenerators.Tests;
+using PDDLSharp.ASTGenerators.Tests.PDDL.PositionTestsData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDLSharp;
-using PDDLSharp.ASTGenerators;
-using PDDLSharp.ASTGenerators.Tests;
-using PDDLSharp.ASTGenerators.Tests.PDDL.PositionTestsData;
 
 namespace PDDLSharp.ASTGenerators.Tests.PDDL.PositionTestsData
 {

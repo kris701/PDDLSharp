@@ -1,16 +1,7 @@
 ﻿using PDDLSharp.ASTGenerators;
 using PDDLSharp.ASTGenerators.SAS;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.AST;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.SAS;
-using PDDLSharp.Models.SAS.Sections;
-using PDDLSharp.Parsers.Visitors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Parsers.SAS
 {

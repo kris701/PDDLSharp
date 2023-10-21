@@ -1,6 +1,4 @@
-﻿using PDDLSharp.Tools;
-
-namespace PDDLSharp.ASTGenerators.SAS
+﻿namespace PDDLSharp.ASTGenerators.SAS
 {
     public static class SASTextPreprocessing
     {

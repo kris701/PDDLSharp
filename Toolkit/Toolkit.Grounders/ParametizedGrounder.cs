@@ -1,13 +1,5 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
-using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Models.Plans;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Grounders
 {
@@ -29,7 +21,7 @@ namespace PDDLSharp.Toolkit.Grounders
             {
                 var copy = item.Copy();
 
-                for(int i = 0; i < item.Parameters.Values.Count; i++)
+                for (int i = 0; i < item.Parameters.Values.Count; i++)
                 {
                     var allRefs = copy.FindNames(item.Parameters.Values[i].Name);
                     foreach (var refItem in allRefs)

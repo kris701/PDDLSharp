@@ -1,9 +1,4 @@
 ﻿using PDDLSharp.Models.AST;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Models.SAS.Sections
 {
@@ -24,7 +19,7 @@ namespace PDDLSharp.Models.SAS.Sections
         public override string? ToString()
         {
             var retStr = "";
-            foreach(var value in Inits)
+            foreach (var value in Inits)
                 retStr += $"{value} ";
             return retStr.Trim();
         }

@@ -2,11 +2,6 @@
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Tools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.MacroGenerators
 {
@@ -57,11 +52,27 @@ namespace PDDLSharp.Toolkit.MacroGenerators
             }
 
             basePreAnd.Children = preconditions.ToList();
-            baseEffAnd.Children = effects.ToList();
+            baseEffAnd.Children = RemoveUnneededSideEffects(effects, preconditions).ToList();
 
             baseAction.Parameters.Values = GetReferencesParameters(baseAction);
 
             return baseAction;
+        }
+
+        private HashSet<IExp> RemoveUnneededSideEffects(HashSet<IExp> effects, HashSet<IExp> preconditions)
+        {
+            HashSet<IExp> newEffects = new HashSet<IExp>();
+            foreach (var effect in effects)
+            {
+                if (effect is NotExp not)
+                {
+                    if (preconditions.Contains(not.Child))
+                        newEffects.Add(effect);
+                }
+                else if (!preconditions.Contains(effect))
+                    newEffects.Add(effect);
+            }
+            return newEffects;
         }
 
         private AndExp GetExpAsAndExp(IExp from)

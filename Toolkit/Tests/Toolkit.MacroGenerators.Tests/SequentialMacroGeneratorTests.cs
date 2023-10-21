@@ -23,11 +23,11 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
     public class SequentialMacroGeneratorTests
     {
         [TestMethod]
-        [DataRow("TestData/gripper-domain.pddl", 10, "TestData/gripper/prob01.plan")]
-        [DataRow("TestData/gripper-domain.pddl", 45, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan")]
-        [DataRow("TestData/gripper-domain.pddl", 81, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan")]
-        [DataRow("TestData/gripper-domain.pddl", 100, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan", "TestData/gripper/prob04.plan")]
-        [DataRow("TestData/gripper-domain.pddl", 100, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan", "TestData/gripper/prob04.plan", "TestData/gripper/prob05.plan")]
+        [DataRow("TestData/gripper-domain.pddl", 4, "TestData/gripper/prob01.plan")]
+        [DataRow("TestData/gripper-domain.pddl", 12, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan")]
+        [DataRow("TestData/gripper-domain.pddl", 20, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan")]
+        [DataRow("TestData/gripper-domain.pddl", 28, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan", "TestData/gripper/prob04.plan")]
+        [DataRow("TestData/gripper-domain.pddl", 36, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan", "TestData/gripper/prob04.plan", "TestData/gripper/prob05.plan")]
         public void Can_GenerateMacros_MacroCount(string domainFile, int expectedMacros, params string[] planFiles)
         {
             // ARRANGE
@@ -66,7 +66,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
             var macros = generator.FindMacros(plans, 50);
 
             // ASSERT
-            foreach(var expectedMacroFile in expectedMacroFiles)
+            foreach (var expectedMacroFile in expectedMacroFiles)
             {
                 var expected = parser.ParseAs<ActionDecl>(new FileInfo(expectedMacroFile));
                 Assert.IsTrue(macros.Contains(expected));

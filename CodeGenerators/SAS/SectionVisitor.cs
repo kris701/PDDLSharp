@@ -1,10 +1,5 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Models.SAS.Sections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.CodeGenerators.SAS
 {
@@ -17,7 +12,7 @@ namespace PDDLSharp.CodeGenerators.SAS
                 retStr += $"{Visit(node.Version)}{Environment.NewLine}";
             if (node.Metric != null)
                 retStr += $"{Visit(node.Metric)}{Environment.NewLine}";
-            foreach(var variable in node.Variables)
+            foreach (var variable in node.Variables)
                 retStr += $"{Visit(variable)}{Environment.NewLine}";
             foreach (var mutex in node.Mutexes)
                 retStr += $"{Visit(mutex)}{Environment.NewLine}";
@@ -105,7 +100,7 @@ namespace PDDLSharp.CodeGenerators.SAS
             retStr += $"{node.VariableName}{Environment.NewLine}";
             retStr += $"{node.AxiomLayer}{Environment.NewLine}";
             retStr += $"{node.SymbolicNames.Count}{Environment.NewLine}";
-            foreach(var sym in node.SymbolicNames)
+            foreach (var sym in node.SymbolicNames)
                 retStr += $"{sym}{Environment.NewLine}";
             retStr += $"end_variable";
             return retStr;

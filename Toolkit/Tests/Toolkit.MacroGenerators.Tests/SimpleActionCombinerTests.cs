@@ -210,7 +210,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
                         new ParameterExp(new List<NameExp>(){ new NameExp("?a") }),
                         new AndExp(new List<IExp>()
                         {
-                            new NotExp(new PredicateExp("pred1", new List<NameExp>(){ new NameExp("?a") }))                        
+                            new NotExp(new PredicateExp("pred1", new List<NameExp>(){ new NameExp("?a") }))
                         }),
                         new AndExp(new List<IExp>()
                         {
