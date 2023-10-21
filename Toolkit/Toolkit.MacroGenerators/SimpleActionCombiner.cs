@@ -35,8 +35,14 @@ namespace PDDLSharp.Toolkit.MacroGenerators
                     if (!baseEffAnd.Children.Contains(pre) && !basePreAnd.Children.Contains(pre))
                         basePreAnd.Children.Add(pre);
                 foreach (var pre in effAnd.Children)
+                {
+                    if (pre is NotExp not)
+                        baseEffAnd.Children.RemoveAll(x => x.GetHashCode() == not.Child.GetHashCode());
+                    else
+                        baseEffAnd.Children.RemoveAll(x => x is NotExp not && not.Child.GetHashCode() == pre.GetHashCode());
                     if (!baseEffAnd.Children.Contains(pre))
                         baseEffAnd.Children.Add(pre);
+                }
 
                 foreach(var argument in action.Parameters.Values)
                     if (!baseAction.Parameters.Values.Contains(argument))

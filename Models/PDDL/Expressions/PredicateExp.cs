@@ -49,6 +49,14 @@ namespace PDDLSharp.Models.PDDL.Expressions
             }
         }
 
+        public override string? ToString()
+        {
+            var retStr = Name;
+            foreach (var arg in Arguments)
+                retStr += $" {arg}";
+            return retStr;
+        }
+
         public override IEnumerator<INode> GetEnumerator()
         {
             return Arguments.GetEnumerator();

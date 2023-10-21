@@ -27,7 +27,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\CodeGenerators\CodeGenerators.csproj" />
+    <ProjectReference Include="..\..\..\Parsers\Parsers.csproj" />
     <ProjectReference Include="..\..\Toolkit.MacroGenerators\Toolkit.MacroGenerators.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestData\gripper-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\gripper\prob01.plan">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\gripper\prob02.plan">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\gripper\prob03.plan">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\gripper\prob04.plan">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\gripper\prob05.plan">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
