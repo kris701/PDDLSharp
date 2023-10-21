@@ -8,6 +8,9 @@
 ![Nuget](https://img.shields.io/nuget/dt/PDDLSharp)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/kris701/PDDLSharp/main)
 ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/kris701/PDDLSharp)
+![Static Badge](https://img.shields.io/badge/Platform-Windows-blue)
+![Static Badge](https://img.shields.io/badge/Platform-Linux-blue)
+![Static Badge](https://img.shields.io/badge/Framework-dotnet--7.0-green)
 
 # PDDLSharp
 
