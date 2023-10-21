@@ -15,7 +15,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators
         public ActionDecl Combine(List<ActionDecl> actions)
         {
             if (actions.Count == 0)
-                throw new ArgumentException("Cant combine no actions!");
+                throw new ArgumentException("Cant combine zero actions!");
             var baseAction = actions[0].Copy();
 
             var basePreAnd = GetExpAsAndExp(baseAction.Preconditions);

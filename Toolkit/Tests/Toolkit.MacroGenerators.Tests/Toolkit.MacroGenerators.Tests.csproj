@@ -36,6 +36,12 @@
     <None Update="TestData\gripper-domain.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestData\gripper-expected\expected2.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\gripper-expected\expected1.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\gripper\prob01.plan">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

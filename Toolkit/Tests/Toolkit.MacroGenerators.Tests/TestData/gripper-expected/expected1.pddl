@@ -1,0 +1,23 @@
+(:action pick-pick
+    :parameters (?ball1 ?ball2 ?rooma ?left ?right)
+    :precondition  (and 
+			(at ?ball1 ?rooma) 
+			(at ?ball2 ?rooma) 
+			(at-robby ?rooma) 
+			(free ?left)
+			(free ?right)
+			(ball ?ball1)
+			(ball ?ball2)
+			(room ?rooma)
+			(gripper ?left)
+			(gripper ?right)
+			)
+    :effect (and 
+			(not (at ?ball1 ?rooma)) 
+			(not (at ?ball2 ?rooma)) 
+			(not (free ?left)) 
+			(not (free ?right)) 
+			(carry ?ball1 ?left)
+			(carry ?ball2 ?right)
+		)
+	)
