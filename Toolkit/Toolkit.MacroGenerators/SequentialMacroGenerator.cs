@@ -73,20 +73,29 @@ namespace PDDLSharp.Toolkit.MacroGenerators
         private List<List<ActionDecl>> GetActionInstancesFromGrounded(List<ActionSequence> actionBlocks)
         {
             var instances = new List<List<ActionDecl>>();
+            var cache = new Dictionary<GroundedAction, ActionDecl>();
             foreach (var block in actionBlocks)
             {
                 var instance = new List<ActionDecl>();
                 foreach(var action in block.Actions)
                 {
-                    ActionDecl target = Declaration.Domain.Actions.First(x => x.Name == action.ActionName).Copy();
-                    var allNames = target.FindTypes<NameExp>();
-                    for(int i = 0; i < action.Arguments.Count; i++)
+                    if (cache.ContainsKey(action))
                     {
-                        var allRefs = allNames.Where(x => x.Name == target.Parameters.Values[i].Name);
-                        foreach (var referene in allRefs)
-                            referene.Name = $"?{action.Arguments[i].Name}";
+                        instance.Add(cache[action]);
                     }
-                    instance.Add(target);
+                    else
+                    {
+                        ActionDecl target = Declaration.Domain.Actions.First(x => x.Name == action.ActionName).Copy();
+                        var allNames = target.FindTypes<NameExp>();
+                        for (int i = 0; i < action.Arguments.Count; i++)
+                        {
+                            var allRefs = allNames.Where(x => x.Name == target.Parameters.Values[i].Name).ToList();
+                            foreach (var referene in allRefs)
+                                referene.Name = $"?{action.Arguments[i].Name}";
+                        }
+                        cache.Add(action, target);
+                        instance.Add(target);
+                    }
                 }
                 instances.Add(instance);
             }

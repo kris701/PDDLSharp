@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,32 +21,43 @@ namespace PDDLSharp.Toolkit.MacroGenerators
             var basePreAnd = GetExpAsAndExp(baseAction.Preconditions);
             var baseEffAnd = GetExpAsAndExp(baseAction.Effects);
 
+            HashSet<IExp> preconditions = new HashSet<IExp>();
+            preconditions.AddRange(basePreAnd.Children.ToHashSet());
+            HashSet<IExp> effects = new HashSet<IExp>();
+            effects.AddRange(baseEffAnd.Children.ToHashSet());
+
             foreach (var action in actions.Skip(1))
             {
+                // Add to name
                 baseAction.Name = $"{baseAction.Name}-{action.Name}";
 
+                // Add all parameters
+                baseAction.Parameters.Values.AddRange(action.Parameters.Values);
+
+                // Combine preconditions
                 var preAnd = GetExpAsAndExp(action.Preconditions);
+                foreach (var pre in preAnd.Children)
+                {
+                    if (!effects.Contains(pre) && !preconditions.Contains(pre))
+                        preconditions.Add(pre);
+                }
+
+                // Combine effects
                 var effAnd = GetExpAsAndExp(action.Effects);
-
-                foreach(var pre in preAnd.Children)
-                    if (!baseEffAnd.Children.Contains(pre) && !basePreAnd.Children.Contains(pre))
-                        basePreAnd.Children.Add(pre);
-
                 foreach (var pre in effAnd.Children)
                 {
                     if (pre is NotExp not)
-                        baseEffAnd.Children.RemoveAll(x => x.GetHashCode() == not.Child.GetHashCode());
+                        effects.Remove(not.Child);
                     else
-                        baseEffAnd.Children.RemoveAll(x => x is NotExp not && not.Child.GetHashCode() == pre.GetHashCode());
-                    if (!baseEffAnd.Children.Contains(pre))
-                        baseEffAnd.Children.Add(pre);
+                        effects.Remove(new NotExp(pre));
+                    if (!effects.Contains(pre))
+                        effects.Add(pre);
                 }
 
-                foreach(var argument in action.Parameters.Values)
-                    if (!baseAction.Parameters.Values.Contains(argument))
-                        if (baseAction.FindNames(argument.Name).Count > 0)
-                            baseAction.Parameters.Add(argument);
             }
+
+            basePreAnd.Children = preconditions.ToList();
+            baseEffAnd.Children = effects.ToList();
 
             baseAction.Parameters.Values = GetReferencesParameters(baseAction);
 

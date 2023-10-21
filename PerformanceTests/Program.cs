@@ -32,7 +32,7 @@ namespace PerformanceTests
             //RunNTimes2(2000);
             //RunNTimes3(1);
             //RunNTimes4(100);
-            RunNTimes5(5);
+            RunNTimes5(20);
         }
 
         private static void RunNTimes5(int number)
