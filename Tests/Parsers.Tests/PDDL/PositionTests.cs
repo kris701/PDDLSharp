@@ -36,7 +36,7 @@ namespace PDDLSharp.Parsers.Tests.PDDL
             var text = File.ReadAllText(testFile).Replace(Environment.NewLine, $"{PDDLASTTokens.BreakToken}");
 
             // ACT
-            var node = pddlParser.ParseAs<DomainDecl>(new FileInfo(testFile));
+            var node = pddlParser.ParseAs<DomainDecl>(text);
 
             // ASSERT
             IsNodePositionValid(node, expectedNode);

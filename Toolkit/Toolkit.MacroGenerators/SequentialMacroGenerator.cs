@@ -108,24 +108,37 @@ namespace PDDLSharp.Toolkit.MacroGenerators
         private bool IsActionChainValid(List<ActionDecl> actions)
         {
             var covered = new bool[actions.Count];
-            for(int current = 0; current < actions.Count; current++)
+            Dictionary<int, HashSet<IExp>> effCache = new Dictionary<int, HashSet<IExp>>();
+            Dictionary<int, HashSet<IExp>> preCache = new Dictionary<int, HashSet<IExp>>();
+            for (int current = 0; current < actions.Count; current++)
             {
-                if (covered[current] == false)
+                if (!covered[current])
                 {
-                    var currentEffect = GetExpAsAndExp(actions[current].Effects);
+                    var currentEffect = GetOrCreateCacheInstance(current, actions[current].Effects, effCache);
                     for (int seek = current + 1; seek < actions.Count; seek++)
                     {
-                        var seekAnd = GetExpAsAndExp(actions[seek].Preconditions);
-                        if (seekAnd.Children.Any(x => currentEffect.Children.Contains(x)))
+                        var seekPreconditions = GetOrCreateCacheInstance(seek, actions[seek].Preconditions, preCache);
+                        if (seekPreconditions.Any(currentEffect.Contains))
                         {
                             covered[current] = true;
                             covered[seek] = true;
                         }
                     }
+                    if (!covered[current])
+                        return false;
                 }
             }
             bool isCovered = covered.All(x => x == true);
             return isCovered;
+        }
+
+        private HashSet<IExp> GetOrCreateCacheInstance(int index, IExp target, Dictionary<int, HashSet<IExp>> cache)
+        {
+            if (cache.ContainsKey(index))
+                return cache[index];
+            var effect = GetExpAsAndExp(target).Children.ToHashSet();
+            cache.Add(index, effect);
+            return effect;
         }
 
         private AndExp GetExpAsAndExp(IExp from)
