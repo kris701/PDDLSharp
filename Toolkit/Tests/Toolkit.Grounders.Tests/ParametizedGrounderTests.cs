@@ -90,7 +90,7 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Objects = new ObjectsDecl();
             decl.Problem.Objects.Objs = objs;
-            IGrounder<IParametized, IParametized> grounder = new ParametizedGrounder(decl);
+            IGrounder<IParametized> grounder = new ParametizedGrounder(decl);
 
             // ACT
             var result = grounder.Ground(action);
@@ -188,7 +188,7 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Objects = new ObjectsDecl();
             decl.Problem.Objects.Objs = objs;
-            IGrounder<IParametized, IParametized> grounder = new ParametizedGrounder(decl);
+            IGrounder<IParametized> grounder = new ParametizedGrounder(decl);
 
             // ACT
             var result = grounder.Ground(action);

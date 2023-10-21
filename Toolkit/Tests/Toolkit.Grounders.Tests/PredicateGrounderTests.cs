@@ -52,7 +52,7 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Objects = new ObjectsDecl();
             decl.Problem.Objects.Objs = objs;
-            IGrounder<PredicateExp, PredicateExp> grounder = new PredicateGrounder(decl);
+            IGrounder<PredicateExp> grounder = new PredicateGrounder(decl);
 
             // ACT
             var result = grounder.Ground(predicate);
@@ -108,7 +108,7 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Objects = new ObjectsDecl();
             decl.Problem.Objects.Objs = objs;
-            IGrounder<PredicateExp, PredicateExp> grounder = new PredicateGrounder(decl);
+            IGrounder<PredicateExp> grounder = new PredicateGrounder(decl);
 
             // ACT
             var result = grounder.Ground(predicate);
@@ -149,7 +149,7 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
             decl.Problem.Objects.Objs = objs;
             decl.Domain.Constants = new ConstantsDecl();
             decl.Domain.Constants.Constants = constants;
-            IGrounder<PredicateExp, PredicateExp> grounder = new PredicateGrounder(decl);
+            IGrounder<PredicateExp> grounder = new PredicateGrounder(decl);
 
             // ACT
             var result = grounder.Ground(predicate);

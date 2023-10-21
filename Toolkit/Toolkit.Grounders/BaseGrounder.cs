@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace PDDLSharp.Toolkit.Grounders
 {
-    public abstract class BaseGrounder<T, U> : IGrounder<T, U>
+    public abstract class BaseGrounder<T> : IGrounder<T>
     {
         public PDDLDecl Declaration { get; }
         private Dictionary<string, List<string>> _objCache = new Dictionary<string, List<string>>();
@@ -19,7 +19,7 @@ namespace PDDLSharp.Toolkit.Grounders
             Declaration = declaration;
         }
 
-        public abstract List<U> Ground(T item);
+        public abstract List<T> Ground(T item);
 
         public List<List<string>> GenerateParameterPermutations(List<NameExp> parameters)
         {

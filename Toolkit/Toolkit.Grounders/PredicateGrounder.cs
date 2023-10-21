@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Grounders
 {
-    public class PredicateGrounder : BaseGrounder<PredicateExp, PredicateExp>
+    public class PredicateGrounder : BaseGrounder<PredicateExp>
     {
         public PredicateGrounder(PDDLDecl declaration) : base(declaration)
         {

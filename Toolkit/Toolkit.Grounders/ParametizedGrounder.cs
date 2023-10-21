@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Grounders
 {
-    public class ParametizedGrounder : BaseGrounder<IParametized, IParametized>
+    public class ParametizedGrounder : BaseGrounder<IParametized>
     {
         public ParametizedGrounder(PDDLDecl declaration) : base(declaration)
         {

@@ -168,7 +168,7 @@ There is a predicate grounder included in PDDLSharp.
 It is able to take in a predicate, and instanciate it with all possible valid combinations of objects (and constants).
 ```csharp
 PDDLDecl decl = new PDDLDecl(...)
-IGrounder<PredicateExp, PredicateExp> grounder = new PredicateGrounder(decl);
+IGrounder<PredicateExp> grounder = new PredicateGrounder(decl);
 PredicateExp predicate = new PredicateExp(...);
 List<PredicateExp> groundedPredicates = grounder.Ground(predicate);
 ```
@@ -179,7 +179,7 @@ This is nodes such as `ActionDecl`, `ForAllExp`, `ExistsExp`, etc.
 It takes in an `IParametized` node and makes grounded copies of it.
 ```csharp
 PDDLDecl decl = new PDDLDecl(...)
-IGrounder<IParametized, IParametized> grounder = new ParametizedGrounder(decl);
+IGrounder<IParametized> grounder = new ParametizedGrounder(decl);
 ActionDecl action = new ActionDecl(...);
 List<IParametized> groundedActions = grounder.Ground(action);
 ```
