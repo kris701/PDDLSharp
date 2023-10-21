@@ -1,12 +1,12 @@
-﻿using System;
+﻿using PDDLSharp;
+using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.Tests;
+using PDDLSharp.Parsers.Tests.PDDL.PositionTestsData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDLSharp;
-using PDDLSharp.Parsers;
-using PDDLSharp.Parsers.Tests;
-using PDDLSharp.Parsers.Tests.PDDL.PositionTestsData;
 
 namespace PDDLSharp.Parsers.Tests.PDDL.PositionTestsData
 {

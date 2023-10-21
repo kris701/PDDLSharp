@@ -1,15 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models;
+using PDDLSharp.Models.Plans;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDLSharp.Models.Plans;
-using PDDLSharp.Models.PDDL;
 
 namespace PDDLSharp.Toolkit.Grounders.Tests
 {

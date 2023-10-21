@@ -3,11 +3,6 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Models.SAS.Sections;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Parsers.SAS
 {
@@ -22,15 +17,15 @@ namespace PDDLSharp.Parsers.SAS
 
         public ISASNode? VisitAs<T>(ASTNode node) where T : ISASNode =>
             // Domain
-            typeof(T) == typeof(SASDecl)        ? TryVisitAsSASDecl(node) :
-            typeof(T) == typeof(VersionDecl)    ? TryVisitAsVersion(node) :
-            typeof(T) == typeof(MetricDecl)     ? TryVisitAsMetric(node) :
-            typeof(T) == typeof(VariableDecl)   ? TryVisitAsVariable(node) :
-            typeof(T) == typeof(MutexDecl)      ? TryVisitAsMutex(node) :
-            typeof(T) == typeof(InitStateDecl)  ? TryVisitAsInitState(node) :
-            typeof(T) == typeof(GoalStateDecl)  ? TryVisitAsGoalState(node) :
-            typeof(T) == typeof(OperatorDecl)   ? TryVisitAsOperator(node) :
-            typeof(T) == typeof(AxiomDecl)      ? TryVisitAsAxiom(node) :
+            typeof(T) == typeof(SASDecl) ? TryVisitAsSASDecl(node) :
+            typeof(T) == typeof(VersionDecl) ? TryVisitAsVersion(node) :
+            typeof(T) == typeof(MetricDecl) ? TryVisitAsMetric(node) :
+            typeof(T) == typeof(VariableDecl) ? TryVisitAsVariable(node) :
+            typeof(T) == typeof(MutexDecl) ? TryVisitAsMutex(node) :
+            typeof(T) == typeof(InitStateDecl) ? TryVisitAsInitState(node) :
+            typeof(T) == typeof(GoalStateDecl) ? TryVisitAsGoalState(node) :
+            typeof(T) == typeof(OperatorDecl) ? TryVisitAsOperator(node) :
+            typeof(T) == typeof(AxiomDecl) ? TryVisitAsAxiom(node) :
             VisitSections(node);
 
         public ISASNode? VisitSections(ASTNode node)

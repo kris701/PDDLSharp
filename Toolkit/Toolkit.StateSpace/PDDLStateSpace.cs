@@ -2,7 +2,6 @@
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.Grounders;
-using System.Xml.Linq;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
@@ -81,7 +80,8 @@ namespace PDDLSharp.Toolkit.StateSpace
                     CheckPermutationsStepwise(
                     all.Expression,
                     all.Parameters,
-                    (x) => {
+                    (x) =>
+                    {
                         ExecuteNode(x, isNegative);
                         return null;
                     });
@@ -137,7 +137,8 @@ namespace PDDLSharp.Toolkit.StateSpace
                     return CheckPermutationsStepwise(
                         exist.Expression,
                         exist.Parameters,
-                        (x) => {
+                        (x) =>
+                        {
                             if (IsNodeTrue(x))
                                 return true;
                             return null;
@@ -153,7 +154,8 @@ namespace PDDLSharp.Toolkit.StateSpace
                     return CheckPermutationsStepwise(
                         all.Expression,
                         all.Parameters,
-                        (x) => {
+                        (x) =>
+                        {
                             if (!IsNodeTrue(x))
                                 return false;
                             return null;
@@ -170,7 +172,8 @@ namespace PDDLSharp.Toolkit.StateSpace
         private bool CheckPermutationsStepwise(INode node, ParameterExp parameters, Func<INode, bool?> stopFunc, bool defaultReturn = true)
         {
             var allPermuations = _grounder.GenerateParameterPermutations(parameters.Values);
-            for (int i = 0; i < allPermuations.Count; i++) {
+            for (int i = 0; i < allPermuations.Count; i++)
+            {
                 var res = stopFunc(GenerateNewParametized(node, parameters, allPermuations[i]));
                 if (res != null)
                     return (bool)res;
@@ -181,7 +184,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         private INode GenerateNewParametized(INode node, ParameterExp replace, List<string> with)
         {
             var checkNode = node.Copy();
-            for(int i = 0; i < replace.Values.Count; i++)
+            for (int i = 0; i < replace.Values.Count; i++)
             {
                 var allRefs = checkNode.FindNames(replace.Values[i].Name);
                 foreach (var name in allRefs)

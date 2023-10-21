@@ -1,7 +1,5 @@
 ﻿using PDDLSharp.Analysers;
 using PDDLSharp.Analysers.PDDL;
-using PDDLSharp.ASTGenerators;
-using PDDLSharp.ASTGenerators.SAS;
 using PDDLSharp.CodeGenerators;
 using PDDLSharp.CodeGenerators.PDDL;
 using PDDLSharp.ErrorListeners;

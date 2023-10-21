@@ -66,7 +66,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
             var macros = generator.FindMacros(plans, 50);
 
             // ASSERT
-            foreach(var expectedMacroFile in expectedMacroFiles)
+            foreach (var expectedMacroFile in expectedMacroFiles)
             {
                 var expected = parser.ParseAs<ActionDecl>(new FileInfo(expectedMacroFile));
                 Assert.IsTrue(macros.Contains(expected));
