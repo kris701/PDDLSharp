@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,45 +15,71 @@ namespace PDDLSharp.Toolkit.MacroGenerators
         public ActionDecl Combine(List<ActionDecl> actions)
         {
             if (actions.Count == 0)
-                throw new ArgumentException("Cant combine no actions!");
+                throw new ArgumentException("Cant combine zero actions!");
             var baseAction = actions[0].Copy();
-            var basePreAnd = baseAction.Preconditions as AndExp;
-            var baseEffAnd = baseAction.Effects as AndExp;
-            if (basePreAnd == null || baseEffAnd == null)
-                throw new ArgumentException("Action precondition or effects was not an and node!");
-            baseAction.Parameters.Values.RemoveAll(x => baseAction.FindNames(x.Name).Count == 1);
+
+            var basePreAnd = GetExpAsAndExp(baseAction.Preconditions);
+            var baseEffAnd = GetExpAsAndExp(baseAction.Effects);
+
+            HashSet<IExp> preconditions = new HashSet<IExp>();
+            preconditions.AddRange(basePreAnd.Children.ToHashSet());
+            HashSet<IExp> effects = new HashSet<IExp>();
+            effects.AddRange(baseEffAnd.Children.ToHashSet());
 
             foreach (var action in actions.Skip(1))
             {
+                // Add to name
                 baseAction.Name = $"{baseAction.Name}-{action.Name}";
 
-                var preAnd = action.Preconditions as AndExp;
-                var effAnd = action.Effects as AndExp;
-                if (preAnd == null || effAnd == null)
-                    throw new ArgumentException("Action precondition or effects was not an and node!");
+                // Add all parameters
+                baseAction.Parameters.Values.AddRange(action.Parameters.Values);
 
-                foreach(var pre in preAnd.Children)
-                    if (!baseEffAnd.Children.Contains(pre) && !basePreAnd.Children.Contains(pre))
-                        basePreAnd.Children.Add(pre);
+                // Combine preconditions
+                var preAnd = GetExpAsAndExp(action.Preconditions);
+                foreach (var pre in preAnd.Children)
+                {
+                    if (!effects.Contains(pre) && !preconditions.Contains(pre))
+                        preconditions.Add(pre);
+                }
+
+                // Combine effects
+                var effAnd = GetExpAsAndExp(action.Effects);
                 foreach (var pre in effAnd.Children)
                 {
                     if (pre is NotExp not)
-                        baseEffAnd.Children.RemoveAll(x => x.GetHashCode() == not.Child.GetHashCode());
+                        effects.Remove(not.Child);
                     else
-                        baseEffAnd.Children.RemoveAll(x => x is NotExp not && not.Child.GetHashCode() == pre.GetHashCode());
-                    if (!baseEffAnd.Children.Contains(pre))
-                        baseEffAnd.Children.Add(pre);
+                        effects.Remove(new NotExp(pre));
+                    if (!effects.Contains(pre))
+                        effects.Add(pre);
                 }
 
-                foreach(var argument in action.Parameters.Values)
-                    if (!baseAction.Parameters.Values.Contains(argument))
-                        if (baseAction.FindNames(argument.Name).Count > 0)
-                            baseAction.Parameters.Add(argument);
             }
 
-            baseAction.Parameters.Values.RemoveAll(x => baseAction.FindNames(x.Name).Count == 1);
+            basePreAnd.Children = preconditions.ToList();
+            baseEffAnd.Children = effects.ToList();
+
+            baseAction.Parameters.Values = GetReferencesParameters(baseAction);
 
             return baseAction;
+        }
+
+        private AndExp GetExpAsAndExp(IExp from)
+        {
+            if (from is AndExp and)
+                return and;
+            return new AndExp(new List<IExp>() { from }); ;
+        }
+
+        private List<NameExp> GetReferencesParameters(ActionDecl baseAction)
+        {
+            var allRefs = baseAction.Preconditions.FindTypes<NameExp>();
+            allRefs.AddRange(baseAction.Effects.FindTypes<NameExp>());
+            var param = new HashSet<NameExp>();
+            foreach (var reference in allRefs)
+                if (!param.Contains(reference))
+                    param.Add(reference);
+            return param.ToList();
         }
     }
 }

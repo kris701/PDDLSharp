@@ -26,7 +26,7 @@
             const int modifier = 31;
             unchecked
             {
-                return Cost * Plan.Aggregate(seed, (current, item) =>
+                return Cost + Plan.Aggregate(seed, (current, item) =>
                     (current * modifier) + item.GetHashCode());
             }
         }

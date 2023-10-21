@@ -1,0 +1,21 @@
+(:action drop-drop
+    :parameters (?ball1 ?ball2 ?roomb ?left ?right)
+    :precondition  (and 
+			(at-robby ?roomb) 
+			(carry ?ball1 ?left)
+			(carry ?ball2 ?right)
+			(ball ?ball1)
+			(ball ?ball2)
+			(room ?roomb)
+			(gripper ?left)
+			(gripper ?right)
+			)
+    :effect (and 
+			(at ?ball1 ?roomb)
+			(at ?ball2 ?roomb)
+			(free ?left)
+			(free ?right) 
+			(not (carry ?ball1 ?left))
+			(not (carry ?ball2 ?right))
+		)
+	)

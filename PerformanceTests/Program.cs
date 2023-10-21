@@ -7,11 +7,13 @@ using PDDLSharp.CodeGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.Plans;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Parsers.Plans;
 using PDDLSharp.Parsers.SAS;
+using PDDLSharp.Toolkit.MacroGenerators;
 using PDDLSharp.Toolkit.PlanValidator;
 using System.Diagnostics;
 
@@ -29,7 +31,36 @@ namespace PerformanceTests
             //RunNTimes(100);
             //RunNTimes2(2000);
             //RunNTimes3(1);
-            RunNTimes4(100);
+            //RunNTimes4(100);
+            RunNTimes5(20);
+        }
+
+        private static void RunNTimes5(int number)
+        {
+            var targetDomain = "benchmarks/psr-large/domain.pddl";
+            var targetProblem = "benchmarks/psr-large/p24-s166-n15-l3-f10.pddl";
+            var targetPlans = "benchmarks-plans/lama-first/psr-large/";
+
+            IErrorListener listener = new ErrorListener();
+            PDDLParser parser = new PDDLParser(listener);
+            FastDownwardPlanParser planParser = new FastDownwardPlanParser(listener);
+            var decl = parser.ParseDecl(new FileInfo(targetDomain), new FileInfo(targetProblem));
+            IMacroGenerator<List<ActionPlan>> generator = new SequentialMacroGenerator(decl);
+            List<ActionPlan> plans = new List<ActionPlan>();
+            foreach (var file in new DirectoryInfo(targetPlans).GetFiles())
+                if (file.Extension == ".plan")
+                    plans.Add(planParser.Parse(file));
+
+            Stopwatch instanceWatch = new Stopwatch();
+            instanceWatch.Start();
+            for (int i = 0; i < number; i++)
+            {
+                Console.WriteLine($"Instance {i}");
+                generator.FindMacros(plans);
+
+            }
+            instanceWatch.Stop();
+            Console.WriteLine($"Done! Took {instanceWatch.ElapsedMilliseconds}ms");
         }
 
         private static void RunNTimes4(int number)
