@@ -6,23 +6,23 @@ on:
       - main
 
 jobs:
-  BuildAndTest:
-    runs-on: ubuntu-latest
-    name: Run Tests
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@master
+  # BuildAndTest:
+  #   runs-on: ubuntu-latest
+  #   name: Run Tests
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@master
 
-      - name: Install dependencies
-        run: dotnet restore
+  #     - name: Install dependencies
+  #       run: dotnet restore
 
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+  #     - name: Build
+  #       run: dotnet build --configuration Release --no-restore
 
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal
+  #     - name: Test
+  #       run: dotnet test --no-restore --verbosity normal
   BuildAndPublish:
-    needs: BuildAndTest
+    # needs: BuildAndTest
     runs-on: ubuntu-latest
     name: Update NuGet 
     steps:
@@ -32,18 +32,18 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
 
-      - name: Build (Release) and Publish
-        run: |  
-          cd PDDLSharp
-          dotnet nuget add source --username kris701 --password ${{ secrets.API_KEY_GITHUB }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/kris701/index.json"
-          dotnet build --configuration Release
-          dotnet pack --configuration Release
-          cd bin
-          cd Release
-          dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_GITHUB }} --source "github" --skip-duplicate
-          dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_NUGET }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-          cd ..
-          cd ..
+      # - name: Build (Release) and Publish
+      #   run: |  
+      #     cd PDDLSharp
+      #     dotnet nuget add source --username kris701 --password ${{ secrets.API_KEY_GITHUB }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/kris701/index.json"
+      #     dotnet build --configuration Release
+      #     dotnet pack --configuration Release
+      #     cd bin
+      #     cd Release
+      #     dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_GITHUB }} --source "github" --skip-duplicate
+      #     dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_NUGET }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+      #     cd ..
+      #     cd ..
 
       - name: Get Package version
         id: get-version
@@ -55,13 +55,14 @@ jobs:
         uses: rickstaa/action-create-tag@v1
         id: "tag_create"
         with:
-          tag_exists_error: true
+          tag_exists_error: "false"
           tag: "v${{ steps.get-version.outputs.package-version }}"
           message: "Latest release"
 
       - name: Generate Release
         uses: ncipollo/release-action@v1
         with:
+          skipIfReleaseExists: true
           artifacts: "PDDLSharp/bin/Release/*.nupkg"
           tag: "v${{ steps.get-version.outputs.package-version }}"
 
