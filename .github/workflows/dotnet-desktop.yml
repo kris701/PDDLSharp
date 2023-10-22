@@ -55,7 +55,7 @@ jobs:
         uses: rickstaa/action-create-tag@v1
         id: "tag_create"
         with:
-          tag_exists_error: "false"
+          continue-on-error: true
           tag: "v${{ steps.get-version.outputs.package-version }}"
           message: "Latest release"
 
