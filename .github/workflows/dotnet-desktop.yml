@@ -55,9 +55,8 @@ jobs:
         uses: rickstaa/action-create-tag@v1
         id: "tag_create"
         with:
+          tag_exists_error: true
           tag: "v${{ steps.get-version.outputs.package-version }}"
-          force_push_tag: false
-          tag_exists_error: false
           message: "Latest release"
 
       - name: Generate Release
