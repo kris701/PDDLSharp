@@ -37,10 +37,10 @@ jobs:
       #     dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_GITHUB }} --source "github" --skip-duplicate
       #     dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_NUGET }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
       - name: Get Package version
-        id: package_version
-        uses: KageKirin/get-csproj-version@v1.0.0
+        id: get-version
+        uses: kzrnm/get-net-sdk-project-versions-action@v1
         with:
-          file: PDDLSharp/PDDLSharp.csproj
+          proj-path: PDDLSharp/PDDLSharp.csproj
       - uses: rickstaa/action-create-tag@v1
         id: "${{ steps.test.package_version.version }}"
         with:
@@ -55,5 +55,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "PDDLSharp/bin/Release/*.nupkg"
-          tag: "${{ steps.test.package_version.version }}"
+          tag: "${{ steps.get-version.outputs.package-version }}"
 
