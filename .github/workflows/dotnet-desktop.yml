@@ -52,10 +52,10 @@ jobs:
           proj-path: PDDLSharp/PDDLSharp.csproj
 
       - name: Generate tag
+        continue-on-error: true
         uses: rickstaa/action-create-tag@v1
         id: "tag_create"
         with:
-          continue-on-error: true
           tag: "v${{ steps.get-version.outputs.package-version }}"
           message: "Latest release"
 
