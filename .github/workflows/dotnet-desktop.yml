@@ -44,7 +44,7 @@ jobs:
       - uses: rickstaa/action-create-tag@v1
         id: "tag_create"
         with:
-          tag: "${{ steps.get-version.outputs.package-version }}"
+          tag: "v${{ steps.get-version.outputs.package-version }}"
           tag_exists_error: false
           message: "Latest release"
       - name: Install dependencies
@@ -55,5 +55,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "PDDLSharp/bin/Release/*.nupkg"
-          tag: "${{ steps.get-version.outputs.package-version }}"
+          tag: "v${{ steps.get-version.outputs.package-version }}"
 
