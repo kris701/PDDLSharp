@@ -6,11 +6,36 @@ on:
       - main
 
 jobs:
+  # BuildAndTest:
+  #   runs-on: ubuntu-latest
+  #   name: Run Tests
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@master
+  #     - name: Install dependencies
+  #       run: dotnet restore
+  #     - name: Build
+  #       run: dotnet build --configuration Release --no-restore
+  #     - name: Test
+  #       run: dotnet test --no-restore --verbosity normal
   BuildAndPublish:
-    needs: BuildAndTest
+    # needs: BuildAndTest
     runs-on: ubuntu-latest
     name: Update NuGet 
     steps:
+      # - name: Checkout repository
+      #   uses: actions/checkout@master
+          
+      # - name: Build (Release) and Publish
+      #   run: |  
+      #     cd PDDLSharp
+      #     dotnet nuget add source --username kris701 --password ${{ secrets.API_KEY_GITHUB }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/kris701/index.json"
+      #     dotnet build --configuration Release
+      #     dotnet pack --configuration Release
+      #     cd bin
+      #     cd Release
+      #     dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_GITHUB }} --source "github" --skip-duplicate
+      #     dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_NUGET }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
       - name: Get Package version
         id: package_version
         uses: KageKirin/get-csproj-version@v1.0.0
