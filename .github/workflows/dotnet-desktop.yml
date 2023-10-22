@@ -49,5 +49,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "PDDLSharp/bin/Release/*.nupkg"
-          tag: "1.1.12"
+          tag: "${{ steps.test.package_version.version }}"
 
