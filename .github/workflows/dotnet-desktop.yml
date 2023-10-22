@@ -42,9 +42,9 @@ jobs:
         with:
           proj-path: PDDLSharp/PDDLSharp.csproj
       - uses: rickstaa/action-create-tag@v1
-        id: "${{ steps.test.package_version.version }}"
+        id: "tag_create"
         with:
-          tag: "latest"
+          tag: "${{ steps.get-version.outputs.package-version }}"
           tag_exists_error: false
           message: "Latest release"
       - name: Install dependencies
