@@ -6,18 +6,6 @@ on:
       - main
 
 jobs:
-  # BuildAndTest:
-  #   runs-on: ubuntu-latest
-  #   name: Run Tests
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@master
-  #     - name: Install dependencies
-  #       run: dotnet restore
-  #     - name: Build
-  #       run: dotnet build --configuration Release --no-restore
-  #     - name: Test
-  #       run: dotnet test --no-restore --verbosity normal
   BuildAndPublish:
     needs: BuildAndTest
     runs-on: ubuntu-latest
