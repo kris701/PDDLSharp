@@ -12,10 +12,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@master
+
       - name: Install dependencies
         run: dotnet restore
+
       - name: Build
         run: dotnet build --configuration Release --no-restore
+
       - name: Test
         run: dotnet test --no-restore --verbosity normal
   BuildAndPublish:
@@ -26,6 +29,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
           
+      - name: Install dependencies
+        run: dotnet restore
+
       - name: Build (Release) and Publish
         run: |  
           cd PDDLSharp
@@ -38,18 +44,22 @@ jobs:
           dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_NUGET }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
           cd ..
           cd ..
+
       - name: Get Package version
         id: get-version
         uses: kzrnm/get-net-sdk-project-versions-action@v1
         with:
           proj-path: PDDLSharp/PDDLSharp.csproj
+
       - name: Generate tag
         uses: rickstaa/action-create-tag@v1
         id: "tag_create"
         with:
           tag: "v${{ steps.get-version.outputs.package-version }}"
+          force_push_tag: false
           tag_exists_error: false
           message: "Latest release"
+
       - name: Generate Release
         uses: ncipollo/release-action@v1
         with:
