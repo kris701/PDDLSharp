@@ -2,22 +2,22 @@
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.Grounders;
+using System.Xml.Linq;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
     public class PDDLStateSpace : IState
     {
         public PDDLDecl Declaration { get; internal set; }
-        internal HashSet<PredicateExp> _state;
+        public HashSet<PredicateExp> State { get; internal set; }
         internal List<PredicateExp> _tempAdd = new List<PredicateExp>();
         internal List<PredicateExp> _tempDel = new List<PredicateExp>();
-        internal ParametizedGrounder _grounder;
+        internal ActionGrounder? _grounder;
 
         public PDDLStateSpace(PDDLDecl declaration)
         {
             Declaration = declaration;
-            _grounder = new ParametizedGrounder(declaration);
-            _state = new HashSet<PredicateExp>();
+            State = new HashSet<PredicateExp>();
             if (declaration.Problem.Init != null)
                 foreach (var item in declaration.Problem.Init.Predicates)
                     if (item is PredicateExp predicate)
@@ -27,18 +27,17 @@ namespace PDDLSharp.Toolkit.StateSpace
         public PDDLStateSpace(PDDLDecl declaration, HashSet<PredicateExp> currentState)
         {
             Declaration = declaration;
-            _grounder = new ParametizedGrounder(declaration);
-            _state = currentState;
+            State = currentState;
         }
 
         public IState Copy()
         {
-            HashSet<PredicateExp> newState = new HashSet<PredicateExp>();
-            _state.CopyTo(newState.ToArray());
-            return new PDDLStateSpace(Declaration, newState);
+            PredicateExp[] newState = new PredicateExp[State.Count];
+            State.CopyTo(newState);
+            return new PDDLStateSpace(Declaration, newState.ToHashSet());
         }
 
-        public int Count => _state.Count;
+        public int Count => State.Count;
 
         private PredicateExp SimplifyPredicate(PredicateExp pred)
         {
@@ -56,12 +55,29 @@ namespace PDDLSharp.Toolkit.StateSpace
             return newPred;
         }
 
-        public void Add(PredicateExp pred) => _state.Add(SimplifyPredicate(pred));
+        public void Add(PredicateExp pred) => State.Add(SimplifyPredicate(pred));
         public void Add(string pred, params string[] arguments) => Add(SimplifyPredicate(pred, arguments));
-        public void Del(PredicateExp pred) => _state.Remove(SimplifyPredicate(pred));
+        public void Del(PredicateExp pred) => State.Remove(SimplifyPredicate(pred));
         public void Del(string pred, params string[] arguments) => Del(SimplifyPredicate(pred, arguments));
-        public bool Contains(PredicateExp pred) => _state.Contains(SimplifyPredicate(pred));
+        public bool Contains(PredicateExp pred) => State.Contains(SimplifyPredicate(pred));
         public bool Contains(string pred, params string[] arguments) => Contains(SimplifyPredicate(pred, arguments));
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is IState other)
+                foreach (var item in State)
+                    if (!other.State.Contains(item))
+                        return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 0;
+            foreach(var item in State)
+                hash ^= item.GetHashCode();
+            return hash;
+        }
 
         public virtual void ExecuteNode(INode node)
         {
@@ -185,6 +201,8 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         private bool CheckPermutationsStepwise(INode node, ParameterExp parameters, Func<INode, bool?> stopFunc, bool defaultReturn = true)
         {
+            if (_grounder == null)
+                _grounder = new ActionGrounder(Declaration);
             var allPermuations = _grounder.GenerateParameterPermutations(parameters.Values);
             for (int i = 0; i < allPermuations.Count; i++)
             {

@@ -21,32 +21,37 @@ namespace PDDLSharp.Toolkit.Planners
 
         public ActionPlan Solve(IHeuristic h)
         {
-            IGrounder<IParametized> grounder = new ParametizedGrounder(new PDDLDecl(Domain, Problem));
-            List<IParametized> groundedActions = new List<IParametized>();
+            IGrounder<ActionDecl> grounder = new ActionGrounder(new PDDLDecl(Domain, Problem));
+            List<ActionDecl> groundedActions = new List<ActionDecl>();
             foreach (var action in Domain.Actions)
                 groundedActions.AddRange(grounder.Ground(action));
 
-            PDDLStateSpace state = new PDDLStateSpace(new PDDLDecl(Domain, Problem));
+            IState state = new RelaxedPDDLStateSpace(new PDDLDecl(Domain, Problem));
             List<GroundedAction> actionSteps = new List<GroundedAction>();
+            HashSet<IState> openList = new HashSet<IState>();
+            HashSet<IState> closedList = new HashSet<IState>();
             while (!state.IsInGoal())
             {
-                int[] evaluated = new int[groundedActions.Count];
+                int best = int.MaxValue;
+                int bestAction = -1;
                 for(int i = 0; i < groundedActions.Count; i++)
                 {
-                    if (groundedActions[i] is ActionDecl checkAct)
+                    if (state.IsNodeTrue(groundedActions[i].Preconditions))
                     {
-                        if (state.IsNodeTrue(checkAct.Preconditions))
+                        var check = state.Copy();
+                        check.ExecuteNode(groundedActions[i].Effects);
+                        var value = h.GetValue(state, groundedActions[i]);
+                        if (value <= best && !closedList.Contains(check))
                         {
-                            var newState = state.Copy();
-                            newState.ExecuteNode(checkAct.Effects);
-                            evaluated[i] = h.GetValue(newState);
+                            closedList.Add(check);
+                            state = check;
+                            best = value;
+                            bestAction = i;
                         }
                     }
                 }
 
-                var best = evaluated[evaluated.ToList().IndexOf(evaluated.Max())];
-                if (groundedActions[best] is ActionDecl act)
-                    state.ExecuteNode(act.Effects);
+                actionSteps.Add(new GroundedAction(groundedActions[bestAction])); 
             }
             return new ActionPlan(actionSteps, actionSteps.Count);
         }

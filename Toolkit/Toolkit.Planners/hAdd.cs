@@ -1,4 +1,6 @@
 ﻿using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.StateSpace;
 using System;
 using System.Collections.Generic;
@@ -17,13 +19,14 @@ namespace PDDLSharp.Toolkit.Planners
             Declaration = declaration;
         }
 
-        public int GetValue(IState state)
+        public int GetValue(IState state, ActionDecl action)
         {
             int cost = 0;
-            bool[] covered = new bool[state.Count];
-            foreach(var action in Declaration.Domain.Actions)
+
+            if (state.Declaration.Problem.Goal != null) 
             {
 
+                return 0;
             }
             return cost;
         }

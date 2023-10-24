@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Models.PDDL;
+﻿using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,9 @@ namespace PDDLSharp.Toolkit.StateSpace
 {
     public interface IState
     {
+        public HashSet<PredicateExp> State { get; }
+        public PDDLDecl Declaration { get; }
+
         public IState Copy();
         public int Count { get; }
 
