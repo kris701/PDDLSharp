@@ -5,13 +5,13 @@ using PDDLSharp.Toolkit.Grounders;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
-    public class PDDLStateSpace
+    public class PDDLStateSpace : IState
     {
         public PDDLDecl Declaration { get; internal set; }
-        private HashSet<PredicateExp> _state;
-        private List<PredicateExp> _tempAdd = new List<PredicateExp>();
-        private List<PredicateExp> _tempDel = new List<PredicateExp>();
-        private ParametizedGrounder _grounder;
+        internal HashSet<PredicateExp> _state;
+        internal List<PredicateExp> _tempAdd = new List<PredicateExp>();
+        internal List<PredicateExp> _tempDel = new List<PredicateExp>();
+        internal ParametizedGrounder _grounder;
 
         public PDDLStateSpace(PDDLDecl declaration)
         {
@@ -22,6 +22,20 @@ namespace PDDLSharp.Toolkit.StateSpace
                 foreach (var item in declaration.Problem.Init.Predicates)
                     if (item is PredicateExp predicate)
                         Add(SimplifyPredicate(predicate));
+        }
+
+        public PDDLStateSpace(PDDLDecl declaration, HashSet<PredicateExp> currentState)
+        {
+            Declaration = declaration;
+            _grounder = new ParametizedGrounder(declaration);
+            _state = currentState;
+        }
+
+        public IState Copy()
+        {
+            HashSet<PredicateExp> newState = new HashSet<PredicateExp>();
+            _state.CopyTo(newState.ToArray());
+            return new PDDLStateSpace(Declaration, newState);
         }
 
         public int Count => _state.Count;
@@ -49,7 +63,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         public bool Contains(PredicateExp pred) => _state.Contains(SimplifyPredicate(pred));
         public bool Contains(string pred, params string[] arguments) => Contains(SimplifyPredicate(pred, arguments));
 
-        public void ExecuteNode(INode node)
+        public virtual void ExecuteNode(INode node)
         {
             _tempAdd.Clear();
             _tempDel.Clear();
@@ -59,7 +73,7 @@ namespace PDDLSharp.Toolkit.StateSpace
             foreach (var item in _tempAdd)
                 Add(item);
         }
-        private void ExecuteNode(INode node, bool isNegative)
+        internal void ExecuteNode(INode node, bool isNegative)
         {
             switch (node)
             {

@@ -3,8 +3,11 @@ using PDDLSharp.Analysers.PDDL;
 using PDDLSharp.CodeGenerators;
 using PDDLSharp.CodeGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers;
@@ -12,6 +15,7 @@ using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Parsers.Plans;
 using PDDLSharp.Parsers.SAS;
 using PDDLSharp.Toolkit.MacroGenerators;
+using PDDLSharp.Toolkit.Planners;
 using PDDLSharp.Toolkit.PlanValidator;
 using System.Diagnostics;
 
@@ -30,7 +34,21 @@ namespace PerformanceTests
             //RunNTimes2(2000);
             //RunNTimes3(1);
             //RunNTimes4(100);
-            RunNTimes5(50);
+            //RunNTimes5(50);
+            RunNTimes6(1);
+        }
+
+        private static void RunNTimes6(int number)
+        {
+            var targetDomain = "benchmarks/gripper/domain.pddl";
+            var targetProblem = "benchmarks/gripper/prob01.pddl";
+
+            IErrorListener listener = new ErrorListener();
+            PDDLParser parser = new PDDLParser(listener);
+
+            IPlanner planner = new BruteForcePlanner(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
+            IHeuristic h = new hAdd(new PDDLDecl(planner.Domain, planner.Problem));
+            var result = planner.Solve(h);
         }
 
         private static void RunNTimes5(int number)
