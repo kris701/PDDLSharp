@@ -246,11 +246,11 @@ namespace PDDLSharp.Toolkit.StateSpace.Tests
             yield return new object[] {
                 new ForAllExp(
                     new ParameterExp(new List<NameExp>(){ new NameExp("?a"), new NameExp("?b") }),
-                        new ForAllExp(
+                    new ForAllExp(
                         new ParameterExp(new List<NameExp>(){ new NameExp("?c"), new NameExp("?d") }),
                         new PredicateExp("pred", new List<NameExp>(){new NameExp("?a"), new NameExp("?b"), new NameExp("?c"), new NameExp("?d") })
-                        )
-                    ),
+                    )
+                ),
                 16
             };
         }
@@ -260,8 +260,9 @@ namespace PDDLSharp.Toolkit.StateSpace.Tests
         public void Can_ExecuteNode_ExpectedNodes(INode node, int expected)
         {
             // ARRANGE
-            PDDLStateSpace state = new PDDLStateSpace(new PDDLDecl(new DomainDecl(), new ProblemDecl()));
-            state.Declaration.Problem.Objects = new ObjectsDecl(new List<NameExp>() { new NameExp("obja"), new NameExp("objb") });
+            var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
+            decl.Problem.Objects = new ObjectsDecl(new List<NameExp>() { new NameExp("obja"), new NameExp("objb") });
+            PDDLStateSpace state = new PDDLStateSpace(decl);
 
             // ACT
             state.ExecuteNode(node);
@@ -449,8 +450,9 @@ namespace PDDLSharp.Toolkit.StateSpace.Tests
         public void Can_IsNodeTrue(INode apply, INode check, bool expected)
         {
             // ARRANGE
-            PDDLStateSpace state = new PDDLStateSpace(new PDDLDecl(new DomainDecl(), new ProblemDecl()));
-            state.Declaration.Problem.Objects = new ObjectsDecl(new List<NameExp>() { new NameExp("obja"), new NameExp("objb") });
+            var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
+            decl.Problem.Objects = new ObjectsDecl(new List<NameExp>() { new NameExp("obja"), new NameExp("objb") });
+            PDDLStateSpace state = new PDDLStateSpace(decl);
             state.ExecuteNode(apply);
 
             // ACT

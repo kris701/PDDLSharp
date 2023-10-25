@@ -12,11 +12,12 @@ namespace PDDLSharp.Toolkit.StateSpace
         public HashSet<PredicateExp> State { get; internal set; }
         internal List<PredicateExp> _tempAdd = new List<PredicateExp>();
         internal List<PredicateExp> _tempDel = new List<PredicateExp>();
-        internal ActionGrounder? _grounder;
+        internal IGrounder<IParametized> _grounder;
 
         public PDDLStateSpace(PDDLDecl declaration)
         {
             Declaration = declaration;
+            _grounder = new ParametizedGrounder(declaration);
             State = new HashSet<PredicateExp>();
             if (declaration.Problem.Init != null)
                 foreach (var item in declaration.Problem.Init.Predicates)
@@ -26,6 +27,7 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         public PDDLStateSpace(PDDLDecl declaration, HashSet<PredicateExp> currentState)
         {
+            _grounder = new ParametizedGrounder(declaration);
             Declaration = declaration;
             State = currentState;
         }
@@ -234,8 +236,6 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         private bool CheckPermutationsStepwise(INode node, ParameterExp parameters, Func<INode, bool?> stopFunc, bool defaultReturn = true)
         {
-            if (_grounder == null)
-                _grounder = new ActionGrounder(Declaration);
             var allPermuations = _grounder.GenerateParameterPermutations(parameters.Values);
             while(allPermuations.Count > 0)
             {
@@ -248,8 +248,6 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         private INode GenerateNewParametized(INode node, ParameterExp replace, int[] with)
         {
-            if (_grounder == null)
-                _grounder = new ActionGrounder(Declaration);
             var checkNode = node.Copy();
             for (int i = 0; i < replace.Values.Count; i++)
             {

@@ -39,9 +39,12 @@ namespace PDDLSharp.Toolkit.Grounders
             {
                 foreach (var type in Declaration.Domain.Types.Types)
                 {
-                    tempDict.Add(typeIndex, new List<int>());
-                    _typeDict.Add(typeIndex, type.Name);
-                    _typeRef.Add(type.Name, typeIndex++);
+                    if (type.Name != "object")
+                    {
+                        tempDict.Add(typeIndex, new List<int>());
+                        _typeDict.Add(typeIndex, type.Name);
+                        _typeRef.Add(type.Name, typeIndex++);
+                    }
                 }
             }
 
@@ -68,17 +71,16 @@ namespace PDDLSharp.Toolkit.Grounders
         public int GetIndexFromType(string type) => _typeRef[type];
         public string GetTypeFromIndex(int index) => _typeDict[index];
 
-        private Queue<int[]> _tempQueue = new Queue<int[]>();
         public Queue<int[]> GenerateParameterPermutations(List<NameExp> parameters)
         {
             var indexedParams = new int[parameters.Count];
             for (int i = 0; i < indexedParams.Length; i++)
                 indexedParams[i] = _typeRef[parameters[i].Type.Name];
-            _tempQueue.Clear();
-            GenerateParameterPermutations(indexedParams, new int[parameters.Count], 0);
-            return _tempQueue;
+            var returnQueue = new Queue<int[]>();
+            GenerateParameterPermutations(indexedParams, new int[parameters.Count], 0, returnQueue);
+            return returnQueue;
         }
-        private void GenerateParameterPermutations(int[] parameters, int[] carried, int index)
+        private void GenerateParameterPermutations(int[] parameters, int[] carried, int index, Queue<int[]> returnQueue)
         {
             var allOfType = _objCache[parameters[index]];
             foreach (var ofType in allOfType)
@@ -87,9 +89,9 @@ namespace PDDLSharp.Toolkit.Grounders
                 Array.Copy(carried, newParam, parameters.Length);
                 newParam[index] = ofType;
                 if (index >= parameters.Length - 1)
-                    _tempQueue.Enqueue(newParam);
+                    returnQueue.Enqueue(newParam);
                 else
-                    GenerateParameterPermutations(parameters, newParam, index + 1);
+                    GenerateParameterPermutations(parameters, newParam, index + 1, returnQueue);
             }
         }
     }
