@@ -22,13 +22,18 @@ namespace PDDLSharp.Toolkit.Grounders
             IStaticPredicateDetectors staticPredicateDetector = new SimpleStaticPredicateDetector();
             var statics = staticPredicateDetector.FindStaticPredicates(Declaration);
 
+            if (statics.Count != 0)
+            {
+
+            }
+
             List<PredicateExp> inits = new List<PredicateExp>();
             if (Declaration.Problem.Init != null)
             {
                 foreach (var init in Declaration.Problem.Init.Predicates)
                     if (init is PredicateExp pred)
                         inits.Add(pred);
-            }    
+            }
 
             var allPermuations = GenerateParameterPermutations(item.Parameters.Values);
             foreach (var permutation in allPermuations)
@@ -47,6 +52,11 @@ namespace PDDLSharp.Toolkit.Grounders
             }
 
             return groundedActions;
+        }
+
+        private void GenerateTypesForStatics()
+        {
+
         }
 
         private bool IsStaticsValidForPermutation(ActionDecl action, List<PredicateExp> inits, List<PredicateExp> statics)

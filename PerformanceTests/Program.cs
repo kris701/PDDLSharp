@@ -37,13 +37,13 @@ namespace PerformanceTests
             //RunNTimes3(1);
             //RunNTimes4(100);
             //RunNTimes5(50);
-            RunNTimes6(30);
+            RunNTimes6(10);
         }
 
         private static void RunNTimes6(int number)
         {
-            var targetDomain = "benchmarks/gripper/domain.pddl";
-            var targetProblem = "benchmarks/gripper/prob01.pddl";
+            var targetDomain = "benchmarks/mystery/domain.pddl";
+            var targetProblem = "benchmarks/mystery/prob01.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
@@ -75,8 +75,10 @@ namespace PerformanceTests
 
             Console.WriteLine($"Planner 1 took {times[0]}ms");
             Console.WriteLine($"Planner 1 generated {planner.Generated} states and expanded {planner.Expanded}");
+            Console.WriteLine($"Planner 1 used {planner.OperatorsUsed} operators");
             Console.WriteLine($"Planner 2 took {times[1]}ms");
             Console.WriteLine($"Planner 2 generated {planner2.Generated} states and expanded {planner2.Expanded}");
+            Console.WriteLine($"Planner 2 used {planner.GroundedActions.Count} operators");
         }
 
         private static void RunNTimes5(int number)

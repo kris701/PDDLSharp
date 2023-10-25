@@ -25,6 +25,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
 
+        public int OperatorsUsed { get; internal set; }
+
         private bool _preprocessed = false;
         private RelaxedPlanningGraphs _graphGenerator;
 
@@ -65,8 +67,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 );
 
             HashSet<StateMove> closedList = new HashSet<StateMove>();
-            Queue<StateMove> openList = new Queue<StateMove>();
-            openList.Enqueue(new StateMove(state, h.GetValue(int.MaxValue, state, operators)));
+            HashSet<StateMove> openListRef = new HashSet<StateMove>();
+            PriorityQueue<StateMove, int> openList = new PriorityQueue<StateMove, int>();
+            var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
+            openList.Enqueue(new StateMove(state, hValue), hValue);
 
             while (true)
             {
@@ -80,29 +84,35 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 {
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
                     {
-                        Expanded++;
+                        Generated++;
                         var check = stateMove.State.Copy();
                         check.ExecuteNode(act.Effects);
                         var value = h.GetValue(stateMove.hValue, check, operators);
                         var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
-                        if (!closedList.Contains(newMove))
+                        if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
+                            if (check.IsInGoal())
+                            {
+                                OperatorsUsed = operators.Count;
+                                return new ActionPlan(newMove.Steps, stateMove.Steps.Count);
+                            }
                             if (value < stateMove.hValue)
                             {
-                                Generated++;
-                                openList.Enqueue(newMove);
-                                if (check.IsInGoal())
-                                    return new ActionPlan(newMove.Steps, stateMove.Steps.Count);
+                                openList.Enqueue(newMove, value);
+                                openListRef.Add(newMove);
                             }
                         }
-                        closedList.Add(newMove);
                     }
                 }
+
+                Expanded++;
+                openListRef.Remove(stateMove);
+                closedList.Add(stateMove);
             }
             throw new Exception("No solution found!");
         }
 
-        private HashSet<ActionDecl> RefineOperators(HashSet<ActionDecl> operators, HashSet<StateMove> closedList, Queue<StateMove> openList)
+        private HashSet<ActionDecl> RefineOperators(HashSet<ActionDecl> operators, HashSet<StateMove> closedList, PriorityQueue<StateMove, int> openList)
         {
             if (closedList.Count == 0)
                 return operators;
@@ -154,7 +164,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         foreach(var item in switchLists)
                         {
                             closedList.Remove(item);
-                            openList.Enqueue(item);
+                            openList.Enqueue(item, item.hValue);
                         }
 
                         operators.AddRange(newOperators);
