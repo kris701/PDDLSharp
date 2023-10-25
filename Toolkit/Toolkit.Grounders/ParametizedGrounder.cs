@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.Grounders
                 {
                     var allRefs = copy.FindNames(item.Parameters.Values[i].Name);
                     foreach (var refItem in allRefs)
-                        refItem.Name = GetObjectFromIndex(permutation[i]).Name;
+                        refItem.Name = GetObjectFromIndex(permutation[i]);
                 }
 
                 if (copy is IParametized param)

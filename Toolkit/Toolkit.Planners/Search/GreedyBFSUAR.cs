@@ -76,7 +76,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             {
                 // Refinement Guard and Refinement
                 if (openList.Count == 0)
-                    operators = RefineOperators(operators, closedList, openList);
+                    operators = RefineOperators(operators, closedList, openList, openListRef);
 
                 var stateMove = openList.Dequeue();
                 if (stateMove.State.IsInGoal())
@@ -95,6 +95,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         check.ExecuteNode(act.Effects);
                         var value = h.GetValue(stateMove.hValue, check, GroundedActions);
                         var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
+                        if (newMove.State.IsInGoal())
+                        {
+                            OperatorsUsed = operators.Count;
+                            return new ActionPlan(newMove.Steps, newMove.Steps.Count);
+                        }
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
                             if (value < stateMove.hValue)
@@ -113,7 +118,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             throw new Exception("No solution found!");
         }
 
-        private HashSet<ActionDecl> RefineOperators(HashSet<ActionDecl> operators, HashSet<StateMove> closedList, PriorityQueue<StateMove, int> openList)
+        private HashSet<ActionDecl> RefineOperators(HashSet<ActionDecl> operators, HashSet<StateMove> closedList, PriorityQueue<StateMove, int> openList, HashSet<StateMove>  openListRef)
         {
             if (closedList.Count == 0)
                 return operators;
@@ -165,6 +170,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         foreach(var item in switchLists)
                         {
                             closedList.Remove(item);
+                            openListRef.Add(item);
                             openList.Enqueue(item, item.hValue);
                         }
 

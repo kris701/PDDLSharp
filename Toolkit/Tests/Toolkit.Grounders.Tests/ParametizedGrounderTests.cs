@@ -19,27 +19,6 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
         public static IEnumerable<object[]> GetGroundingData_Typeless_NoConstants()
         {
             yield return new object[] {
-                new ActionDecl("act", new ParameterExp(new List<NameExp>(){  }), new AndExp(), new AndExp()),
-                new List<NameExp>() { new NameExp("obj1"), new NameExp("obj2") },
-                1
-            };
-            yield return new object[] {
-                new ActionDecl("act", new ParameterExp(new List<NameExp>(){ new NameExp("?a") }), new AndExp(), new AndExp()),
-                new List<NameExp>() { new NameExp("obj1"), new NameExp("obj2") },
-                2
-            };
-            yield return new object[] {
-                new ActionDecl("act", new ParameterExp(new List<NameExp>(){ new NameExp("?a") }), new AndExp(), new AndExp()),
-                new List<NameExp>() {  },
-                0
-            };
-            yield return new object[] {
-                new ActionDecl("act", new ParameterExp(new List<NameExp>(){ new NameExp("?a"), new NameExp("?b") }), new AndExp(), new AndExp()),
-                new List<NameExp>() { new NameExp("obj1"), new NameExp("obj2") },
-                4
-            };
-
-            yield return new object[] {
                 new ForAllExp(new ParameterExp(new List<NameExp>(){  }), new AndExp()),
                 new List<NameExp>() { new NameExp("obj1"), new NameExp("obj2") },
                 1
@@ -90,7 +69,7 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Objects = new ObjectsDecl();
             decl.Problem.Objects.Objs = objs;
-            IGrounder<IParametized> grounder = new ActionGrounder(decl);
+            IGrounder<IParametized> grounder = new ParametizedGrounder(decl);
 
             // ACT
             var result = grounder.Ground(action);
@@ -101,32 +80,6 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
 
         public static IEnumerable<object[]> GetGroundingData_NoConstants()
         {
-            yield return new object[] {
-                new ActionDecl("act", new ParameterExp(new List<NameExp>(){  }), new AndExp(), new AndExp()),
-                new List<NameExp>() { new NameExp("obj1", new TypeExp("type1")), new NameExp("obj2", new TypeExp("type2")) },
-                1
-            };
-            yield return new object[] {
-                new ActionDecl("act", new ParameterExp(new List<NameExp>(){ new NameExp("?a", new TypeExp("type1")) }), new AndExp(), new AndExp()),
-                new List<NameExp>() { new NameExp("obj1", new TypeExp("type1")), new NameExp("obj2", new TypeExp("type2")) },
-                1
-            };
-            yield return new object[] {
-                new ActionDecl("act", new ParameterExp(new List<NameExp>(){ new NameExp("?a", new TypeExp("type3")) }), new AndExp(), new AndExp()),
-                new List<NameExp>() { new NameExp("obj1", new TypeExp("type1")), new NameExp("obj2", new TypeExp("type2")) },
-                0
-            };
-            yield return new object[] {
-                new ActionDecl("act", new ParameterExp(new List<NameExp>(){ new NameExp("?a", new TypeExp("type1")), new NameExp("?b") }), new AndExp(), new AndExp()),
-                new List<NameExp>() { new NameExp("obj1", new TypeExp("type1")), new NameExp("obj2") },
-                2
-            };
-            yield return new object[] {
-                new ActionDecl("act", new ParameterExp(new List<NameExp>(){ new NameExp("?a", new TypeExp("type1")), new NameExp("?b", new TypeExp("type3")) }), new AndExp(), new AndExp()),
-                new List<NameExp>() { new NameExp("obj1", new TypeExp("type1")), new NameExp("obj2") },
-                0
-            };
-
             yield return new object[] {
                 new ForAllExp(new ParameterExp(new List<NameExp>(){  }), new AndExp()),
                 new List<NameExp>() { new NameExp("obj1", new TypeExp("type1")), new NameExp("obj2", new TypeExp("type2")) },
@@ -188,7 +141,12 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Objects = new ObjectsDecl();
             decl.Problem.Objects.Objs = objs;
-            IGrounder<IParametized> grounder = new ActionGrounder(decl);
+            decl.Domain.Types = new TypesDecl();
+            decl.Domain.Types.Add(new TypeExp("type1"));
+            decl.Domain.Types.Add(new TypeExp("type2"));
+            decl.Domain.Types.Add(new TypeExp("type3"));
+            decl.Domain.Types.Add(new TypeExp("type4"));
+            IGrounder<IParametized> grounder = new ParametizedGrounder(decl);
 
             // ACT
             var result = grounder.Ground(action);

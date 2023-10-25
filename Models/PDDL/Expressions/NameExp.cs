@@ -23,17 +23,17 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public NameExp(ASTNode node, INode? parent, string name) : base(node, parent, name)
         {
-            Type = new TypeExp(node, this, "");
+            Type = new TypeExp(node, this, "object");
         }
 
         public NameExp(INode? parent, string name) : base(parent, name)
         {
-            Type = new TypeExp(this, "");
+            Type = new TypeExp(this, "object");
         }
 
         public NameExp(string name) : base(name)
         {
-            Type = new TypeExp(this, "");
+            Type = new TypeExp(this, "object");
         }
 
         public override int GetHashCode()

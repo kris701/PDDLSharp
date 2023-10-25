@@ -71,6 +71,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         check.ExecuteNode(act.Effects);
                         var value = h.GetValue(stateMove.hValue, check, GroundedActions);
                         var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
+                        if (newMove.State.IsInGoal())
+                            return new ActionPlan(newMove.Steps, newMove.Steps.Count);
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
                             if (value < stateMove.hValue)

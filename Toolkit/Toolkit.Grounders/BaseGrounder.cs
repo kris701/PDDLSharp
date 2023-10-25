@@ -8,10 +8,10 @@ namespace PDDLSharp.Toolkit.Grounders
     {
         public PDDLDecl Declaration { get; internal set; }
 
-        private Dictionary<int, TypeExp> _typeDict = new Dictionary<int, TypeExp>();
-        private Dictionary<TypeExp, int> _typeRef = new Dictionary<TypeExp, int>();
-        private Dictionary<int, NameExp> _objDict = new Dictionary<int, NameExp>();
-        private Dictionary<NameExp, int> _objRef = new Dictionary<NameExp, int>();
+        private Dictionary<int, string> _typeDict = new Dictionary<int, string>();
+        private Dictionary<string, int> _typeRef = new Dictionary<string, int>();
+        private Dictionary<int, string> _objDict = new Dictionary<int, string>();
+        private Dictionary<string, int> _objRef = new Dictionary<string, int>();
         private Dictionary<int, int[]> _objCache = new Dictionary<int, int[]>();
 
         protected BaseGrounder(PDDLDecl declaration)
@@ -33,42 +33,47 @@ namespace PDDLSharp.Toolkit.Grounders
             var tempDict = new Dictionary<int, List<int>>();
             int typeIndex = 0;
             tempDict.Add(typeIndex, new List<int>());
-            _typeDict.Add(typeIndex, new TypeExp("object"));
-            _typeRef.Add(new TypeExp("object"), typeIndex++);
+            _typeDict.Add(typeIndex, "object");
+            _typeRef.Add("object", typeIndex++);
             if (Declaration.Domain.Types != null)
             {
                 foreach (var type in Declaration.Domain.Types.Types)
                 {
                     tempDict.Add(typeIndex, new List<int>());
-                    _typeDict.Add(typeIndex, type);
-                    _typeRef.Add(type, typeIndex++);
+                    _typeDict.Add(typeIndex, type.Name);
+                    _typeRef.Add(type.Name, typeIndex++);
                 }
             }
 
             int objectIndex = 0;
             foreach (var obj in addObjects)
             {
-                if (tempDict.ContainsKey(_typeRef[obj.Type]))
-                    tempDict[_typeRef[obj.Type]].Add(objectIndex);
-                _objDict.Add(objectIndex, obj);
-                _objRef.Add(obj, objectIndex++);
+                if (tempDict.ContainsKey(_typeRef[obj.Type.Name]))
+                    if (!tempDict[_typeRef[obj.Type.Name]].Contains(objectIndex))
+                        tempDict[_typeRef[obj.Type.Name]].Add(objectIndex);
+                foreach (var superType in obj.Type.SuperTypes)
+                    if (tempDict.ContainsKey(_typeRef[superType]))
+                        if (!tempDict[_typeRef[superType]].Contains(objectIndex))
+                            tempDict[_typeRef[superType]].Add(objectIndex);
+                _objDict.Add(objectIndex, obj.Name);
+                _objRef.Add(obj.Name, objectIndex++);
             }
 
             foreach (var key in tempDict.Keys)
                 _objCache.Add(key, tempDict[key].ToArray());
         }
 
-        public int GetIndexFromObject(NameExp obj) => _objRef[obj];
-        public NameExp GetObjectFromIndex(int index) => _objDict[index];
-        public int GetIndexFromType(TypeExp type) => _typeRef[type];
-        public TypeExp GetTypeFromIndex(int index) => _typeDict[index];
+        public int GetIndexFromObject(string obj) => _objRef[obj];
+        public string GetObjectFromIndex(int index) => _objDict[index];
+        public int GetIndexFromType(string type) => _typeRef[type];
+        public string GetTypeFromIndex(int index) => _typeDict[index];
 
         private Queue<int[]> _tempQueue = new Queue<int[]>();
         public Queue<int[]> GenerateParameterPermutations(List<NameExp> parameters)
         {
             var indexedParams = new int[parameters.Count];
             for (int i = 0; i < indexedParams.Length; i++)
-                indexedParams[i] = _typeRef[parameters[i].Type];
+                indexedParams[i] = _typeRef[parameters[i].Type.Name];
             _tempQueue.Clear();
             GenerateParameterPermutations(indexedParams, new int[parameters.Count], 0);
             return _tempQueue;

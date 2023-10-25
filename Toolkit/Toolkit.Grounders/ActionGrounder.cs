@@ -40,7 +40,7 @@ namespace PDDLSharp.Toolkit.Grounders
                     {
                         var newArgs = new List<NameExp>();
                         for (int i = 0; i < staticsPrecon.Indexes.Length; i++)
-                            newArgs.Add(new NameExp(GetObjectFromIndex(permutation[staticsPrecon.Indexes[i]]).Name));
+                            newArgs.Add(new NameExp(GetObjectFromIndex(permutation[staticsPrecon.Indexes[i]])));
                         if (!simpleInits.Contains(new PredicateExp(staticsPrecon.Predicate.Name, newArgs)))
                         {
                             var newPattern = new int[permutation.Length];
@@ -139,7 +139,7 @@ namespace PDDLSharp.Toolkit.Grounders
             {
                 var allRefs = copy.FindNames(action.Parameters.Values[i].Name);
                 foreach (var refItem in allRefs)
-                    refItem.Name = GetObjectFromIndex(permutation[i]).Name;
+                    refItem.Name = GetObjectFromIndex(permutation[i]);
             }
             return copy;
         }

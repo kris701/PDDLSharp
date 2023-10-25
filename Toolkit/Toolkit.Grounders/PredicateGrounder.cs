@@ -21,7 +21,7 @@ namespace PDDLSharp.Toolkit.Grounders
             {
                 List<NameExp> arguments = new List<NameExp>();
                 foreach (var arg in premutation)
-                    arguments.Add(new NameExp(GetObjectFromIndex(arg).Name));
+                    arguments.Add(new NameExp(GetObjectFromIndex(arg)));
                 newPredicates.Add(new PredicateExp(item.Name, arguments));
             }
 

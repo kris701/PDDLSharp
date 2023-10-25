@@ -255,7 +255,7 @@ namespace PDDLSharp.Toolkit.StateSpace
             {
                 var allRefs = checkNode.FindNames(replace.Values[i].Name);
                 foreach (var name in allRefs)
-                    name.Name = _grounder.GetObjectFromIndex(with[i]).Name;
+                    name.Name = _grounder.GetObjectFromIndex(with[i]);
             }
 
             return checkNode;

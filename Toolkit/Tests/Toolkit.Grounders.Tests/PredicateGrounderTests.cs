@@ -108,6 +108,11 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Objects = new ObjectsDecl();
             decl.Problem.Objects.Objs = objs;
+            decl.Domain.Types = new TypesDecl();
+            decl.Domain.Types.Add(new TypeExp("type1"));
+            decl.Domain.Types.Add(new TypeExp("type2"));
+            decl.Domain.Types.Add(new TypeExp("type3"));
+            decl.Domain.Types.Add(new TypeExp("type4"));
             IGrounder<PredicateExp> grounder = new PredicateGrounder(decl);
 
             // ACT
