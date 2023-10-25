@@ -19,7 +19,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
 
         public int GetValue(IState state)
         {
-            return int.MaxValue;
+            return 1;
         }
     }
 }

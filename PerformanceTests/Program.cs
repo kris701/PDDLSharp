@@ -42,12 +42,12 @@ namespace PerformanceTests
         private static void RunNTimes6(int number)
         {
             var targetDomain = "benchmarks/gripper/domain.pddl";
-            var targetProblem = "benchmarks/gripper/prob01.pddl";
+            var targetProblem = "benchmarks/gripper/prob02.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
 
-            var planner = new DepthFirstSearch(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
+            var planner = new GreedySearch(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
             var h1 = new hBlind(new PDDLDecl(planner.Domain, planner.Problem));
 
             for (int i = 0; i < number; i++)
