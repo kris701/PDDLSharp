@@ -86,9 +86,9 @@ namespace PDDLSharp.Toolkit.Grounders
             return simpleInits;
         }
 
-        private List<PredicateExpIndexes> GenerateStaticsViolationChecks(ActionDecl action, List<PredicateExp> statics)
+        private List<PredicateViolationCheck> GenerateStaticsViolationChecks(ActionDecl action, List<PredicateExp> statics)
         {
-            var staticsPreconditions = new List<PredicateExpIndexes>();
+            var staticsPreconditions = new List<PredicateViolationCheck>();
             var argumentIndexes = new Dictionary<string, int>();
             int index = 0;
             foreach (var arg in action.Parameters.Values)
@@ -102,7 +102,7 @@ namespace PDDLSharp.Toolkit.Grounders
                     var indexes = new int[refPred.Arguments.Count];
                     for (int i = 0; i < refPred.Arguments.Count; i++)
                         indexes[i] = argumentIndexes[refPred.Arguments[i].Name];
-                    staticsPreconditions.Add(new PredicateExpIndexes(stat, indexes));
+                    staticsPreconditions.Add(new PredicateViolationCheck(stat, indexes));
                 }
             }
             return staticsPreconditions;
@@ -115,14 +115,17 @@ namespace PDDLSharp.Toolkit.Grounders
                 foreach(var pattern in violationPatterns)
                 {
                     int violated = 0;
-                    for(int j = 0; j < pattern.Length; j++)
+                    int expected = 0;
+                    for (int j = 0; j < pattern.Length; j++)
                     {
-                        if (pattern[j] != -1 && pattern[j] == permutation[j])
+                        if (pattern[j] != -1)
                         {
-                            violated++;
+                            expected++;
+                            if (pattern[j] == permutation[j])
+                                violated++;
                         }
                     }
-                    if (violated == pattern.Count(x => x != -1))
+                    if (violated == expected)
                         return false;
                 }
             }
@@ -139,18 +142,6 @@ namespace PDDLSharp.Toolkit.Grounders
                     refItem.Name = GetObjectFromIndex(permutation[i]).Name;
             }
             return copy;
-        }
-
-        internal class PredicateExpIndexes
-        {
-            public PredicateExp Predicate { get; }
-            public int[] Indexes { get; }
-
-            public PredicateExpIndexes(PredicateExp predicate, int[] indexes)
-            {
-                Predicate = predicate;
-                Indexes = indexes;
-            }
         }
     }
 }

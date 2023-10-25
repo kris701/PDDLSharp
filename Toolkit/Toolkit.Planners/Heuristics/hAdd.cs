@@ -14,12 +14,10 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     public class hAdd : IHeuristic
     {
         public PDDLDecl Declaration { get; }
-        private RelaxedPlanningGraphs _graphGenerator;
 
         public hAdd(PDDLDecl declaration)
         {
             Declaration = declaration;
-            _graphGenerator = new RelaxedPlanningGraphs();
         }
 
         public int GetValue(int currentValue, IState state, HashSet<ActionDecl> groundedActions)

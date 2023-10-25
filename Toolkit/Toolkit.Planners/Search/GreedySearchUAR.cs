@@ -66,9 +66,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 GroundedActions
                 );
 
-            HashSet<StateMove> closedList = new HashSet<StateMove>();
-            HashSet<StateMove> openListRef = new HashSet<StateMove>();
-            PriorityQueue<StateMove, int> openList = new PriorityQueue<StateMove, int>();
+            var closedList = new HashSet<StateMove>();
+            var openListRef = new HashSet<StateMove>();
+            var openList = new PriorityQueue<StateMove, int>();
             var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
             openList.Enqueue(new StateMove(state, hValue), hValue);
 
@@ -79,7 +79,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     operators = RefineOperators(operators, closedList, openList);
 
                 var stateMove = openList.Dequeue();
-
                 foreach (var act in operators)
                 {
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
@@ -87,7 +86,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         Generated++;
                         var check = stateMove.State.Copy();
                         check.ExecuteNode(act.Effects);
-                        var value = h.GetValue(stateMove.hValue, check, operators);
+                        var value = h.GetValue(stateMove.hValue, check, GroundedActions);
                         var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
@@ -197,16 +196,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var allSmallest = closedList.Where(x => x.hValue == smallestHValue).ToList();
             var applicableOperators = new HashSet<ActionDecl>();
             foreach (var item in allSmallest)
-            {
                 foreach (var act in GroundedActions) 
-                {
                     if (item.State.IsNodeTrue(act.Preconditions))
-                    {
                         applicableOperators.Add(act);
-                        break;
-                    }
-                }
-            }
             var newOperators = new HashSet<ActionDecl>();
             foreach (var relaxedOperator in applicableOperators)
                 if (!operators.Contains(relaxedOperator))
