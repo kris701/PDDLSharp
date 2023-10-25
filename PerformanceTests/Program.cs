@@ -50,8 +50,8 @@ namespace PerformanceTests
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
 
-            var planner = new GreedySearchUAR(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
-            var planner2 = new GreedySearch(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
+            var planner = new GreedyBFSUAR(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
+            var planner2 = new GreedyBFS(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
             var h1 = new hBlind(new PDDLDecl(planner.Domain, planner.Problem));
             var h2 = new hAdd(new PDDLDecl(planner.Domain, planner.Problem));
             var h3 = new hFF(new PDDLDecl(planner.Domain, planner.Problem));

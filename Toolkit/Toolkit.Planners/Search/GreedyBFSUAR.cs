@@ -17,7 +17,7 @@ using PDDLSharp.Tools;
 namespace PDDLSharp.Toolkit.Planners.Search
 {
     // Greedy Search with Under-Approximation Refinement
-    public class GreedySearchUAR : IPlanner
+    public class GreedyBFSUAR : IPlanner
     {
         public DomainDecl Domain { get; }
         public ProblemDecl Problem { get; }
@@ -30,7 +30,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         private bool _preprocessed = false;
         private RelaxedPlanningGraphs _graphGenerator;
 
-        public GreedySearchUAR(DomainDecl domain, ProblemDecl problem)
+        public GreedyBFSUAR(DomainDecl domain, ProblemDecl problem)
         {
             Domain = domain;
             Problem = problem;

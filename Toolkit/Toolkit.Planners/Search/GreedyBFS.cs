@@ -9,7 +9,7 @@ using PDDLSharp.Tools;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
-    public class GreedySearch : IPlanner
+    public class GreedyBFS : IPlanner
     {
         public DomainDecl Domain { get; }
         public ProblemDecl Problem { get; }
@@ -19,7 +19,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         private bool _preprocessed = false;
 
-        public GreedySearch(DomainDecl domain, ProblemDecl problem)
+        public GreedyBFS(DomainDecl domain, ProblemDecl problem)
         {
             Domain = domain;
             Problem = problem;
