@@ -3,13 +3,16 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.StaticPredicateDetectors;
+using System;
 
 namespace PDDLSharp.Toolkit.Grounders
 {
     public class ActionGrounder : BaseGrounder<ActionDecl>
     {
+        IStaticPredicateDetectors _staticPredicateDetector;
         public ActionGrounder(PDDLDecl declaration) : base(declaration)
         {
+            _staticPredicateDetector = new SimpleStaticPredicateDetector();
         }
 
         public override List<ActionDecl> Ground(ActionDecl item)
@@ -19,67 +22,135 @@ namespace PDDLSharp.Toolkit.Grounders
             if (item.Parameters.Values.Count == 0 && item.Copy() is ActionDecl newItem)
                 return new List<ActionDecl>() { newItem };
 
-            IStaticPredicateDetectors staticPredicateDetector = new SimpleStaticPredicateDetector();
-            var statics = staticPredicateDetector.FindStaticPredicates(Declaration);
-
-            List<PredicateExp> inits = new List<PredicateExp>();
-            if (Declaration.Problem.Init != null)
-                foreach (var init in Declaration.Problem.Init.Predicates)
-                    if (init is PredicateExp pred)
-                        inits.Add(pred);
+            var statics = _staticPredicateDetector.FindStaticPredicates(Declaration);
+            var violationPatterns = new HashSet<int[]>();
+            var simpleInits = GenerateSimpleInits();
+            var staticsPreconditions = GenerateStaticsViolationChecks(item, statics);
 
             var allPermutations = GenerateParameterPermutations(item.Parameters.Values);
             foreach (var permutation in allPermutations)
             {
-                var copy = item.Copy();
-                for (int i = 0; i < item.Parameters.Values.Count; i++)
+                if (statics.Count > 0)
                 {
-                    var allRefs = copy.FindNames(item.Parameters.Values[i].Name);
-                    foreach (var refItem in allRefs)
-                        refItem.Name = GetObjectFromIndex(permutation[i]).Name;
+                    if (!IsPermutationLegal(permutation, violationPatterns))
+                        continue;
+
+                    bool allGood = true;
+                    foreach (var staticsPrecon in staticsPreconditions)
+                    {
+                        var newArgs = new List<NameExp>();
+                        for (int i = 0; i < staticsPrecon.Indexes.Length; i++)
+                            newArgs.Add(new NameExp(GetObjectFromIndex(permutation[staticsPrecon.Indexes[i]]).Name));
+                        if (!simpleInits.Contains(new PredicateExp(staticsPrecon.Predicate.Name, newArgs)))
+                        {
+                            var newPattern = new int[permutation.Length];
+                            int index = 0;
+                            for (int i = 0; i < newPattern.Length; i++)
+                            {
+                                if (index < staticsPrecon.Indexes.Length && i == staticsPrecon.Indexes[index])
+                                    newPattern[i] = permutation[staticsPrecon.Indexes[index++]];
+                                else
+                                    newPattern[i] = -1;
+                            }
+                            violationPatterns.Add(newPattern);
+                            allGood = false;
+                        }
+                    }
+                    if (!allGood)
+                        continue;
                 }
 
-                if (IsStaticsValidForPermutation(copy, inits, statics))
-                    groundedActions.Add(copy);
+                var copy = GenerateActionInstance(item, permutation);
+                groundedActions.Add(copy);
             }
 
             return groundedActions;
         }
 
-        private bool IsStaticsValidForPermutation(ActionDecl action, List<PredicateExp> inits, List<PredicateExp> statics)
+        private HashSet<PredicateExp> GenerateSimpleInits()
         {
-            if (statics.Count == 0)
-                return true;
-            return IsNodeTrue(action.Preconditions, inits, statics);
+            var simpleInits = new HashSet<PredicateExp>();
+            if (Declaration.Problem.Init != null)
+            {
+                foreach (var init in Declaration.Problem.Init.Predicates)
+                {
+                    if (init is PredicateExp pred)
+                    {
+                        var newArgs = new List<NameExp>();
+                        foreach (var arg in pred.Arguments)
+                            newArgs.Add(new NameExp(arg.Name));
+                        simpleInits.Add(new PredicateExp(pred.Name, newArgs));
+                    }
+                }
+            }
+            return simpleInits;
         }
 
-        private bool IsNodeTrue(INode node, List<PredicateExp> inits, List<PredicateExp> statics)
+        private List<PredicateExpIndexes> GenerateStaticsViolationChecks(ActionDecl action, List<PredicateExp> statics)
         {
-            switch (node)
+            var staticsPreconditions = new List<PredicateExpIndexes>();
+            var argumentIndexes = new Dictionary<string, int>();
+            int index = 0;
+            foreach (var arg in action.Parameters.Values)
+                argumentIndexes.Add(arg.Name, index++);
+            var allPredicates = action.Preconditions.FindTypes<PredicateExp>();
+            foreach (var stat in statics)
             {
-                case PredicateExp predicate:
-                    // Handle Equality predicate
-                    if (predicate.Name == "=" && predicate.Arguments.Count == 2)
-                        return predicate.Arguments[0].Name == predicate.Arguments[1].Name;
-
-                    if (statics.Any(x => x.Name == predicate.Name))
-                        return inits.Contains(predicate);
-                    return true;
-                case NotExp not:
-                    return !IsNodeTrue(not.Child, inits, statics);
-                case OrExp or:
-                    foreach (var subNode in or)
-                        if (IsNodeTrue(subNode, inits, statics))
-                            return true;
-                    return false;
-                case AndExp and:
-                    foreach (var subNode in and)
-                        if (!IsNodeTrue(subNode, inits, statics))
-                            return false;
-                    return true;
+                var allRefs = allPredicates.Where(x => x.Name == stat.Name);
+                foreach (var refPred in allRefs)
+                {
+                    var indexes = new int[refPred.Arguments.Count];
+                    for (int i = 0; i < refPred.Arguments.Count; i++)
+                        indexes[i] = argumentIndexes[refPred.Arguments[i].Name];
+                    staticsPreconditions.Add(new PredicateExpIndexes(stat, indexes));
+                }
             }
+            return staticsPreconditions;
+        }
 
-            throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
+        private bool IsPermutationLegal(int[] permutation, HashSet<int[]> violationPatterns)
+        {
+            for (int i = 0; i < permutation.Length; i++)
+            {
+                foreach(var pattern in violationPatterns)
+                {
+                    int violated = 0;
+                    for(int j = 0; j < pattern.Length; j++)
+                    {
+                        if (pattern[j] != -1 && pattern[j] == permutation[j])
+                        {
+                            violated++;
+                        }
+                    }
+                    if (violated == pattern.Count(x => x != -1))
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        private ActionDecl GenerateActionInstance(ActionDecl action, int[] permutation)
+        {
+            var copy = action.Copy();
+            for (int i = 0; i < action.Parameters.Values.Count; i++)
+            {
+                var allRefs = copy.FindNames(action.Parameters.Values[i].Name);
+                foreach (var refItem in allRefs)
+                    refItem.Name = GetObjectFromIndex(permutation[i]).Name;
+            }
+            return copy;
+        }
+
+        internal class PredicateExpIndexes
+        {
+            public PredicateExp Predicate { get; }
+            public int[] Indexes { get; }
+
+            public PredicateExpIndexes(PredicateExp predicate, int[] indexes)
+            {
+                Predicate = predicate;
+                Indexes = indexes;
+            }
         }
     }
 }

@@ -237,9 +237,9 @@ namespace PDDLSharp.Toolkit.StateSpace
             if (_grounder == null)
                 _grounder = new ActionGrounder(Declaration);
             var allPermuations = _grounder.GenerateParameterPermutations(parameters.Values);
-            for (int i = 0; i < allPermuations.Count; i++)
+            while(allPermuations.Count > 0)
             {
-                var res = stopFunc(GenerateNewParametized(node, parameters, allPermuations[i]));
+                var res = stopFunc(GenerateNewParametized(node, parameters, allPermuations.Dequeue()));
                 if (res != null)
                     return (bool)res;
             }

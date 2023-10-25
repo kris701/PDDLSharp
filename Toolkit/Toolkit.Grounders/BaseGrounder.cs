@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Toolkit.Grounders
 {
@@ -62,17 +63,18 @@ namespace PDDLSharp.Toolkit.Grounders
         public int GetIndexFromType(TypeExp type) => _typeRef[type];
         public TypeExp GetTypeFromIndex(int index) => _typeDict[index];
 
-        public List<int[]> GenerateParameterPermutations(List<NameExp> parameters)
+        private Queue<int[]> _tempQueue = new Queue<int[]>();
+        public Queue<int[]> GenerateParameterPermutations(List<NameExp> parameters)
         {
             var indexedParams = new int[parameters.Count];
             for (int i = 0; i < indexedParams.Length; i++)
                 indexedParams[i] = _typeRef[parameters[i].Type];
-            return GenerateParameterPermutations(indexedParams, new int[parameters.Count], 0);
+            _tempQueue.Clear();
+            GenerateParameterPermutations(indexedParams, new int[parameters.Count], 0);
+            return _tempQueue;
         }
-        private List<int[]> GenerateParameterPermutations(int[] parameters, int[] carried, int index)
+        private void GenerateParameterPermutations(int[] parameters, int[] carried, int index)
         {
-            List<int[]> returnList = new List<int[]>();
-
             var allOfType = _objCache[parameters[index]];
             foreach (var ofType in allOfType)
             {
@@ -80,14 +82,10 @@ namespace PDDLSharp.Toolkit.Grounders
                 Array.Copy(carried, newParam, parameters.Length);
                 newParam[index] = ofType;
                 if (index >= parameters.Length - 1)
-                    returnList.Add(newParam);
+                    _tempQueue.Enqueue(newParam);
                 else
-                    returnList.AddRange(GenerateParameterPermutations(parameters, newParam, index + 1));
+                    GenerateParameterPermutations(parameters, newParam, index + 1);
             }
-
-            return returnList;
         }
-
-
     }
 }
