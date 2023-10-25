@@ -48,15 +48,19 @@ namespace PDDLSharp.Toolkit.Planners.Search
             Expanded = 0;
             Generated = 0;
 
-            HashSet<StateMove> closedList = new HashSet<StateMove>();
-            HashSet<StateMove> openListRef = new HashSet<StateMove>();
-            PriorityQueue<StateMove, int> openList = new PriorityQueue<StateMove, int>();
+            var closedList = new HashSet<StateMove>();
+            var openListRef = new HashSet<StateMove>();
+            var openList = new PriorityQueue<StateMove, int>();
             var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
             openList.Enqueue(new StateMove(state, hValue), hValue);
 
             while (openList.Count > 0)
             {
                 var stateMove = openList.Dequeue();
+                if (stateMove.State.IsInGoal())
+                    return new ActionPlan(stateMove.Steps, stateMove.Steps.Count);
+                openListRef.Remove(stateMove);
+                closedList.Add(stateMove);
 
                 foreach (var act in GroundedActions)
                 {
@@ -69,20 +73,18 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
-                            if (check.IsInGoal())
-                                return new ActionPlan(newMove.Steps, newMove.hValue);
                             if (value < stateMove.hValue)
                             {
                                 openList.Enqueue(newMove, value);
                                 openListRef.Add(newMove);
                             }
+                            else
+                                closedList.Add(newMove);
                         }
                     }
                 }
 
                 Expanded++;
-                openListRef.Remove(stateMove);
-                closedList.Add(stateMove);
             }
             throw new Exception("No solution found!");
         }

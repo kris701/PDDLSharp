@@ -79,6 +79,13 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     operators = RefineOperators(operators, closedList, openList);
 
                 var stateMove = openList.Dequeue();
+                if (stateMove.State.IsInGoal())
+                {
+                    OperatorsUsed = operators.Count;
+                    return new ActionPlan(stateMove.Steps, stateMove.Steps.Count);
+                }
+                openListRef.Remove(stateMove);
+                closedList.Add(stateMove);
                 foreach (var act in operators)
                 {
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
@@ -90,23 +97,18 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
-                            if (check.IsInGoal())
-                            {
-                                OperatorsUsed = operators.Count;
-                                return new ActionPlan(newMove.Steps, stateMove.Steps.Count);
-                            }
                             if (value < stateMove.hValue)
                             {
                                 openList.Enqueue(newMove, value);
                                 openListRef.Add(newMove);
                             }
+                            else
+                                closedList.Add(newMove);
                         }
                     }
                 }
 
                 Expanded++;
-                openListRef.Remove(stateMove);
-                closedList.Add(stateMove);
             }
             throw new Exception("No solution found!");
         }
