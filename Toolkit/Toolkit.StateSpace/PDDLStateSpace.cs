@@ -30,7 +30,7 @@ namespace PDDLSharp.Toolkit.StateSpace
             State = currentState;
         }
 
-        public IState Copy()
+        public virtual IState Copy()
         {
             PredicateExp[] newState = new PredicateExp[State.Count];
             State.CopyTo(newState);

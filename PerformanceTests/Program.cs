@@ -50,7 +50,7 @@ namespace PerformanceTests
 
             var planner = new GreedySearchUAR(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
             var h1 = new hBlind(new PDDLDecl(planner.Domain, planner.Problem));
-            var h2 = new hFF(new PDDLDecl(planner.Domain, planner.Problem));
+            var h2 = new hAdd(new PDDLDecl(planner.Domain, planner.Problem));
 
             for (int i = 0; i < number; i++)
             {

@@ -25,5 +25,12 @@ namespace PDDLSharp.Toolkit.StateSpace
                     changes++;
             return changes;
         }
+
+        public override IState Copy()
+        {
+            PredicateExp[] newState = new PredicateExp[State.Count];
+            State.CopyTo(newState);
+            return new RelaxedPDDLStateSpace(Declaration, newState.ToHashSet());
+        }
     }
 }

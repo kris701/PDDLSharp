@@ -76,7 +76,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
                 var stateMove = openList.Dequeue();
 
-                foreach(var act in operators)
+                foreach (var act in operators)
                 {
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
                     {
@@ -85,14 +85,14 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         check.ExecuteNode(act.Effects);
                         var value = h.GetValue(check, GroundedActions);
                         var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
-                        if (!closedList.Contains(newMove))
+                        if (!closedList.Contains(newMove) && !openList.Contains(newMove))
                         {
-                            if (check.IsInGoal())
-                                return new ActionPlan(newMove.Steps, stateMove.Steps.Count);
-                            else if (value < stateMove.hValue)
+                            if (value < stateMove.hValue)
                             {
                                 Generated++;
                                 openList.Enqueue(newMove);
+                                if (check.IsInGoal())
+                                    return new ActionPlan(newMove.Steps, stateMove.Steps.Count);
                             }
                             closedList.Add(newMove);
                         }
@@ -119,6 +119,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     // Refinement step 3
                     if (openList.Count != 0)
                         return operators;
+
+                    if (lookForApplicaple)
+                        throw new Exception("??");
 
                     // Refinement Step 4
                     smallestHValue = -1;
