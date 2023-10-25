@@ -246,14 +246,16 @@ namespace PDDLSharp.Toolkit.StateSpace
             return defaultReturn;
         }
 
-        private INode GenerateNewParametized(INode node, ParameterExp replace, List<string> with)
+        private INode GenerateNewParametized(INode node, ParameterExp replace, int[] with)
         {
+            if (_grounder == null)
+                _grounder = new ActionGrounder(Declaration);
             var checkNode = node.Copy();
             for (int i = 0; i < replace.Values.Count; i++)
             {
                 var allRefs = checkNode.FindNames(replace.Values[i].Name);
                 foreach (var name in allRefs)
-                    name.Name = with[i];
+                    name.Name = _grounder.GetObjectFromIndex(with[i]).Name;
             }
 
             return checkNode;

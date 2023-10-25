@@ -5,30 +5,81 @@ namespace PDDLSharp.Toolkit.Grounders
 {
     public abstract class BaseGrounder<T> : IGrounder<T>
     {
-        public PDDLDecl Declaration { get; }
-        private Dictionary<string, List<string>> _objCache = new Dictionary<string, List<string>>();
+        public PDDLDecl Declaration { get; internal set; }
+
+        private Dictionary<int, TypeExp> _typeDict = new Dictionary<int, TypeExp>();
+        private Dictionary<TypeExp, int> _typeRef = new Dictionary<TypeExp, int>();
+        private Dictionary<int, NameExp> _objDict = new Dictionary<int, NameExp>();
+        private Dictionary<NameExp, int> _objRef = new Dictionary<NameExp, int>();
+        private Dictionary<int, int[]> _objCache = new Dictionary<int, int[]>();
 
         protected BaseGrounder(PDDLDecl declaration)
         {
             Declaration = declaration;
+            IndexItems();
         }
 
         public abstract List<T> Ground(T item);
 
-        public List<List<string>> GenerateParameterPermutations(List<NameExp> parameters)
+        private void IndexItems()
         {
-            return GenerateParameterPermutations(parameters, new List<string>(parameters.Count), 0);
-        }
-        private List<List<string>> GenerateParameterPermutations(List<NameExp> parameters, List<string> carried, int index)
-        {
-            List<List<string>> returnList = new List<List<string>>();
+            var addObjects = new List<NameExp>();
+            if (Declaration.Problem.Objects != null)
+                addObjects.AddRange(Declaration.Problem.Objects.Objs);
+            if (Declaration.Domain.Constants != null)
+                addObjects.AddRange(Declaration.Domain.Constants.Constants);
 
-            List<string> allOfType = GetObjsForType(parameters[index].Type.Name);
+            var tempDict = new Dictionary<int, List<int>>();
+            int typeIndex = 0;
+            tempDict.Add(typeIndex, new List<int>());
+            _typeDict.Add(typeIndex, new TypeExp("object"));
+            _typeRef.Add(new TypeExp("object"), typeIndex++);
+            if (Declaration.Domain.Types != null)
+            {
+                foreach (var type in Declaration.Domain.Types.Types)
+                {
+                    tempDict.Add(typeIndex, new List<int>());
+                    _typeDict.Add(typeIndex, type);
+                    _typeRef.Add(type, typeIndex++);
+                }
+            }
+
+            int objectIndex = 0;
+            foreach (var obj in addObjects)
+            {
+                if (tempDict.ContainsKey(_typeRef[obj.Type]))
+                    tempDict[_typeRef[obj.Type]].Add(objectIndex);
+                _objDict.Add(objectIndex, obj);
+                _objRef.Add(obj, objectIndex++);
+            }
+
+            foreach (var key in tempDict.Keys)
+                _objCache.Add(key, tempDict[key].ToArray());
+        }
+
+        public int GetIndexFromObject(NameExp obj) => _objRef[obj];
+        public NameExp GetObjectFromIndex(int index) => _objDict[index];
+        public int GetIndexFromType(TypeExp type) => _typeRef[type];
+        public TypeExp GetTypeFromIndex(int index) => _typeDict[index];
+
+        public List<int[]> GenerateParameterPermutations(List<NameExp> parameters)
+        {
+            var indexedParams = new int[parameters.Count];
+            for (int i = 0; i < indexedParams.Length; i++)
+                indexedParams[i] = _typeRef[parameters[i].Type];
+            return GenerateParameterPermutations(indexedParams, new int[parameters.Count], 0);
+        }
+        private List<int[]> GenerateParameterPermutations(int[] parameters, int[] carried, int index)
+        {
+            List<int[]> returnList = new List<int[]>();
+
+            var allOfType = _objCache[parameters[index]];
             foreach (var ofType in allOfType)
             {
-                var newParam = new List<string>(carried);
-                newParam.Add(ofType);
-                if (index >= parameters.Count - 1)
+                var newParam = new int[parameters.Length];
+                Array.Copy(carried, newParam, parameters.Length);
+                newParam[index] = ofType;
+                if (index >= parameters.Length - 1)
                     returnList.Add(newParam);
                 else
                     returnList.AddRange(GenerateParameterPermutations(parameters, newParam, index + 1));
@@ -37,21 +88,6 @@ namespace PDDLSharp.Toolkit.Grounders
             return returnList;
         }
 
-        private List<string> GetObjsForType(string typeName)
-        {
-            if (_objCache.ContainsKey(typeName))
-                return _objCache[typeName];
 
-            var addItems = new List<NameExp>();
-            if (Declaration.Problem.Objects != null)
-                addItems.AddRange(Declaration.Problem.Objects.Objs.Where(x => x.Type.IsTypeOf(typeName)));
-            if (Declaration.Domain.Constants != null)
-                addItems.AddRange(Declaration.Domain.Constants.Constants.Where(x => x.Type.IsTypeOf(typeName)));
-
-            _objCache.Add(typeName, new List<string>());
-            foreach (var item in addItems)
-                _objCache[typeName].Add(item.Name);
-            return _objCache[typeName];
-        }
     }
 }

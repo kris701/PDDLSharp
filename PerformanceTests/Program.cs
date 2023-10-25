@@ -42,8 +42,10 @@ namespace PerformanceTests
 
         private static void RunNTimes6(int number)
         {
-            var targetDomain = "benchmarks/mystery/domain.pddl";
-            var targetProblem = "benchmarks/mystery/prob01.pddl";
+            //var targetDomain = "benchmarks/mystery/domain.pddl";
+            //var targetProblem = "benchmarks/mystery/prob01.pddl";
+            var targetDomain = "benchmarks/gripper/domain.pddl";
+            var targetProblem = "benchmarks/gripper/prob01.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
@@ -55,6 +57,8 @@ namespace PerformanceTests
 
             planner.PreProcess();
             planner2.PreProcess();
+
+            Thread.Sleep(1000);
 
             Stopwatch instanceWatch = new Stopwatch();
             List<long> times = new List<long>() { 0, 0 };
