@@ -13,6 +13,7 @@ namespace PDDLSharp.Toolkit.Planners
     {
         public DomainDecl Domain { get; }
         public ProblemDecl Problem { get; }
+        public void PreProcess();
         public ActionPlan Solve(IHeuristic h);
     }
 }

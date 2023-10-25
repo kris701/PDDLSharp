@@ -35,7 +35,7 @@ namespace PerformanceTests
             //RunNTimes3(1);
             //RunNTimes4(100);
             //RunNTimes5(50);
-            RunNTimes6(1);
+            RunNTimes6(30);
         }
 
         private static void RunNTimes6(int number)
@@ -46,9 +46,15 @@ namespace PerformanceTests
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
 
-            IPlanner planner = new BruteForcePlanner(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
+            IPlanner planner = new GreedyBestFirst(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
             IHeuristic h = new hAdd(new PDDLDecl(planner.Domain, planner.Problem));
-            var result = planner.Solve(h);
+
+            for (int i = 0; i < number; i++)
+            {
+                Console.WriteLine($"Instance {i}");
+                planner.PreProcess();
+                var result = planner.Solve(h);
+            }
         }
 
         private static void RunNTimes5(int number)
