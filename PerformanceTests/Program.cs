@@ -46,7 +46,7 @@ namespace PerformanceTests
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
 
-            IPlanner planner = new GreedyBestFirst(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
+            IPlanner planner = new DepthFirstSearch(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
             IHeuristic h = new hAdd(new PDDLDecl(planner.Domain, planner.Problem));
 
             for (int i = 0; i < number; i++)

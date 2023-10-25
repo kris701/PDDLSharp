@@ -8,14 +8,14 @@ using PDDLSharp.Toolkit.StateSpace;
 
 namespace PDDLSharp.Toolkit.Planners
 {
-    public class GreedyBestFirst : IPlanner
+    public class DepthFirstSearch : IPlanner
     {
         public DomainDecl Domain { get; }
         public ProblemDecl Problem { get; }
         private bool _preprocessed = false;
         private List<ActionDecl> _groundedActions = new List<ActionDecl>();
 
-        public GreedyBestFirst(DomainDecl domain, ProblemDecl problem)
+        public DepthFirstSearch(DomainDecl domain, ProblemDecl problem)
         {
             Domain = domain;
             Problem = problem;
@@ -35,7 +35,7 @@ namespace PDDLSharp.Toolkit.Planners
             if (!_preprocessed)
                 PreProcess();
 
-            IState state = new RelaxedPDDLStateSpace(new PDDLDecl(Domain, Problem));
+            IState state = new PDDLStateSpace(new PDDLDecl(Domain, Problem));
             List<GroundedAction> actionSteps = new List<GroundedAction>();
             HashSet<IState> closedList = new HashSet<IState>();
             Queue<StateMove> openList = new Queue<StateMove>();
