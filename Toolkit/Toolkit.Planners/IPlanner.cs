@@ -9,11 +9,15 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners
 {
-    public interface IPlanner
+    public interface IPlanner<StateType>
     {
         public DomainDecl Domain { get; }
         public ProblemDecl Problem { get; }
+
+        public int Generated { get; }
+        public int Expanded { get; }
+
         public void PreProcess();
-        public ActionPlan Solve(IHeuristic h);
+        public ActionPlan Solve(IHeuristic<StateType> h);
     }
 }

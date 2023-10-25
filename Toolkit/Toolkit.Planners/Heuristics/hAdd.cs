@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Toolkit.Planners
+namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
-    public class hAdd : IHeuristic
+    public class hAdd : IHeuristic<RelaxedPDDLStateSpace>
     {
         public PDDLDecl Declaration { get; }
 
@@ -19,15 +19,11 @@ namespace PDDLSharp.Toolkit.Planners
             Declaration = declaration;
         }
 
-        public int GetValue(IState state, ActionDecl action)
+        public int GetValue(IState state)
         {
             int cost = 0;
 
-            if (state.Declaration.Problem.Goal != null) 
-            {
 
-                return 0;
-            }
             return cost;
         }
     }

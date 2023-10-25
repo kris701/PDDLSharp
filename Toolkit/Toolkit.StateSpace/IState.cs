@@ -26,6 +26,7 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         public void ExecuteNode(INode node);
         public bool IsNodeTrue(INode node);
+        public int IsTrueCount(INode node);
 
         public bool IsInGoal();
     }

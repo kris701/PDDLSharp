@@ -16,6 +16,7 @@ using PDDLSharp.Parsers.Plans;
 using PDDLSharp.Parsers.SAS;
 using PDDLSharp.Toolkit.MacroGenerators;
 using PDDLSharp.Toolkit.Planners;
+using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.PlanValidator;
 using System.Diagnostics;
 
@@ -46,14 +47,14 @@ namespace PerformanceTests
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
 
-            IPlanner planner = new DepthFirstSearch(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
-            IHeuristic h = new hAdd(new PDDLDecl(planner.Domain, planner.Problem));
+            var planner = new DepthFirstSearch(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
+            var h1 = new hBlind(new PDDLDecl(planner.Domain, planner.Problem));
 
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
                 planner.PreProcess();
-                var result = planner.Solve(h);
+                var result1 = planner.Solve(h1);
             }
         }
 

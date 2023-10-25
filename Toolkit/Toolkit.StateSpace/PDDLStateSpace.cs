@@ -199,6 +199,35 @@ namespace PDDLSharp.Toolkit.StateSpace
             throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
         }
 
+        public int IsTrueCount(INode node)
+        {
+            switch (node)
+            {
+                case PredicateExp predicate:
+                    // Handle Equality predicate
+                    if (predicate.Name == "=" && predicate.Arguments.Count == 2)
+                        if (predicate.Arguments[0].Name == predicate.Arguments[1].Name)
+                            return 1;
+                    if (Contains(predicate))
+                        return 1;
+                    return 0;
+                case NotExp not:
+                    return IsTrueCount(not.Child);
+                case OrExp or:
+                    int count = 0;
+                    foreach (var subNode in or)
+                        count += IsTrueCount(subNode);
+                    return count;
+                case AndExp and:
+                    int count2 = 0;
+                    foreach (var subNode in and)
+                        count2 += IsTrueCount(subNode);
+                    return count2;
+            }
+
+            throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
+        }
+
         private bool CheckPermutationsStepwise(INode node, ParameterExp parameters, Func<INode, bool?> stopFunc, bool defaultReturn = true)
         {
             if (_grounder == null)

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners
 {
-    public interface IHeuristic
+    public interface IHeuristic<StateType>
     {
         public PDDLDecl Declaration { get; }
-        public int GetValue(IState state, ActionDecl action);
+        public int GetValue(IState state);
     }
 }
