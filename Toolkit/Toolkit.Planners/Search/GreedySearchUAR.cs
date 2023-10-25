@@ -66,7 +66,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
             HashSet<StateMove> closedList = new HashSet<StateMove>();
             Queue<StateMove> openList = new Queue<StateMove>();
-            openList.Enqueue(new StateMove(state, h.GetValue(state, GroundedActions)));
+            openList.Enqueue(new StateMove(state, h.GetValue(int.MaxValue, state, operators)));
 
             while (true)
             {
@@ -83,9 +83,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         Expanded++;
                         var check = stateMove.State.Copy();
                         check.ExecuteNode(act.Effects);
-                        var value = h.GetValue(check, GroundedActions);
+                        var value = h.GetValue(stateMove.hValue, check, operators);
                         var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
-                        if (!closedList.Contains(newMove) && !openList.Contains(newMove))
+                        if (!closedList.Contains(newMove))
                         {
                             if (value < stateMove.hValue)
                             {
@@ -94,8 +94,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
                                 if (check.IsInGoal())
                                     return new ActionPlan(newMove.Steps, stateMove.Steps.Count);
                             }
-                            closedList.Add(newMove);
                         }
+                        closedList.Add(newMove);
                     }
                 }
             }
@@ -188,7 +188,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var applicableOperators = new HashSet<ActionDecl>();
             foreach (var item in allSmallest)
             {
-                foreach (var act in GroundedActions) {
+                foreach (var act in GroundedActions) 
+                {
                     if (item.State.IsNodeTrue(act.Preconditions))
                     {
                         applicableOperators.Add(act);

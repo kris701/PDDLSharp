@@ -50,7 +50,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
             HashSet<StateMove> closedList = new HashSet<StateMove>();
             Queue<StateMove> openList = new Queue<StateMove>();
-            openList.Enqueue(new StateMove(state, h.GetValue(state, GroundedActions)));
+            openList.Enqueue(new StateMove(state, h.GetValue(int.MaxValue, state, GroundedActions)));
 
             while (openList.Count > 0)
             {
@@ -63,13 +63,13 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         Expanded++;
                         var check = stateMove.State.Copy();
                         check.ExecuteNode(act.Effects);
-                        var value = h.GetValue(check, GroundedActions);
+                        var value = h.GetValue(stateMove.hValue, check, GroundedActions);
                         var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
                         if (!closedList.Contains(newMove))
                         {
                             if (check.IsInGoal())
                                 return new ActionPlan(newMove.Steps, newMove.hValue);
-                            else if (value <= stateMove.hValue)
+                            else if (value < stateMove.hValue)
                             {
                                 Generated++;
                                 openList.Enqueue(newMove);

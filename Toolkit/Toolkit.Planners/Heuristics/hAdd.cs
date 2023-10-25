@@ -22,7 +22,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             _graphGenerator = new RelaxedPlanningGraphs();
         }
 
-        public int GetValue(IState state, HashSet<ActionDecl> groundedActions)
+        public int GetValue(int currentValue, IState state, HashSet<ActionDecl> groundedActions)
         {
             if (state is not RelaxedPDDLStateSpace)
                 state = new RelaxedPDDLStateSpace(state.Declaration, state.State);
@@ -32,7 +32,10 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             int cost = 0;
             var goalFacts = GetGoalFacts(Declaration.Problem);
             foreach (var fact in goalFacts)
-                cost += GetCostToAchiveFact(state, fact, groundedActions);
+                if (cost >= 0)
+                    cost += GetCostToAchiveFact(state, fact, groundedActions, new HashSet<ActionDecl>());
+            if (cost < 0)
+                cost = int.MaxValue;
             return cost;
         }
 
@@ -51,7 +54,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             return returnSet;
         }
 
-        private int GetCostToAchiveFact(IState state, PredicateExp pred, HashSet<ActionDecl> groundedActions)
+        private int GetCostToAchiveFact(IState state, PredicateExp pred, HashSet<ActionDecl> groundedActions, HashSet<ActionDecl> evaluated)
         {
             if (state.Contains(pred))
                 return 0;
@@ -66,20 +69,26 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             int min = int.MaxValue;
             foreach(var op in targetActions)
             {
-                var value = 1 + GetCostOfOperatorPreconditions(state, op, groundedActions);
-                if (value < min)
-                    min = value;
+                if (!evaluated.Contains(op))
+                {
+                    var value = 1 + GetCostOfOperatorPreconditions(state, op, groundedActions, evaluated);
+                    if (value < 0)
+                        value = int.MaxValue;
+                    if (value < min)
+                        min = value;
+                }
             }
             return min;
         }
 
-        private int GetCostOfOperatorPreconditions(IState state, ActionDecl op, HashSet<ActionDecl> groundedActions)
+        private int GetCostOfOperatorPreconditions(IState state, ActionDecl op, HashSet<ActionDecl> groundedActions, HashSet<ActionDecl> evaluated)
         {
             var allPrecons = op.Preconditions.FindTypes<PredicateExp>();
             allPrecons.RemoveAll(x => x.Parent is NotExp);
             int cost = 0;
             foreach (var recon in allPrecons)
-                cost += GetCostToAchiveFact(state, recon, groundedActions);
+                if (cost >= 0)
+                    cost += GetCostToAchiveFact(state, recon, groundedActions, new HashSet<ActionDecl>(evaluated) { op });
             return cost;
         }
     }

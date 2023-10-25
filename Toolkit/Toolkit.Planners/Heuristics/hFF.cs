@@ -22,7 +22,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             _graphGenerator = new RelaxedPlanningGraphs();
         }
 
-        public int GetValue(IState state, HashSet<ActionDecl> groundedActions)
+        public int GetValue(int currentValue, IState state, HashSet<ActionDecl> groundedActions)
         {
             var relaxedPlan = _graphGenerator.GenerateReplaxedPlan(
                 new RelaxedPDDLStateSpace(Declaration, state.State),

@@ -43,21 +43,40 @@ namespace PerformanceTests
         private static void RunNTimes6(int number)
         {
             var targetDomain = "benchmarks/gripper/domain.pddl";
-            var targetProblem = "benchmarks/gripper/prob03.pddl";
+            var targetProblem = "benchmarks/gripper/prob01.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
 
             var planner = new GreedySearchUAR(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
+            var planner2 = new GreedySearch(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
             var h1 = new hBlind(new PDDLDecl(planner.Domain, planner.Problem));
             var h2 = new hAdd(new PDDLDecl(planner.Domain, planner.Problem));
 
+            planner.PreProcess();
+            planner2.PreProcess();
+
+            Stopwatch instanceWatch = new Stopwatch();
+            List<long> times = new List<long>() { 0, 0 };
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
-                planner.PreProcess();
-                var result1 = planner.Solve(h2);
+
+                instanceWatch.Restart();
+                var result1 = planner.Solve(h1);
+                instanceWatch.Stop();
+                times[0] += instanceWatch.ElapsedMilliseconds;
+
+                instanceWatch.Restart();
+                var result2 = planner2.Solve(h1);
+                instanceWatch.Stop();
+                times[1] += instanceWatch.ElapsedMilliseconds;
             }
+
+            Console.WriteLine($"Planner 1 took {times[0]}ms");
+            Console.WriteLine($"Planner 1 generated {planner.Generated} states and expanded {planner.Expanded}");
+            Console.WriteLine($"Planner 2 took {times[1]}ms");
+            Console.WriteLine($"Planner 2 generated {planner2.Generated} states and expanded {planner2.Expanded}");
         }
 
         private static void RunNTimes5(int number)
