@@ -1,4 +1,6 @@
 ﻿using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.Plans;
 using PDDLSharp.Toolkit.StateSpace;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
-    public class hBlind : IHeuristic<PDDLStateSpace>
+    public class hBlind : IHeuristic
     {
         public PDDLDecl Declaration { get; }
 
@@ -17,7 +19,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             Declaration = declaration;
         }
 
-        public int GetValue(IState state)
+        public int GetValue(IState state, HashSet<ActionDecl> groundedActions)
         {
             return 1;
         }

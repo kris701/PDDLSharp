@@ -17,6 +17,7 @@ using PDDLSharp.Parsers.SAS;
 using PDDLSharp.Toolkit.MacroGenerators;
 using PDDLSharp.Toolkit.Planners;
 using PDDLSharp.Toolkit.Planners.Heuristics;
+using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
 using System.Diagnostics;
 
@@ -42,19 +43,20 @@ namespace PerformanceTests
         private static void RunNTimes6(int number)
         {
             var targetDomain = "benchmarks/gripper/domain.pddl";
-            var targetProblem = "benchmarks/gripper/prob02.pddl";
+            var targetProblem = "benchmarks/gripper/prob03.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
 
-            var planner = new GreedySearch(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
+            var planner = new GreedySearchUAR(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
             var h1 = new hBlind(new PDDLDecl(planner.Domain, planner.Problem));
+            var h2 = new hFF(new PDDLDecl(planner.Domain, planner.Problem));
 
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
                 planner.PreProcess();
-                var result1 = planner.Solve(h1);
+                var result1 = planner.Solve(h2);
             }
         }
 

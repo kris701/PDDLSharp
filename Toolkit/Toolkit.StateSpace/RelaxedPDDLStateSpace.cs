@@ -15,12 +15,15 @@ namespace PDDLSharp.Toolkit.StateSpace
         {
         }
 
-        public override void ExecuteNode(INode node)
+        public override int ExecuteNode(INode node)
         {
             _tempAdd.Clear();
             ExecuteNode(node, false);
+            int changes = 0;
             foreach (var item in _tempAdd)
-                Add(item);
+                if (Add(item))
+                    changes++;
+            return changes;
         }
     }
 }

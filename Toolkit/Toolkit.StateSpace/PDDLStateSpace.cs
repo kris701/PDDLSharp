@@ -55,10 +55,10 @@ namespace PDDLSharp.Toolkit.StateSpace
             return newPred;
         }
 
-        public void Add(PredicateExp pred) => State.Add(SimplifyPredicate(pred));
-        public void Add(string pred, params string[] arguments) => Add(SimplifyPredicate(pred, arguments));
-        public void Del(PredicateExp pred) => State.Remove(SimplifyPredicate(pred));
-        public void Del(string pred, params string[] arguments) => Del(SimplifyPredicate(pred, arguments));
+        public bool Add(PredicateExp pred) => State.Add(SimplifyPredicate(pred));
+        public bool Add(string pred, params string[] arguments) => Add(SimplifyPredicate(pred, arguments));
+        public bool Del(PredicateExp pred) => State.Remove(SimplifyPredicate(pred));
+        public bool Del(string pred, params string[] arguments) => Del(SimplifyPredicate(pred, arguments));
         public bool Contains(PredicateExp pred) => State.Contains(SimplifyPredicate(pred));
         public bool Contains(string pred, params string[] arguments) => Contains(SimplifyPredicate(pred, arguments));
 
@@ -79,15 +79,19 @@ namespace PDDLSharp.Toolkit.StateSpace
             return hash;
         }
 
-        public virtual void ExecuteNode(INode node)
+        public virtual int ExecuteNode(INode node)
         {
             _tempAdd.Clear();
             _tempDel.Clear();
             ExecuteNode(node, false);
+            int changes = 0;
             foreach (var item in _tempDel)
-                Del(item);
+                if (Del(item))
+                    changes--;
             foreach (var item in _tempAdd)
-                Add(item);
+                if (Add(item))
+                    changes++;
+            return changes;
         }
         internal void ExecuteNode(INode node, bool isNegative)
         {

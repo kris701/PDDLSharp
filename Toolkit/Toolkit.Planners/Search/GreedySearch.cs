@@ -5,23 +5,25 @@ using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Tools;
 
-namespace PDDLSharp.Toolkit.Planners
+namespace PDDLSharp.Toolkit.Planners.Search
 {
-    public class GreedySearch : IPlanner<PDDLStateSpace>
+    public class GreedySearch : IPlanner
     {
         public DomainDecl Domain { get; }
         public ProblemDecl Problem { get; }
+        public HashSet<ActionDecl> GroundedActions { get; set; }
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
 
         private bool _preprocessed = false;
-        private List<ActionDecl> _groundedActions = new List<ActionDecl>();
 
         public GreedySearch(DomainDecl domain, ProblemDecl problem)
         {
             Domain = domain;
             Problem = problem;
+            GroundedActions = new HashSet<ActionDecl>();
         }
 
         public void PreProcess()
@@ -29,37 +31,40 @@ namespace PDDLSharp.Toolkit.Planners
             if (_preprocessed)
                 return;
             IGrounder<ActionDecl> grounder = new ActionGrounder(new PDDLDecl(Domain, Problem));
-            _groundedActions = new List<ActionDecl>();
+            GroundedActions = new HashSet<ActionDecl>();
             foreach (var action in Domain.Actions)
-                _groundedActions.AddRange(grounder.Ground(action));
+                GroundedActions.AddRange(grounder.Ground(action).ToHashSet());
             _preprocessed = true;
         }
 
-        public ActionPlan Solve(IHeuristic<PDDLStateSpace> h)
+        public ActionPlan Solve(IHeuristic h)
+        {
+            IState state = new PDDLStateSpace(new PDDLDecl(Domain, Problem));
+            return Solve(h, state);
+        }
+
+        public ActionPlan Solve(IHeuristic h, IState state)
         {
             Expanded = 0;
             Generated = 0;
-            if (!_preprocessed)
-                PreProcess();
 
-            IState state = new PDDLStateSpace(new PDDLDecl(Domain, Problem));
             HashSet<StateMove> closedList = new HashSet<StateMove>();
             Queue<StateMove> openList = new Queue<StateMove>();
-            openList.Enqueue(new StateMove(state, h.GetValue(state)));
+            openList.Enqueue(new StateMove(state, h.GetValue(state, GroundedActions)));
 
             while (openList.Count > 0)
             {
                 var stateMove = openList.Dequeue();
 
-                for (int i = 0; i < _groundedActions.Count; i++)
+                foreach(var act in GroundedActions)
                 {
-                    if (stateMove.State.IsNodeTrue(_groundedActions[i].Preconditions))
+                    if (stateMove.State.IsNodeTrue(act.Preconditions))
                     {
                         Expanded++;
                         var check = stateMove.State.Copy();
-                        check.ExecuteNode(_groundedActions[i].Effects);
-                        var value = h.GetValue(check);
-                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(_groundedActions[i], _groundedActions[i].Parameters.Values) }, value);
+                        check.ExecuteNode(act.Effects);
+                        var value = h.GetValue(check, GroundedActions);
+                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
                         if (!closedList.Contains(newMove))
                         {
                             if (check.IsInGoal())
