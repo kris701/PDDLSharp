@@ -30,6 +30,7 @@ namespace PDDLSharp.Toolkit.Grounders
             if (Declaration.Domain.Constants != null)
                 addObjects.AddRange(Declaration.Domain.Constants.Constants);
 
+            // Add all type types (other than "object")
             var tempDict = new Dictionary<int, List<int>>();
             int typeIndex = 0;
             tempDict.Add(typeIndex, new List<int>());
@@ -48,12 +49,16 @@ namespace PDDLSharp.Toolkit.Grounders
                 }
             }
 
+            // Add all object and type references
             int objectIndex = 0;
             foreach (var obj in addObjects)
             {
+                // For its own type
                 if (tempDict.ContainsKey(_typeRef[obj.Type.Name]))
                     if (!tempDict[_typeRef[obj.Type.Name]].Contains(objectIndex))
                         tempDict[_typeRef[obj.Type.Name]].Add(objectIndex);
+
+                // For its super types
                 foreach (var superType in obj.Type.SuperTypes)
                     if (tempDict.ContainsKey(_typeRef[superType]))
                         if (!tempDict[_typeRef[superType]].Contains(objectIndex))
