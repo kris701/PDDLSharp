@@ -52,13 +52,13 @@ namespace PerformanceTests
 
             PDDLDecl decl = new PDDLDecl(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
 
-            var planner = new GreedyBFSUAR(decl);
-            var planner2 = new GreedyBFS(decl);
+            var greedyBFS_UAR = new GreedyBFSUAR(decl);
+            var greedyBFS = new GreedyBFS(decl);
             var h1 = new hBlind(decl);
             var h2 = new hFF(decl);
 
-            planner.PreProcess();
-            planner2.GroundedActions = planner.GroundedActions;
+            greedyBFS_UAR.PreProcess();
+            greedyBFS.GroundedActions = greedyBFS_UAR.GroundedActions;
 
             Thread.Sleep(1000);
 
@@ -70,37 +70,37 @@ namespace PerformanceTests
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
-                Console.WriteLine($"Planner 1");
+                Console.WriteLine($"{nameof(greedyBFS_UAR)}");
                 instanceWatch.Restart();
-                actionPlan1 = planner.Solve(h2);
+                actionPlan1 = greedyBFS_UAR.Solve(h1);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 
-                Console.WriteLine($"Planner 2");
+                Console.WriteLine($"{nameof(greedyBFS)}");
                 instanceWatch.Restart();
-                actionPlan2 = planner2.Solve(h2);
+                actionPlan2 = greedyBFS.Solve(h1);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
             }
 
-            Console.WriteLine($"Planner 1 took {times[0]}ms");
-            Console.WriteLine($"Planner 1 generated {planner.Generated} states and expanded {planner.Expanded}");
-            Console.WriteLine($"Planner 1 used {planner.OperatorsUsed} operators");
-            Console.WriteLine($"Planner 2 took {times[1]}ms");
-            Console.WriteLine($"Planner 2 generated {planner2.Generated} states and expanded {planner2.Expanded}");
-            Console.WriteLine($"Planner 2 used {planner.GroundedActions.Count} operators");
+            Console.WriteLine($"{nameof(greedyBFS_UAR)} took {times[0]}ms");
+            Console.WriteLine($"{nameof(greedyBFS_UAR)} generated {greedyBFS_UAR.Generated} states and expanded {greedyBFS_UAR.Expanded}");
+            Console.WriteLine($"{nameof(greedyBFS_UAR)} used {greedyBFS_UAR.OperatorsUsed} operators");
+            Console.WriteLine($"{nameof(greedyBFS)} took {times[1]}ms");
+            Console.WriteLine($"{nameof(greedyBFS)} generated {greedyBFS.Generated} states and expanded {greedyBFS.Expanded}");
+            Console.WriteLine($"{nameof(greedyBFS)} used {greedyBFS_UAR.GroundedActions.Count} operators");
 
             IPlanValidator validator = new PlanValidator();
-            Console.WriteLine($"Planner 1 plan have {actionPlan1.Cost}");
+            Console.WriteLine($"{nameof(greedyBFS_UAR)} plan have {actionPlan1.Cost}");
             if (validator.Validate(actionPlan1, decl))
-                Console.WriteLine($"Planner 1 plan is valid!");
+                Console.WriteLine($"{nameof(greedyBFS_UAR)} plan is valid!");
             else
-                Console.WriteLine($"Planner 1 plan is NOT valid!");
-            Console.WriteLine($"Planner 2 plan have {actionPlan2.Cost}");
+                Console.WriteLine($"{nameof(greedyBFS_UAR)} plan is NOT valid!");
+            Console.WriteLine($"{nameof(greedyBFS)} plan have {actionPlan2.Cost}");
             if (validator.Validate(actionPlan2, decl))
-                Console.WriteLine($"Planner 2 plan is valid!");
+                Console.WriteLine($"{nameof(greedyBFS)} plan is valid!");
             else
-                Console.WriteLine($"Planner 2 plan is NOT valid!");
+                Console.WriteLine($"{nameof(greedyBFS)} plan is NOT valid!");
         }
 
         private static void RunNTimes5(int number)

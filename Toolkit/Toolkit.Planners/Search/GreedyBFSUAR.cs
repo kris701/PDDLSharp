@@ -17,43 +17,18 @@ using PDDLSharp.Tools;
 namespace PDDLSharp.Toolkit.Planners.Search
 {
     // Greedy Search with Under-Approximation Refinement
-    public class GreedyBFSUAR : IPlanner
+    public class GreedyBFSUAR : BaseSearch
     {
-        public PDDLDecl Declaration { get; }
-        public HashSet<ActionDecl> GroundedActions { get; set; }
-        public int Generated { get; internal set; }
-        public int Expanded { get; internal set; }
+        public int OperatorsUsed { get; set; }
 
-        public int OperatorsUsed { get; internal set; }
-
-        private bool _preprocessed = false;
         private RelaxedPlanningGraphs _graphGenerator;
 
-        public GreedyBFSUAR(PDDLDecl decl)
+        public GreedyBFSUAR(PDDLDecl decl) : base(decl)
         {
-            Declaration = decl;
-            GroundedActions = new HashSet<ActionDecl>();
             _graphGenerator = new RelaxedPlanningGraphs();
         }
 
-        public void PreProcess()
-        {
-            if (_preprocessed)
-                return;
-            IGrounder<ActionDecl> grounder = new ActionGrounder(Declaration);
-            GroundedActions = new HashSet<ActionDecl>();
-            foreach (var action in Declaration.Domain.Actions)
-                GroundedActions.AddRange(grounder.Ground(action).ToHashSet());
-            _preprocessed = true;
-        }
-
-        public ActionPlan Solve(IHeuristic h)
-        {
-            IState state = new PDDLStateSpace(Declaration);
-            return Solve(h, state);
-        }
-
-        public ActionPlan Solve(IHeuristic h, IState state)
+        public override ActionPlan Solve(IHeuristic h, IState state)
         {
             Expanded = 0;
             Generated = 0;
