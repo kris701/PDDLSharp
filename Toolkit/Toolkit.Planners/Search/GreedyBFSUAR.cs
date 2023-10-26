@@ -13,6 +13,7 @@ using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Models.PDDL.Expressions;
 using System.Xml.Linq;
 using PDDLSharp.Tools;
+using PDDLSharp.Toolkit.Planners.Tools;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
@@ -21,11 +22,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
     {
         public int OperatorsUsed { get; set; }
 
-        private RelaxedPlanningGraphs _graphGenerator;
+        private RelaxedPlanGenerator _graphGenerator;
 
         public GreedyBFSUAR(PDDLDecl decl) : base(decl)
         {
-            _graphGenerator = new RelaxedPlanningGraphs();
+            _graphGenerator = new RelaxedPlanGenerator();
         }
 
         public override ActionPlan Solve(IHeuristic h, IState state)

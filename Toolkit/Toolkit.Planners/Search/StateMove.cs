@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Toolkit.Planners
+namespace PDDLSharp.Toolkit.Planners.Search
 {
     internal class StateMove
     {
