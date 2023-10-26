@@ -21,12 +21,16 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             layers.Add(new Layer(new HashSet<ActionDecl>(), state.State));
             while (!state.IsInGoal())
             {
+                // Find applicable actions
                 var newLayer = new Layer();
                 foreach (var act in groundedActions)
                     if (state.IsNodeTrue(act.Preconditions))
                         newLayer.Actions.Add(act);
+                // Error condition: there are no applicable actions at all (most likely means the problem is unsolvable)
                 if (newLayer.Actions.Count == 0)
-                    throw new Exception("No applicable actions found!");
+                    throw new ArgumentException("No applicable actions found!");
+
+                // Apply applicable actions to state
                 state = state.Copy();
                 foreach (var act in newLayer.Actions)
                 {
@@ -35,8 +39,11 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 }
                 newLayer.Propositions = state.State;
 
+                // Error condition: there where actions executed, but nothing happened from them
                 if (layers[0].Propositions == newLayer.Propositions)
-                    throw new Exception("Relaxed state did not change!");
+                    throw new ArgumentException("Relaxed state did not change!");
+
+                // Add new layer
                 layers.Add(newLayer);
             }
             return layers;
