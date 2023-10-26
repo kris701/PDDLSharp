@@ -78,7 +78,7 @@ namespace PerformanceTests
 
                 Console.WriteLine($"{nameof(greedyBFS)}");
                 instanceWatch.Restart();
-                //actionPlan2 = greedyBFS.Solve(h1);
+                actionPlan2 = greedyBFS.Solve(h1);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
             }
