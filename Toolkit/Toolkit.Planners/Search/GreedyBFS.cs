@@ -11,18 +11,16 @@ namespace PDDLSharp.Toolkit.Planners.Search
 {
     public class GreedyBFS : IPlanner
     {
-        public DomainDecl Domain { get; }
-        public ProblemDecl Problem { get; }
+        public PDDLDecl Declaration { get; }
         public HashSet<ActionDecl> GroundedActions { get; set; }
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
 
         private bool _preprocessed = false;
 
-        public GreedyBFS(DomainDecl domain, ProblemDecl problem)
+        public GreedyBFS(PDDLDecl decl)
         {
-            Domain = domain;
-            Problem = problem;
+            Declaration = decl;
             GroundedActions = new HashSet<ActionDecl>();
         }
 
@@ -30,16 +28,16 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
             if (_preprocessed)
                 return;
-            IGrounder<ActionDecl> grounder = new ActionGrounder(new PDDLDecl(Domain, Problem));
+            IGrounder<ActionDecl> grounder = new ActionGrounder(Declaration);
             GroundedActions = new HashSet<ActionDecl>();
-            foreach (var action in Domain.Actions)
+            foreach (var action in Declaration.Domain.Actions)
                 GroundedActions.AddRange(grounder.Ground(action).ToHashSet());
             _preprocessed = true;
         }
 
         public ActionPlan Solve(IHeuristic h)
         {
-            IState state = new PDDLStateSpace(new PDDLDecl(Domain, Problem));
+            IState state = new PDDLStateSpace(Declaration);
             return Solve(h, state);
         }
 
@@ -77,13 +75,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         {
                             openList.Enqueue(newMove, value);
                             openListRef.Add(newMove);
-                            //if (value < stateMove.hValue)
-                            //{
-                            //    openList.Enqueue(newMove, value);
-                            //    openListRef.Add(newMove);
-                            //}
-                            //else
-                            //    closedList.Add(newMove);
                         }
                     }
                 }

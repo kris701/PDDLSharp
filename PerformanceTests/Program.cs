@@ -37,43 +37,48 @@ namespace PerformanceTests
             //RunNTimes3(1);
             //RunNTimes4(100);
             //RunNTimes5(50);
-            RunNTimes6(10);
+            RunNTimes6(1);
         }
 
         private static void RunNTimes6(int number)
         {
-            //var targetDomain = "benchmarks/logistics98/domain.pddl";
-            //var targetProblem = "benchmarks/logistics98/prob01.pddl";
-            var targetDomain = "benchmarks/gripper/domain.pddl";
-            var targetProblem = "benchmarks/gripper/prob01.pddl";
+            var targetDomain = "benchmarks/logistics98/domain.pddl";
+            var targetProblem = "benchmarks/logistics98/prob01.pddl";
+            //var targetDomain = "benchmarks/gripper/domain.pddl";
+            //var targetProblem = "benchmarks/gripper/prob01.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
 
-            var planner = new GreedyBFSUAR(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
-            var planner2 = new GreedyBFS(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
-            var h1 = new hBlind(new PDDLDecl(planner.Domain, planner.Problem));
-            var h2 = new hAdd(new PDDLDecl(planner.Domain, planner.Problem));
-            var h3 = new hFF(new PDDLDecl(planner.Domain, planner.Problem));
+            PDDLDecl decl = new PDDLDecl(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
+
+            var planner = new GreedyBFSUAR(decl);
+            var planner2 = new GreedyBFS(decl);
+            var h1 = new hBlind(decl);
+            var h2 = new hFF(decl);
 
             planner.PreProcess();
             planner2.GroundedActions = planner.GroundedActions;
 
             Thread.Sleep(1000);
 
+            var actionPlan1 = new ActionPlan(new List<GroundedAction>(), 0);
+            var actionPlan2 = new ActionPlan(new List<GroundedAction>(), 0);
+
             Stopwatch instanceWatch = new Stopwatch();
             List<long> times = new List<long>() { 0, 0 };
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
-
+                Console.WriteLine($"Planner 1");
                 instanceWatch.Restart();
-                var result1 = planner.Solve(h3);
+                actionPlan1 = planner.Solve(h2);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 
+                Console.WriteLine($"Planner 2");
                 instanceWatch.Restart();
-                var result2 = planner2.Solve(h3);
+                actionPlan2 = planner2.Solve(h2);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
             }
@@ -84,6 +89,18 @@ namespace PerformanceTests
             Console.WriteLine($"Planner 2 took {times[1]}ms");
             Console.WriteLine($"Planner 2 generated {planner2.Generated} states and expanded {planner2.Expanded}");
             Console.WriteLine($"Planner 2 used {planner.GroundedActions.Count} operators");
+
+            IPlanValidator validator = new PlanValidator();
+            Console.WriteLine($"Planner 1 plan have {actionPlan1.Cost}");
+            if (validator.Validate(actionPlan1, decl))
+                Console.WriteLine($"Planner 1 plan is valid!");
+            else
+                Console.WriteLine($"Planner 1 plan is NOT valid!");
+            Console.WriteLine($"Planner 2 plan have {actionPlan2.Cost}");
+            if (validator.Validate(actionPlan2, decl))
+                Console.WriteLine($"Planner 2 plan is valid!");
+            else
+                Console.WriteLine($"Planner 2 plan is NOT valid!");
         }
 
         private static void RunNTimes5(int number)

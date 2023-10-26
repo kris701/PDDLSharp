@@ -62,10 +62,10 @@ namespace PDDLSharp.Toolkit.Planners
                 return new HashSet<ActionDecl>();
             }
 
-            var G = new Dictionary<int, HashSet<PredicateExp>>();
+            var G = new Dictionary<int, List<PredicateExp>>();
             for (int t = 0; t <= m; t++)
             {
-                G.Add(t, new HashSet<PredicateExp>());
+                G.Add(t, new List<PredicateExp>());
                 foreach (var fact in goals)
                     if (FirstLevel(fact, graphLayers) == t)
                         G[t].Add(fact);

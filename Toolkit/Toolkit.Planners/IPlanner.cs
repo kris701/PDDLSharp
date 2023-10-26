@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
+﻿using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Toolkit.StateSpace;
@@ -12,8 +13,7 @@ namespace PDDLSharp.Toolkit.Planners
 {
     public interface IPlanner
     {
-        public DomainDecl Domain { get; }
-        public ProblemDecl Problem { get; }
+        public PDDLDecl Declaration { get; }
         public HashSet<ActionDecl> GroundedActions { get; set; }
 
         public int Generated { get; }
