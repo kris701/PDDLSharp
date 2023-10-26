@@ -1,0 +1,11 @@
+(define (problem strips-log-x-1)
+   (:domain logistics-strips)
+   (:objects )
+   (:init 
+          )
+   (:goal (and (at package6 city1-2)
+               (at package5 city6-2)
+               (at package4 city3-2)
+               (at package3 city6-1)
+               (at package2 city6-2)
+               (at package1 city2-1))))

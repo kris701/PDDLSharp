@@ -1,9 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.PDDL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +18,76 @@ namespace PDDLSharp.Toolkit.Grounders.Tests
     [TestClass]
     public class ActionGrounderTests
     {
+        [TestMethod]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01/prob01.pddl",
+            // Move
+            "TestData/gripper/prob01/expected1.pddl",
+            "TestData/gripper/prob01/expected2.pddl",
+            "TestData/gripper/prob01/expected3.pddl",
+            "TestData/gripper/prob01/expected4.pddl",
+
+            // Pick
+            "TestData/gripper/prob01/expected5.pddl",
+            "TestData/gripper/prob01/expected6.pddl",
+            "TestData/gripper/prob01/expected7.pddl",
+            "TestData/gripper/prob01/expected8.pddl",
+
+            "TestData/gripper/prob01/expected9.pddl",
+            "TestData/gripper/prob01/expected10.pddl",
+            "TestData/gripper/prob01/expected11.pddl",
+            "TestData/gripper/prob01/expected12.pddl",
+
+            // Drop
+            "TestData/gripper/prob01/expected13.pddl",
+            "TestData/gripper/prob01/expected14.pddl",
+            "TestData/gripper/prob01/expected15.pddl",
+            "TestData/gripper/prob01/expected16.pddl",
+
+            "TestData/gripper/prob01/expected17.pddl",
+            "TestData/gripper/prob01/expected18.pddl",
+            "TestData/gripper/prob01/expected19.pddl",
+            "TestData/gripper/prob01/expected20.pddl"
+        )]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01small/prob01small.pddl",
+            // Move
+            "TestData/gripper/prob01/expected1.pddl",
+            "TestData/gripper/prob01/expected2.pddl",
+            "TestData/gripper/prob01/expected3.pddl",
+            "TestData/gripper/prob01/expected4.pddl"
+        )]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01zero/prob01zero.pddl")]
+        [DataRow("TestData/logistics98/domain.pddl", "TestData/logistics98/prob01zero/prob01zero.pddl")]
+        [DataRow("TestData/logistics98/domain.pddl", "TestData/logistics98/prob01small/prob01small.pddl",
+            // LOAD-TRUCK
+            "TestData/logistics98/prob01small/expected1.pddl",
+
+            // UNLOAD-TRUCK
+            "TestData/logistics98/prob01small/expected2.pddl"
+        )]
+        public void Can_FullGroundDomains(string domain, string problem, params string[] expecteds)
+        {
+            // ARRANGE
+            IErrorListener listener = new ErrorListener();
+            IParser<INode> parser = new PDDLParser(listener);
+            var decl = new PDDLDecl(
+                parser.ParseAs<DomainDecl>(new FileInfo(domain)),
+                parser.ParseAs<ProblemDecl>(new FileInfo(problem)));
+            IGrounder<ActionDecl> grounder = new ActionGrounder(decl);
+
+            // ACT
+            var results = new List<ActionDecl>();
+            foreach (var act in decl.Domain.Actions)
+                results.AddRange(grounder.Ground(act));
+
+            // ASSERT
+            Assert.AreEqual(expecteds.Length, results.Count);
+            foreach(var expected in expecteds)
+            {
+                var expectedAct = parser.ParseAs<ActionDecl>(new FileInfo(expected));
+                Assert.IsTrue(results.Contains(expectedAct));
+            }
+        }
+
         public static IEnumerable<object[]> GetGroundingData_Typeless_NoConstants()
         {
             yield return new object[] {
