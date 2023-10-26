@@ -47,5 +47,16 @@ namespace PDDLSharp.Models.PDDL.Expressions
             newNode.Type = Type.Copy(newNode);
             return newNode;
         }
+
+        public override void RemoveContext()
+        {
+            base.RemoveContext();
+            Type.RemoveContext();
+        }
+
+        public override void RemoveTypes()
+        {
+            Type = new TypeExp("object");
+        }
     }
 }

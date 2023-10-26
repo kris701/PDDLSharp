@@ -72,23 +72,23 @@ namespace PerformanceTests
                 Console.WriteLine($"Instance {i}");
                 Console.WriteLine($"{nameof(greedyBFS_UAR)}");
                 instanceWatch.Restart();
-                actionPlan1 = greedyBFS_UAR.Solve(h2);
+                actionPlan1 = greedyBFS_UAR.Solve(h1);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 
                 Console.WriteLine($"{nameof(greedyBFS)}");
                 instanceWatch.Restart();
-                actionPlan2 = greedyBFS.Solve(h2);
+                //actionPlan2 = greedyBFS.Solve(h1);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
             }
 
             Console.WriteLine($"{nameof(greedyBFS_UAR)} took {times[0]}ms");
             Console.WriteLine($"{nameof(greedyBFS_UAR)} generated {greedyBFS_UAR.Generated} states and expanded {greedyBFS_UAR.Expanded}");
-            Console.WriteLine($"{nameof(greedyBFS_UAR)} used {greedyBFS_UAR.OperatorsUsed} operators");
+            Console.WriteLine($"{nameof(greedyBFS_UAR)} used {greedyBFS_UAR.OperatorsUsed} operators out of {greedyBFS_UAR.GroundedActions.Count}");
             Console.WriteLine($"{nameof(greedyBFS)} took {times[1]}ms");
             Console.WriteLine($"{nameof(greedyBFS)} generated {greedyBFS.Generated} states and expanded {greedyBFS.Expanded}");
-            Console.WriteLine($"{nameof(greedyBFS)} used {greedyBFS_UAR.GroundedActions.Count} operators");
+            Console.WriteLine($"{nameof(greedyBFS)} used {greedyBFS.GroundedActions.Count} operators out of {greedyBFS.GroundedActions.Count}");
 
             IPlanValidator validator = new PlanValidator();
             Console.WriteLine($"{nameof(greedyBFS_UAR)} plan have {actionPlan1.Cost}");
@@ -151,9 +151,9 @@ namespace PerformanceTests
 
         private static void RunNTimes3(int number)
         {
-            var targetDomain = "benchmarks/psr-large/domain.pddl";
-            var targetProblem = "benchmarks/psr-large/p24-s166-n15-l3-f10.pddl";
-            var targetPlan = "benchmarks-plans/lama-first/psr-large/p24-s166-n15-l3-f10.plan";
+            var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
+            var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
+            var targetPlan = "benchmarks-plans/lama-first/agricola-opt18-strips/p01.plan";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
@@ -168,13 +168,14 @@ namespace PerformanceTests
                 Console.WriteLine($"    Parsing");
                 instanceWatch.Start();
                 var decl = parser.ParseDecl(new FileInfo(targetDomain), new FileInfo(targetProblem));
-                var plan = planParser.Parse(targetPlan);
+                var plan = planParser.Parse(new FileInfo(targetPlan));
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 
                 Console.WriteLine($"    Validating");
                 instanceWatch.Restart();
                 var res = validator.Validate(plan, decl);
+                Console.WriteLine($"    Was: {res}");
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
 

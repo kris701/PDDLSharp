@@ -148,5 +148,7 @@ namespace PDDLSharp.Models.PDDL
             End = -1;
             Line = -1; 
         }
+
+        public virtual void RemoveTypes() { }
     }
 }

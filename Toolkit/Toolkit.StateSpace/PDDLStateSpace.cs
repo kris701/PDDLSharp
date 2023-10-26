@@ -43,23 +43,54 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         private PredicateExp SimplifyPredicate(PredicateExp pred)
         {
-            var newPred = new PredicateExp(pred.Name);
-            foreach (var arg in pred.Arguments)
-                newPred.Arguments.Add(new NameExp(arg.Name));
-            return newPred;
+            var copy = pred.Copy();
+            copy.RemoveContext();
+            copy.RemoveTypes();
+            return copy;
         }
 
         private PredicateExp SimplifyPredicate(string predicate, params string[] arguments)
         {
             var newPred = new PredicateExp(predicate);
-            foreach (var arg in arguments)
-                newPred.Arguments.Add(new NameExp(arg));
+            newPred.Arguments = GetNameExpFromString(arguments);
+            newPred.RemoveTypes();
             return newPred;
         }
 
-        public bool Add(PredicateExp pred) => State.Add(SimplifyPredicate(pred));
+        private List<NameExp> GetNameExpFromString(string[] arguments)
+        {
+            var args = new List<NameExp>();
+            foreach (var arg in arguments)
+            {
+                NameExp? obj = null;
+                if (Declaration.Problem.Objects != null)
+                    obj = Declaration.Problem.Objects.Objs.FirstOrDefault(x => x.Name == arg.ToLower());
+                if (obj == null && Declaration.Domain.Constants != null)
+                    obj = Declaration.Domain.Constants.Constants.FirstOrDefault(x => x.Name == arg.ToLower());
+
+                if (obj == null)
+                    throw new ArgumentException($"Cannot find object (or constant) '{arg}'");
+                var newObj = obj.Copy();
+                newObj.RemoveContext();
+                newObj.RemoveTypes();
+                args.Add(newObj);
+            }
+            return args;
+        }
+
+        public bool Add(PredicateExp pred) 
+        {
+            if (pred.Start == -1)
+                return State.Add(pred);
+            return State.Add(SimplifyPredicate(pred));
+        }
         public bool Add(string pred, params string[] arguments) => Add(SimplifyPredicate(pred, arguments));
-        public bool Del(PredicateExp pred) => State.Remove(SimplifyPredicate(pred));
+        public bool Del(PredicateExp pred) 
+        {
+            if (pred.Start == -1)
+                return State.Remove(pred);
+            return State.Remove(SimplifyPredicate(pred));
+        }
         public bool Del(string pred, params string[] arguments) => Del(SimplifyPredicate(pred, arguments));
         public bool Contains(PredicateExp pred)
         {
@@ -268,7 +299,10 @@ namespace PDDLSharp.Toolkit.StateSpace
         {
             if (Declaration.Problem.Goal == null)
                 throw new ArgumentNullException("No problem goal was declared!");
-            return IsNodeTrue(Declaration.Problem.Goal.GoalExp);
+            var simplified = Declaration.Problem.Goal.GoalExp.Copy();
+            simplified.RemoveContext();
+            simplified.RemoveTypes();
+            return IsNodeTrue(simplified);
         }
     }
 }

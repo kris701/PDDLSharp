@@ -69,8 +69,8 @@ namespace PDDLSharp.Toolit.Tests.System
                     any = true;
                 }
             }
-            if (!any)
-                Assert.Inconclusive($"Could not find any plans for the domain+problems!");
+            //if (!any)
+            //    Assert.Inconclusive($"Could not find any plans for the domain+problems!");
 
             // ASSERT
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));

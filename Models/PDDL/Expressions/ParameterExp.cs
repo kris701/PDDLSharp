@@ -85,5 +85,10 @@ namespace PDDLSharp.Models.PDDL.Expressions
             if (node is NameExp exp)
                 Values.Remove(exp);
         }
+
+        public override void RemoveTypes()
+        {
+            
+        }
     }
 }
