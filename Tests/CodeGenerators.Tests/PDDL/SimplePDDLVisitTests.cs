@@ -41,7 +41,7 @@ namespace PDDLSharp.CodeGenerators.Tests.PDDL
                         new NameExp(null, "?b")
                     })
                 }),
-                "(:predicates(name ?a ?b))"
+                "(:predicates(name ?a - object ?b - object))"
             };
             yield return new object[]
             {
@@ -53,7 +53,7 @@ namespace PDDLSharp.CodeGenerators.Tests.PDDL
                         new NameExp(null, "?b")
                     })
                 }),
-                "(:predicates(name ?a - typea ?b))"
+                "(:predicates(name ?a - typea ?b - object))"
             };
             yield return new object[]
             {
