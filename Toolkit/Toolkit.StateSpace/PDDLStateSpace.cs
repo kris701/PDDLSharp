@@ -61,7 +61,12 @@ namespace PDDLSharp.Toolkit.StateSpace
         public bool Add(string pred, params string[] arguments) => Add(SimplifyPredicate(pred, arguments));
         public bool Del(PredicateExp pred) => State.Remove(SimplifyPredicate(pred));
         public bool Del(string pred, params string[] arguments) => Del(SimplifyPredicate(pred, arguments));
-        public bool Contains(PredicateExp pred) => State.Contains(SimplifyPredicate(pred));
+        public bool Contains(PredicateExp pred)
+        {
+            if (pred.Start == -1)
+                return State.Contains(pred);
+             return State.Contains(SimplifyPredicate(pred));
+        }
         public bool Contains(string pred, params string[] arguments) => Contains(SimplifyPredicate(pred, arguments));
 
         public override bool Equals(object? obj)

@@ -18,6 +18,7 @@ namespace PDDLSharp.Toolkit.Planners
         private HashSet<PredicateExp> _goalCache = new HashSet<PredicateExp>();
         public HashSet<ActionDecl> GenerateReplaxedPlan(IState state, HashSet<ActionDecl> groundedActions)
         {
+            Failed = false;
             var graphLayers = GenerateRelaxedPlanningGraph(state, groundedActions);
             if (Failed)
                 return new HashSet<ActionDecl>();
@@ -75,25 +76,19 @@ namespace PDDLSharp.Toolkit.Planners
             {
                 foreach (var fact in G[t])
                 {
-                    foreach (var layer in graphLayers)
+                    foreach (var act in graphLayers[t].Actions)
                     {
-                        foreach (var act in layer.Actions)
+                        var allEff = act.Effects.FindTypes<PredicateExp>();
+                        if (allEff.Any(x => x.Parent is not NotExp && SimplifyPredicate(x).Equals(fact)))
                         {
-                            if (FirstLevel(act, graphLayers) == t)
+                            selectedActions.Add(act);
+                            var allPrecons = act.Preconditions.FindTypes<PredicateExp>();
+                            foreach (var precon in allPrecons)
                             {
-                                var allEff = act.Effects.FindTypes<PredicateExp>();
-                                if (allEff.Any(x => x.Parent is not NotExp && SimplifyPredicate(x).Equals(fact)))
+                                if (precon is PredicateExp pred)
                                 {
-                                    selectedActions.Add(act);
-                                    var allPrecons = act.Preconditions.FindTypes<PredicateExp>();
-                                    foreach (var precon in allPrecons)
-                                    {
-                                        if (precon is PredicateExp pred)
-                                        {
-                                            var newGoal = FirstLevel(pred, graphLayers);
-                                            G[newGoal].Add(pred);
-                                        }
-                                    }
+                                    var newGoal = FirstLevel(pred, graphLayers);
+                                    G[newGoal].Add(pred);
                                 }
                             }
                         }
@@ -120,25 +115,18 @@ namespace PDDLSharp.Toolkit.Planners
             return -1;
         }
 
-        private int FirstLevel(ActionDecl act, List<Layer> layers)
-        {
-            for (int i = 0; i < layers.Count; i++)
-                if (layers[i].Actions.Contains(act))
-                    return i;
-            return -1;
-        }
-
         private List<Layer> GenerateRelaxedPlanningGraph(IState state, HashSet<ActionDecl> groundedActions)
         {
-            Failed = false;
             state = state.Copy();
+            ActionDecl[] copyActs = new ActionDecl[groundedActions.Count];
+            groundedActions.CopyTo(copyActs);
+            groundedActions = copyActs.ToHashSet();
             List<Layer> layers = new List<Layer>();
-            HashSet<ActionDecl> usedActions = new HashSet<ActionDecl>();
             layers.Add(new Layer(new HashSet<ActionDecl>(), state.State));
             while (!state.IsInGoal())
             {
                 var newLayer = new Layer();
-                foreach (var act in groundedActions.Except(usedActions))
+                foreach (var act in groundedActions)
                     if (state.IsNodeTrue(act.Preconditions))
                         newLayer.Actions.Add(act);
                 if (newLayer.Actions.Count == 0)
@@ -150,7 +138,7 @@ namespace PDDLSharp.Toolkit.Planners
                 foreach (var act in newLayer.Actions)
                 {
                     state.ExecuteNode(act.Effects);
-                    usedActions.Add(act);
+                    groundedActions.Remove(act);
                 }
                 newLayer.Propositions = state.State;
 

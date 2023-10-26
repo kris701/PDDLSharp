@@ -140,5 +140,13 @@ namespace PDDLSharp.Models.PDDL
             var hash2 = GetHashCode();
             return hash1 == hash2;
         }
+
+        public virtual void RemoveContext()
+        {
+            Parent = null;
+            Start = -1;
+            End = -1;
+            Line = -1; 
+        }
     }
 }

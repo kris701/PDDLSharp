@@ -30,5 +30,12 @@ namespace PDDLSharp.Models.PDDL
         }
 
         public abstract void Replace(INode node, INode with);
+
+        public override void RemoveContext()
+        {
+            base.RemoveContext();
+            foreach (var item in this)
+                item.RemoveContext();
+        }
     }
 }

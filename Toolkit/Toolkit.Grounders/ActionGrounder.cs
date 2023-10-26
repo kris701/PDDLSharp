@@ -141,6 +141,7 @@ namespace PDDLSharp.Toolkit.Grounders
                 foreach (var refItem in allRefs)
                     refItem.Name = GetObjectFromIndex(permutation[i]);
             }
+            copy.RemoveContext();
             return copy;
         }
     }
