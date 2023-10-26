@@ -20,7 +20,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
         public hFF(PDDLDecl declaration)
         {
             Declaration = declaration;
-            _graphGenerator = new RelaxedPlanGenerator();
+            _graphGenerator = new RelaxedPlanGenerator(declaration);
         }
 
         public int GetValue(int currentValue, IState state, HashSet<ActionDecl> groundedActions)

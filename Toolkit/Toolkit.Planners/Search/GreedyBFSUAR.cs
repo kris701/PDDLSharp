@@ -26,7 +26,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         public GreedyBFSUAR(PDDLDecl decl) : base(decl)
         {
-            _graphGenerator = new RelaxedPlanGenerator();
+            _graphGenerator = new RelaxedPlanGenerator(decl);
         }
 
         public override ActionPlan Solve(IHeuristic h, IState state)

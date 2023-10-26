@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
+﻿using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Toolkit.StateSpace;
@@ -12,7 +13,16 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 {
     public class RelaxedPlanGenerator
     {
-        private HashSet<PredicateExp> _goalCache = new HashSet<PredicateExp>();
+        public PDDLDecl Declaration { get; set; }
+        private HashSet<PredicateExp> _goalCache;
+
+        public RelaxedPlanGenerator(PDDLDecl declaration)
+        {
+            Declaration = declaration;
+            _goalCache = new HashSet<PredicateExp>();
+            GetGoalFacts(declaration.Problem);
+        }
+
         public HashSet<ActionDecl> GenerateReplaxedPlan(IState state, HashSet<ActionDecl> groundedActions)
         {
             var graphLayers = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, groundedActions);
