@@ -102,13 +102,15 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         }
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
-                            if (value < stateMove.hValue)
-                            {
-                                openList.Enqueue(newMove, value);
-                                openListRef.Add(newMove);
-                            }
-                            else
-                                closedList.Add(newMove);
+                            openList.Enqueue(newMove, value);
+                            openListRef.Add(newMove);
+                            //if (value < stateMove.hValue)
+                            //{
+                            //    openList.Enqueue(newMove, value);
+                            //    openListRef.Add(newMove);
+                            //}
+                            //else
+                            //    closedList.Add(newMove);
                         }
                     }
                 }
@@ -167,15 +169,25 @@ namespace PDDLSharp.Toolkit.Planners.Search
                                 }
                             }
                         }
-                        foreach(var item in switchLists)
-                        {
-                            closedList.Remove(item);
-                            openListRef.Add(item);
-                            openList.Enqueue(item, item.hValue);
-                        }
 
-                        operators.AddRange(newOperators);
-                        refinedOperatorsFound = true;
+                        if (switchLists.Count > 0)
+                        {
+                            foreach (var item in switchLists)
+                            {
+                                closedList.Remove(item);
+                                openListRef.Add(item);
+                                openList.Enqueue(item, item.hValue);
+                            }
+
+                            operators.AddRange(newOperators);
+                            refinedOperatorsFound = true;
+                        }
+                        else
+                        {
+                            // Refinement Step 4
+                            smallestHValue = -1;
+                            lookForApplicaple = true;
+                        }
                     }
                 }
             }

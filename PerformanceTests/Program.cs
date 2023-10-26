@@ -42,10 +42,10 @@ namespace PerformanceTests
 
         private static void RunNTimes6(int number)
         {
-            var targetDomain = "benchmarks/logistics98/domain.pddl";
-            var targetProblem = "benchmarks/logistics98/prob01.pddl";
-            //var targetDomain = "benchmarks/gripper/domain.pddl";
-            //var targetProblem = "benchmarks/gripper/prob01.pddl";
+            //var targetDomain = "benchmarks/logistics98/domain.pddl";
+            //var targetProblem = "benchmarks/logistics98/prob01.pddl";
+            var targetDomain = "benchmarks/gripper/domain.pddl";
+            var targetProblem = "benchmarks/gripper/prob01.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);

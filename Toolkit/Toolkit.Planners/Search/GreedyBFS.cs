@@ -75,13 +75,15 @@ namespace PDDLSharp.Toolkit.Planners.Search
                             return new ActionPlan(newMove.Steps, newMove.Steps.Count);
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
-                            if (value < stateMove.hValue)
-                            {
-                                openList.Enqueue(newMove, value);
-                                openListRef.Add(newMove);
-                            }
-                            else
-                                closedList.Add(newMove);
+                            openList.Enqueue(newMove, value);
+                            openListRef.Add(newMove);
+                            //if (value < stateMove.hValue)
+                            //{
+                            //    openList.Enqueue(newMove, value);
+                            //    openListRef.Add(newMove);
+                            //}
+                            //else
+                            //    closedList.Add(newMove);
                         }
                     }
                 }
