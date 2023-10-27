@@ -86,7 +86,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public bool IsTypeOf(string typeName)
         {
-            if (typeName == "")
+            if (typeName == "object")
                 return true;
             if (typeName == Name)
                 return true;

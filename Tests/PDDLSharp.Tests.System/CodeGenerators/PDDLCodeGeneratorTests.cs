@@ -51,7 +51,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
             ICodeGenerator<INode> generator = new PDDLCodeGenerator(listener);
 
             // ACT
-            var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
+            var domainDecl = GetPDDLDecl(domain).Domain;
             generator.Generate(domainDecl, "temp.pddl");
             var newDomainDecl = parser.ParseAs<DomainDecl>(new FileInfo("temp.pddl"));
 
@@ -75,7 +75,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
             {
                 Trace.WriteLine($"   Testing problem: {problem}");
 
-                var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
+                var problemDecl = GetPDDLDecl(domain, problem).Problem;
                 generator.Generate(problemDecl, "temp.pddl");
                 var newProblemDecl = parser.ParseAs<ProblemDecl>(new FileInfo("temp.pddl"));
 
@@ -104,10 +104,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
             {
                 Trace.WriteLine($"   Testing problem: {problem}");
 
-                var decl = new PDDLDecl(
-                    parser.ParseAs<DomainDecl>(new FileInfo(domain)),
-                    parser.ParseAs<ProblemDecl>(new FileInfo(problem))
-                    );
+                var decl = GetPDDLDecl(domain, problem);
                 contextualiser.Contexturalise(decl);
                 analyser.Analyse(decl);
                 generator.Generate(decl.Domain, "temp_domain.pddl");

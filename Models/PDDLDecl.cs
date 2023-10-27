@@ -17,6 +17,12 @@ namespace PDDLSharp.Models
             Problem = problem;
         }
 
+        public PDDLDecl()
+        {
+            Domain = new DomainDecl();
+            Problem = new ProblemDecl();
+        }
+
         public override bool Equals(object? obj)
         {
             if (obj == null)

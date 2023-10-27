@@ -618,7 +618,7 @@ namespace PDDLSharp.Parsers.Tests.PDDL.Visitors
         }
 
         [TestMethod]
-        [DataRow("(name)", "")]
+        [DataRow("(name)", "object")]
         [DataRow("(name - type)", "type")]
         [DataRow("(a - type)", "type")]
         public void Can_ParseNameNode_CorrectTypeName(string toParse, string expected)

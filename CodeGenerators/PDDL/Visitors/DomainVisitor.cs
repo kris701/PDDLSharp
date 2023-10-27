@@ -180,7 +180,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
             string retStr = $"{IndentStr(indent)}(:types{Environment.NewLine}";
             foreach (var type in node.Types)
             {
-                if (type.SuperType != "")
+                if (type.SuperType != "domain")
                 {
                     retStr += $"{Visit(type, indent + 1)} - {type.SuperType}{Environment.NewLine}";
                 }

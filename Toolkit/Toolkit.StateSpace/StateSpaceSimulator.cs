@@ -45,7 +45,8 @@ namespace PDDLSharp.Toolkit.StateSpace
         {
             actionName = actionName.ToLower();
 
-            var targetAction = GetTargetAction(actionName).Copy(null);
+            var targetAction = GetTargetAction(actionName).Copy();
+            targetAction.RemoveContext();
 
             if (targetAction.Parameters.Values.Count != arguments.Count)
                 throw new ArgumentOutOfRangeException($"Action takes '{targetAction.Parameters.Values.Count}' arguments, but was given '{arguments.Count}'");
@@ -79,6 +80,8 @@ namespace PDDLSharp.Toolkit.StateSpace
                 foreach (var name in names)
                     name.Name = groundArgs[i].Name;
             }
+            node.RemoveContext();
+            node.RemoveTypes();
             return node;
         }
 
@@ -95,7 +98,8 @@ namespace PDDLSharp.Toolkit.StateSpace
 
                 if (obj == null)
                     throw new ArgumentException($"Cannot find object (or constant) '{arg}'");
-                args.Add(obj.Copy());
+                var newObj = obj.Copy();
+                args.Add(newObj);
             }
             return args;
         }

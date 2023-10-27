@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Models\Models.csproj" />
+    <ProjectReference Include="..\Toolkit.StaticPredicateDetectors\Toolkit.StaticPredicateDetectors.csproj" />
   </ItemGroup>
 
 </Project>

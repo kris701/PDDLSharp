@@ -71,5 +71,18 @@ namespace PDDLSharp.Models.PDDL
                     count++;
             return count;
         }
+
+        public override void RemoveContext()
+        {
+            base.RemoveContext();
+            foreach (var item in this)
+                item.RemoveContext();
+        }
+
+        public override void RemoveTypes()
+        {
+            foreach (var item in this)
+                item.RemoveTypes();
+        }
     }
 }

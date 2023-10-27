@@ -36,6 +36,8 @@ namespace PDDLSharp.Contextualisers.PDDL
             var allTypes = node.FindTypes<TypeExp>();
             foreach (var typeDecl in decl.Types)
             {
+                if (typeDecl.SuperTypes.Contains(""))
+                    typeDecl.SuperTypes.Remove("");
                 foreach (var type in allTypes)
                 {
                     if (type != typeDecl)

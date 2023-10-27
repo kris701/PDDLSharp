@@ -87,5 +87,10 @@ namespace PDDLSharp.Models.PDDL.Domain
             if (Effects == node && with is IExp exp2)
                 Effects = exp2;
         }
+
+        public override string ToString()
+        {
+            return Name + Parameters.ToString();
+        }
     }
 }
