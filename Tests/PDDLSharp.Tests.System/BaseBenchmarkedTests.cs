@@ -2,6 +2,8 @@
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Tools;
@@ -56,13 +58,34 @@ namespace PDDLSharp.PDDLSharp.Tests.System
             }
         }
 
-        public IParser<INode> GetParser(string domain, IErrorListener listener)
+        public static IParser<INode> GetParser(string domain, IErrorListener listener)
         {
             if (!CompatabilityHelper.IsPDDLDomainSpported(domain))
                 Assert.Inconclusive("Domain is unsupported");
             IParser<INode> parser = new PDDLParser(listener);
             parser.Listener.ThrowIfTypeAbove = ErrorListeners.ParseErrorType.Warning;
             return parser;
+        }
+
+        private static Dictionary<string, PDDLDecl> _declCache = new Dictionary<string, PDDLDecl>();
+        internal static PDDLDecl GetPDDLDecl(string domain, string problem = "")
+        {
+            if (_declCache.ContainsKey(domain + problem))
+                return _declCache[domain + problem].Copy();
+
+            IErrorListener listener = new ErrorListener();
+            IParser<INode> parser = GetParser(domain, listener);
+
+            var newDomain = new DomainDecl();
+            if (domain != "")
+                newDomain = parser.ParseAs<DomainDecl>(new FileInfo(domain));
+            var newProblem = new ProblemDecl();
+            if (problem != "")
+                newProblem = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
+
+            var decl = new PDDLDecl(newDomain, newProblem);
+            _declCache.Add(domain + problem, decl);
+            return decl.Copy();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System
 {
     public class BasePlanBenchmarkedTests : BaseBenchmarkedTests
     {
+        public static long MaxPlansPrDomain = 5;
         public static Dictionary<string, List<string>> _testPlanDict = new Dictionary<string, List<string>>();
 
         public static async Task Setup()
@@ -33,6 +34,8 @@ namespace PDDLSharp.PDDLSharp.Tests.System
                         {
                             if (plan.EndsWith(".plan"))
                                 _testPlanDict[domainName].Add(plan);
+                            if (_testPlanDict[domainName].Count >= MaxPlansPrDomain)
+                                break;
                         }
                     }
                 }

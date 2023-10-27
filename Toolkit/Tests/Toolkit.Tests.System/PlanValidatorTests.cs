@@ -57,9 +57,7 @@ namespace PDDLSharp.Toolit.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
-                    var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
-                    var newDecl = new PDDLDecl(domainDecl, problemDecl);
+                    var newDecl = GetPDDLDecl(domain, problem);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                     listener.Errors.Clear();
 
@@ -98,9 +96,7 @@ namespace PDDLSharp.Toolit.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
-                    var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
-                    var newDecl = new PDDLDecl(domainDecl, problemDecl);
+                    var newDecl = GetPDDLDecl(domain, problem);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                     listener.Errors.Clear();
 
@@ -144,9 +140,7 @@ namespace PDDLSharp.Toolit.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
-                    var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
-                    var newDecl = new PDDLDecl(domainDecl, problemDecl);
+                    var newDecl = GetPDDLDecl(domain, problem);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                     listener.Errors.Clear();
 
@@ -186,9 +180,7 @@ namespace PDDLSharp.Toolit.Tests.System
                 if (targetPlan != null)
                 {
                     Trace.WriteLine($"   Parsing problem: {problem}");
-                    var domainDecl = parser.ParseAs<DomainDecl>(new FileInfo(domain));
-                    var problemDecl = parser.ParseAs<ProblemDecl>(new FileInfo(problem));
-                    var newDecl = new PDDLDecl(domainDecl, problemDecl);
+                    var newDecl = GetPDDLDecl(domain, problem);
                     Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
                     listener.Errors.Clear();
 
