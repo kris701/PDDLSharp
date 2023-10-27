@@ -4,6 +4,7 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.StaticPredicateDetectors;
 using System;
+using System.Linq;
 
 namespace PDDLSharp.Toolkit.Grounders
 {
@@ -38,21 +39,9 @@ namespace PDDLSharp.Toolkit.Grounders
                     bool allGood = true;
                     foreach (var staticsPrecon in staticsPreconditions)
                     {
-                        var newArgs = new List<NameExp>();
-                        for (int i = 0; i < staticsPrecon.Indexes.Length; i++)
-                            newArgs.Add(new NameExp(GetObjectFromIndex(permutation[staticsPrecon.Indexes[i]])));
-                        if (!simpleInits.Contains(new PredicateExp(staticsPrecon.Predicate.Name, newArgs)))
+                        if (!simpleInits.Contains(GeneratePredicateFromIndexes(permutation, staticsPrecon)))
                         {
-                            var newPattern = new int[permutation.Length];
-                            int index = 0;
-                            for (int i = 0; i < newPattern.Length; i++)
-                            {
-                                if (index < staticsPrecon.Indexes.Length && i == staticsPrecon.Indexes[index])
-                                    newPattern[i] = permutation[staticsPrecon.Indexes[index++]];
-                                else
-                                    newPattern[i] = -1;
-                            }
-                            violationPatterns.Add(newPattern);
+                            violationPatterns.Add(GeneratePattern(permutation, staticsPrecon));
                             allGood = false;
                         }
                     }
@@ -65,6 +54,37 @@ namespace PDDLSharp.Toolkit.Grounders
             }
 
             return groundedActions;
+        }
+
+        private PredicateExp GeneratePredicateFromIndexes(int[] permutation, PredicateViolationCheck staticsPrecon)
+        {
+            var newArgs = new List<NameExp>();
+            for (int i = 0; i < staticsPrecon.Indexes.Length; i++)
+                newArgs.Add(new NameExp(GetObjectFromIndex(permutation[staticsPrecon.Indexes[i]])));
+            return new PredicateExp(staticsPrecon.Predicate.Name, newArgs);
+        }
+
+        private int[] GeneratePattern(int[] permutation, PredicateViolationCheck staticsPrecon)
+        {
+            var newPattern = new int[permutation.Length];
+            var covered = new bool[staticsPrecon.Indexes.Length];
+            for (int i = 0; i < newPattern.Length; i++)
+            {
+                bool any = false;
+                for (int j = 0; j < staticsPrecon.Indexes.Length; j++)
+                {
+                    if (i == staticsPrecon.Indexes[j] && !covered[j])
+                    {
+                        newPattern[i] = permutation[staticsPrecon.Indexes[j]];
+                        covered[j] = true;
+                        any = true;
+                        break;
+                    }
+                }
+                if (!any)
+                    newPattern[i] = -1;
+            }
+            return newPattern;
         }
 
         private HashSet<PredicateExp> GenerateSimpleInits()

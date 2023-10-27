@@ -21,9 +21,65 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
     [TestClass]
     public class RelaxedPlanningGraphTests
     {
+        private static Dictionary<string, HashSet<ActionDecl>> _groundedCache = new Dictionary<string, HashSet<ActionDecl>>();
+        private static HashSet<ActionDecl> GetGroundedActions(PDDLDecl decl)
+        {
+            if (_groundedCache.ContainsKey(decl.Domain.Name.Name + decl.Problem.Name.Name))
+                return _groundedCache[decl.Domain.Name.Name + decl.Problem.Name.Name];
+
+            IGrounder<ActionDecl> grounder = new ActionGrounder(decl);
+            var actions = new HashSet<ActionDecl>();
+            foreach (var act in decl.Domain.Actions)
+                actions.AddRange(grounder.Ground(act).ToHashSet());
+            _groundedCache.Add(decl.Domain.Name.Name + decl.Problem.Name.Name, actions);
+            return actions;
+        }
+
+        private static Dictionary<string, PDDLDecl> _declCache = new Dictionary<string, PDDLDecl>();
+        private static PDDLDecl GetPDDLDecl(string domain, string problem)
+        {
+            if (_declCache.ContainsKey(domain + problem))
+                return _declCache[domain + problem];
+
+            IErrorListener listener = new ErrorListener();
+            IParser<INode> parser = new PDDLParser(listener);
+            var decl = new PDDLDecl(
+                parser.ParseAs<DomainDecl>(new FileInfo(domain)),
+                parser.ParseAs<ProblemDecl>(new FileInfo(problem))
+                );
+            _declCache.Add(domain + problem, decl);
+            return decl;
+        }
+
         [TestMethod]
         [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl", 3)]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl", 3)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl", 5)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl", 7)]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl", 4)]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl", 4)]
         public void Can_GenerateGraph_Layer_Size(string domain, string problem, int expected)
+        {
+            // ARRANGE
+            var decl = GetPDDLDecl(domain, problem);
+            IState state = new RelaxedPDDLStateSpace(decl);
+            var actions = GetGroundedActions(decl);
+
+            // ACT
+            var graph = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+
+            // ASSERT
+            Assert.AreEqual(expected, graph.Count);
+        }
+
+        [TestMethod]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl", 0, 6, 10)]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl", 0, 30, 58)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl", 0, 8, 20, 14, 14)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl", 0, 9, 27, 42, 88, 223, 239)]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl", 0, 1, 2, 1)]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl", 0, 3, 11, 2)]
+        public void Can_GenerateGraph_Layer_ActionSize(string domain, string problem, params int[] expecteds)
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
@@ -33,16 +89,57 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                 parser.ParseAs<ProblemDecl>(new FileInfo(problem))
                 );
             IState state = new RelaxedPDDLStateSpace(decl);
-            IGrounder<ActionDecl> grounder = new ActionGrounder(decl);
-            var actions = new HashSet<ActionDecl>();
-            foreach (var act in decl.Domain.Actions)
-                actions.AddRange(grounder.Ground(act).ToHashSet());
+            var actions = GetGroundedActions(decl);
 
             // ACT
             var graph = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
 
             // ASSERT
-            Assert.AreEqual(expected, graph.Count);
+            Assert.AreEqual(expecteds.Length, graph.Count);
+            for (int i = 0; i < expecteds.Length; i++)
+                Assert.AreEqual(expecteds[i], graph[i].Actions.Count);
+        }
+
+        [TestMethod]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl")]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl")]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl")]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl")]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl")]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl")]
+        public void Can_GenerateGraph_Layer_ActionSize_FirstAlwaysZero(string domain, string problem)
+        {
+            // ARRANGE
+            var decl = GetPDDLDecl(domain, problem);
+            IState state = new RelaxedPDDLStateSpace(decl);
+            var actions = GetGroundedActions(decl);
+
+            // ACT
+            var graph = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+
+            // ASSERT
+            Assert.AreEqual(0, graph[0].Actions.Count);
+        }
+
+        [TestMethod]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl")]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl")]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl")]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl")]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl")]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl")]
+        public void Can_GenerateGraph_Layer_Proposition_FirstAlwaysInits(string domain, string problem)
+        {
+            // ARRANGE
+            var decl = GetPDDLDecl(domain, problem);
+            IState state = new RelaxedPDDLStateSpace(decl);
+            var actions = GetGroundedActions(decl);
+
+            // ACT
+            var graph = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+
+            // ASSERT
+            Assert.AreEqual(decl.Problem.Init.Predicates.Count, graph[0].Propositions.Count);
         }
 
         [TestMethod]
