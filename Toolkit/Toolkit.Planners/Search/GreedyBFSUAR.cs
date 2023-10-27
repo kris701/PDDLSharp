@@ -29,7 +29,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
 
-        public override ActionPlan Solve(IHeuristic h, IState state)
+        internal override ActionPlan Solve(IHeuristic h, IState state)
         {
             Expanded = 0;
             Generated = 0;
@@ -51,6 +51,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
             while (true)
             {
+                if (_abort) break;
+
                 // Refinement Guard and Refinement
                 if (openList.Count == 0 || current > best)
                     operators = RefineOperators(operators, closedList, openList, openListRef);
@@ -67,6 +69,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 closedList.Add(stateMove);
                 foreach (var act in operators)
                 {
+                    if (_abort) break;
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
                     {
                         Generated++;

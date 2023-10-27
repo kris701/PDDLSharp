@@ -15,7 +15,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
         }
 
-        public override ActionPlan Solve(IHeuristic h, IState state)
+        internal override ActionPlan Solve(IHeuristic h, IState state)
         {
             Expanded = 0;
             Generated = 0;
@@ -27,6 +27,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             openList.Enqueue(new StateMove(state, hValue), hValue);
             while (openList.Count > 0)
             {
+                if (_abort) break;
                 var stateMove = openList.Dequeue();
                 if (stateMove.State.IsInGoal())
                     return new ActionPlan(stateMove.Steps, stateMove.Steps.Count);
@@ -35,6 +36,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
                 foreach (var act in GroundedActions)
                 {
+                    if (_abort) break;
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
                     {
                         Generated++;
