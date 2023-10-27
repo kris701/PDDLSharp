@@ -70,9 +70,9 @@ namespace PerformanceTests
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
-                Console.WriteLine($"{nameof(greedyBFS_UAR)} using {nameof(hBlind)}");
+                Console.WriteLine($"{nameof(greedyBFS_UAR)} using {nameof(hFF)}");
                 instanceWatch.Restart();
-                actionPlan1 = greedyBFS_UAR.Solve(h1);
+                actionPlan1 = greedyBFS_UAR.Solve(h2);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 

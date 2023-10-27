@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var openList = new PriorityQueue<StateMove, int>();
             var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
             openList.Enqueue(new StateMove(state, hValue), hValue);
-
+            int c = 0;
             while (openList.Count > 0)
             {
                 var stateMove = openList.Dequeue();
@@ -41,12 +41,14 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         Generated++;
                         var check = stateMove.State.Copy();
                         check.ExecuteNode(act.Effects);
-                        var value = h.GetValue(stateMove.hValue, check, GroundedActions);
-                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
+                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
                         if (newMove.State.IsInGoal())
                             return new ActionPlan(newMove.Steps, newMove.Steps.Count);
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
+                            c++;
+                            var value = h.GetValue(stateMove.hValue, check, GroundedActions);
+                            newMove.hValue = value;
                             openList.Enqueue(newMove, value);
                             openListRef.Add(newMove);
                         }

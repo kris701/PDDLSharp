@@ -12,13 +12,13 @@ namespace PDDLSharp.Toolkit.Planners.Search
     {
         public IState State { get; private set; }
         public List<GroundedAction> Steps { get; private set; }
-        public int hValue { get; private set; }
+        public int hValue { get; set; }
 
-        public StateMove(IState state, List<GroundedAction> steps, int hvalue)
+        public StateMove(IState state, List<GroundedAction> steps)
         {
             State = state;
             Steps = steps;
-            hValue = hvalue;
+            hValue = -1;
         }
 
         public StateMove(IState state, int hvalue)
@@ -32,7 +32,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
             State = state;
             Steps = new List<GroundedAction>();
-            hValue = 0;
+            hValue = -1;
         }
 
         public override int GetHashCode()

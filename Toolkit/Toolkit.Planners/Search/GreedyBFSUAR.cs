@@ -46,10 +46,13 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
             openList.Enqueue(new StateMove(state, hValue), hValue);
 
+            int best = hValue;
+            int current = hValue;
+
             while (true)
             {
                 // Refinement Guard and Refinement
-                if (openList.Count == 0)
+                if (openList.Count == 0 || current > best)
                     operators = RefineOperators(operators, closedList, openList, openListRef);
 
                 var stateMove = openList.Dequeue();
@@ -58,6 +61,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     OperatorsUsed = operators.Count;
                     return new ActionPlan(stateMove.Steps, stateMove.Steps.Count);
                 }
+                best = stateMove.hValue;
+                current = int.MaxValue;
                 openListRef.Remove(stateMove);
                 closedList.Add(stateMove);
                 foreach (var act in operators)
@@ -67,8 +72,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         Generated++;
                         var check = stateMove.State.Copy();
                         check.ExecuteNode(act.Effects);
-                        var value = h.GetValue(stateMove.hValue, check, GroundedActions);
-                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
+                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
                         if (newMove.State.IsInGoal())
                         {
                             OperatorsUsed = operators.Count;
@@ -76,6 +80,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         }
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
+                            var value = h.GetValue(stateMove.hValue, check, GroundedActions);
+                            if (value < current)
+                                current = value;
+                            newMove.hValue = value;
                             openList.Enqueue(newMove, value);
                             openListRef.Add(newMove);
                         }
@@ -127,6 +135,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         List<StateMove> switchLists = new List<StateMove>(); 
                         foreach(var closed in closedList)
                         {
+                            if (closed.hValue != smallestItem.hValue)
+                                continue;
                             foreach(var newOperator in newOperators)
                             {
                                 if (closed.State.IsNodeTrue(newOperator.Preconditions))
