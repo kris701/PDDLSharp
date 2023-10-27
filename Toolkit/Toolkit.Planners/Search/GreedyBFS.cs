@@ -25,7 +25,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var openList = new PriorityQueue<StateMove, int>();
             var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
             openList.Enqueue(new StateMove(state, hValue), hValue);
-            int c = 0;
             while (openList.Count > 0)
             {
                 var stateMove = openList.Dequeue();
@@ -46,7 +45,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
                             return new ActionPlan(newMove.Steps, newMove.Steps.Count);
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
-                            c++;
                             var value = h.GetValue(stateMove.hValue, check, GroundedActions);
                             newMove.hValue = value;
                             openList.Enqueue(newMove, value);
