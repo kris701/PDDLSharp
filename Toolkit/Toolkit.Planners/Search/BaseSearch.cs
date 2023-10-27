@@ -31,11 +31,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
             if (_preprocessed)
                 return;
-            IGrounder<ActionDecl> grounder = new ActionGrounder(Declaration);
+            var grounder = new ParametizedGrounder(Declaration);
             GroundedActions = new HashSet<ActionDecl>();
             foreach (var action in Declaration.Domain.Actions)
-                GroundedActions.AddRange(grounder.Ground(action).ToHashSet());
-            //_preprocessed = true;
+                GroundedActions.AddRange(grounder.Ground(action).Cast<ActionDecl>().ToHashSet());
+            _preprocessed = true;
         }
 
         public ActionPlan Solve(IHeuristic h)

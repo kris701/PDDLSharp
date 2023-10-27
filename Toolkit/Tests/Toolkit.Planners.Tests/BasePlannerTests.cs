@@ -23,7 +23,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests
             if (_groundedCache.ContainsKey(decl.Domain.Name.Name + decl.Problem.Name.Name))
                 return _groundedCache[decl.Domain.Name.Name + decl.Problem.Name.Name];
 
-            IGrounder<ActionDecl> grounder = new ActionGrounder(decl);
+            IGrounder<ActionDecl> grounder = new ParametizedGrounder(decl);
             var actions = new HashSet<ActionDecl>();
             foreach (var act in decl.Domain.Actions)
                 actions.AddRange(grounder.Ground(act).ToHashSet());
