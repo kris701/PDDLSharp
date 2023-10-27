@@ -11,10 +11,12 @@ namespace PDDLSharp.Toolkit.Grounders
     public class ActionGrounder : BaseGrounder<ActionDecl>
     {
         private HashSet<PredicateExp> _statics;
+        private HashSet<PredicateExp> _inits;
         public ActionGrounder(PDDLDecl declaration) : base(declaration)
         {
             var staticPredicateDetector = new SimpleStaticPredicateDetector();
             _statics = staticPredicateDetector.FindStaticPredicates(Declaration).ToHashSet();
+            _inits = GenerateSimpleInits();
         }
 
         public override List<ActionDecl> Ground(ActionDecl item)
@@ -24,8 +26,10 @@ namespace PDDLSharp.Toolkit.Grounders
             if (item.Parameters.Values.Count == 0 && item.Copy() is ActionDecl newItem)
                 return new List<ActionDecl>() { newItem };
 
-            var violationPatterns = new HashSet<int[]>();
-            var simpleInits = GenerateSimpleInits();
+            var staticsViolationPatterns = new Dictionary<int, List<int[]>>();
+            for(int i = 0; i < item.Parameters.Values.Count; i++)
+                staticsViolationPatterns.Add(i, new List<int[]>());
+
             var staticsPreconditions = GenerateStaticsViolationChecks(item, _statics);
 
             var allPermutations = GenerateParameterPermutations(item.Parameters.Values);
@@ -33,15 +37,16 @@ namespace PDDLSharp.Toolkit.Grounders
             {
                 if (_statics.Count > 0)
                 {
-                    if (!IsPermutationLegal(permutation, violationPatterns))
+                    if (!IsPermutationLegal(permutation, staticsViolationPatterns))
                         continue;
 
                     bool allGood = true;
                     foreach (var staticsPrecon in staticsPreconditions)
                     {
-                        if (!simpleInits.Contains(GeneratePredicateFromIndexes(permutation, staticsPrecon)))
+                        if (!_inits.Contains(GeneratePredicateFromIndexes(permutation, staticsPrecon)))
                         {
-                            violationPatterns.Add(GeneratePattern(permutation, staticsPrecon));
+                            int maxIndex = staticsPrecon.Indexes.Max();
+                            staticsViolationPatterns[maxIndex].Add(GeneratePattern(permutation, staticsPrecon));
                             allGood = false;
                         }
                     }
@@ -128,15 +133,19 @@ namespace PDDLSharp.Toolkit.Grounders
             return staticsPreconditions;
         }
 
-        private bool IsPermutationLegal(int[] permutation, HashSet<int[]> violationPatterns)
+        private bool IsPermutationLegal(int[] permutation, Dictionary<int, List<int[]>> violationPatterns)
         {
-            for (int i = 0; i < permutation.Length; i++)
+            // Check forward in patterns, since the permutations is generated backwards
+            int violated;
+            int expected;
+            int length = permutation.Length;
+            for (int i = 0; i < length; i++)
             {
-                foreach(var pattern in violationPatterns)
+                foreach(var pattern in violationPatterns[i])
                 {
-                    int violated = 0;
-                    int expected = 0;
-                    for (int j = 0; j < pattern.Length; j++)
+                    violated = 0;
+                    expected = 0;
+                    for (int j = 0; j < length; j++)
                     {
                         if (pattern[j] != -1)
                         {

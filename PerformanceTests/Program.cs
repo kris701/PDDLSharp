@@ -37,7 +37,7 @@ namespace PerformanceTests
             //RunNTimes3(1);
             //RunNTimes4(100);
             //RunNTimes5(50);
-            RunNTimes6(1);
+            RunNTimes6(4);
         }
 
         private static void RunNTimes6(int number)
@@ -57,8 +57,8 @@ namespace PerformanceTests
             var h1 = new hBlind(decl);
             var h2 = new hFF(decl);
 
-            greedyBFS_UAR.PreProcess();
-            greedyBFS.GroundedActions = greedyBFS_UAR.GroundedActions;
+            //greedyBFS_UAR.PreProcess();
+            //greedyBFS.GroundedActions = greedyBFS_UAR.GroundedActions;
 
             Thread.Sleep(1000);
 
@@ -72,13 +72,14 @@ namespace PerformanceTests
                 Console.WriteLine($"Instance {i}");
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} using {nameof(hBlind)}");
                 instanceWatch.Restart();
-                actionPlan1 = greedyBFS_UAR.Solve(h1);
+                greedyBFS_UAR.PreProcess();
+                //actionPlan1 = greedyBFS_UAR.Solve(h1);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 
                 Console.WriteLine($"{nameof(greedyBFS)} using {nameof(hFF)}");
                 instanceWatch.Restart();
-                actionPlan2 = greedyBFS.Solve(h2);
+                //actionPlan2 = greedyBFS.Solve(h2);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
             }
