@@ -26,7 +26,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
         public int GetValue(int currentValue, IState state, HashSet<ActionDecl> groundedActions)
         {
             var relaxedPlan = _graphGenerator.GenerateReplaxedPlan(
-                new RelaxedPDDLStateSpace(Declaration, state.State),
+                state,
                 groundedActions);
             return relaxedPlan.Count;
         }

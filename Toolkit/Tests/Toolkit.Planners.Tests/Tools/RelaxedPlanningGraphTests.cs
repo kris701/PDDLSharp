@@ -82,12 +82,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         public void Can_GenerateGraph_Layer_ActionSize(string domain, string problem, params int[] expecteds)
         {
             // ARRANGE
-            IErrorListener listener = new ErrorListener();
-            IParser<INode> parser = new PDDLParser(listener);
-            var decl = new PDDLDecl(
-                parser.ParseAs<DomainDecl>(new FileInfo(domain)),
-                parser.ParseAs<ProblemDecl>(new FileInfo(problem))
-                );
+            var decl = GetPDDLDecl(domain, problem);
             IState state = new RelaxedPDDLStateSpace(decl);
             var actions = GetGroundedActions(decl);
 

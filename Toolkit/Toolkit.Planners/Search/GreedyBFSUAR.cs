@@ -168,7 +168,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             foreach (var item in allSmallest)
                 relaxedPlanOperators.AddRange(
                     _graphGenerator.GenerateReplaxedPlan(
-                        new RelaxedPDDLStateSpace(Declaration, item.State.State),
+                        item.State,
                         GroundedActions
                         ));
             var newOperators = new HashSet<ActionDecl>();

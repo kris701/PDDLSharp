@@ -10,10 +10,11 @@ namespace PDDLSharp.Toolkit.Grounders
 {
     public class ActionGrounder : BaseGrounder<ActionDecl>
     {
-        IStaticPredicateDetectors _staticPredicateDetector;
+        private HashSet<PredicateExp> _statics;
         public ActionGrounder(PDDLDecl declaration) : base(declaration)
         {
-            _staticPredicateDetector = new SimpleStaticPredicateDetector();
+            var staticPredicateDetector = new SimpleStaticPredicateDetector();
+            _statics = staticPredicateDetector.FindStaticPredicates(Declaration).ToHashSet();
         }
 
         public override List<ActionDecl> Ground(ActionDecl item)
@@ -23,15 +24,14 @@ namespace PDDLSharp.Toolkit.Grounders
             if (item.Parameters.Values.Count == 0 && item.Copy() is ActionDecl newItem)
                 return new List<ActionDecl>() { newItem };
 
-            var statics = _staticPredicateDetector.FindStaticPredicates(Declaration);
             var violationPatterns = new HashSet<int[]>();
             var simpleInits = GenerateSimpleInits();
-            var staticsPreconditions = GenerateStaticsViolationChecks(item, statics);
+            var staticsPreconditions = GenerateStaticsViolationChecks(item, _statics);
 
             var allPermutations = GenerateParameterPermutations(item.Parameters.Values);
             foreach (var permutation in allPermutations)
             {
-                if (statics.Count > 0)
+                if (_statics.Count > 0)
                 {
                     if (!IsPermutationLegal(permutation, violationPatterns))
                         continue;
@@ -106,7 +106,7 @@ namespace PDDLSharp.Toolkit.Grounders
             return simpleInits;
         }
 
-        private List<PredicateViolationCheck> GenerateStaticsViolationChecks(ActionDecl action, List<PredicateExp> statics)
+        private List<PredicateViolationCheck> GenerateStaticsViolationChecks(ActionDecl action, HashSet<PredicateExp> statics)
         {
             var staticsPreconditions = new List<PredicateViolationCheck>();
             var argumentIndexes = new Dictionary<string, int>();

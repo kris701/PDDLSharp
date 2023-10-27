@@ -3,11 +3,6 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Toolkit.StateSpace;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners.Tools
 {
@@ -25,6 +20,9 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 
         public HashSet<ActionDecl> GenerateReplaxedPlan(IState state, HashSet<ActionDecl> groundedActions)
         {
+            if (state is not RelaxedPDDLStateSpace)
+                state = new RelaxedPDDLStateSpace(Declaration, state.State);
+            
             var graphLayers = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, groundedActions);
             var selectedActions = ReconstructPlan(state, graphLayers);
 
