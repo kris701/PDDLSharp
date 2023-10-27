@@ -47,6 +47,12 @@ namespace PDDLSharp.Toolkit.Grounders
                 case ActionDecl act:
                     _staticsPreconditions = GenerateStaticsViolationChecks(act.Parameters, act.Preconditions, _statics);
                     break;
+                case AxiomDecl axi:
+                    _staticsPreconditions = GenerateStaticsViolationChecks(axi.Parameters, axi.Context, _statics);
+                    break;
+                case DurativeActionDecl dAct:
+                    _staticsPreconditions = GenerateStaticsViolationChecks(dAct.Parameters, dAct.Condition, _statics);
+                    break;
                 case ForAllExp forAll:
                     _staticsPreconditions = GenerateStaticsViolationChecks(forAll.Parameters, forAll.Expression, _statics);
                     break;
@@ -171,6 +177,8 @@ namespace PDDLSharp.Toolkit.Grounders
             int length = permutation.Length;
             for (int i = 0; i < length; i++)
             {
+                if (!violationPatterns.ContainsKey(i))
+                    continue;
                 foreach(var pattern in violationPatterns[i])
                 {
                     if (pattern.Length > index)

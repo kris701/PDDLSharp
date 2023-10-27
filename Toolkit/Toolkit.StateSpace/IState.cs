@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Toolkit.Grounders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace PDDLSharp.Toolkit.StateSpace
     {
         public HashSet<PredicateExp> State { get; }
         public PDDLDecl Declaration { get; }
+        public IGrounder<IParametized> Grounder { get; }
 
         public IState Copy();
         public int Count { get; }

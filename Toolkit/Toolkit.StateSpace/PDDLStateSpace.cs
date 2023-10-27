@@ -10,14 +10,15 @@ namespace PDDLSharp.Toolkit.StateSpace
     {
         public PDDLDecl Declaration { get; internal set; }
         public HashSet<PredicateExp> State { get; internal set; }
+        public IGrounder<IParametized> Grounder { get; }
+
         internal List<PredicateExp> _tempAdd = new List<PredicateExp>();
         internal List<PredicateExp> _tempDel = new List<PredicateExp>();
-        internal IGrounder<IParametized> _grounder;
 
         public PDDLStateSpace(PDDLDecl declaration)
         {
             Declaration = declaration;
-            _grounder = new ParametizedGrounder(declaration);
+            Grounder = new ParametizedGrounder(declaration);
             State = new HashSet<PredicateExp>();
             if (declaration.Problem.Init != null)
                 foreach (var item in declaration.Problem.Init.Predicates)
@@ -25,9 +26,9 @@ namespace PDDLSharp.Toolkit.StateSpace
                         Add(SimplifyPredicate(predicate));
         }
 
-        public PDDLStateSpace(PDDLDecl declaration, HashSet<PredicateExp> currentState)
+        public PDDLStateSpace(PDDLDecl declaration, HashSet<PredicateExp> currentState, IGrounder<IParametized> grounder)
         {
-            _grounder = new ParametizedGrounder(declaration);
+            Grounder = grounder;
             Declaration = declaration;
             State = currentState;
         }
@@ -36,7 +37,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         {
             PredicateExp[] newState = new PredicateExp[State.Count];
             State.CopyTo(newState);
-            return new PDDLStateSpace(Declaration, newState.ToHashSet());
+            return new PDDLStateSpace(Declaration, newState.ToHashSet(), Grounder);
         }
 
         public int Count => State.Count;
@@ -272,7 +273,7 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         private bool CheckPermutationsStepwise(INode node, ParameterExp parameters, Func<INode, bool?> stopFunc, bool defaultReturn = true)
         {
-            var allPermuations = _grounder.GenerateParameterPermutations(parameters.Values);
+            var allPermuations = Grounder.GenerateParameterPermutations(parameters.Values);
             while(allPermuations.Count > 0)
             {
                 var res = stopFunc(GenerateNewParametized(node, parameters, allPermuations.Dequeue()));
@@ -289,7 +290,7 @@ namespace PDDLSharp.Toolkit.StateSpace
             {
                 var allRefs = checkNode.FindNames(replace.Values[i].Name);
                 foreach (var name in allRefs)
-                    name.Name = _grounder.GetObjectFromIndex(with[i]);
+                    name.Name = Grounder.GetObjectFromIndex(with[i]);
             }
 
             return checkNode;

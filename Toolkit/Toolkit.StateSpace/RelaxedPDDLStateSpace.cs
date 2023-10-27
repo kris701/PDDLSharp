@@ -11,7 +11,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         {
         }
 
-        public RelaxedPDDLStateSpace(PDDLDecl declaration, HashSet<PredicateExp> currentState) : base(declaration, currentState)
+        public RelaxedPDDLStateSpace(PDDLDecl declaration, HashSet<PredicateExp> currentState, IGrounder<IParametized> grounder) : base(declaration, currentState, grounder)
         {
         }
 
@@ -30,7 +30,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         {
             PredicateExp[] newState = new PredicateExp[State.Count];
             State.CopyTo(newState);
-            return new RelaxedPDDLStateSpace(Declaration, newState.ToHashSet());
+            return new RelaxedPDDLStateSpace(Declaration, newState.ToHashSet(), Grounder);
         }
     }
 }
