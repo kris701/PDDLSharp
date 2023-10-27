@@ -37,6 +37,26 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
 
         [TestMethod]
         [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl")]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl")]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl")]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl")]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl")]
+        public void Can_PreProcess(string domain, string problem)
+        {
+            // ARRANGE
+            var decl = GetPDDLDecl(domain, problem);
+            IPlanner planner = new GreedyBFS(decl);
+            var expected = GetGroundedActions(decl);
+
+            // ACT
+            planner.PreProcess();
+
+            // ASSERT
+            Assert.AreEqual(expected.Count, planner.GroundedActions.Count);
+        }
+
+        [TestMethod]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl")]
         [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl")]
         [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl")]
         [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl")]
