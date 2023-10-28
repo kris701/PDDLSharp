@@ -35,6 +35,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             if (_preprocessed)
                 return;
             var grounder = new ParametizedGrounder(Declaration);
+            grounder.RemoveStaticsFromOutput = true;
             GroundedActions = new HashSet<ActionDecl>();
             foreach (var action in Declaration.Domain.Actions)
                 GroundedActions.AddRange(grounder.Ground(action).Cast<ActionDecl>().ToHashSet());

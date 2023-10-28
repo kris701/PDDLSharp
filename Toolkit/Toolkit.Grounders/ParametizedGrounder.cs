@@ -10,6 +10,8 @@ namespace PDDLSharp.Toolkit.Grounders
 {
     public class ParametizedGrounder : BaseGrounder<IParametized>
     {
+        public bool RemoveStaticsFromOutput { get; set; } = false;
+
         private HashSet<PredicateExp> _statics;
         private HashSet<PredicateExp> _inits;
         private Dictionary<int, List<int[]>> _staticsViolationPatterns;
@@ -34,10 +36,28 @@ namespace PDDLSharp.Toolkit.Grounders
             GenerateStaticsPreconditions(item);
 
             var allPermutations = GenerateParameterPermutations(item.Parameters.Values);
+            if (RemoveStaticsFromOutput)
+                item = RemoveStaticsFromNode(item);
             foreach (var permutation in allPermutations)
                 groundedActions.Add(GenerateInstance(item, permutation));
 
             return groundedActions;
+        }
+
+        private IParametized RemoveStaticsFromNode(IParametized item)
+        {
+            var copy = item.Copy();
+            foreach (var statics in _statics)
+            {
+                var allRefs = copy.FindTypes<PredicateExp>();
+                var allStaticsRef = allRefs.Where(x => x.Name == statics.Name);
+                foreach (var reference in allStaticsRef)
+                    if (reference.Parent is IListable list)
+                        list.Remove(reference);
+            }
+            if (copy is IParametized param)
+                return param;
+            throw new ArgumentException("Expected copy to be a `IParametizzed`!");
         }
 
         private void GenerateStaticsPreconditions(IParametized item)
