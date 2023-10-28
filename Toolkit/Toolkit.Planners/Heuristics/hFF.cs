@@ -28,6 +28,8 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             var relaxedPlan = _graphGenerator.GenerateReplaxedPlan(
                 state,
                 groundedActions);
+            if (_graphGenerator.Failed)
+                return int.MaxValue;
             return relaxedPlan.Count;
         }
     }

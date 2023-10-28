@@ -39,6 +39,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 new RelaxedPDDLStateSpace(Declaration),
                 GroundedActions
                 );
+            if (_graphGenerator.Failed)
+                throw new Exception("No relaxed plan could be found from the initial state! Could indicate the problem is unsolvable.");
 
             var closedList = new HashSet<StateMove>();
             var openListRef = new HashSet<StateMove>();
@@ -179,11 +181,14 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var allSmallest = closedList.Where(x => x.hValue == smallestHValue).ToList();
             var relaxedPlanOperators = new HashSet<ActionDecl>();
             foreach (var item in allSmallest)
-                relaxedPlanOperators.AddRange(
-                    _graphGenerator.GenerateReplaxedPlan(
+            {
+                var newOps = _graphGenerator.GenerateReplaxedPlan(
                         item.State,
                         GroundedActions
-                        ));
+                        );
+                if (!_graphGenerator.Failed)
+                    relaxedPlanOperators.AddRange(newOps);
+            }
             var newOperators = new HashSet<ActionDecl>();
             foreach (var relaxedOperator in relaxedPlanOperators)
                 if (!operators.Contains(relaxedOperator))

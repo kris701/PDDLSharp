@@ -44,12 +44,12 @@ namespace PerformanceTests
         {
             //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
             //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
-            //var targetDomain = "benchmarks/barman-sat11-strips/domain.pddl";
-            //var targetProblem = "benchmarks/barman-sat11-strips/pfile06-021.pddl";
+            var targetDomain = "benchmarks/barman-sat11-strips/domain.pddl";
+            var targetProblem = "benchmarks/barman-sat11-strips/pfile06-021.pddl";
             //var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
             //var targetProblem = "benchmarks/tidybot-opt11-strips/p01.pddl";
-            var targetDomain = "benchmarks/logistics98/domain.pddl";
-            var targetProblem = "benchmarks/logistics98/prob01.pddl";
+            //var targetDomain = "benchmarks/logistics98/domain.pddl";
+            //var targetProblem = "benchmarks/logistics98/prob01.pddl";
             //var targetDomain = "benchmarks/gripper/domain.pddl";
             //var targetProblem = "benchmarks/gripper/prob01.pddl";
 
