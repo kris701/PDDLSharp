@@ -45,6 +45,7 @@ namespace PDDLSharp.Contextualisers.PDDL
                         if (typeDecl.Name == type.Name)
                         {
                             type.SuperTypes = typeDecl.SuperTypes;
+                            type.SuperType = typeDecl.SuperType;
                         }
                     }
                 }

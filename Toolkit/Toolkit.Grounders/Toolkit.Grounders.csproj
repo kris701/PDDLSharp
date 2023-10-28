@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Contextualisers\Contextualisers.csproj" />
     <ProjectReference Include="..\..\Models\Models.csproj" />
     <ProjectReference Include="..\Toolkit.StaticPredicateDetectors\Toolkit.StaticPredicateDetectors.csproj" />
   </ItemGroup>

@@ -47,10 +47,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         }
 
         [TestMethod]
-        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl", 9)]
-        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl", 57)]
-        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl", 16)]
-        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl", 70)]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl", 5)]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl", 29)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl", 10)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl", 37)]
         [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl", 3)]
         [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl", 6)]
         public void Can_GenerateRelaxedPlan_Length(string domain, string problem, int expected)

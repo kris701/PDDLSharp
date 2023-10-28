@@ -23,7 +23,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             IHeuristic h = new hBlind(new PDDLDecl());
 
             // ACT
-            var newValue = h.GetValue(inValue, null, new HashSet<ActionDecl>());
+            var newValue = h.GetValue(inValue, null, new List<ActionDecl>());
 
             // ASSERT
             Assert.AreEqual(expected, newValue);

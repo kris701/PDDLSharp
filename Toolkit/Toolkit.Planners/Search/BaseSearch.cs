@@ -9,13 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Timers;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
     public abstract class BaseSearch : IPlanner
     {
         public PDDLDecl Declaration { get; }
-        public HashSet<ActionDecl> GroundedActions { get; set; }
+        public List<ActionDecl> GroundedActions { get; set; }
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
 
@@ -27,7 +29,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public BaseSearch(PDDLDecl decl)
         {
             Declaration = decl;
-            GroundedActions = new HashSet<ActionDecl>();
+            GroundedActions = new List<ActionDecl>();
         }
 
         public void PreProcess()
@@ -35,10 +37,22 @@ namespace PDDLSharp.Toolkit.Planners.Search
             if (_preprocessed)
                 return;
             var grounder = new ParametizedGrounder(Declaration);
-            GroundedActions = new HashSet<ActionDecl>();
+            grounder.RemoveStaticsFromOutput = true;
+            GroundedActions = new List<ActionDecl>();
             foreach (var action in Declaration.Domain.Actions)
-                GroundedActions.AddRange(grounder.Ground(action).Cast<ActionDecl>().ToHashSet());
+            {
+                action.Preconditions = EnsureAndNode(action.Preconditions);
+                action.Effects = EnsureAndNode(action.Effects);
+                GroundedActions.AddRange(grounder.Ground(action).Cast<ActionDecl>());
+            }
             _preprocessed = true;
+        }
+
+        private IExp EnsureAndNode(IExp from)
+        {
+            if (from is AndExp)
+                return from;
+            return new AndExp(new List<IExp>() { from });
         }
 
         public ActionPlan Solve(IHeuristic h)

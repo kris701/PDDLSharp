@@ -10,12 +10,14 @@ namespace PDDLSharp.Toolkit.Grounders
     internal class PredicateViolationCheck
     {
         public PredicateExp Predicate { get; }
-        public int[] Indexes { get; }
+        public int[] ArgIndexes { get; }
+        public int[] ConstantsIndexes { get; }
 
-        public PredicateViolationCheck(PredicateExp predicate, int[] indexes)
+        public PredicateViolationCheck(PredicateExp predicate, int[] argIndexes, int[] constantsIndexes)
         {
             Predicate = predicate;
-            Indexes = indexes;
+            ArgIndexes = argIndexes;
+            ConstantsIndexes = constantsIndexes;
         }
     }
 }

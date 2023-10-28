@@ -19,7 +19,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             Declaration = declaration;
         }
 
-        public int GetValue(int currentValue, IState state, HashSet<ActionDecl> groundedActions)
+        public int GetValue(int currentValue, IState state, List<ActionDecl> groundedActions)
         {
             return currentValue - 1;
         }
