@@ -19,7 +19,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
 
-        public int TimeOutM { get; set; } = 30;
+        public TimeSpan Timeout { get; set; } = TimeSpan.FromMinutes(30);
 
         private bool _preprocessed = false;
         internal bool _abort = false;
@@ -45,7 +45,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
             IState state = new PDDLStateSpace(Declaration);
             var timeoutTimer = new System.Timers.Timer();
-            timeoutTimer.Interval = TimeSpan.FromMinutes(TimeOutM).TotalMilliseconds;
+            timeoutTimer.Interval = Timeout.TotalMilliseconds;
             timeoutTimer.Elapsed += OnTimedOut;
             timeoutTimer.AutoReset = false;
             timeoutTimer.Start();
