@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Toolkit.Planners.Tests
 {
@@ -26,9 +27,20 @@ namespace PDDLSharp.Toolkit.Planners.Tests
             IGrounder<IParametized> grounder = new ParametizedGrounder(decl);
             var actions = new List<ActionDecl>();
             foreach (var act in decl.Domain.Actions)
+            {
+                act.Preconditions = EnsureAndNode(act.Preconditions);
+                act.Effects = EnsureAndNode(act.Effects);
                 actions.AddRange(grounder.Ground(act).Cast<ActionDecl>());
+            }
             _groundedCache.Add(decl.Domain.Name.Name + decl.Problem.Name.Name, actions);
             return actions;
+        }
+
+        private static IExp EnsureAndNode(IExp from)
+        {
+            if (from is AndExp)
+                return from;
+            return new AndExp(new List<IExp>() { from });
         }
 
         private static Dictionary<string, PDDLDecl> _declCache = new Dictionary<string, PDDLDecl>();

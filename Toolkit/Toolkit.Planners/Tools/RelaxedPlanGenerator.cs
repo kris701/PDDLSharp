@@ -53,22 +53,38 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             {
                 foreach (var fact in G[t])
                 {
-                    foreach (var act in graphLayers[t].Actions)
+                    bool found = false;
+                    foreach (var act in graphLayers[t].Actions) 
                     {
-                        var allEff = act.Effects.FindTypes<PredicateExp>();
-                        if (allEff.Any(x => x.Parent is not NotExp && SimplifyPredicate(x).Equals(fact)))
+                        if (found)
+                            break;
+                        if (act.Effects is AndExp effAnd)
                         {
-                            selectedActions.Add(act);
-                            var allPrecons = act.Preconditions.FindTypes<PredicateExp>();
-                            foreach (var precon in allPrecons)
+                            foreach (var child in effAnd.Children)
                             {
-                                if (precon is PredicateExp pred)
+                                if (child is PredicateExp pred && SimplifyPredicate(pred).Equals(fact))
                                 {
-                                    var newGoal = FirstLevel(pred, graphLayers);
-                                    G[newGoal].Add(pred);
+                                    selectedActions.Add(act);
+                                    if (act.Preconditions is AndExp preAnd)
+                                    {
+                                        foreach (var child2 in preAnd.Children)
+                                        {
+                                            if (child2 is PredicateExp pred2)
+                                            {
+                                                var newGoal = FirstLevel(pred2, graphLayers);
+                                                G[newGoal].Add(pred2);
+                                            }
+                                        }
+                                    }
+                                    else
+                                        throw new Exception("Expected action preconditions to be an and expression!");
+                                    found = true;
+                                    break;
                                 }
                             }
                         }
+                        else
+                            throw new Exception("Expected action effects to be an and expression!");
                     }
                 }
             }

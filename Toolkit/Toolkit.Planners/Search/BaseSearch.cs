@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Timers;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
@@ -38,8 +40,19 @@ namespace PDDLSharp.Toolkit.Planners.Search
             grounder.RemoveStaticsFromOutput = true;
             GroundedActions = new List<ActionDecl>();
             foreach (var action in Declaration.Domain.Actions)
+            {
+                action.Preconditions = EnsureAndNode(action.Preconditions);
+                action.Effects = EnsureAndNode(action.Effects);
                 GroundedActions.AddRange(grounder.Ground(action).Cast<ActionDecl>());
+            }
             _preprocessed = true;
+        }
+
+        private IExp EnsureAndNode(IExp from)
+        {
+            if (from is AndExp)
+                return from;
+            return new AndExp(new List<IExp>() { from });
         }
 
         public ActionPlan Solve(IHeuristic h)

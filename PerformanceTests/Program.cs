@@ -42,6 +42,8 @@ namespace PerformanceTests
 
         private static void RunNTimes6(int number)
         {
+            //var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
+            //var targetProblem = "benchmarks/tidybot-opt11-strips/p01.pddl";
             var targetDomain = "benchmarks/logistics98/domain.pddl";
             var targetProblem = "benchmarks/logistics98/prob01.pddl";
             //var targetDomain = "benchmarks/gripper/domain.pddl";
