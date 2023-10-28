@@ -25,6 +25,25 @@ namespace PDDLSharp.Toolkit.Grounders
             _staticsPreconditions = new List<PredicateViolationCheck>();
         }
 
+        private HashSet<PredicateExp> GenerateSimpleInits()
+        {
+            var simpleInits = new HashSet<PredicateExp>();
+            if (Declaration.Problem.Init != null)
+            {
+                foreach (var init in Declaration.Problem.Init.Predicates)
+                {
+                    if (init is PredicateExp pred)
+                    {
+                        var newArgs = new List<NameExp>();
+                        foreach (var arg in pred.Arguments)
+                            newArgs.Add(new NameExp(arg.Name));
+                        simpleInits.Add(new PredicateExp(pred.Name, newArgs));
+                    }
+                }
+            }
+            return simpleInits;
+        }
+
         public override List<IParametized> Ground(IParametized item)
         {
             List<IParametized> groundedActions = new List<IParametized>();
@@ -44,20 +63,11 @@ namespace PDDLSharp.Toolkit.Grounders
             return groundedActions;
         }
 
-        private IParametized RemoveStaticsFromNode(IParametized item)
+        private void InitializeViolationPatternDict(int argCount)
         {
-            var copy = item.Copy();
-            foreach (var statics in _statics)
-            {
-                var allRefs = copy.FindTypes<PredicateExp>();
-                var allStaticsRef = allRefs.Where(x => x.Name == statics.Name);
-                foreach (var reference in allStaticsRef)
-                    if (reference.Parent is IListable list)
-                        list.Remove(reference);
-            }
-            if (copy is IParametized param)
-                return param;
-            throw new ArgumentException("Expected copy to be a `IParametizzed`!");
+            _staticsViolationPatterns = new Dictionary<int, List<int[]>>();
+            for (int i = 0; i < argCount; i++)
+                _staticsViolationPatterns.Add(i, new List<int[]>());
         }
 
         private void GenerateStaticsPreconditions(IParametized item)
@@ -84,11 +94,42 @@ namespace PDDLSharp.Toolkit.Grounders
             }
         }
 
-        private void InitializeViolationPatternDict(int argCount)
+        private List<PredicateViolationCheck> GenerateStaticsViolationChecks(ParameterExp param, INode exp, HashSet<PredicateExp> statics)
         {
-            _staticsViolationPatterns = new Dictionary<int, List<int[]>>();
-            for (int i = 0; i < argCount; i++)
-                _staticsViolationPatterns.Add(i, new List<int[]>());
+            var staticsPreconditions = new List<PredicateViolationCheck>();
+            var argumentIndexes = new Dictionary<string, int>();
+            int index = 0;
+            foreach (var arg in param.Values)
+                argumentIndexes.Add(arg.Name, index++);
+            var allPredicates = exp.FindTypes<PredicateExp>();
+            foreach (var stat in statics)
+            {
+                var allRefs = allPredicates.Where(x => x.Name == stat.Name);
+                foreach (var refPred in allRefs)
+                {
+                    var indexes = new int[refPred.Arguments.Count];
+                    for (int i = 0; i < refPred.Arguments.Count; i++)
+                        indexes[i] = argumentIndexes[refPred.Arguments[i].Name];
+                    staticsPreconditions.Add(new PredicateViolationCheck(stat, indexes));
+                }
+            }
+            return staticsPreconditions;
+        }
+
+        private IParametized RemoveStaticsFromNode(IParametized item)
+        {
+            var copy = item.Copy();
+            foreach (var statics in _statics)
+            {
+                var allRefs = copy.FindTypes<PredicateExp>();
+                var allStaticsRef = allRefs.Where(x => x.Name == statics.Name);
+                foreach (var reference in allStaticsRef)
+                    if (reference.Parent is IListable list)
+                        list.Remove(reference);
+            }
+            if (copy is IParametized param)
+                return param;
+            throw new ArgumentException("Expected copy to be a `IParametizzed`!");
         }
 
         internal override bool IsPermutationLegal(int[] permutation, int index)
@@ -146,47 +187,6 @@ namespace PDDLSharp.Toolkit.Grounders
                     newPattern[i] = -1;
             }
             return newPattern;
-        }
-
-        private HashSet<PredicateExp> GenerateSimpleInits()
-        {
-            var simpleInits = new HashSet<PredicateExp>();
-            if (Declaration.Problem.Init != null)
-            {
-                foreach (var init in Declaration.Problem.Init.Predicates)
-                {
-                    if (init is PredicateExp pred)
-                    {
-                        var newArgs = new List<NameExp>();
-                        foreach (var arg in pred.Arguments)
-                            newArgs.Add(new NameExp(arg.Name));
-                        simpleInits.Add(new PredicateExp(pred.Name, newArgs));
-                    }
-                }
-            }
-            return simpleInits;
-        }
-
-        private List<PredicateViolationCheck> GenerateStaticsViolationChecks(ParameterExp param, INode exp, HashSet<PredicateExp> statics)
-        {
-            var staticsPreconditions = new List<PredicateViolationCheck>();
-            var argumentIndexes = new Dictionary<string, int>();
-            int index = 0;
-            foreach (var arg in param.Values)
-                argumentIndexes.Add(arg.Name, index++);
-            var allPredicates = exp.FindTypes<PredicateExp>();
-            foreach (var stat in statics)
-            {
-                var allRefs = allPredicates.Where(x => x.Name == stat.Name);
-                foreach (var refPred in allRefs)
-                {
-                    var indexes = new int[refPred.Arguments.Count];
-                    for (int i = 0; i < refPred.Arguments.Count; i++)
-                        indexes[i] = argumentIndexes[refPred.Arguments[i].Name];
-                    staticsPreconditions.Add(new PredicateViolationCheck(stat, indexes));
-                }
-            }
-            return staticsPreconditions;
         }
 
         private bool IsPermutationLegal(int[] permutation, int index, Dictionary<int, List<int[]>> violationPatterns)
