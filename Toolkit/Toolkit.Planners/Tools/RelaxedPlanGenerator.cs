@@ -8,6 +8,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 {
     public class RelaxedPlanGenerator
     {
+        public bool Failed { get; internal set; } = false;
         public PDDLDecl Declaration { get; set; }
         private HashSet<PredicateExp> _goalCache;
 
@@ -20,12 +21,16 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 
         public HashSet<ActionDecl> GenerateReplaxedPlan(IState state, List<ActionDecl> groundedActions)
         {
+            Failed = false;
             if (state is not RelaxedPDDLStateSpace)
                 state = new RelaxedPDDLStateSpace(Declaration, state.State, state.Grounder);
             
             var graphLayers = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, groundedActions);
             if (graphLayers.Count == 0)
-                return groundedActions.ToHashSet();
+            {
+                Failed = true;
+                return new HashSet<ActionDecl>();
+            }
             var selectedActions = ReconstructPlan(state, graphLayers);
 
             return selectedActions;
