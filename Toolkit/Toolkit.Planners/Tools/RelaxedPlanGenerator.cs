@@ -21,7 +21,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
         public HashSet<ActionDecl> GenerateReplaxedPlan(IState state, HashSet<ActionDecl> groundedActions)
         {
             if (state is not RelaxedPDDLStateSpace)
-                state = new RelaxedPDDLStateSpace(Declaration, state.State);
+                state = new RelaxedPDDLStateSpace(Declaration, state.State, state.Grounder);
             
             var graphLayers = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, groundedActions);
             var selectedActions = ReconstructPlan(state, graphLayers);

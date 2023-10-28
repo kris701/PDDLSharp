@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
@@ -19,7 +19,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
 
+        public TimeSpan Timeout { get; set; } = TimeSpan.FromMinutes(30);
+
         private bool _preprocessed = false;
+        internal bool _abort = false;
 
         public BaseSearch(PDDLDecl decl)
         {
@@ -31,19 +34,31 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
             if (_preprocessed)
                 return;
-            IGrounder<ActionDecl> grounder = new ActionGrounder(Declaration);
+            var grounder = new ParametizedGrounder(Declaration);
             GroundedActions = new HashSet<ActionDecl>();
             foreach (var action in Declaration.Domain.Actions)
-                GroundedActions.AddRange(grounder.Ground(action).ToHashSet());
+                GroundedActions.AddRange(grounder.Ground(action).Cast<ActionDecl>().ToHashSet());
             _preprocessed = true;
         }
 
         public ActionPlan Solve(IHeuristic h)
         {
             IState state = new PDDLStateSpace(Declaration);
+            var timeoutTimer = new System.Timers.Timer();
+            timeoutTimer.Interval = Timeout.TotalMilliseconds;
+            timeoutTimer.Elapsed += OnTimedOut;
+            timeoutTimer.AutoReset = false;
+            timeoutTimer.Start();
+
             return Solve(h, state);
         }
 
-        public abstract ActionPlan Solve(IHeuristic h, IState state);
+        private void OnTimedOut(object? source, ElapsedEventArgs e)
+        {
+            _abort = true;
+            throw new Exception("Planner Timed out! Aborting search...");
+        }
+
+        internal abstract ActionPlan Solve(IHeuristic h, IState state);
     }
 }

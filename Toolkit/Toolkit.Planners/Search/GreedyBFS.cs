@@ -15,7 +15,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
         }
 
-        public override ActionPlan Solve(IHeuristic h, IState state)
+        internal override ActionPlan Solve(IHeuristic h, IState state)
         {
             Expanded = 0;
             Generated = 0;
@@ -25,9 +25,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var openList = new PriorityQueue<StateMove, int>();
             var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
             openList.Enqueue(new StateMove(state, hValue), hValue);
-
             while (openList.Count > 0)
             {
+                if (_abort) break;
                 var stateMove = openList.Dequeue();
                 if (stateMove.State.IsInGoal())
                     return new ActionPlan(stateMove.Steps, stateMove.Steps.Count);
@@ -36,17 +36,19 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
                 foreach (var act in GroundedActions)
                 {
+                    if (_abort) break;
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
                     {
                         Generated++;
                         var check = stateMove.State.Copy();
                         check.ExecuteNode(act.Effects);
-                        var value = h.GetValue(stateMove.hValue, check, GroundedActions);
-                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) }, value);
+                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
                         if (newMove.State.IsInGoal())
                             return new ActionPlan(newMove.Steps, newMove.Steps.Count);
                         if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
                         {
+                            var value = h.GetValue(stateMove.hValue, check, GroundedActions);
+                            newMove.hValue = value;
                             openList.Enqueue(newMove, value);
                             openListRef.Add(newMove);
                         }

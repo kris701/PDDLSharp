@@ -16,11 +16,12 @@ namespace PDDLSharp.Toolkit.Planners
         public PDDLDecl Declaration { get; }
         public HashSet<ActionDecl> GroundedActions { get; set; }
 
+        public TimeSpan Timeout { get; set; }
+
         public int Generated { get; }
         public int Expanded { get; }
 
         public void PreProcess();
         public ActionPlan Solve(IHeuristic h);
-        public ActionPlan Solve(IHeuristic h, IState state);
     }
 }

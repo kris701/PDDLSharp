@@ -93,11 +93,18 @@ namespace PDDLSharp.Toolkit.Grounders
                 var newParam = new int[parameters.Length];
                 Array.Copy(carried, newParam, parameters.Length);
                 newParam[index] = ofType;
-                if (index >= parameters.Length - 1)
-                    returnQueue.Enqueue(newParam);
-                else
-                    GenerateParameterPermutations(parameters, newParam, index + 1, returnQueue);
+                if (IsPermutationLegal(newParam, index))
+                {
+                    if (index >= parameters.Length - 1)
+                        returnQueue.Enqueue(newParam);
+                    else
+                        GenerateParameterPermutations(parameters, newParam, index + 1, returnQueue);
+                }
             }
+        }
+        internal virtual bool IsPermutationLegal(int[] permutation, int index)
+        {
+            return true;
         }
     }
 }
