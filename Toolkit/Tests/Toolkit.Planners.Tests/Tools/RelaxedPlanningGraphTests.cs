@@ -108,7 +108,6 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException), "No applicable actions found!")]
         public void Cant_GenerateGraph_IfNoApplicableActions_1()
         {
             // ARRANGE
@@ -118,11 +117,13 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             IState state = new RelaxedPDDLStateSpace(decl);
 
             // ACT
-            RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, new List<ActionDecl>());
+            var result = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, new List<ActionDecl>());
+
+            // ASSERT
+            Assert.AreEqual(0, result.Count);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException), "No applicable actions found!")]
         public void Cant_GenerateGraph_IfNoApplicableActions_2()
         {
             // ARRANGE
@@ -138,11 +139,13 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             actions.Add(action);
 
             // ACT
-            RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+            var result = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+
+            // ASSERT
+            Assert.AreEqual(0, result.Count);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException), "Relaxed state did not change!")]
         public void Cant_GenerateGraph_IfActionDoesNothing()
         {
             // ARRANGE
@@ -157,7 +160,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             actions.Add(action);
 
             // ACT
-            RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+            var result = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+
+            // ASSERT
+            Assert.AreEqual(0, result.Count);
         }
     }
 }

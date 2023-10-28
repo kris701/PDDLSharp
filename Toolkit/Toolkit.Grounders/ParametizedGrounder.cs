@@ -1,4 +1,7 @@
-﻿using PDDLSharp.Models;
+﻿using PDDLSharp.Contextualisers;
+using PDDLSharp.Contextualisers.PDDL;
+using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
@@ -107,10 +110,21 @@ namespace PDDLSharp.Toolkit.Grounders
                 var allRefs = allPredicates.Where(x => x.Name == stat.Name);
                 foreach (var refPred in allRefs)
                 {
-                    var indexes = new int[refPred.Arguments.Count];
-                    for (int i = 0; i < refPred.Arguments.Count; i++)
-                        indexes[i] = argumentIndexes[refPred.Arguments[i].Name];
-                    staticsPreconditions.Add(new PredicateViolationCheck(stat, indexes));
+                    var argIndexes = new int[stat.Arguments.Count];
+                    var constantIndexes = new int[stat.Arguments.Count];
+                    for (int i = 0; i < refPred.Arguments.Count; i++) {
+                        if (argumentIndexes.ContainsKey(refPred.Arguments[i].Name))
+                        {
+                            argIndexes[i] = argumentIndexes[refPred.Arguments[i].Name];
+                            constantIndexes[i] = int.MaxValue;
+                        }
+                        else
+                        {
+                            argIndexes[i] = int.MaxValue;
+                            constantIndexes[i] = GetIndexFromObject(refPred.Arguments[i].Name);
+                        }
+                    }
+                    staticsPreconditions.Add(new PredicateViolationCheck(stat, argIndexes, constantIndexes));
                 }
             }
             return staticsPreconditions;
@@ -144,8 +158,8 @@ namespace PDDLSharp.Toolkit.Grounders
                 {
                     if (!_inits.Contains(GeneratePredicateFromIndexes(permutation, staticsPrecon)))
                     {
-                        int minIndex = staticsPrecon.Indexes.Min();
-                        if (staticsPrecon.Indexes.Max() <= index)
+                        int minIndex = staticsPrecon.ArgIndexes.Min();
+                        if (staticsPrecon.ArgIndexes.Max() <= index)
                         {
                             _staticsViolationPatterns[minIndex].Add(GeneratePattern(permutation, index, staticsPrecon));
                             allGood = false;
@@ -161,23 +175,28 @@ namespace PDDLSharp.Toolkit.Grounders
         private PredicateExp GeneratePredicateFromIndexes(int[] permutation, PredicateViolationCheck staticsPrecon)
         {
             var newArgs = new List<NameExp>();
-            for (int i = 0; i < staticsPrecon.Indexes.Length; i++)
-                newArgs.Add(new NameExp(GetObjectFromIndex(permutation[staticsPrecon.Indexes[i]])));
+            for (int i = 0; i < staticsPrecon.ArgIndexes.Length; i++)
+            {
+                if (staticsPrecon.ArgIndexes[i] == int.MaxValue)
+                    newArgs.Add(new NameExp(GetObjectFromIndex(staticsPrecon.ConstantsIndexes[i])));
+                else
+                    newArgs.Add(new NameExp(GetObjectFromIndex(permutation[staticsPrecon.ArgIndexes[i]])));                   
+            }
             return new PredicateExp(staticsPrecon.Predicate.Name, newArgs);
         }
 
         private int[] GeneratePattern(int[] permutation, int index, PredicateViolationCheck staticsPrecon)
         {
             var newPattern = new int[index + 1];
-            var covered = new bool[staticsPrecon.Indexes.Length];
+            var covered = new bool[staticsPrecon.ArgIndexes.Length];
             for (int i = 0; i < newPattern.Length; i++)
             {
                 bool any = false;
-                for (int j = 0; j < staticsPrecon.Indexes.Length; j++)
+                for (int j = 0; j < staticsPrecon.ArgIndexes.Length; j++)
                 {
-                    if (i == staticsPrecon.Indexes[j] && !covered[j])
+                    if (i == staticsPrecon.ArgIndexes[j] && !covered[j])
                     {
-                        newPattern[i] = permutation[staticsPrecon.Indexes[j]];
+                        newPattern[i] = permutation[staticsPrecon.ArgIndexes[j]];
                         covered[j] = true;
                         any = true;
                         break;
@@ -230,6 +249,7 @@ namespace PDDLSharp.Toolkit.Grounders
                 foreach (var refItem in allRefs)
                     refItem.Name = GetObjectFromIndex(permutation[i]);
             }
+            copy.RemoveTypes();
             copy.RemoveContext();
             if (copy is IParametized param)
                 return param;

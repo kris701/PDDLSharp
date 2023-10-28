@@ -1,4 +1,6 @@
-﻿using PDDLSharp.Models;
+﻿using PDDLSharp.Contextualisers.PDDL;
+using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Tools;
 
@@ -17,6 +19,12 @@ namespace PDDLSharp.Toolkit.Grounders
         protected BaseGrounder(PDDLDecl declaration)
         {
             Declaration = declaration;
+            if (!Declaration.IsContextualised)
+            {
+                IErrorListener listener = new ErrorListener();
+                var context = new PDDLContextualiser(listener);
+                context.Contexturalise(Declaration);
+            }
             IndexItems();
         }
 

@@ -17,6 +17,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             bool[] covered = new bool[groundedActions.Count];
             List<Layer> layers = new List<Layer>();
             layers.Add(new Layer(new HashSet<ActionDecl>(), state.State));
+            int previousLayer = 0;
             while (!state.IsInGoal())
             {
                 // Find applicable actions
@@ -34,7 +35,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 }
                 // Error condition: there are no applicable actions at all (most likely means the problem is unsolvable)
                 if (newLayer.Actions.Count == 0)
-                    throw new ArgumentException("No applicable actions found!");
+                    return new List<Layer>();
 
                 // Apply applicable actions to state
                 state = state.Copy();
@@ -43,8 +44,8 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 newLayer.Propositions = state.State;
 
                 // Error condition: there where actions executed, but nothing happened from them
-                if (layers[0].Propositions == newLayer.Propositions)
-                    throw new ArgumentException("Relaxed state did not change!");
+                if (layers[previousLayer++].Propositions.Count == newLayer.Propositions.Count)
+                    return new List<Layer>();
 
                 // Add new layer
                 layers.Add(newLayer);
