@@ -118,7 +118,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             IState state = new RelaxedPDDLStateSpace(decl);
 
             // ACT
-            RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, new HashSet<ActionDecl>());
+            RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, new List<ActionDecl>());
         }
 
         [TestMethod]
@@ -131,7 +131,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             decl.Problem.Goal.GoalExp = new PredicateExp("abc");
             IState state = new RelaxedPDDLStateSpace(decl);
 
-            var actions = new HashSet<ActionDecl>();
+            var actions = new List<ActionDecl>();
             var action = new ActionDecl("non-applicable");
             action.Parameters = new ParameterExp(new List<NameExp>() { new NameExp("?a") });
             action.Preconditions = new PredicateExp("wew", new List<NameExp>() { new NameExp("?a") });
@@ -151,7 +151,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             decl.Problem.Goal.GoalExp = new PredicateExp("abc");
             IState state = new RelaxedPDDLStateSpace(decl);
 
-            var actions = new HashSet<ActionDecl>();
+            var actions = new List<ActionDecl>();
             var action = new ActionDecl("non-applicable");
             action.Parameters = new ParameterExp(new List<NameExp>() { new NameExp("?a") });
             actions.Add(action);

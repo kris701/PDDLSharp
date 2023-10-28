@@ -14,7 +14,7 @@ namespace PDDLSharp.Toolkit.Planners
     public interface IPlanner
     {
         public PDDLDecl Declaration { get; }
-        public HashSet<ActionDecl> GroundedActions { get; set; }
+        public List<ActionDecl> GroundedActions { get; set; }
 
         public TimeSpan Timeout { get; set; }
 

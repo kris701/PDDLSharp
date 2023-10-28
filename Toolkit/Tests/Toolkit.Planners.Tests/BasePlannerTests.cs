@@ -17,16 +17,16 @@ namespace PDDLSharp.Toolkit.Planners.Tests
 {
     public class BasePlannerTests
     {
-        private static Dictionary<string, HashSet<ActionDecl>> _groundedCache = new Dictionary<string, HashSet<ActionDecl>>();
-        internal static HashSet<ActionDecl> GetGroundedActions(PDDLDecl decl)
+        private static Dictionary<string, List<ActionDecl>> _groundedCache = new Dictionary<string, List<ActionDecl>>();
+        internal static List<ActionDecl> GetGroundedActions(PDDLDecl decl)
         {
             if (_groundedCache.ContainsKey(decl.Domain.Name.Name + decl.Problem.Name.Name))
                 return _groundedCache[decl.Domain.Name.Name + decl.Problem.Name.Name];
 
             IGrounder<IParametized> grounder = new ParametizedGrounder(decl);
-            var actions = new HashSet<ActionDecl>();
+            var actions = new List<ActionDecl>();
             foreach (var act in decl.Domain.Actions)
-                actions.AddRange(grounder.Ground(act).Cast<ActionDecl>().ToHashSet());
+                actions.AddRange(grounder.Ground(act).Cast<ActionDecl>());
             _groundedCache.Add(decl.Domain.Name.Name + decl.Problem.Name.Name, actions);
             return actions;
         }

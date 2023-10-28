@@ -11,21 +11,27 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 {
     public static class RelaxedPlanningGraph
     {
-        public static List<Layer> GenerateRelaxedPlanningGraph(IState state, HashSet<ActionDecl> groundedActions)
+        public static List<Layer> GenerateRelaxedPlanningGraph(IState state, List<ActionDecl> groundedActions)
         {
             state = state.Copy();
-            ActionDecl[] copyActs = new ActionDecl[groundedActions.Count];
-            groundedActions.CopyTo(copyActs);
-            groundedActions = copyActs.ToHashSet();
+            bool[] covered = new bool[groundedActions.Count];
             List<Layer> layers = new List<Layer>();
             layers.Add(new Layer(new HashSet<ActionDecl>(), state.State));
             while (!state.IsInGoal())
             {
                 // Find applicable actions
                 var newLayer = new Layer();
-                foreach (var act in groundedActions)
-                    if (state.IsNodeTrue(act.Preconditions))
-                        newLayer.Actions.Add(act);
+                for (int i = 0; i < covered.Length; i++)
+                {
+                    if (!covered[i])
+                    {
+                        if (state.IsNodeTrue(groundedActions[i].Preconditions))
+                        {
+                            newLayer.Actions.Add(groundedActions[i]);
+                            covered[i] = true;
+                        }
+                    }
+                }
                 // Error condition: there are no applicable actions at all (most likely means the problem is unsolvable)
                 if (newLayer.Actions.Count == 0)
                     throw new ArgumentException("No applicable actions found!");
@@ -33,10 +39,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 // Apply applicable actions to state
                 state = state.Copy();
                 foreach (var act in newLayer.Actions)
-                {
                     state.ExecuteNode(act.Effects);
-                    groundedActions.Remove(act);
-                }
                 newLayer.Propositions = state.State;
 
                 // Error condition: there where actions executed, but nothing happened from them

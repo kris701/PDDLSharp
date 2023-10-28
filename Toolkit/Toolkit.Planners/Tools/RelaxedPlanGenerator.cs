@@ -18,7 +18,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             GetGoalFacts(declaration.Problem);
         }
 
-        public HashSet<ActionDecl> GenerateReplaxedPlan(IState state, HashSet<ActionDecl> groundedActions)
+        public HashSet<ActionDecl> GenerateReplaxedPlan(IState state, List<ActionDecl> groundedActions)
         {
             if (state is not RelaxedPDDLStateSpace)
                 state = new RelaxedPDDLStateSpace(Declaration, state.State, state.Grounder);

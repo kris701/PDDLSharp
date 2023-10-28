@@ -15,7 +15,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
     public abstract class BaseSearch : IPlanner
     {
         public PDDLDecl Declaration { get; }
-        public HashSet<ActionDecl> GroundedActions { get; set; }
+        public List<ActionDecl> GroundedActions { get; set; }
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
 
@@ -27,7 +27,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public BaseSearch(PDDLDecl decl)
         {
             Declaration = decl;
-            GroundedActions = new HashSet<ActionDecl>();
+            GroundedActions = new List<ActionDecl>();
         }
 
         public void PreProcess()
@@ -36,9 +36,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 return;
             var grounder = new ParametizedGrounder(Declaration);
             grounder.RemoveStaticsFromOutput = true;
-            GroundedActions = new HashSet<ActionDecl>();
+            GroundedActions = new List<ActionDecl>();
             foreach (var action in Declaration.Domain.Actions)
-                GroundedActions.AddRange(grounder.Ground(action).Cast<ActionDecl>().ToHashSet());
+                GroundedActions.AddRange(grounder.Ground(action).Cast<ActionDecl>());
             _preprocessed = true;
         }
 
