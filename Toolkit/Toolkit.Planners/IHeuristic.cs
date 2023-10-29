@@ -13,6 +13,7 @@ namespace PDDLSharp.Toolkit.Planners
 {
     public interface IHeuristic
     {
+        public int Calculated { get; }
         public int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions);
     }
 }

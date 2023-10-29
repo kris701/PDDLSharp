@@ -25,6 +25,7 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
 
         public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
+            Calculated++;
             int sum = 0;
             foreach(var heuristic in Heuristics)
                 sum += heuristic.GetValue(parent, state, groundedActions);

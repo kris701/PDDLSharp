@@ -17,6 +17,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     {
         public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
+            Calculated++;
             return parent.Steps.Count + 1;
         }
     }

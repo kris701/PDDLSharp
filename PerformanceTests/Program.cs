@@ -62,6 +62,7 @@ namespace PerformanceTests
             var greedyBFS_UAR = new GreedyBFSUAR(decl);
             var greedyBFS = new GreedyBFS(decl);
             var greedyBFS_PO = new GreedyBFSPO(decl);
+            var greedyBFS_DHE = new GreedyBFSDHE(decl);
 
             var h1 = new hDepth();
             var h2 = new hFF(decl);
@@ -78,24 +79,20 @@ namespace PerformanceTests
             greedyBFS_UAR.PreProcess();
             greedyBFS.GroundedActions = greedyBFS_UAR.GroundedActions;
             greedyBFS_PO.GroundedActions = greedyBFS_UAR.GroundedActions;
+            greedyBFS_DHE.GroundedActions = greedyBFS_UAR.GroundedActions;
 
             Thread.Sleep(1000);
 
             var actionPlan1 = new ActionPlan(new List<GroundedAction>(), 0);
             var actionPlan2 = new ActionPlan(new List<GroundedAction>(), 0);
             var actionPlan3 = new ActionPlan(new List<GroundedAction>(), 0);
+            var actionPlan4 = new ActionPlan(new List<GroundedAction>(), 0);
 
             Stopwatch instanceWatch = new Stopwatch();
-            List<long> times = new List<long>() { 0, 0, 0 };
+            List<long> times = new List<long>() { 0, 0, 0, 4 };
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
-                Console.WriteLine($"{nameof(greedyBFS)} using {h2.GetType().Name}");
-                instanceWatch.Restart();
-                h2 = new hFF(decl);
-                actionPlan2 = greedyBFS.Solve(h2);
-                instanceWatch.Stop();
-                times[1] += instanceWatch.ElapsedMilliseconds;
 
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
@@ -103,6 +100,15 @@ namespace PerformanceTests
                 actionPlan1 = greedyBFS_UAR.Solve(h2);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
+                Console.WriteLine($"{nameof(greedyBFS_UAR)} calculated heuristic {h2.Calculated} times");
+
+                Console.WriteLine($"{nameof(greedyBFS)} using {h2.GetType().Name}");
+                instanceWatch.Restart();
+                h2 = new hFF(decl);
+                actionPlan2 = greedyBFS.Solve(h2);
+                instanceWatch.Stop();
+                times[1] += instanceWatch.ElapsedMilliseconds;
+                Console.WriteLine($"{nameof(greedyBFS)} calculated heuristic {h2.Calculated} times");
 
                 Console.WriteLine($"{nameof(greedyBFS_PO)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
@@ -110,6 +116,15 @@ namespace PerformanceTests
                 actionPlan3 = greedyBFS_PO.Solve(h2);
                 instanceWatch.Stop();
                 times[2] += instanceWatch.ElapsedMilliseconds;
+                Console.WriteLine($"{nameof(greedyBFS_PO)} calculated heuristic {h2.Calculated} times");
+
+                Console.WriteLine($"{nameof(greedyBFS_DHE)} using {h2.GetType().Name}");
+                instanceWatch.Restart();
+                h2 = new hFF(decl);
+                actionPlan4 = greedyBFS_DHE.Solve(h2);
+                instanceWatch.Stop();
+                times[3] += instanceWatch.ElapsedMilliseconds;
+                Console.WriteLine($"{nameof(greedyBFS_DHE)} calculated heuristic {h2.Calculated} times");
             }
 
             Console.WriteLine($"{nameof(greedyBFS_UAR)} took {times[0]}ms");
@@ -124,6 +139,10 @@ namespace PerformanceTests
             Console.WriteLine($"{nameof(greedyBFS_PO)} generated {greedyBFS_PO.Generated} states and expanded {greedyBFS_PO.Expanded}");
             Console.WriteLine($"{nameof(greedyBFS_PO)} had {greedyBFS_PO.GroundedActions.Count} operators to use out of {greedyBFS_PO.GroundedActions.Count}");
             Console.WriteLine($"{nameof(greedyBFS_PO)} actually used {actionPlan3.Plan.ToHashSet().Count} operators");
+            Console.WriteLine($"{nameof(greedyBFS_DHE)} took {times[3]}ms");
+            Console.WriteLine($"{nameof(greedyBFS_DHE)} generated {greedyBFS_DHE.Generated} states and expanded {greedyBFS_DHE.Expanded}");
+            Console.WriteLine($"{nameof(greedyBFS_DHE)} had {greedyBFS_DHE.GroundedActions.Count} operators to use out of {greedyBFS_DHE.GroundedActions.Count}");
+            Console.WriteLine($"{nameof(greedyBFS_DHE)} actually used {actionPlan4.Plan.ToHashSet().Count} operators");
 
             IPlanValidator validator = new PlanValidator();
             Console.WriteLine($"{nameof(greedyBFS_UAR)} plan have {actionPlan1.Cost}");
@@ -141,6 +160,11 @@ namespace PerformanceTests
                 Console.WriteLine($"{nameof(greedyBFS_PO)} plan is valid!");
             else
                 Console.WriteLine($"{nameof(greedyBFS_PO)} plan is NOT valid!");
+            Console.WriteLine($"{nameof(greedyBFS_DHE)} plan have {actionPlan4.Cost}");
+            if (validator.Validate(actionPlan4, decl))
+                Console.WriteLine($"{nameof(greedyBFS_DHE)} plan is valid!");
+            else
+                Console.WriteLine($"{nameof(greedyBFS_DHE)} plan is NOT valid!");
         }
 
         private static void RunNTimes5(int number)

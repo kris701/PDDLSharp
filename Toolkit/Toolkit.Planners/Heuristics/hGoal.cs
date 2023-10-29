@@ -51,6 +51,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
 
         public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
+            Calculated++;
             int count = 0;
             foreach(var goal in _goalCache)
                 if (state.Contains(goal))
