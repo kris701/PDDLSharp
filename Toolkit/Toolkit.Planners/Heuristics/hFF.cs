@@ -17,7 +17,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     {
         private RelaxedPlanGenerator _graphGenerator;
 
-        public hFF(PDDLDecl declaration) : base(declaration)
+        public hFF(PDDLDecl declaration)
         {
             _graphGenerator = new RelaxedPlanGenerator(declaration);
         }

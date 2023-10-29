@@ -12,18 +12,15 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
 {
     public abstract class BaseHeuristicCollection : IHeuristicCollection
     {
-        public PDDLDecl Declaration { get; }
         public List<IHeuristic> Heuristics { get; set; }
 
-        public BaseHeuristicCollection(PDDLDecl declaration, List<IHeuristic> heuristics)
+        public BaseHeuristicCollection(List<IHeuristic> heuristics)
         {
-            Declaration = declaration;
             Heuristics = heuristics;
         }
 
-        public BaseHeuristicCollection(PDDLDecl declaration)
+        public BaseHeuristicCollection()
         {
-            Declaration = declaration;
             Heuristics = new List<IHeuristic>();
         }
 

@@ -12,13 +12,6 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
     public abstract class BaseHeuristic : IHeuristic
     {
-        public PDDLDecl Declaration { get; }
-
-        public BaseHeuristic(PDDLDecl declaration)
-        {
-            Declaration = declaration;
-        }
-
         public abstract int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions);
     }
 }

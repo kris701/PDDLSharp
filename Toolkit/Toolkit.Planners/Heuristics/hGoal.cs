@@ -19,7 +19,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     {
         private HashSet<PredicateExp> _goalCache = new HashSet<PredicateExp>();
 
-        public hGoal(PDDLDecl declaration) : base(declaration)
+        public hGoal(PDDLDecl declaration)
         {
             GenerateGoalFacts(declaration.Problem);
         }

@@ -15,10 +15,6 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     /// </summary>
     public class hPath : BaseHeuristic
     {
-        public hPath(PDDLDecl declaration) : base(declaration)
-        {
-        }
-
         public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
             return parent.Steps.Count + 1;

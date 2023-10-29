@@ -15,14 +15,9 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
     /// </summary>
     public class hColSum : BaseHeuristicCollection
     {
-        public hColSum(PDDLDecl declaration) : base(declaration)
+        public hColSum(List<IHeuristic> heuristics) : base(heuristics)
         {
         }
-
-        public hColSum(PDDLDecl declaration, List<IHeuristic> heuristics) : base(declaration, heuristics)
-        {
-        }
-
 
         public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {

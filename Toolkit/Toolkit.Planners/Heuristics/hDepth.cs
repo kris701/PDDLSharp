@@ -16,10 +16,6 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     /// </summary>
     public class hDepth : BaseHeuristic
     {
-        public hDepth(PDDLDecl declaration) : base(declaration)
-        {
-        }
-
         public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
             return parent.hValue - 1;

@@ -60,7 +60,8 @@ namespace PerformanceTests
 
             var greedyBFS_UAR = new GreedyBFSUAR(decl);
             var greedyBFS = new GreedyBFS(decl);
-            var h1 = new hDepth(decl);
+
+            var h1 = new hDepth();
             var h2 = new hFF(decl);
             var h3 = new hGoal(decl);
 
