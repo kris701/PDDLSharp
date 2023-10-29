@@ -73,6 +73,22 @@ namespace PDDLSharp.Toolkit.Planners.Search
             throw new Exception("Planner Timed out! Aborting search...");
         }
 
+        internal IState GenerateNewState(IState state, ActionDecl action)
+        {
+            Generated++;
+            var newState = state.Copy();
+            newState.ExecuteNode(action.Effects);
+            return newState;
+        }
+
+        internal RefPriorityQueue InitializeQueue(IHeuristic h, IState state) 
+        {
+            var queue = new RefPriorityQueue();
+            var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
+            queue.Enqueue(new StateMove(state, hValue), hValue);
+            return queue;
+        }
+
         internal abstract ActionPlan Solve(IHeuristic h, IState state);
     }
 }

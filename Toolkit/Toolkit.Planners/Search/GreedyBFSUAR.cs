@@ -35,62 +35,49 @@ namespace PDDLSharp.Toolkit.Planners.Search
             Generated = 0;
 
             // Initial Operator Subset
-            var operators = _graphGenerator.GenerateReplaxedPlan(
-                new RelaxedPDDLStateSpace(Declaration),
-                GroundedActions
-                );
-            if (_graphGenerator.Failed)
-                throw new Exception("No relaxed plan could be found from the initial state! Could indicate the problem is unsolvable.");
+            var operators = GetInitialOperators();
 
             var closedList = new HashSet<StateMove>();
-            var openListRef = new HashSet<StateMove>();
-            var openList = new PriorityQueue<StateMove, int>();
-            var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
-            openList.Enqueue(new StateMove(state, hValue), hValue);
+            var openList = InitializeQueue(h, state);
 
-            int best = hValue;
-            int current = hValue;
+            int best = 0;
+            int current = 0;
 
-            while (true)
+            while (!_abort)
             {
-                if (_abort) break;
-
                 // Refinement Guard and Refinement
                 if (openList.Count == 0 || current > best)
-                    operators = RefineOperators(operators, closedList, openList, openListRef);
+                    operators = RefineOperators(operators, closedList, openList);
 
                 var stateMove = openList.Dequeue();
                 if (stateMove.State.IsInGoal())
                 {
                     OperatorsUsed = operators.Count;
-                    return new ActionPlan(stateMove.Steps, stateMove.Steps.Count);
+                    return new ActionPlan(stateMove.Steps);
                 }
                 best = stateMove.hValue;
                 current = int.MaxValue;
-                openListRef.Remove(stateMove);
                 closedList.Add(stateMove);
                 foreach (var act in operators)
                 {
                     if (_abort) break;
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
                     {
-                        Generated++;
-                        var check = stateMove.State.Copy();
-                        check.ExecuteNode(act.Effects);
-                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
+                        var check = GenerateNewState(stateMove.State, act);
+                        var newMove = new StateMove(check);
                         if (newMove.State.IsInGoal())
                         {
                             OperatorsUsed = operators.Count;
-                            return new ActionPlan(newMove.Steps, newMove.Steps.Count);
+                            return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
                         }
-                        if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
+                        if (!closedList.Contains(newMove) && !openList.Contains(newMove))
                         {
                             var value = h.GetValue(stateMove.hValue, check, GroundedActions);
                             if (value < current)
                                 current = value;
+                            newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
                             newMove.hValue = value;
                             openList.Enqueue(newMove, value);
-                            openListRef.Add(newMove);
                         }
                     }
                 }
@@ -100,7 +87,18 @@ namespace PDDLSharp.Toolkit.Planners.Search
             throw new Exception("No solution found!");
         }
 
-        private HashSet<ActionDecl> RefineOperators(HashSet<ActionDecl> operators, HashSet<StateMove> closedList, PriorityQueue<StateMove, int> openList, HashSet<StateMove>  openListRef)
+        private HashSet<ActionDecl> GetInitialOperators()
+        {
+            var operators = _graphGenerator.GenerateReplaxedPlan(
+                new RelaxedPDDLStateSpace(Declaration),
+                GroundedActions
+                );
+            if (_graphGenerator.Failed)
+                throw new Exception("No relaxed plan could be found from the initial state! Could indicate the problem is unsolvable.");
+            return operators;
+        }
+
+        private HashSet<ActionDecl> RefineOperators(HashSet<ActionDecl> operators, HashSet<StateMove> closedList, RefPriorityQueue openList)
         {
             if (closedList.Count == 0)
                 return operators;
@@ -119,7 +117,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         return operators;
 
                     if (lookForApplicaple)
-                        throw new Exception("??");
+                        throw new Exception("No solution found!");
 
                     // Refinement Step 4
                     smallestHValue = -1;
@@ -157,7 +155,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
                             foreach (var item in switchLists)
                             {
                                 closedList.Remove(item);
-                                openListRef.Add(item);
                                 openList.Enqueue(item, item.hValue);
                             }
 
@@ -189,11 +186,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 if (!_graphGenerator.Failed)
                     relaxedPlanOperators.AddRange(newOps);
             }
-            var newOperators = new HashSet<ActionDecl>();
-            foreach (var relaxedOperator in relaxedPlanOperators)
-                if (!operators.Contains(relaxedOperator))
-                    newOperators.Add(relaxedOperator);
-            return newOperators;
+            return relaxedPlanOperators.Except(operators).ToHashSet();
         }
 
         private HashSet<ActionDecl> GetNewApplicableOperators(int smallestHValue, HashSet<ActionDecl> operators, HashSet<StateMove> closedList)
@@ -204,11 +197,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 foreach (var act in GroundedActions) 
                     if (item.State.IsNodeTrue(act.Preconditions))
                         applicableOperators.Add(act);
-            var newOperators = new HashSet<ActionDecl>();
-            foreach (var relaxedOperator in applicableOperators)
-                if (!operators.Contains(relaxedOperator))
-                    newOperators.Add(relaxedOperator);
-            return newOperators;
+            return applicableOperators.Except(operators).ToHashSet();
         }
     }
 }

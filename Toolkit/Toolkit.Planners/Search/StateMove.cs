@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
-    internal class StateMove
+    public class StateMove
     {
         public IState State { get; private set; }
-        public List<GroundedAction> Steps { get; private set; }
+        public List<GroundedAction> Steps { get; set; }
         public int hValue { get; set; }
 
         public StateMove(IState state, List<GroundedAction> steps)

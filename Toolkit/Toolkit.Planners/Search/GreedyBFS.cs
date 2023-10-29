@@ -21,17 +21,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
             Generated = 0;
 
             var closedList = new HashSet<StateMove>();
-            var openListRef = new HashSet<StateMove>();
-            var openList = new PriorityQueue<StateMove, int>();
-            var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
-            openList.Enqueue(new StateMove(state, hValue), hValue);
-            while (openList.Count > 0)
+            var openList = InitializeQueue(h, state);
+            while (!_abort && openList.Count > 0)
             {
-                if (_abort) break;
                 var stateMove = openList.Dequeue();
                 if (stateMove.State.IsInGoal())
-                    return new ActionPlan(stateMove.Steps, stateMove.Steps.Count);
-                openListRef.Remove(stateMove);
+                    return new ActionPlan(stateMove.Steps);
                 closedList.Add(stateMove);
 
                 foreach (var act in GroundedActions)
@@ -39,18 +34,16 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     if (_abort) break;
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
                     {
-                        Generated++;
-                        var check = stateMove.State.Copy();
-                        check.ExecuteNode(act.Effects);
-                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
+                        var check = GenerateNewState(stateMove.State, act);
+                        var newMove = new StateMove(check);
                         if (newMove.State.IsInGoal())
-                            return new ActionPlan(newMove.Steps, newMove.Steps.Count);
-                        if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
+                            return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
+                        if (!closedList.Contains(newMove) && !openList.Contains(newMove))
                         {
                             var value = h.GetValue(stateMove.hValue, check, GroundedActions);
+                            newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
                             newMove.hValue = value;
                             openList.Enqueue(newMove, value);
-                            openListRef.Add(newMove);
                         }
                     }
                 }
