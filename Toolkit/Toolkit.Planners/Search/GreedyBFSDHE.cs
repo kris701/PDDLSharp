@@ -51,12 +51,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
                             {
                                 var value = h.GetValue(stateMove, newMove.State, GroundedActions);
                                 if (value < stateMove.hValue)
-                                {
                                     lowerFound = true;
-                                    newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
-                                    newMove.hValue = value;
-                                    _openList.Enqueue(newMove, value);
-                                }
+                                newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
+                                newMove.hValue = value;
+                                _openList.Enqueue(newMove, value);
                             }
                         }
                     }

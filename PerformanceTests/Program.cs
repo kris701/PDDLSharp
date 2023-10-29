@@ -89,7 +89,7 @@ namespace PerformanceTests
             var actionPlan4 = new ActionPlan(new List<GroundedAction>(), 0);
 
             Stopwatch instanceWatch = new Stopwatch();
-            List<long> times = new List<long>() { 0, 0, 0, 4 };
+            List<long> times = new List<long>() { 0, 0, 0, 0 };
             for (int i = 0; i < number; i++)
             {
                 Console.WriteLine($"Instance {i}");
