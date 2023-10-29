@@ -26,7 +26,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
             var decl = GetPDDLDecl(domain, problem);
             IPlanner planner = new GreedyBFS(decl);
             planner.GroundedActions = GetGroundedActions(decl);
-            var h = new hBlind(decl);
+            var h = new hDepth(decl);
             IPlanValidator validator = new PlanValidator.PlanValidator();
 
             // ACT
@@ -90,7 +90,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
             decl.Problem.Goal.GoalExp = new PredicateExp("non-existent");
             IPlanner planner = new GreedyBFS(decl);
             planner.GroundedActions = GetGroundedActions(decl);
-            var h = new hBlind(decl);
+            var h = new hDepth(decl);
 
             // ACT
             var result = planner.Solve(h);

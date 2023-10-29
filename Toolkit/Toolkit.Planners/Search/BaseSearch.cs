@@ -93,7 +93,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         internal RefPriorityQueue InitializeQueue(IHeuristic h, IState state) 
         {
             var queue = new RefPriorityQueue();
-            var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
+            var hValue = h.GetValue(new StateMove(), state, GroundedActions);
             queue.Enqueue(new StateMove(state, hValue), hValue);
             return queue;
         }

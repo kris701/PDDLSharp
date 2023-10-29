@@ -66,7 +66,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         }
                         if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
-                            var value = h.GetValue(stateMove.hValue, newMove.State, GroundedActions);
+                            var value = h.GetValue(stateMove, newMove.State, GroundedActions);
                             if (value < current)
                                 current = value;
                             newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };

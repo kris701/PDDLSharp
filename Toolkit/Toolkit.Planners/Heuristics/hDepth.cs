@@ -1,9 +1,7 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Toolkit.Planners.Search;
-using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
 using System;
 using System.Collections.Generic;
@@ -13,25 +11,18 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
-    public class hFF : IHeuristic
+    public class hDepth : IHeuristic
     {
         public PDDLDecl Declaration { get; }
-        private RelaxedPlanGenerator _graphGenerator;
 
-        public hFF(PDDLDecl declaration)
+        public hDepth(PDDLDecl declaration)
         {
             Declaration = declaration;
-            _graphGenerator = new RelaxedPlanGenerator(declaration);
         }
 
         public int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
-            var relaxedPlan = _graphGenerator.GenerateReplaxedPlan(
-                state,
-                groundedActions);
-            if (_graphGenerator.Failed)
-                return int.MaxValue;
-            return relaxedPlan.Count;
+            return parent.hValue - 1;
         }
     }
 }

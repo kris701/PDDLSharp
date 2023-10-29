@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
             var decl = GetPDDLDecl(domain, problem);
             IPlanner planner = new GreedyBFSUAR(decl);
             planner.GroundedActions = GetGroundedActions(decl);
-            var h = new hBlind(decl);
+            var h = new hDepth(decl);
             IPlanValidator validator = new PlanValidator.PlanValidator();
 
             // ACT
@@ -87,7 +87,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
             var decl = GetPDDLDecl(domain, problem);
             GreedyBFSUAR planner = new GreedyBFSUAR(decl);
             planner.GroundedActions = GetGroundedActions(decl);
-            var h = new hBlind(decl);
+            var h = new hDepth(decl);
 
             // ACT
             var result = planner.Solve(h);

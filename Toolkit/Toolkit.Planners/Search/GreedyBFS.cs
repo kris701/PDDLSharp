@@ -34,7 +34,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                             return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
                         if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
-                            var value = h.GetValue(stateMove.hValue, newMove.State, GroundedActions);
+                            var value = h.GetValue(stateMove, newMove.State, GroundedActions);
                             newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
                             newMove.hValue = value;
                             _openList.Enqueue(newMove, value);

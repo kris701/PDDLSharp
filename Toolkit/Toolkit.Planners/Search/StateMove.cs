@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Models.Plans;
+﻿using PDDLSharp.Models;
+using PDDLSharp.Models.Plans;
 using PDDLSharp.Toolkit.StateSpace;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,13 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public StateMove(IState state)
         {
             State = state;
+            Steps = new List<GroundedAction>();
+            hValue = -1;
+        }
+
+        public StateMove()
+        {
+            State = new PDDLStateSpace(new PDDLDecl());
             Steps = new List<GroundedAction>();
             hValue = -1;
         }

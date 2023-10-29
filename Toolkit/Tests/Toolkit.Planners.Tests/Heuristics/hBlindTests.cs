@@ -20,7 +20,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         public void Can_GeneratehBlindCorrectly(int inValue, int expected)
         {
             // ARRANGE
-            IHeuristic h = new hBlind(new PDDLDecl());
+            IHeuristic h = new hDepth(new PDDLDecl());
 
             // ACT
             var newValue = h.GetValue(inValue, null, new List<ActionDecl>());
