@@ -15,9 +15,9 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     public class hWeighted : BaseHeuristic
     {
         public IHeuristic Heuristic { get; set; }
-        public int Weight { get; set; }
+        public double Weight { get; set; }
 
-        public hWeighted(IHeuristic heuristic, int weight)
+        public hWeighted(IHeuristic heuristic, double weight)
         {
             Heuristic = heuristic;
             Weight = weight;
@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
 
         public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
-            return Heuristic.GetValue(parent, state, groundedActions) * Weight;
+            return (int)((double)Heuristic.GetValue(parent, state, groundedActions) * Weight);
         }
     }
 }
