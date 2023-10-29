@@ -26,6 +26,7 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
 
         public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
+            Calculated++;
             int max = -1;
             foreach(var heuristic in Heuristics)
             {

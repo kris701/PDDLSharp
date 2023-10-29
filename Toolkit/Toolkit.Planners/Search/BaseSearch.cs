@@ -100,9 +100,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return queue;
         }
 
-        internal StateMove ExpandBestState()
+        internal StateMove ExpandBestState(RefPriorityQueue? from = null)
         {
-            var stateMove = _openList.Dequeue();
+            if (from == null)
+                from = _openList;
+            var stateMove = from.Dequeue();
             _closedList.Add(stateMove);
             Expanded++;
             return stateMove;

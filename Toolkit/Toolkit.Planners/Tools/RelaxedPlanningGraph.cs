@@ -30,12 +30,17 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                     state.State = _layerCache[hash].Propositions;
                     foreach (var item in _coveredCache[hash])
                         covered[item] = true;
+
+                    // Error condition: there where actions executed, but nothing happened from them
+                    if (layers[previousLayer++].Propositions.Count == _layerCache[hash].Propositions.Count)
+                        return new List<Layer>();
+
                     layers.Add(_layerCache[hash]);
                 }
                 else
                 {
                     var newLayer = new Layer();
-                    _coveredCache.Add(hash, new List<int>());
+                    var newCovers = new List<int>();
                     // Find applicable actions
                     for (int i = 0; i < covered.Length; i++)
                     {
@@ -45,7 +50,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                             {
                                 newLayer.Actions.Add(groundedActions[i]);
                                 covered[i] = true;
-                                _coveredCache[hash].Add(i);
+                                newCovers.Add(i);
                             }
                         }
                     }
@@ -66,6 +71,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                     // Add new layer
                     layers.Add(newLayer);
                     _layerCache.Add(hash, newLayer);
+                    _coveredCache.Add(hash, newCovers);
                 }
             }
             return layers;

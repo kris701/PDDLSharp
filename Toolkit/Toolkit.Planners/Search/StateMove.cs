@@ -14,6 +14,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public IState State { get; private set; }
         public List<GroundedAction> Steps { get; set; }
         public int hValue { get; set; }
+        public bool Evaluated { get; set; } = true;
 
         public StateMove(IState state, List<GroundedAction> steps)
         {
