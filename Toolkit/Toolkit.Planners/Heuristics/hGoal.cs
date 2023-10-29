@@ -12,6 +12,9 @@ using PDDLSharp.Toolkit.Planners.Search;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
+    /// <summary>
+    /// Based on the <seealso href="https://www.fast-downward.org/Doc/Evaluator">goal count Evaluator</seealso>
+    /// </summary>
     public class hGoal : IHeuristic
     {
         public PDDLDecl Declaration { get; }

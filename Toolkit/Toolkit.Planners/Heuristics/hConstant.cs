@@ -10,6 +10,9 @@ using PDDLSharp.Toolkit.Planners.Search;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
+    /// <summary>
+    /// Based on the <seealso href="https://www.fast-downward.org/Doc/Evaluator">constant Evaluator</seealso>
+    /// </summary>
     public class hConstant : IHeuristic
     {
         public PDDLDecl Declaration { get; }

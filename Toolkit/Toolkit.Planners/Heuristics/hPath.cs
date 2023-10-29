@@ -1,6 +1,5 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.Plans;
+﻿using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
 using System;
@@ -12,20 +11,20 @@ using System.Threading.Tasks;
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
     /// <summary>
-    /// Simply forces the search to be a depth first search
+    /// Based on the <seealso href="https://www.fast-downward.org/Doc/Evaluator">g-value Evaluator</seealso>
     /// </summary>
-    public class hDepth : IHeuristic
+    public class hPath : IHeuristic
     {
         public PDDLDecl Declaration { get; }
 
-        public hDepth(PDDLDecl declaration)
+        public hPath(PDDLDecl declaration)
         {
             Declaration = declaration;
         }
 
         public int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
-            return parent.hValue - 1;
+            return parent.Steps.Count + 1;
         }
     }
 }
