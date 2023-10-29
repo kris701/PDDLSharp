@@ -15,9 +15,14 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
     /// </summary>
     public class hColMax : BaseHeuristicCollection
     {
+        public hColMax() : base()
+        {
+        }
+
         public hColMax(List<IHeuristic> heuristics) : base(heuristics)
         {
         }
+
 
         public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
