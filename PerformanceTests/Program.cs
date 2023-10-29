@@ -17,6 +17,7 @@ using PDDLSharp.Parsers.SAS;
 using PDDLSharp.Toolkit.MacroGenerators;
 using PDDLSharp.Toolkit.Planners;
 using PDDLSharp.Toolkit.Planners.Heuristics;
+using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
 using System.Diagnostics;
@@ -49,7 +50,7 @@ namespace PerformanceTests
             //var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
             //var targetProblem = "benchmarks/tidybot-opt11-strips/p01.pddl";
             var targetDomain = "benchmarks/logistics98/domain.pddl";
-            var targetProblem = "benchmarks/logistics98/prob01.pddl";
+            var targetProblem = "benchmarks/logistics98/prob35.pddl";
             //var targetDomain = "benchmarks/gripper/domain.pddl";
             //var targetProblem = "benchmarks/gripper/prob01.pddl";
 
@@ -65,7 +66,14 @@ namespace PerformanceTests
             var h2 = new hFF(decl);
             var h3 = new hGoal(decl);
             var h4 = new hConstant(1);
+            var h5 = new hPath();
+            var hc5 = new hColMax(new List<IHeuristic>()
+            {
+                h2,
+                h3
+            });
 
+            Console.WriteLine($"Grounding...");
             greedyBFS_UAR.PreProcess();
             greedyBFS.GroundedActions = greedyBFS_UAR.GroundedActions;
 
@@ -81,13 +89,13 @@ namespace PerformanceTests
                 Console.WriteLine($"Instance {i}");
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                actionPlan1 = greedyBFS_UAR.Solve(h4);
+                actionPlan1 = greedyBFS_UAR.Solve(h2);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 
                 Console.WriteLine($"{nameof(greedyBFS)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                actionPlan2 = greedyBFS.Solve(h1);
+                actionPlan2 = greedyBFS.Solve(h2);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
             }

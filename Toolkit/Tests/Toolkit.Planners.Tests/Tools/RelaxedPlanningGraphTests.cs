@@ -34,9 +34,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = GetPDDLDecl(domain, problem);
             IState state = new RelaxedPDDLStateSpace(decl);
             var actions = GetGroundedActions(decl);
+            var generator = new RelaxedPlanningGraph();
 
             // ACT
-            var graph = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+            var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
 
             // ASSERT
             Assert.AreEqual(expected, graph.Count);
@@ -55,9 +56,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = GetPDDLDecl(domain, problem);
             IState state = new RelaxedPDDLStateSpace(decl);
             var actions = GetGroundedActions(decl);
+            var generator = new RelaxedPlanningGraph();
 
             // ACT
-            var graph = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+            var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
 
             // ASSERT
             Assert.AreEqual(expecteds.Length, graph.Count);
@@ -78,9 +80,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = GetPDDLDecl(domain, problem);
             IState state = new RelaxedPDDLStateSpace(decl);
             var actions = GetGroundedActions(decl);
+            var generator = new RelaxedPlanningGraph();
 
             // ACT
-            var graph = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+            var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
 
             // ASSERT
             Assert.AreEqual(0, graph[0].Actions.Count);
@@ -99,9 +102,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = GetPDDLDecl(domain, problem);
             IState state = new RelaxedPDDLStateSpace(decl);
             var actions = GetGroundedActions(decl);
+            var generator = new RelaxedPlanningGraph();
 
             // ACT
-            var graph = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+            var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
 
             // ASSERT
             Assert.AreEqual(decl.Problem.Init.Predicates.Count, graph[0].Propositions.Count);
@@ -115,9 +119,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             decl.Problem.Goal = new GoalDecl();
             decl.Problem.Goal.GoalExp = new PredicateExp("abc");
             IState state = new RelaxedPDDLStateSpace(decl);
+            var generator = new RelaxedPlanningGraph();
 
             // ACT
-            var result = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, new List<ActionDecl>());
+            var result = generator.GenerateRelaxedPlanningGraph(state, new List<ActionDecl>());
 
             // ASSERT
             Assert.AreEqual(0, result.Count);
@@ -137,9 +142,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             action.Parameters = new ParameterExp(new List<NameExp>() { new NameExp("?a") });
             action.Preconditions = new PredicateExp("wew", new List<NameExp>() { new NameExp("?a") });
             actions.Add(action);
+            var generator = new RelaxedPlanningGraph();
 
             // ACT
-            var result = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+            var result = generator.GenerateRelaxedPlanningGraph(state, actions);
 
             // ASSERT
             Assert.AreEqual(0, result.Count);
@@ -158,9 +164,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var action = new ActionDecl("non-applicable");
             action.Parameters = new ParameterExp(new List<NameExp>() { new NameExp("?a") });
             actions.Add(action);
+            var generator = new RelaxedPlanningGraph();
 
             // ACT
-            var result = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, actions);
+            var result = generator.GenerateRelaxedPlanningGraph(state, actions);
 
             // ASSERT
             Assert.AreEqual(0, result.Count);

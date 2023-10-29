@@ -12,7 +12,7 @@ namespace PDDLSharp.Toolkit.StateSpace
 {
     public interface IState
     {
-        public HashSet<PredicateExp> State { get; }
+        public HashSet<PredicateExp> State { get; set; }
         public PDDLDecl Declaration { get; }
         public IGrounder<IParametized> Grounder { get; }
 
