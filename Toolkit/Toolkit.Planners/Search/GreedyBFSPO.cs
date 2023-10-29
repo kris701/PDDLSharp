@@ -13,7 +13,8 @@ using PDDLSharp.Toolkit.Planners.Tools;
 namespace PDDLSharp.Toolkit.Planners.Search
 {
     /// <summary>
-    /// Greedy Best First Search with Preferred Operators (Helmert 2006)
+    /// Greedy Best First Search with Preferred Operators
+    /// (<seealso href="https://ai.dmi.unibas.ch/papers/helmert-jair06.pdf">Helmert 2006</seealso>).
     /// The preferred operators are extracted from a relaxed plan of the problem
     /// </summary>
     public class GreedyBFSPO : BaseSearch
