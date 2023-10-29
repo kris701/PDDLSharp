@@ -14,16 +14,13 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     /// <summary>
     /// Simply forces the search to be a depth first search
     /// </summary>
-    public class hDepth : IHeuristic
+    public class hDepth : BaseHeuristic
     {
-        public PDDLDecl Declaration { get; }
-
-        public hDepth(PDDLDecl declaration)
+        public hDepth(PDDLDecl declaration) : base(declaration)
         {
-            Declaration = declaration;
         }
 
-        public int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
+        public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
             return parent.hValue - 1;
         }

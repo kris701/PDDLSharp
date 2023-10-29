@@ -15,15 +15,12 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     /// <summary>
     /// Based on the <seealso href="https://www.fast-downward.org/Doc/Evaluator">goal count Evaluator</seealso>
     /// </summary>
-    public class hGoal : IHeuristic
+    public class hGoal : BaseHeuristic
     {
-        public PDDLDecl Declaration { get; }
-
         private HashSet<PredicateExp> _goalCache = new HashSet<PredicateExp>();
 
-        public hGoal(PDDLDecl declaration)
+        public hGoal(PDDLDecl declaration) : base(declaration)
         {
-            Declaration = declaration;
             GenerateGoalFacts(declaration.Problem);
         }
 
@@ -52,7 +49,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             return newPred;
         }
 
-        public int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
+        public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
             int count = 0;
             foreach(var goal in _goalCache)

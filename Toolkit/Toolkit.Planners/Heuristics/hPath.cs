@@ -13,16 +13,13 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     /// <summary>
     /// Based on the <seealso href="https://www.fast-downward.org/Doc/Evaluator">g-value Evaluator</seealso>
     /// </summary>
-    public class hPath : IHeuristic
+    public class hPath : BaseHeuristic
     {
-        public PDDLDecl Declaration { get; }
-
-        public hPath(PDDLDecl declaration)
+        public hPath(PDDLDecl declaration) : base(declaration)
         {
-            Declaration = declaration;
         }
 
-        public int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
+        public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
             return parent.Steps.Count + 1;
         }

@@ -13,18 +13,16 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
-    public class hFF : IHeuristic
+    public class hFF : BaseHeuristic
     {
-        public PDDLDecl Declaration { get; }
         private RelaxedPlanGenerator _graphGenerator;
 
-        public hFF(PDDLDecl declaration)
+        public hFF(PDDLDecl declaration) : base(declaration)
         {
-            Declaration = declaration;
             _graphGenerator = new RelaxedPlanGenerator(declaration);
         }
 
-        public int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
+        public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
             var relaxedPlan = _graphGenerator.GenerateReplaxedPlan(
                 state,

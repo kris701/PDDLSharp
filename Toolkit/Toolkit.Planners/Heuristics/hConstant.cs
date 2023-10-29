@@ -13,16 +13,13 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     /// <summary>
     /// Based on the <seealso href="https://www.fast-downward.org/Doc/Evaluator">constant Evaluator</seealso>
     /// </summary>
-    public class hConstant : IHeuristic
+    public class hConstant : BaseHeuristic
     {
-        public PDDLDecl Declaration { get; }
-
-        public hConstant(PDDLDecl declaration)
+        public hConstant(PDDLDecl declaration) : base(declaration)
         {
-            Declaration = declaration;
         }
 
-        public int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
+        public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
             return 1;
         }
