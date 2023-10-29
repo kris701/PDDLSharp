@@ -69,6 +69,8 @@ namespace PerformanceTests
             var h3 = new hGoal(decl);
             var h4 = new hConstant(1);
             var h5 = new hPath();
+            var h6 = new hAdd(decl);
+            var h7 = new hMax(decl);
             var hc5 = new hColMax(new List<IHeuristic>()
             {
                 h2,
@@ -97,7 +99,8 @@ namespace PerformanceTests
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
                 h2 = new hFF(decl);
-                actionPlan1 = greedyBFS_UAR.Solve(h2);
+                h7 = new hMax(decl);
+                actionPlan1 = greedyBFS_UAR.Solve(h7);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} calculated heuristic {h2.Calculated} times");
@@ -105,7 +108,8 @@ namespace PerformanceTests
                 Console.WriteLine($"{nameof(greedyBFS)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
                 h2 = new hFF(decl);
-                actionPlan2 = greedyBFS.Solve(h2);
+                h7 = new hMax(decl);
+                actionPlan2 = greedyBFS.Solve(h7);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
                 Console.WriteLine($"{nameof(greedyBFS)} calculated heuristic {h2.Calculated} times");
@@ -113,7 +117,8 @@ namespace PerformanceTests
                 Console.WriteLine($"{nameof(greedyBFS_PO)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
                 h2 = new hFF(decl);
-                actionPlan3 = greedyBFS_PO.Solve(h2);
+                h7 = new hMax(decl);
+                actionPlan3 = greedyBFS_PO.Solve(h7);
                 instanceWatch.Stop();
                 times[2] += instanceWatch.ElapsedMilliseconds;
                 Console.WriteLine($"{nameof(greedyBFS_PO)} calculated heuristic {h2.Calculated} times");
@@ -121,7 +126,8 @@ namespace PerformanceTests
                 Console.WriteLine($"{nameof(greedyBFS_DHE)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
                 h2 = new hFF(decl);
-                actionPlan4 = greedyBFS_DHE.Solve(h2);
+                h7 = new hMax(decl);
+                actionPlan4 = greedyBFS_DHE.Solve(h7);
                 instanceWatch.Stop();
                 times[3] += instanceWatch.ElapsedMilliseconds;
                 Console.WriteLine($"{nameof(greedyBFS_DHE)} calculated heuristic {h2.Calculated} times");
