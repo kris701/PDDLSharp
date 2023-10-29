@@ -31,14 +31,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         internal override ActionPlan Solve(IHeuristic h, IState state)
         {
-            Expanded = 0;
-            Generated = 0;
-
             // Initial Operator Subset
             var operators = GetInitialOperators();
-
-            var closedList = new HashSet<StateMove>();
-            var openList = InitializeQueue(h, state);
 
             int best = 0;
             int current = 0;
@@ -46,10 +40,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
             while (!_abort)
             {
                 // Refinement Guard and Refinement
-                if (openList.Count == 0 || current > best)
-                    operators = RefineOperators(operators, closedList, openList);
+                if (_openList.Count == 0 || current > best)
+                    operators = RefineOperators(operators);
 
-                var stateMove = openList.Dequeue();
+                var stateMove = ExpandBestState();
                 if (stateMove.State.IsInGoal())
                 {
                     OperatorsUsed = operators.Count;
@@ -57,7 +51,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 }
                 best = stateMove.hValue;
                 current = int.MaxValue;
-                closedList.Add(stateMove);
                 foreach (var act in operators)
                 {
                     if (_abort) break;
@@ -70,19 +63,17 @@ namespace PDDLSharp.Toolkit.Planners.Search
                             OperatorsUsed = operators.Count;
                             return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
                         }
-                        if (!closedList.Contains(newMove) && !openList.Contains(newMove))
+                        if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
                             var value = h.GetValue(stateMove.hValue, check, GroundedActions);
                             if (value < current)
                                 current = value;
                             newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
                             newMove.hValue = value;
-                            openList.Enqueue(newMove, value);
+                            _openList.Enqueue(newMove, value);
                         }
                     }
                 }
-
-                Expanded++;
             }
             throw new Exception("No solution found!");
         }
@@ -98,9 +89,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return operators;
         }
 
-        private HashSet<ActionDecl> RefineOperators(HashSet<ActionDecl> operators, HashSet<StateMove> closedList, RefPriorityQueue openList)
+        private HashSet<ActionDecl> RefineOperators(HashSet<ActionDecl> operators)
         {
-            if (closedList.Count == 0)
+            if (_closedList.Count == 0)
                 return operators;
 
             bool refinedOperatorsFound = false;
@@ -109,11 +100,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
             // Refinement Step 2
             while (!refinedOperatorsFound && operators.Count != GroundedActions.Count)
             {
-                var smallestItem = closedList.Where(x => x.hValue > smallestHValue).MinBy(x => x.hValue);
+                var smallestItem = _closedList.Where(x => x.hValue > smallestHValue).MinBy(x => x.hValue);
                 if (smallestItem == null)
                 {
                     // Refinement step 3
-                    if (openList.Count != 0)
+                    if (_openList.Count != 0)
                         return operators;
 
                     if (lookForApplicaple)
@@ -129,14 +120,14 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     smallestHValue = smallestItem.hValue;
                     var newOperators = new HashSet<ActionDecl>();
                     if (lookForApplicaple)
-                        newOperators = GetNewApplicableOperators(smallestHValue, operators, closedList);
+                        newOperators = GetNewApplicableOperators(smallestHValue, operators, _closedList);
                     else
-                        newOperators = GetNewRelaxedOperators(smallestHValue, operators, closedList);
+                        newOperators = GetNewRelaxedOperators(smallestHValue, operators, _closedList);
 
                     if (newOperators.Count > 0)
                     {
                         List<StateMove> switchLists = new List<StateMove>(); 
-                        foreach(var closed in closedList)
+                        foreach(var closed in _closedList)
                         {
                             if (closed.hValue != smallestItem.hValue)
                                 continue;
@@ -154,8 +145,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         {
                             foreach (var item in switchLists)
                             {
-                                closedList.Remove(item);
-                                openList.Enqueue(item, item.hValue);
+                                _closedList.Remove(item);
+                                _openList.Enqueue(item, item.hValue);
                             }
 
                             operators.AddRange(newOperators);

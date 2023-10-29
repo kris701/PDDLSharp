@@ -17,17 +17,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         internal override ActionPlan Solve(IHeuristic h, IState state)
         {
-            Expanded = 0;
-            Generated = 0;
-
-            var closedList = new HashSet<StateMove>();
-            var openList = InitializeQueue(h, state);
-            while (!_abort && openList.Count > 0)
+            while (!_abort && _openList.Count > 0)
             {
-                var stateMove = openList.Dequeue();
+                var stateMove = ExpandBestState();
                 if (stateMove.State.IsInGoal())
                     return new ActionPlan(stateMove.Steps);
-                closedList.Add(stateMove);
 
                 foreach (var act in GroundedActions)
                 {
@@ -38,17 +32,15 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         var newMove = new StateMove(check);
                         if (newMove.State.IsInGoal())
                             return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
-                        if (!closedList.Contains(newMove) && !openList.Contains(newMove))
+                        if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
                             var value = h.GetValue(stateMove.hValue, check, GroundedActions);
                             newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
                             newMove.hValue = value;
-                            openList.Enqueue(newMove, value);
+                            _openList.Enqueue(newMove, value);
                         }
                     }
                 }
-
-                Expanded++;
             }
             throw new Exception("No solution found!");
         }

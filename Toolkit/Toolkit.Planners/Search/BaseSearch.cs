@@ -23,8 +23,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         public TimeSpan Timeout { get; set; } = TimeSpan.FromMinutes(30);
 
-        private bool _preprocessed = false;
+        internal HashSet<StateMove> _closedList = new HashSet<StateMove>();
+        internal RefPriorityQueue _openList = new RefPriorityQueue();
         internal bool _abort = false;
+
+        private bool _preprocessed = false;
 
         public BaseSearch(PDDLDecl decl)
         {
@@ -64,6 +67,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
             timeoutTimer.AutoReset = false;
             timeoutTimer.Start();
 
+            _closedList = new HashSet<StateMove>();
+            _openList = InitializeQueue(h, state);
+
+            Expanded = 0;
+            Generated = 0;
+
             return Solve(h, state);
         }
 
@@ -87,6 +96,14 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
             queue.Enqueue(new StateMove(state, hValue), hValue);
             return queue;
+        }
+
+        internal StateMove ExpandBestState()
+        {
+            var stateMove = _openList.Dequeue();
+            _closedList.Add(stateMove);
+            Expanded++;
+            return stateMove;
         }
 
         internal abstract ActionPlan Solve(IHeuristic h, IState state);
