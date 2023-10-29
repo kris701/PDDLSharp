@@ -15,9 +15,21 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     /// </summary>
     public class hConstant : BaseHeuristic
     {
+        public int Constant { get; set; }
+
+        public hConstant(int constant)
+        {
+            Constant = constant;
+        }
+
+        public hConstant()
+        {
+            Constant = 1;
+        }
+
         public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
-            return 1;
+            return Constant;
         }
     }
 }

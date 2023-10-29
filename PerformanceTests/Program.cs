@@ -64,6 +64,7 @@ namespace PerformanceTests
             var h1 = new hDepth();
             var h2 = new hFF(decl);
             var h3 = new hGoal(decl);
+            var h4 = new hConstant(1);
 
             greedyBFS_UAR.PreProcess();
             greedyBFS.GroundedActions = greedyBFS_UAR.GroundedActions;
@@ -80,13 +81,13 @@ namespace PerformanceTests
                 Console.WriteLine($"Instance {i}");
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                actionPlan1 = greedyBFS_UAR.Solve(h3);
+                actionPlan1 = greedyBFS_UAR.Solve(h4);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
 
                 Console.WriteLine($"{nameof(greedyBFS)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                actionPlan2 = greedyBFS.Solve(h3);
+                actionPlan2 = greedyBFS.Solve(h1);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
             }

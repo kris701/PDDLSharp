@@ -20,13 +20,13 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl")]
         [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl")]
         [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl")]
-        public void Can_FindSolution_hBlind(string domain, string problem)
+        public void Can_FindSolution_hDepth(string domain, string problem)
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
             IPlanner planner = new GreedyBFS(decl);
             planner.GroundedActions = GetGroundedActions(decl);
-            var h = new hDepth(decl);
+            var h = new hDepth();
             IPlanValidator validator = new PlanValidator.PlanValidator();
 
             // ACT
@@ -83,14 +83,14 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl")]
         [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl")]
         [ExpectedException(typeof(NoSolutionFoundException))]
-        public void Cant_FindSolution_hBlind_IfImpossible(string domain, string problem)
+        public void Cant_FindSolution_hDepth_IfImpossible(string domain, string problem)
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
             decl.Problem.Goal.GoalExp = new PredicateExp("non-existent");
             IPlanner planner = new GreedyBFS(decl);
             planner.GroundedActions = GetGroundedActions(decl);
-            var h = new hDepth(decl);
+            var h = new hDepth();
 
             // ACT
             var result = planner.Solve(h);
