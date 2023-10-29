@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.Plans;
+using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
 using System;
 using System.Collections.Generic;
@@ -10,18 +11,14 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
-    public class hBlind : IHeuristic
+    /// <summary>
+    /// Simply forces the search to be a depth first search
+    /// </summary>
+    public class hDepth : BaseHeuristic
     {
-        public PDDLDecl Declaration { get; }
-
-        public hBlind(PDDLDecl declaration)
+        public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
         {
-            Declaration = declaration;
-        }
-
-        public int GetValue(int currentValue, IState state, List<ActionDecl> groundedActions)
-        {
-            return currentValue - 1;
+            return parent.hValue - 1;
         }
     }
 }

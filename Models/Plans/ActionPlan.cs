@@ -11,6 +11,12 @@
             Cost = cost;
         }
 
+        public ActionPlan(List<GroundedAction> plan)
+        {
+            Plan = plan;
+            Cost = plan.Count;
+        }
+
         public override bool Equals(object? obj)
         {
             if (obj is ActionPlan op)

@@ -7,6 +7,7 @@ using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.Planners.Heuristics;
+using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.Tools;
 using System;
@@ -36,7 +37,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             var actions = GetGroundedActions(decl);
 
             // ACT
-            var newValue = h.GetValue(0, state, actions);
+            var newValue = h.GetValue(new StateMove(), state, actions);
 
             // ASSERT
             Assert.AreEqual(expected, newValue);
@@ -59,7 +60,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             var actions = GetGroundedActions(decl);
 
             // ACT
-            var newValue = h.GetValue(0, state, actions);
+            var newValue = h.GetValue(new StateMove(), state, actions);
 
             // ASSERT
             Assert.AreEqual(expected, newValue);

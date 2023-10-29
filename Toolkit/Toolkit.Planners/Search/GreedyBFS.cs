@@ -4,6 +4,7 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Toolkit.Grounders;
+using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.Tools;
 
@@ -17,47 +18,31 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         internal override ActionPlan Solve(IHeuristic h, IState state)
         {
-            Expanded = 0;
-            Generated = 0;
-
-            var closedList = new HashSet<StateMove>();
-            var openListRef = new HashSet<StateMove>();
-            var openList = new PriorityQueue<StateMove, int>();
-            var hValue = h.GetValue(int.MaxValue, state, GroundedActions);
-            openList.Enqueue(new StateMove(state, hValue), hValue);
-            while (openList.Count > 0)
+            while (!_abort && _openList.Count > 0)
             {
-                if (_abort) break;
-                var stateMove = openList.Dequeue();
+                var stateMove = ExpandBestState();
                 if (stateMove.State.IsInGoal())
-                    return new ActionPlan(stateMove.Steps, stateMove.Steps.Count);
-                openListRef.Remove(stateMove);
-                closedList.Add(stateMove);
+                    return new ActionPlan(stateMove.Steps);
 
                 foreach (var act in GroundedActions)
                 {
                     if (_abort) break;
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
                     {
-                        Generated++;
-                        var check = stateMove.State.Copy();
-                        check.ExecuteNode(act.Effects);
-                        var newMove = new StateMove(check, new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
+                        var newMove = new StateMove(GenerateNewState(stateMove.State, act));
                         if (newMove.State.IsInGoal())
-                            return new ActionPlan(newMove.Steps, newMove.Steps.Count);
-                        if (!closedList.Contains(newMove) && !openListRef.Contains(newMove))
+                            return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
+                        if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
-                            var value = h.GetValue(stateMove.hValue, check, GroundedActions);
+                            var value = h.GetValue(stateMove, newMove.State, GroundedActions);
+                            newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
                             newMove.hValue = value;
-                            openList.Enqueue(newMove, value);
-                            openListRef.Add(newMove);
+                            _openList.Enqueue(newMove, value);
                         }
                     }
                 }
-
-                Expanded++;
             }
-            throw new Exception("No solution found!");
+            throw new NoSolutionFoundException();
         }
     }
 }

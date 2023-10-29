@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Models.Plans;
+﻿using PDDLSharp.Models;
+using PDDLSharp.Models.Plans;
 using PDDLSharp.Toolkit.StateSpace;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
-    internal class StateMove
+    public class StateMove
     {
         public IState State { get; private set; }
-        public List<GroundedAction> Steps { get; private set; }
+        public List<GroundedAction> Steps { get; set; }
         public int hValue { get; set; }
 
         public StateMove(IState state, List<GroundedAction> steps)
@@ -35,9 +36,19 @@ namespace PDDLSharp.Toolkit.Planners.Search
             hValue = -1;
         }
 
+        public StateMove()
+        {
+            State = new PDDLStateSpace(new PDDLDecl());
+            Steps = new List<GroundedAction>();
+            hValue = -1;
+        }
+
+        private int _hashCache = -1;
         public override int GetHashCode()
         {
-            return State.GetHashCode();
+            if (_hashCache == -1)
+                _hashCache = State.GetHashCode();
+            return _hashCache;
         }
 
         public override bool Equals(object? obj)
