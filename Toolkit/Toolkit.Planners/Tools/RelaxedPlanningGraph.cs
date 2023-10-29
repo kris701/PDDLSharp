@@ -11,7 +11,8 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 {
     public class RelaxedPlanningGraph
     {
-        private Dictionary<int, Layer> _stateCache = new Dictionary<int, Layer>();
+        // Cache, from the hash of the previous state, that then links to the next layer
+        private Dictionary<int, Layer> _layerCache = new Dictionary<int, Layer>();
         private Dictionary<int, List<int>> _coveredCache = new Dictionary<int, List<int>>();
         public List<Layer> GenerateRelaxedPlanningGraph(IState state, List<ActionDecl> groundedActions)
         {
@@ -22,13 +23,14 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             int previousLayer = 0;
             while (!state.IsInGoal())
             {
+                // Take from cache if it exists
                 var hash = state.GetHashCode();
-                if (_stateCache.ContainsKey(hash))
+                if (_layerCache.ContainsKey(hash))
                 {
-                    state.State = _stateCache[hash].Propositions;
+                    state.State = _layerCache[hash].Propositions;
                     foreach (var item in _coveredCache[hash])
                         covered[item] = true;
-                    layers.Add(_stateCache[hash]);
+                    layers.Add(_layerCache[hash]);
                 }
                 else
                 {
@@ -63,7 +65,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 
                     // Add new layer
                     layers.Add(newLayer);
-                    _stateCache.Add(hash, newLayer);
+                    _layerCache.Add(hash, newLayer);
                 }
             }
             return layers;
