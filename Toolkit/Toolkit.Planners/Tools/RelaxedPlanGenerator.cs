@@ -2,6 +2,7 @@
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.StateSpace;
 
 namespace PDDLSharp.Toolkit.Planners.Tools
@@ -45,7 +46,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 m = Math.Max(m, FirstLevel(fact, graphLayers));
 
             if (m == -1)
-                throw new Exception("Relaxed plan graph was not valid!");
+                throw new RelaxedPlanningGraphException("Relaxed plan graph was not valid!");
 
             var G = new Dictionary<int, List<PredicateExp>>();
             for (int t = 0; t <= m; t++)
@@ -84,14 +85,14 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                                         }
                                     }
                                     else
-                                        throw new Exception("Expected action preconditions to be an and expression!");
+                                        throw new RelaxedPlanningGraphException("Expected action preconditions to be an and expression!");
                                     found = true;
                                     break;
                                 }
                             }
                         }
                         else
-                            throw new Exception("Expected action effects to be an and expression!");
+                            throw new RelaxedPlanningGraphException("Expected action effects to be an and expression!");
                     }
                 }
             }

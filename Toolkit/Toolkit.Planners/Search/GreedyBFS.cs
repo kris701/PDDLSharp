@@ -4,6 +4,7 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Toolkit.Grounders;
+using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.Tools;
 
@@ -42,7 +43,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     }
                 }
             }
-            throw new Exception("No solution found!");
+            throw new NoSolutionFoundException();
         }
     }
 }

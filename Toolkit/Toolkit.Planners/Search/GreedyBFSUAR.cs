@@ -14,6 +14,8 @@ using PDDLSharp.Models.PDDL.Expressions;
 using System.Xml.Linq;
 using PDDLSharp.Tools;
 using PDDLSharp.Toolkit.Planners.Tools;
+using System.Runtime.Intrinsics.X86;
+using PDDLSharp.Toolkit.Planners.Exceptions;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
@@ -75,7 +77,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     }
                 }
             }
-            throw new Exception("No solution found!");
+            throw new NoSolutionFoundException();
         }
 
         private HashSet<ActionDecl> GetInitialOperators()
@@ -89,6 +91,17 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return operators;
         }
 
+        /// <summary>
+        /// From the general idea of the paper:
+        /// <list type="bullet">
+        ///     <item><description>Select the visited states that have the lowest heuristic value. Generate a new subset of operators, based on relaxed plans starting in those states.​</description></item>
+        ///     <item><description>If no new operators was found, repeat the previous but with the states with the next lowest heuristic value.​​</description></item>
+        ///     <item><description>If there is still no new operators, do it all again, but simply use all applicable actions from the given states, instead of those from relaxed plans.</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="operators">Set of unrefined operators</param>
+        /// <returns>A set of refined operators</returns>
+        /// <exception cref="NoSolutionFoundException">If no operators could be found with either the relaxed plans or just applicable operators, assume the problem is unsolvable.</exception>
         private HashSet<ActionDecl> RefineOperators(HashSet<ActionDecl> operators)
         {
             if (_closedList.Count == 0)
@@ -108,7 +121,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         return operators;
 
                     if (lookForApplicaple)
-                        throw new Exception("No solution found!");
+                        throw new NoSolutionFoundException();
 
                     // Refinement Step 4
                     smallestHValue = -1;
