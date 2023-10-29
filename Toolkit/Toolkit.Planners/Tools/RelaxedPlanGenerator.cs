@@ -12,11 +12,13 @@ namespace PDDLSharp.Toolkit.Planners.Tools
         public bool Failed { get; internal set; } = false;
         public PDDLDecl Declaration { get; set; }
         private HashSet<PredicateExp> _goalCache;
+        private RelaxedPlanningGraph _generator;
 
         public RelaxedPlanGenerator(PDDLDecl declaration)
         {
             Declaration = declaration;
             _goalCache = new HashSet<PredicateExp>();
+            _generator = new RelaxedPlanningGraph();
             GetGoalFacts(declaration.Problem);
         }
 
@@ -26,7 +28,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             if (state is not RelaxedPDDLStateSpace)
                 state = new RelaxedPDDLStateSpace(Declaration, state.State, state.Grounder);
             
-            var graphLayers = RelaxedPlanningGraph.GenerateRelaxedPlanningGraph(state, groundedActions);
+            var graphLayers = _generator.GenerateRelaxedPlanningGraph(state, groundedActions);
             if (graphLayers.Count == 0)
             {
                 Failed = true;

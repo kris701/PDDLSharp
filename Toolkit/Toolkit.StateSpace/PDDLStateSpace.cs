@@ -9,7 +9,7 @@ namespace PDDLSharp.Toolkit.StateSpace
     public class PDDLStateSpace : IState
     {
         public PDDLDecl Declaration { get; internal set; }
-        public HashSet<PredicateExp> State { get; internal set; }
+        public HashSet<PredicateExp> State { get; set; }
         public IGrounder<IParametized> Grounder { get; }
 
         internal List<PredicateExp> _tempAdd = new List<PredicateExp>();
