@@ -29,13 +29,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     if (_abort) break;
                     if (stateMove.State.IsNodeTrue(act.Preconditions))
                     {
-                        var check = GenerateNewState(stateMove.State, act);
-                        var newMove = new StateMove(check);
+                        var newMove = new StateMove(GenerateNewState(stateMove.State, act));
                         if (newMove.State.IsInGoal())
                             return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
                         if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
-                            var value = h.GetValue(stateMove.hValue, check, GroundedActions);
+                            var value = h.GetValue(stateMove.hValue, newMove.State, GroundedActions);
                             newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
                             newMove.hValue = value;
                             _openList.Enqueue(newMove, value);
