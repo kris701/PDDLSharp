@@ -47,7 +47,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override string ToString()
         {
             var retStr = "";
-            foreach(var value in Values)
+            foreach (var value in Values)
                 retStr += $" {value.Name}";
             return retStr;
         }
@@ -88,7 +88,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override void RemoveTypes()
         {
-            
+
         }
     }
 }

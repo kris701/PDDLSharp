@@ -1,12 +1,6 @@
 ﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
 {
@@ -28,7 +22,7 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
         {
             Calculated++;
             int max = -1;
-            foreach(var heuristic in Heuristics)
+            foreach (var heuristic in Heuristics)
             {
                 var hValue = heuristic.GetValue(parent, state, groundedActions);
                 if (hValue > max)

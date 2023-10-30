@@ -1,12 +1,10 @@
 ﻿using PDDLSharp.ASTGenerators;
-using PDDLSharp.ASTGenerators.SAS;
+using PDDLSharp.ASTGenerators.FastDownward.SAS;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Models.FastDownward.SAS.Sections;
-using PDDLSharp.Models.SAS;
-using PDDLSharp.Models.SAS.Sections;
-using PDDLSharp.Parsers.SAS;
+using PDDLSharp.Parsers.FastDownward.SAS;
 using System;
 using System.Collections.Generic;
 using System.Linq;

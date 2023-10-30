@@ -27,7 +27,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             Failed = false;
             if (state is not RelaxedPDDLStateSpace)
                 state = new RelaxedPDDLStateSpace(Declaration, state.State, state.Grounder);
-            
+
             var graphLayers = _generator.GenerateRelaxedPlanningGraph(state, groundedActions);
             if (graphLayers.Count == 0)
             {
@@ -64,7 +64,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 foreach (var fact in G[t])
                 {
                     bool found = false;
-                    foreach (var act in graphLayers[t].Actions) 
+                    foreach (var act in graphLayers[t].Actions)
                     {
                         if (found)
                             break;

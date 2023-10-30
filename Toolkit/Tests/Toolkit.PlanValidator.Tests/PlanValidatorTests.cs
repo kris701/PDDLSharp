@@ -2,7 +2,6 @@
 using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.StateSpace;

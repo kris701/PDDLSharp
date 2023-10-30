@@ -1,14 +1,9 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models;
-using PDDLSharp.Toolkit.StateSpace;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Toolkit.Planners.Search;
+using PDDLSharp.Toolkit.StateSpace;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
@@ -53,7 +48,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
         {
             Calculated++;
             int count = 0;
-            foreach(var goal in _goalCache)
+            foreach (var goal in _goalCache)
                 if (state.Contains(goal))
                     count++;
             return _goalCache.Count - count;

@@ -1,5 +1,5 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.Plans;
+﻿using PDDLSharp.Models.FastDownward.Plans;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
 using System;

@@ -1,21 +1,10 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models;
-using PDDLSharp.Toolkit.Grounders;
-using PDDLSharp.Toolkit.StateSpace;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PDDLSharp.Toolkit.Planners.Heuristics;
-using PDDLSharp.Models.PDDL.Expressions;
-using System.Xml.Linq;
-using PDDLSharp.Tools;
-using PDDLSharp.Toolkit.Planners.Tools;
-using System.Runtime.Intrinsics.X86;
-using PDDLSharp.Toolkit.Planners.Exceptions;
+﻿using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Toolkit.Planners.Exceptions;
+using PDDLSharp.Toolkit.Planners.Tools;
+using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
@@ -138,12 +127,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
                     if (newOperators.Count > 0)
                     {
-                        List<StateMove> switchLists = new List<StateMove>(); 
-                        foreach(var closed in _closedList)
+                        List<StateMove> switchLists = new List<StateMove>();
+                        foreach (var closed in _closedList)
                         {
                             if (closed.hValue != smallestItem.hValue)
                                 continue;
-                            foreach(var newOperator in newOperators)
+                            foreach (var newOperator in newOperators)
                             {
                                 if (closed.State.IsNodeTrue(newOperator.Preconditions))
                                 {
@@ -197,7 +186,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var allSmallest = closedList.Where(x => x.hValue == smallestHValue).ToList();
             var applicableOperators = new HashSet<ActionDecl>();
             foreach (var item in allSmallest)
-                foreach (var act in GroundedActions) 
+                foreach (var act in GroundedActions)
                     if (item.State.IsNodeTrue(act.Preconditions))
                         applicableOperators.Add(act);
             return applicableOperators.Except(operators).ToHashSet();

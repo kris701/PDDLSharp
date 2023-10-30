@@ -1,16 +1,11 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models;
+﻿using PDDLSharp.Models;
+using PDDLSharp.Models.FastDownward.Plans;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.StateSpace;
-using PDDLSharp.Tools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Timers;
-using PDDLSharp.Models.PDDL;
-using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Models.FastDownward.Plans;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
@@ -90,7 +85,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return newState;
         }
 
-        internal RefPriorityQueue InitializeQueue(IHeuristic h, IState state) 
+        internal RefPriorityQueue InitializeQueue(IHeuristic h, IState state)
         {
             var queue = new RefPriorityQueue();
             var fromMove = new StateMove();

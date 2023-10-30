@@ -146,7 +146,7 @@ namespace PDDLSharp.Models.PDDL
             Parent = null;
             Start = -1;
             End = -1;
-            Line = -1; 
+            Line = -1;
         }
 
         public virtual void RemoveTypes() { }

@@ -1,20 +1,20 @@
 ﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models;
-using PDDLSharp.Parsers.PDDL;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.Grounders;
+using PDDLSharp.Toolkit.Planners.Tools;
+using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDLSharp.Toolkit.StateSpace;
-using PDDLSharp.Toolkit.Planners.Tools;
-using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Toolkit.Planners.Tests.Tools
 {

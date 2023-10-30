@@ -1,4 +1,4 @@
-﻿using PDDLSharp.Models.Plans;
+﻿using PDDLSharp.Models.FastDownward.Plans;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,18 +1,9 @@
 ﻿using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.Planners.Search;
-using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
@@ -58,7 +49,8 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             Calculated++;
             var cost = 0;
             var dict = GenerateCostStructure(state, groundedActions);
-            foreach (var fact in _goalCache) {
+            foreach (var fact in _goalCache)
+            {
                 var factCost = dict[fact];
                 if (factCost == int.MaxValue)
                     return int.MaxValue;
@@ -78,15 +70,15 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             var Ucost = new Dictionary<ActionDecl, int>();
             var dict = new Dictionary<PredicateExp, int>();
             var checkList = new List<KeyValuePair<PredicateExp, int>>();
-            var covered = new bool[groundedActions.Count]; 
+            var covered = new bool[groundedActions.Count];
             // Add state facts
             foreach (var fact in state.State)
                 dict.Add(fact, 0);
 
             // Add all possible effect facts
-            foreach(var act in groundedActions)
+            foreach (var act in groundedActions)
                 if (act.Effects is AndExp andEff)
-                    foreach(var fact in andEff)
+                    foreach (var fact in andEff)
                         if (fact is PredicateExp pred && !dict.ContainsKey(pred))
                             dict.Add(pred, int.MaxValue - 1);
 

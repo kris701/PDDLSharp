@@ -9,9 +9,6 @@ using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Models.FastDownward.SAS.Sections;
-using PDDLSharp.Models.Plans;
-using PDDLSharp.Models.SAS;
-using PDDLSharp.Models.SAS.Sections;
 using System;
 
 namespace PDDLSharp.CodeGenerators.Tests.SAS

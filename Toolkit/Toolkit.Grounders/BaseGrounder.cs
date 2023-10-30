@@ -2,7 +2,6 @@
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Tools;
 
 namespace PDDLSharp.Toolkit.Grounders
 {

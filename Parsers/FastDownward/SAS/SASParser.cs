@@ -1,8 +1,7 @@
 ﻿using PDDLSharp.ASTGenerators;
-using PDDLSharp.ASTGenerators.SAS;
+using PDDLSharp.ASTGenerators.FastDownward.SAS;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.FastDownward.SAS;
-using PDDLSharp.Parsers.SAS;
 
 namespace PDDLSharp.Parsers.FastDownward.SAS
 {

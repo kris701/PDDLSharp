@@ -2,9 +2,8 @@
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
-using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers;
-using PDDLSharp.Parsers.Plans;
+using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Parsers.Tests;
 using PDDLSharp.Parsers.Tests.Plans;
 using System;

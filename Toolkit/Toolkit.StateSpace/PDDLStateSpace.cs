@@ -2,7 +2,6 @@
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.Grounders;
-using System.Xml.Linq;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
@@ -79,14 +78,14 @@ namespace PDDLSharp.Toolkit.StateSpace
             return args;
         }
 
-        public bool Add(PredicateExp pred) 
+        public bool Add(PredicateExp pred)
         {
             if (pred.Start == -1)
                 return State.Add(pred);
             return State.Add(SimplifyPredicate(pred));
         }
         public bool Add(string pred, params string[] arguments) => Add(SimplifyPredicate(pred, arguments));
-        public bool Del(PredicateExp pred) 
+        public bool Del(PredicateExp pred)
         {
             if (pred.Start == -1)
                 return State.Remove(pred);
@@ -97,7 +96,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         {
             if (pred.Start == -1)
                 return State.Contains(pred);
-             return State.Contains(SimplifyPredicate(pred));
+            return State.Contains(SimplifyPredicate(pred));
         }
         public bool Contains(string pred, params string[] arguments) => Contains(SimplifyPredicate(pred, arguments));
 
@@ -113,7 +112,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         public override int GetHashCode()
         {
             int hash = 0;
-            foreach(var item in State)
+            foreach (var item in State)
                 hash ^= item.GetHashCode();
             return hash;
         }
@@ -274,7 +273,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         private bool CheckPermutationsStepwise(INode node, ParameterExp parameters, Func<INode, bool?> stopFunc, bool defaultReturn = true)
         {
             var allPermuations = Grounder.GenerateParameterPermutations(parameters.Values);
-            while(allPermuations.Count > 0)
+            while (allPermuations.Count > 0)
             {
                 var res = stopFunc(GenerateNewParametized(node, parameters, allPermuations.Dequeue()));
                 if (res != null)
