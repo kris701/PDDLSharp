@@ -142,7 +142,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var actions = new List<Operator>()
             {
                 new Operator(
-                    "non-applicable", 
+                    "non-applicable",
                     new string[]{ "?a" },
                     new HashSet<Fact>(){ new Fact("wew", "?a") },
                     new HashSet<Fact>(){ },

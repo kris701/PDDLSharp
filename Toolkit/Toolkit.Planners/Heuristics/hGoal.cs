@@ -1,8 +1,4 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.SAS;
+﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
 

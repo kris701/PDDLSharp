@@ -15,9 +15,7 @@ using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Parsers.FastDownward.SAS;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.MacroGenerators;
-using PDDLSharp.Toolkit.Planners;
 using PDDLSharp.Toolkit.Planners.Heuristics;
-using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
 using System.Diagnostics;
@@ -56,7 +54,7 @@ namespace PerformanceTests
             //var targetDomain = "benchmarks/depot/domain.pddl";
             //var targetProblem = "benchmarks/depot/p11.pddl";
             var targetDomain = "benchmarks/transport-opt08-strips/domain.pddl";
-            var targetProblem = "benchmarks/transport-opt08-strips/p07.pddl";
+            var targetProblem = "benchmarks/transport-opt08-strips/p05.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);

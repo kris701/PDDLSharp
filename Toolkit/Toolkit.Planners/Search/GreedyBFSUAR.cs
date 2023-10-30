@@ -1,6 +1,5 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
-using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Tools;
@@ -195,9 +194,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 else
                 {
                     _applicableCache.Add(hash, new HashSet<Operator>());
-                    foreach (var op in Operators) 
+                    foreach (var op in Operators)
                     {
-                        if (item.State.IsNodeTrue(op)) 
+                        if (item.State.IsNodeTrue(op))
                         {
                             applicableOperators.Add(op);
                             _applicableCache[hash].Add(op);

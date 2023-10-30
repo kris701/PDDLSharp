@@ -1,5 +1,4 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.SAS;
+﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.StateSpace;
 
 namespace PDDLSharp.Toolkit.Planners.Tools

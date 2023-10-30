@@ -1,6 +1,5 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
-using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.SAS;
 
 namespace PDDLSharp.Toolkit.Planners
@@ -8,7 +7,7 @@ namespace PDDLSharp.Toolkit.Planners
     public interface IPlanner : IDisposable
     {
         public PDDLDecl Declaration { get; }
-        public List<Operator> Operators { get; set; }
+        public List<Operator> Operators { get; }
         public IHeuristic Heuristic { get; }
 
         public TimeSpan Timeout { get; set; }

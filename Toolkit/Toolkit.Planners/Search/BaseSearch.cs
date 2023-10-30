@@ -1,7 +1,6 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL;
-using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Grounders;
@@ -14,11 +13,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
     public abstract class BaseSearch : IPlanner
     {
         public PDDLDecl Declaration { get; }
-        public List<Models.SAS.Operator> Operators { get; set; }
+        public List<Models.SAS.Operator> Operators { get; internal set; }
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
         public int Evaluations => Heuristic.Evaluations;
-        public IHeuristic Heuristic { get; set; }
+        public IHeuristic Heuristic { get; }
 
         public TimeSpan Timeout { get; set; } = TimeSpan.FromMinutes(30);
 
@@ -32,7 +31,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
             Declaration = decl;
             Heuristic = heuristic;
-            Operators = new List<Models.SAS.Operator>();
+            Operators = new List<Operator>();
         }
 
         public void PreProcess()
