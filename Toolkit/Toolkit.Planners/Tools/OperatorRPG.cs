@@ -9,7 +9,9 @@ namespace PDDLSharp.Toolkit.Planners.Tools
         public void ClearCaches()
         {
             _layerCache.Clear();
+            _layerCache.EnsureCapacity(0);
             _coveredCache.Clear();
+            _coveredCache.EnsureCapacity(0);
         }
 
         // Cache, from the hash of the previous state, that then links to the next layer

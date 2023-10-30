@@ -121,8 +121,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public virtual void Dispose()
         {
             _closedList.Clear();
+            _closedList.EnsureCapacity(0);
             _openList.Clear();
+            _openList.Queue.EnsureCapacity(0);
             Operators.Clear();
+            Operators.EnsureCapacity(0);
         }
     }
 }

@@ -23,6 +23,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
         public void ClearCaches()
         {
             _opCache.Clear();
+            _opCache.EnsureCapacity(0);
             _generator.ClearCaches();
         }
 
@@ -79,6 +80,8 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                             foreach (var pre in op.Pre)
                             {
                                 var newGoal = FirstLevel(pre, graphLayers);
+                                if (newGoal == t)
+                                    break;
                                 G[newGoal].Add(pre);
                             }
                             break;
