@@ -12,7 +12,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
     /// </summary>
     public class GreedyBFSDHE : BaseSearch
     {
-        public GreedyBFSDHE(PDDLDecl decl) : base(decl)
+        public GreedyBFSDHE(PDDLDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
         }
 

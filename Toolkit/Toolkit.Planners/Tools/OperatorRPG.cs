@@ -7,6 +7,12 @@ namespace PDDLSharp.Toolkit.Planners.Tools
     // Operator Relaxed Planning Graph
     public class OperatorRPG
     {
+        public void ClearCaches()
+        {
+            _layerCache.Clear();
+            _coveredCache.Clear();
+        }
+
         // Cache, from the hash of the previous state, that then links to the next layer
         private Dictionary<int, Layer> _layerCache = new Dictionary<int, Layer>();
         private Dictionary<int, List<int>> _coveredCache = new Dictionary<int, List<int>>();

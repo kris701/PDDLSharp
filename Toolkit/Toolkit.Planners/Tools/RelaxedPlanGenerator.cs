@@ -23,6 +23,12 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             _opCache = new Dictionary<int, HashSet<Operator>>();
         }
 
+        public void ClearCaches()
+        {
+            _opCache.Clear();
+            _generator.ClearCaches();
+        }
+
         public HashSet<Operator> GenerateReplaxedPlan(IState<Fact, Operator> state, List<Operator> operators)
         {
             var hash = state.GetHashCode();

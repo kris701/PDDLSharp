@@ -17,7 +17,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
 
         public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
         {
-            Calculated++;
+            Evaluations++;
             var max = 0;
             var dict = _graphGenerator.GenerateRelaxedGraph(state, operators);
             foreach (var fact in state.Goals)

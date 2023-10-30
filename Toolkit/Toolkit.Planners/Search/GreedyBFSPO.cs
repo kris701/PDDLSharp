@@ -17,7 +17,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
     public class GreedyBFSPO : BaseSearch
     {
         private RelaxedPlanGenerator _graphGenerator;
-        public GreedyBFSPO(PDDLDecl decl) : base(decl)
+        public GreedyBFSPO(PDDLDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
@@ -92,6 +92,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
             if (_graphGenerator.Failed)
                 throw new Exception("No relaxed plan could be found from the initial state! Could indicate the problem is unsolvable.");
             return operators;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _graphGenerator.ClearCaches();
         }
     }
 }

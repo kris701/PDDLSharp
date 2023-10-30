@@ -16,8 +16,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public int OperatorsUsed { get; set; }
 
         private RelaxedPlanGenerator _graphGenerator;
-
-        public GreedyBFSUAR(PDDLDecl decl) : base(decl)
+        public GreedyBFSUAR(PDDLDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
@@ -207,6 +206,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 }
             }
             return applicableOperators.Except(operators).ToHashSet();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _graphGenerator.ClearCaches();
         }
     }
 }

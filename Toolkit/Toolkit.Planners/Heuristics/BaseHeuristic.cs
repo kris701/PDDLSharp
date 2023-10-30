@@ -7,7 +7,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
     public abstract class BaseHeuristic : IHeuristic
     {
-        public int Calculated { get; internal set; }
+        public int Evaluations { get; internal set; }
         public abstract int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators);
     }
 }

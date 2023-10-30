@@ -8,7 +8,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 {
     public class GreedyBFS : BaseSearch
     {
-        public GreedyBFS(PDDLDecl decl) : base(decl)
+        public GreedyBFS(PDDLDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
         }
 

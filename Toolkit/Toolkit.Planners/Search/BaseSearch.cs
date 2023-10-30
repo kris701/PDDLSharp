@@ -17,6 +17,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public List<Models.SAS.Operator> Operators { get; set; }
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
+        public int Evaluations => Heuristic.Evaluations;
+        public IHeuristic Heuristic { get; set; }
 
         public TimeSpan Timeout { get; set; } = TimeSpan.FromMinutes(30);
 
@@ -26,9 +28,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         private bool _preprocessed = false;
 
-        public BaseSearch(PDDLDecl decl)
+        public BaseSearch(PDDLDecl decl, IHeuristic heuristic)
         {
             Declaration = decl;
+            Heuristic = heuristic;
             Operators = new List<Models.SAS.Operator>();
         }
 
@@ -57,8 +60,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return new AndExp(new List<IExp>() { from });
         }
 
-        public ActionPlan Solve(IHeuristic h)
+        public ActionPlan Solve()
         {
+            if (!_preprocessed)
+                PreProcess();
+
             var state = new SASStateSpace(Declaration);
             var timeoutTimer = new System.Timers.Timer();
             timeoutTimer.Interval = Timeout.TotalMilliseconds;
@@ -67,12 +73,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
             timeoutTimer.Start();
 
             _closedList = new HashSet<StateMove>();
-            _openList = InitializeQueue(h, state);
+            _openList = InitializeQueue(Heuristic, state);
 
             Expanded = 0;
             Generated = 0;
 
-            return Solve(h, state);
+            return Solve(Heuristic, state);
         }
 
         private void OnTimedOut(object? source, ElapsedEventArgs e)
@@ -112,5 +118,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
         internal GroundedAction GenerateFromOp(Models.SAS.Operator op) => new GroundedAction(op.Name, op.Arguments);
 
         internal abstract ActionPlan Solve(IHeuristic h, IState<Fact, Models.SAS.Operator> state);
+
+        public virtual void Dispose()
+        {
+            _closedList.Clear();
+            _openList.Clear();
+            Operators.Clear();
+        }
     }
 }

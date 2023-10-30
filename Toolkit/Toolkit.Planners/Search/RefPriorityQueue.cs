@@ -13,6 +13,11 @@
 
         public bool Contains(StateMove move) => ReferenceList.Contains(move.GetHashCode());
         public int Count => Queue.Count;
+        public void Clear()
+        {
+            ReferenceList.Clear();
+            Queue.Clear();
+        }
 
         public void Enqueue(StateMove move, int priority)
         {

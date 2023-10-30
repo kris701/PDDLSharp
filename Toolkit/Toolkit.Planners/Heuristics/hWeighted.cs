@@ -21,7 +21,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
 
         public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
         {
-            Calculated++;
+            Evaluations++;
             return (int)((double)Heuristic.GetValue(parent, state, operators) * Weight);
         }
     }
