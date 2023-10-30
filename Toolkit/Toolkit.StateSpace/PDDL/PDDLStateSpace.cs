@@ -114,7 +114,7 @@ namespace PDDLSharp.Toolkit.StateSpace.PDDL
 
         public override int GetHashCode()
         {
-            int hash = 0;
+            int hash = State.Count;
             foreach (var item in State)
                 hash ^= item.GetHashCode();
             return hash;

@@ -38,7 +38,7 @@ namespace PDDLSharp.Models.SAS
             const int modifier = 31;
             unchecked
             {
-                _hashCache = Name.GetHashCode() * Arguments.Aggregate(seed, (current, item) =>
+                _hashCache = 25 * Name.GetHashCode() * Arguments.Aggregate(seed, (current, item) =>
                     (current * modifier) + item.GetHashCode());
                 return _hashCache;
             }

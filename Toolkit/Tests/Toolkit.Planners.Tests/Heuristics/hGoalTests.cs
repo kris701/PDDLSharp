@@ -43,7 +43,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             // ARRANGE
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new PredicateExp("goal-fact");
+            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("goal-fact") });
             decl.Problem.Init = new InitDecl();
             decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact"));
             var h = new hGoal(decl);

@@ -8,7 +8,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
     public class hMax : hAdd
     {
-        public hMax(PDDLDecl declaration) : base(declaration)
+        public hMax() : base()
         {
         }
 
@@ -20,6 +20,8 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             foreach (var fact in state.Goals)
             {
                 var factCost = dict[fact];
+                if (factCost == int.MaxValue - 1)
+                    return int.MaxValue;
                 if (factCost > max)
                     max = factCost;
             }

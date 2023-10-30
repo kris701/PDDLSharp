@@ -12,11 +12,11 @@ namespace PDDLSharp.Models.SAS
     {
         public string Name { get; }
         public string[] Arguments { get; }
-        public Fact[] Pre { get; }
-        public Fact[] Add { get; }
-        public Fact[] Del { get; }
+        public HashSet<Fact> Pre { get; }
+        public HashSet<Fact> Add { get; }
+        public HashSet<Fact> Del { get; }
 
-        public Operator(string name, string[] arguments, Fact[] pre, Fact[] add, Fact[] del)
+        public Operator(string name, string[] arguments, HashSet<Fact> pre, HashSet<Fact> add, HashSet<Fact> del)
         {
             Name = name;
             Arguments = arguments;
@@ -35,7 +35,7 @@ namespace PDDLSharp.Models.SAS
             Arguments = args.ToArray();
 
             // Preconditions
-            var pre = new List<Fact>();
+            var pre = new HashSet<Fact>();
             if (act.Preconditions is AndExp preAnd)
             {
                 foreach(var item in preAnd.Children)
@@ -48,15 +48,18 @@ namespace PDDLSharp.Models.SAS
             }
             else
                 throw new ArgumentException("Action precondition must be an and expression.");
-            Pre = pre.ToArray();
+            Pre = pre;
 
             // Effects
-            var add = new List<Fact>();
-            var del = new List<Fact>();
+            var add = new HashSet<Fact>();
+            var del = new HashSet<Fact>();
             if (act.Effects is AndExp effAnd)
             {
                 foreach (var item in effAnd.Children)
                 {
+                    if (item is NumericExp)
+                        continue;
+
                     if (item is PredicateExp pred)
                         add.Add(new Fact(pred));
                     else
@@ -70,28 +73,27 @@ namespace PDDLSharp.Models.SAS
             }
             else
                 throw new ArgumentException("Action effect must be an and expression.");
-            Add = add.ToArray();
-            Del = del.ToArray();
+            Add = add;
+            Del = del;
         }
 
-        // The order is important!
-        // Based on: https://stackoverflow.com/a/30758270
         private int _hashCache = -1;
         public override int GetHashCode()
         {
             if (_hashCache != -1)
                 return _hashCache;
-            const int seed = 487;
-            const int modifier = 31;
-            unchecked
-            {
-                _hashCache = Name.GetHashCode() * Arguments.Aggregate(seed, (current, item) =>
-                    (current * modifier) + item.GetHashCode()) * Pre.Aggregate(seed, (current, item) =>
-                    (current * modifier) + item.GetHashCode()) * Add.Aggregate(seed, (current, item) =>
-                    (current * modifier) + item.GetHashCode()) * Del.Aggregate(seed, (current, item) =>
-                    (current * modifier) + item.GetHashCode());
-                return _hashCache;
-            }
+
+            _hashCache = Name.GetHashCode();
+            foreach(var arg in Arguments)
+                _hashCache ^= arg.GetHashCode();
+            foreach(var pre in Pre)
+                _hashCache ^= pre.GetHashCode();
+            foreach (var del in Del)
+                _hashCache ^= del.GetHashCode();
+            foreach (var add in Add)
+                _hashCache ^= add.GetHashCode();
+
+            return _hashCache;
         }
 
         public override bool Equals(object? obj)

@@ -183,14 +183,29 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return relaxedPlanOperators.Except(operators).ToHashSet();
         }
 
+        private Dictionary<int, HashSet<Operator>> _applicableCache = new Dictionary<int, HashSet<Operator>>();
         private HashSet<Operator> GetNewApplicableOperators(int smallestHValue, HashSet<Operator> operators, HashSet<StateMove> closedList)
         {
             var allSmallest = closedList.Where(x => x.hValue == smallestHValue).ToList();
             var applicableOperators = new HashSet<Operator>();
             foreach (var item in allSmallest)
-                foreach (var op in Operators)
-                    if (item.State.IsNodeTrue(op))
-                        applicableOperators.Add(op);
+            {
+                var hash = item.GetHashCode();
+                if (_applicableCache.ContainsKey(hash))
+                    applicableOperators.AddRange(_applicableCache[hash]);
+                else
+                {
+                    _applicableCache.Add(hash, new HashSet<Operator>());
+                    foreach (var op in Operators) 
+                    {
+                        if (item.State.IsNodeTrue(op)) 
+                        {
+                            applicableOperators.Add(op);
+                            _applicableCache[hash].Add(op);
+                        }
+                    }
+                }
+            }
             return applicableOperators.Except(operators).ToHashSet();
         }
     }

@@ -144,9 +144,9 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                 new Operator(
                     "non-applicable", 
                     new string[]{ "?a" },
-                    new Fact[]{ new Fact("wew", "?a") },
-                    new Fact[]{ },
-                    new Fact[]{ })
+                    new HashSet<Fact>(){ new Fact("wew", "?a") },
+                    new HashSet<Fact>(){ },
+                    new HashSet<Fact>(){ })
             };
             var generator = new RelaxedPlanningGraph();
 
@@ -171,9 +171,9 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                 new Operator(
                     "non-applicable",
                     new string[]{ "?a" },
-                    new Fact[]{ },
-                    new Fact[]{ },
-                    new Fact[]{ })
+                    new HashSet<Fact>(){ },
+                    new HashSet<Fact>(){ },
+                    new HashSet<Fact>(){ })
             };
             var generator = new RelaxedPlanningGraph();
 

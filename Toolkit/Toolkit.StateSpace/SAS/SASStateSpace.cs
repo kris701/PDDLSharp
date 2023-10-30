@@ -27,14 +27,17 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
                     if (child is PredicateExp pred)
                         State.Add(new Fact(pred));
             Goals = new HashSet<Fact>();
-            if (declaration.Problem.Goal != null && declaration.Problem.Goal.GoalExp is AndExp and)
+            if (declaration.Problem.Goal != null)
             {
-                foreach (var child in and.Children)
-                    if (child is PredicateExp pred)
-                        Goals.Add(new Fact(pred));
+                if (declaration.Problem.Goal.GoalExp is AndExp and)
+                {
+                    foreach (var child in and.Children)
+                        if (child is PredicateExp pred)
+                            Goals.Add(new Fact(pred));
+                }
+                else
+                    throw new Exception("Error! Goal expression was not and and expression!");
             }
-            else
-                throw new Exception("Error! Goal expression was not and and expression!");
         }
 
         public SASStateSpace(PDDLDecl declaration, HashSet<Fact> state, HashSet<Fact> goal)
@@ -61,15 +64,18 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
         public override bool Equals(object? obj)
         {
             if (obj is IState<Fact, Operator> other)
+            {
                 foreach (var item in State)
                     if (!other.State.Contains(item))
                         return false;
-            return true;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()
         {
-            int hash = 0;
+            int hash = State.Count;
             foreach (var item in State)
                 hash ^= item.GetHashCode();
             return hash;

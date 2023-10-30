@@ -14,15 +14,21 @@ namespace PDDLSharp.Toolkit.Planners.Tools
         public bool Failed { get; internal set; } = false;
         public PDDLDecl Declaration { get; set; }
         private RelaxedPlanningGraph _generator;
+        private Dictionary<int, HashSet<Operator>> _opCache;
 
         public RelaxedPlanGenerator(PDDLDecl declaration)
         {
             Declaration = declaration;
             _generator = new RelaxedPlanningGraph();
+            _opCache = new Dictionary<int, HashSet<Operator>>();
         }
 
         public HashSet<Operator> GenerateReplaxedPlan(IState<Fact, Operator> state, List<Operator> operators)
         {
+            var hash = state.GetHashCode();
+            if (_opCache.ContainsKey(hash))
+                return _opCache[hash];
+
             Failed = false;
             if (state is not RelaxedSASStateSpace)
                 state = new RelaxedSASStateSpace(Declaration, state.State, state.Goals);
@@ -33,9 +39,10 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 Failed = true;
                 return new HashSet<Operator>();
             }
-            var selectedActions = ReconstructPlan(state, graphLayers);
+            var selectedOperators = ReconstructPlan(state, graphLayers);
 
-            return selectedActions;
+            _opCache.Add(hash, selectedOperators);
+            return selectedOperators;
         }
 
         private HashSet<Operator> ReconstructPlan(IState<Fact, Operator> state, List<Layer> graphLayers)
@@ -61,24 +68,17 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             {
                 foreach (var fact in G[t])
                 {
-                    bool found = false;
-                    foreach (var act in graphLayers[t].Operators)
+                    foreach (var op in graphLayers[t].Operators)
                     {
-                        if (found)
-                            break;
-                        foreach(var add in act.Add)
+                        if (op.Add.Contains(fact))
                         {
-                            if (add.Equals(fact))
+                            selectedOperators.Add(op);
+                            foreach (var pre in op.Pre)
                             {
-                                selectedOperators.Add(act);
-                                foreach(var pre in act.Pre)
-                                {
-                                    var newGoal = FirstLevel(pre, graphLayers);
-                                    G[newGoal].Add(pre);
-                                }
-                                found = true;
-                                break;
+                                var newGoal = FirstLevel(pre, graphLayers);
+                                G[newGoal].Add(pre);
                             }
+                            break;
                         }
                     }
                 }

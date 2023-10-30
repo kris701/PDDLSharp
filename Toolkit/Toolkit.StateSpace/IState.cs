@@ -21,6 +21,9 @@ namespace PDDLSharp.Toolkit.StateSpace
         public bool Contains(F pred);
         public bool Contains(string pred, params string[] arguments);
 
+        public int GetHashCode();
+        public bool Equals(object? obj);
+
         public int ExecuteNode(O node);
         public bool IsNodeTrue(O node);
 
