@@ -28,7 +28,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             int best = 0;
             int current = 0;
 
-            while (!_abort)
+            while (!Aborted)
             {
                 // Refinement Guards
                 if (_openList.Count == 0 || current > best)
@@ -44,7 +44,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 current = int.MaxValue;
                 foreach (var op in operators)
                 {
-                    if (_abort) break;
+                    if (Aborted) break;
                     if (stateMove.State.IsNodeTrue(op))
                     {
                         var newMove = new StateMove(GenerateNewState(stateMove.State, op));

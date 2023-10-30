@@ -27,7 +27,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var preferredQueue = InitializeQueue(h, state);
 
             int iteration = 0;
-            while (!_abort && _openList.Count > 0 || preferredQueue.Count > 0)
+            while (!Aborted && _openList.Count > 0 || preferredQueue.Count > 0)
             {
                 if (iteration++ % 2 == 0 && preferredQueue.Count > 0)
                 {
@@ -37,7 +37,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
                     foreach (var op in preferedOperators)
                     {
-                        if (_abort) break;
+                        if (Aborted) break;
                         if (stateMove.State.IsNodeTrue(op))
                         {
                             var newMove = new StateMove(GenerateNewState(stateMove.State, op));
@@ -61,7 +61,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
                     foreach (var op in Operators)
                     {
-                        if (_abort) break;
+                        if (Aborted) break;
                         if (stateMove.State.IsNodeTrue(op))
                         {
                             var newMove = new StateMove(GenerateNewState(stateMove.State, op));

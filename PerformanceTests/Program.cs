@@ -15,6 +15,7 @@ using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Parsers.FastDownward.SAS;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.MacroGenerators;
+using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
@@ -41,130 +42,87 @@ namespace PerformanceTests
 
         private static void RunNTimes6(int number)
         {
-            //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
-            //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
-            var targetDomain = "benchmarks/barman-opt11-strips/domain.pddl";
-            var targetProblem = "benchmarks/barman-opt11-strips/pfile05-020.pddl";
-            //var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
-            //var targetProblem = "benchmarks/tidybot-opt11-strips/p01.pddl";
-            //var targetDomain = "benchmarks/logistics98/domain.pddl";
-            //var targetProblem = "benchmarks/logistics98/prob35.pddl";
-            //var targetDomain = "benchmarks/gripper/domain.pddl";
-            //var targetProblem = "benchmarks/gripper/prob20.pddl";
-            //var targetDomain = "benchmarks/depot/domain.pddl";
-            //var targetProblem = "benchmarks/depot/p11.pddl";
-            //var targetDomain = "benchmarks/transport-opt08-strips/domain.pddl";
-            //var targetProblem = "benchmarks/transport-opt08-strips/p05.pddl";
-            //var targetDomain = "benchmarks/blocks/domain.pddl";
-            //var targetProblem = "benchmarks/blocks/probBLOCKS-17-0.pddl";
-
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
-
-            PDDLDecl decl = new PDDLDecl(parser.ParseAs<DomainDecl>(new FileInfo(targetDomain)), parser.ParseAs<ProblemDecl>(new FileInfo(targetProblem)));
-
             IPlanValidator validator = new PlanValidator();
-            using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
+
+            var path = new DirectoryInfo("benchmarks");
+            var paths = path.GetDirectories();
+            int couldSolve = 0;
+            int couldNotSolve = 0;
+            int counter = 1;
+            foreach (var subDir in paths)
             {
-                Stopwatch instanceWatch = new Stopwatch();
-                Console.WriteLine($"Grounding...");
-                planner.PreProcess();
-                Console.WriteLine($"{planner.Operators.Count} total operators");
-                Console.WriteLine($"");
-                Console.WriteLine($"Solving...");
-                instanceWatch.Start();
-                var plan = planner.Solve();
-                instanceWatch.Stop();
-                Console.WriteLine($"");
+                Console.WriteLine("");
+                Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
+                Console.WriteLine("");
+                var domain = Path.Combine(subDir.FullName, "domain.pddl");
+                if (File.Exists(domain))
+                {
+                    try
+                    {
+                        foreach (var file in new DirectoryInfo(subDir.FullName).GetFiles())
+                        {
+                            if (file.Name != "domain.pddl")
+                            {
+                                PDDLDecl decl = new PDDLDecl(
+                                    parser.ParseAs<DomainDecl>(new FileInfo(domain)),
+                                    parser.ParseAs<ProblemDecl>(file));
 
-                Console.WriteLine($"{planner.GetType().Name} took {instanceWatch.ElapsedMilliseconds}ms");
-                Console.WriteLine($"{planner.GetType().Name} generated {planner.Generated} states and expanded {planner.Expanded}");
-                Console.WriteLine($"{planner.GetType().Name} had {planner.OperatorsUsed} operators to use out of {planner.Operators.Count}");
-                Console.WriteLine($"{planner.GetType().Name} heuristic evaluated {planner.Evaluations} times");
-                Console.WriteLine($"{planner.GetType().Name} actually used {plan.Plan.Count} operators");
+                                Console.WriteLine($"Domain: {subDir.Name}");
+                                Console.WriteLine($"Problem: {file.Name}");
 
-                Console.WriteLine($"");
-                Console.WriteLine($"{planner.GetType().Name} plan have a cost of {plan.Cost}");
-                if (validator.Validate(plan, decl))
-                    Console.WriteLine($"{planner.GetType().Name} plan is valid!");
-                else
-                    Console.WriteLine($"{planner.GetType().Name} plan is NOT valid!");
+                                using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
+                                {
+                                    Console.WriteLine(planner.GetType().Name);
+                                    planner.PreprocessLimit = TimeSpan.FromSeconds(60);
+                                    planner.SearchLimit = TimeSpan.FromSeconds(60);
+
+                                    Console.WriteLine($"Grounding...");
+                                    planner.PreProcess();
+                                    Console.WriteLine($"{planner.Operators.Count} total operators");
+                                    Console.WriteLine($"Solving...");
+                                    var plan = new ActionPlan(new List<GroundedAction>());
+                                    try
+                                    {
+                                        plan = planner.Solve();
+                                    }
+                                    catch (NoSolutionFoundException) { };
+
+                                    if (!planner.Aborted)
+                                    {
+                                        couldSolve++;
+                                        Console.WriteLine($"Search took {planner.SearchTime.TotalSeconds}s");
+                                        Console.WriteLine($"Generated {planner.Generated} states and expanded {planner.Expanded}");
+                                        Console.WriteLine($"Had {planner.OperatorsUsed} operators to use out of {planner.Operators.Count}");
+                                        Console.WriteLine($"Heuristic evaluated {planner.Evaluations} times");
+                                        Console.WriteLine($"Actually used {plan.Plan.Count} operators");
+
+                                        Console.WriteLine($"{planner.GetType().Name} plan have a cost of {plan.Cost}");
+                                        if (validator.Validate(plan, decl))
+                                            Console.WriteLine($"{planner.GetType().Name} plan is valid!");
+                                        else
+                                            Console.WriteLine($"{planner.GetType().Name} plan is NOT valid!");
+                                    }
+                                    else
+                                    {
+                                        couldNotSolve++;
+                                        Console.WriteLine($"Planner aborted...");
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        couldNotSolve++;
+                        Console.WriteLine($"Cannot solve for domain: {ex.Message}");
+                    }
+                }
             }
-            using (var planner = new GreedyBFS(decl, new hFF(decl)))
-            {
-                Stopwatch instanceWatch = new Stopwatch();
-                Console.WriteLine($"Grounding...");
-                planner.PreProcess();
-                Console.WriteLine($"{planner.Operators.Count} total operators");
-                Console.WriteLine($"");
-                Console.WriteLine($"Solving...");
-                instanceWatch.Start();
-                var plan = planner.Solve();
-                instanceWatch.Stop();
-                Console.WriteLine($"");
-
-                Console.WriteLine($"{planner.GetType().Name} took {instanceWatch.ElapsedMilliseconds}ms");
-                Console.WriteLine($"{planner.GetType().Name} generated {planner.Generated} states and expanded {planner.Expanded}");
-                Console.WriteLine($"{planner.GetType().Name} heuristic evaluated {planner.Evaluations} times");
-                Console.WriteLine($"{planner.GetType().Name} actually used {plan.Plan.Count} operators");
-
-                Console.WriteLine($"");
-                Console.WriteLine($"{planner.GetType().Name} plan have a cost of {plan.Cost}");
-                if (validator.Validate(plan, decl))
-                    Console.WriteLine($"{planner.GetType().Name} plan is valid!");
-                else
-                    Console.WriteLine($"{planner.GetType().Name} plan is NOT valid!");
-            }
-            using (var planner = new GreedyBFSPO(decl, new hFF(decl)))
-            {
-                Stopwatch instanceWatch = new Stopwatch();
-                Console.WriteLine($"Grounding...");
-                planner.PreProcess();
-                Console.WriteLine($"{planner.Operators.Count} total operators");
-                Console.WriteLine($"");
-                Console.WriteLine($"Solving...");
-                instanceWatch.Start();
-                var plan = planner.Solve();
-                instanceWatch.Stop();
-                Console.WriteLine($"");
-
-                Console.WriteLine($"{planner.GetType().Name} took {instanceWatch.ElapsedMilliseconds}ms");
-                Console.WriteLine($"{planner.GetType().Name} generated {planner.Generated} states and expanded {planner.Expanded}");
-                Console.WriteLine($"{planner.GetType().Name} heuristic evaluated {planner.Evaluations} times");
-                Console.WriteLine($"{planner.GetType().Name} actually used {plan.Plan.Count} operators");
-
-                Console.WriteLine($"");
-                Console.WriteLine($"{planner.GetType().Name} plan have a cost of {plan.Cost}");
-                if (validator.Validate(plan, decl))
-                    Console.WriteLine($"{planner.GetType().Name} plan is valid!");
-                else
-                    Console.WriteLine($"{planner.GetType().Name} plan is NOT valid!");
-            }
-            using (var planner = new GreedyBFSDHE(decl, new hFF(decl)))
-            {
-                Stopwatch instanceWatch = new Stopwatch();
-                Console.WriteLine($"Grounding...");
-                planner.PreProcess();
-                Console.WriteLine($"{planner.Operators.Count} total operators");
-                Console.WriteLine($"");
-                Console.WriteLine($"Solving...");
-                instanceWatch.Start();
-                var plan = planner.Solve();
-                instanceWatch.Stop();
-                Console.WriteLine($"");
-
-                Console.WriteLine($"{planner.GetType().Name} took {instanceWatch.ElapsedMilliseconds}ms");
-                Console.WriteLine($"{planner.GetType().Name} generated {planner.Generated} states and expanded {planner.Expanded}");
-                Console.WriteLine($"{planner.GetType().Name} heuristic evaluated {planner.Evaluations} times");
-                Console.WriteLine($"{planner.GetType().Name} actually used {plan.Plan.Count} operators");
-
-                Console.WriteLine($"");
-                Console.WriteLine($"{planner.GetType().Name} plan have a cost of {plan.Cost}");
-                if (validator.Validate(plan, decl))
-                    Console.WriteLine($"{planner.GetType().Name} plan is valid!");
-                else
-                    Console.WriteLine($"{planner.GetType().Name} plan is NOT valid!");
-            }
+            Console.WriteLine($"");
+            Console.WriteLine($"Could solve {couldSolve} and could not solve {couldNotSolve}");
         }
 
         private static void RunNTimes5(int number)
@@ -197,8 +155,6 @@ namespace PerformanceTests
 
         private static void RunNTimes4(int number)
         {
-            var targetDomain = "benchmarks/psr-large/domain.pddl";
-            var targetProblem = "benchmarks/psr-large/p24-s166-n15-l3-f10.pddl";
             var targetSAS = "benchmarks-plans/lama-first/psr-large/p24-s166-n15-l3-f10.sas";
 
             IErrorListener listener = new ErrorListener();

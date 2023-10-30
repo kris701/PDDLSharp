@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Toolkit.Grounders
@@ -17,6 +18,7 @@ namespace PDDLSharp.Toolkit.Grounders
                 return new List<PredicateExp>() { item.Copy() };
 
             var allPermuations = GenerateParameterPermutations(item.Arguments);
+            if (_abort) return new List<PredicateExp>();
             foreach (var premutation in allPermuations)
             {
                 List<NameExp> arguments = new List<NameExp>();
