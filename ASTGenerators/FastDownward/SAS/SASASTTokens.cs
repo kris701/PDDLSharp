@@ -1,4 +1,4 @@
-﻿namespace PDDLSharp.ASTGenerators.SAS
+﻿namespace PDDLSharp.ASTGenerators.FastDownward.SAS
 {
     public class SASASTTokens
     {

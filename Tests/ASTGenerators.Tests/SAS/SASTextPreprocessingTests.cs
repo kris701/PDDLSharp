@@ -1,5 +1,6 @@
 ﻿using PDDLSharp;
 using PDDLSharp.ASTGenerators;
+using PDDLSharp.ASTGenerators.FastDownward.SAS;
 using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ASTGenerators.SAS;
 using PDDLSharp.ASTGenerators.Tests;

@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 
-namespace PDDLSharp.ASTGenerators.SAS
+namespace PDDLSharp.ASTGenerators.FastDownward.SAS
 {
     public class SASASTGenerator : BaseASTGenerator
     {

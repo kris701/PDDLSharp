@@ -1,4 +1,4 @@
-﻿using PDDLSharp.ASTGenerators.SAS;
+﻿using PDDLSharp.ASTGenerators.FastDownward.SAS;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.FastDownward.SAS;
