@@ -3,7 +3,6 @@ using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.Tests;
 using PDDLSharp.Models.Tests.FastDownward.Plans;
-using PDDLSharp.Models.Tests.Plans;
 using System;
 using System.Collections.Generic;
 using System.Linq;

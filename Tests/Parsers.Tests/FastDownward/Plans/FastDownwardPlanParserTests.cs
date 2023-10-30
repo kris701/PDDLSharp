@@ -6,7 +6,6 @@ using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Parsers.Tests;
 using PDDLSharp.Parsers.Tests.FastDownward.Plans;
-using PDDLSharp.Parsers.Tests.Plans;
 using System;
 using System.Collections.Generic;
 using System.Linq;

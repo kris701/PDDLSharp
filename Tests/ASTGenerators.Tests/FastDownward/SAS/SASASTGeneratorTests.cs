@@ -3,7 +3,6 @@ using PDDLSharp.ASTGenerators;
 using PDDLSharp.ASTGenerators.FastDownward.SAS;
 using PDDLSharp.ASTGenerators.Tests;
 using PDDLSharp.ASTGenerators.Tests.FastDownward.SAS;
-using PDDLSharp.ASTGenerators.Tests.SAS;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 

@@ -7,7 +7,6 @@ using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.Tests;
 using PDDLSharp.Models.Tests.FastDownward.Plans;
-using PDDLSharp.Models.Tests.Plans;
 using System;
 using System.Collections.Generic;
 using System.Linq;

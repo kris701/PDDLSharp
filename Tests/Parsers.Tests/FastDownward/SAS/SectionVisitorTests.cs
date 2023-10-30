@@ -9,7 +9,6 @@ using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.FastDownward.SAS;
 using PDDLSharp.Parsers.Tests;
 using PDDLSharp.Parsers.Tests.FastDownward.SAS;
-using PDDLSharp.Parsers.Tests.SAS;
 using System;
 using System.Collections.Generic;
 using System.Linq;

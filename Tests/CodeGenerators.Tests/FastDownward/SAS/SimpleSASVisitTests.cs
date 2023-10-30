@@ -4,8 +4,6 @@ using PDDLSharp.CodeGenerators.Plans;
 using PDDLSharp.CodeGenerators.SAS;
 using PDDLSharp.CodeGenerators.Tests;
 using PDDLSharp.CodeGenerators.Tests.FastDownward.SAS;
-using PDDLSharp.CodeGenerators.Tests.Plans;
-using PDDLSharp.CodeGenerators.Tests.SAS;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
