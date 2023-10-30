@@ -13,7 +13,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
     public abstract class BaseSearch : IPlanner
     {
         public PDDLDecl Declaration { get; }
-        public List<Models.SAS.Operator> Operators { get; internal set; }
+        public List<Models.SAS.Operator> Operators { get; set; }
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
         public int Evaluations => Heuristic.Evaluations;

@@ -23,13 +23,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            var planner = new GreedyBFSUAR(decl);
+            var planner = new GreedyBFSUAR(decl, new hDepth());
             planner.Operators = GetOperators(decl);
-            var h = new hDepth();
             var validator = new PlanValidator.PlanValidator();
 
             // ACT
-            var result = planner.Solve(h);
+            var result = planner.Solve();
 
             // ASSERT
             Assert.IsTrue(validator.Validate(result, decl));
@@ -44,13 +43,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            var planner = new GreedyBFSUAR(decl);
+            var planner = new GreedyBFSUAR(decl, new hFF(decl));
             planner.Operators = GetOperators(decl);
-            var h = new hFF(decl);
             var validator = new PlanValidator.PlanValidator();
 
             // ACT
-            var result = planner.Solve(h);
+            var result = planner.Solve();
 
             // ASSERT
             Assert.IsTrue(validator.Validate(result, decl));
@@ -66,7 +64,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            var planner = new GreedyBFSUAR(decl);
+            var planner = new GreedyBFSUAR(decl, new hDepth());
             var expected = GetOperators(decl);
 
             // ACT
@@ -85,12 +83,11 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            GreedyBFSUAR planner = new GreedyBFSUAR(decl);
+            GreedyBFSUAR planner = new GreedyBFSUAR(decl, new hDepth());
             planner.Operators = GetOperators(decl);
-            var h = new hDepth();
 
             // ACT
-            var result = planner.Solve(h);
+            var result = planner.Solve();
 
             // ASSERT
             Assert.AreNotEqual(planner.OperatorsUsed, planner.Operators.Count);
