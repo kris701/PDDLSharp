@@ -9,6 +9,7 @@ using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 using PDDLSharp.Tools;
 using System;
 using System.Collections.Generic;
@@ -32,9 +33,9 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IHeuristic h = new hFF(decl);
-            IState state = new PDDLStateSpace(decl);
-            var actions = GetGroundedActions(decl);
+            var h = new hFF(decl);
+            var state = new SASStateSpace(decl);
+            var actions = GetOperators(decl);
 
             // ACT
             var newValue = h.GetValue(new StateMove(), state, actions);
@@ -54,10 +55,11 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IHeuristic h = new hFF(decl);
-            IState state = new PDDLStateSpace(decl);
-            state.ExecuteNode(decl.Problem.Goal.GoalExp);
-            var actions = GetGroundedActions(decl);
+            var h = new hFF(decl);
+            var state = new SASStateSpace(decl);
+            foreach (var goal in state.Goals)
+                state.Add(goal);
+            var actions = GetOperators(decl);
 
             // ACT
             var newValue = h.GetValue(new StateMove(), state, actions);

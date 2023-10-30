@@ -4,11 +4,13 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 using PDDLSharp.Tools;
 using System;
 using System.Collections.Generic;
@@ -32,8 +34,8 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IState state = new RelaxedPDDLStateSpace(decl);
-            var actions = GetGroundedActions(decl);
+            var state = new RelaxedSASStateSpace(decl);
+            var actions = GetOperators(decl);
             var generator = new RelaxedPlanningGraph();
 
             // ACT
@@ -54,8 +56,8 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IState state = new RelaxedPDDLStateSpace(decl);
-            var actions = GetGroundedActions(decl);
+            var state = new RelaxedSASStateSpace(decl);
+            var actions = GetOperators(decl);
             var generator = new RelaxedPlanningGraph();
 
             // ACT
@@ -78,8 +80,8 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IState state = new RelaxedPDDLStateSpace(decl);
-            var actions = GetGroundedActions(decl);
+            var state = new RelaxedSASStateSpace(decl);
+            var actions = GetOperators(decl);
             var generator = new RelaxedPlanningGraph();
 
             // ACT
@@ -100,8 +102,8 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IState state = new RelaxedPDDLStateSpace(decl);
-            var actions = GetGroundedActions(decl);
+            var state = new RelaxedSASStateSpace(decl);
+            var actions = GetOperators(decl);
             var generator = new RelaxedPlanningGraph();
 
             // ACT
@@ -118,11 +120,11 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Goal = new GoalDecl();
             decl.Problem.Goal.GoalExp = new PredicateExp("abc");
-            IState state = new RelaxedPDDLStateSpace(decl);
+            var state = new RelaxedSASStateSpace(decl);
             var generator = new RelaxedPlanningGraph();
 
             // ACT
-            var result = generator.GenerateRelaxedPlanningGraph(state, new List<ActionDecl>());
+            var result = generator.GenerateRelaxedPlanningGraph(state, new List<Operator>());
 
             // ASSERT
             Assert.AreEqual(0, result.Count);
@@ -135,13 +137,17 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Goal = new GoalDecl();
             decl.Problem.Goal.GoalExp = new PredicateExp("abc");
-            IState state = new RelaxedPDDLStateSpace(decl);
+            var state = new RelaxedSASStateSpace(decl);
 
-            var actions = new List<ActionDecl>();
-            var action = new ActionDecl("non-applicable");
-            action.Parameters = new ParameterExp(new List<NameExp>() { new NameExp("?a") });
-            action.Preconditions = new PredicateExp("wew", new List<NameExp>() { new NameExp("?a") });
-            actions.Add(action);
+            var actions = new List<Operator>()
+            {
+                new Operator(
+                    "non-applicable", 
+                    new string[]{ "?a" },
+                    new Fact[]{ new Fact("wew", "?a") },
+                    new Fact[]{ },
+                    new Fact[]{ })
+            };
             var generator = new RelaxedPlanningGraph();
 
             // ACT
@@ -158,12 +164,17 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Goal = new GoalDecl();
             decl.Problem.Goal.GoalExp = new PredicateExp("abc");
-            IState state = new RelaxedPDDLStateSpace(decl);
+            var state = new RelaxedSASStateSpace(decl);
 
-            var actions = new List<ActionDecl>();
-            var action = new ActionDecl("non-applicable");
-            action.Parameters = new ParameterExp(new List<NameExp>() { new NameExp("?a") });
-            actions.Add(action);
+            var actions = new List<Operator>()
+            {
+                new Operator(
+                    "non-applicable",
+                    new string[]{ "?a" },
+                    new Fact[]{ },
+                    new Fact[]{ },
+                    new Fact[]{ })
+            };
             var generator = new RelaxedPlanningGraph();
 
             // ACT

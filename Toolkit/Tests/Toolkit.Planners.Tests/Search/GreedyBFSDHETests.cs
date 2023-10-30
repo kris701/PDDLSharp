@@ -24,10 +24,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IPlanner planner = new GreedyBFSDHE(decl);
-            planner.Operators = GetGroundedActions(decl);
+            var planner = new GreedyBFSDHE(decl);
+            planner.Operators = GetOperators(decl);
             var h = new hDepth();
-            IPlanValidator validator = new PlanValidator.PlanValidator();
+            var validator = new PlanValidator.PlanValidator();
 
             // ACT
             var result = planner.Solve(h);
@@ -46,8 +46,8 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IPlanner planner = new GreedyBFSDHE(decl);
-            var expected = GetGroundedActions(decl);
+            var planner = new GreedyBFSDHE(decl);
+            var expected = GetOperators(decl);
 
             // ACT
             planner.PreProcess();
@@ -65,10 +65,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IPlanner planner = new GreedyBFSDHE(decl);
-            planner.Operators = GetGroundedActions(decl);
+            var planner = new GreedyBFSDHE(decl);
+            planner.Operators = GetOperators(decl);
             var h = new hFF(decl);
-            IPlanValidator validator = new PlanValidator.PlanValidator();
+            var validator = new PlanValidator.PlanValidator();
 
             // ACT
             var result = planner.Solve(h);
@@ -88,8 +88,8 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
             decl.Problem.Goal.GoalExp = new PredicateExp("non-existent");
-            IPlanner planner = new GreedyBFSDHE(decl);
-            planner.Operators = GetGroundedActions(decl);
+            var planner = new GreedyBFSDHE(decl);
+            planner.Operators = GetOperators(decl);
             var h = new hDepth();
 
             // ACT

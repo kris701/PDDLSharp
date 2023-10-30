@@ -12,7 +12,7 @@ namespace PDDLSharp.Models.SAS
         public string Name { get; }
         public string[] Arguments { get; }
 
-        public Fact(string name, string[] arguments)
+        public Fact(string name, params string[] arguments)
         {
             Name = name;
             Arguments = arguments;

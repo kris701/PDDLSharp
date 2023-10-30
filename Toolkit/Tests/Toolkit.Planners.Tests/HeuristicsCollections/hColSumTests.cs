@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
 using PDDLSharp.Toolkit.Planners.Search;
@@ -25,7 +26,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.HeuristicsCollections
             var parent = new StateMove();
 
             // ACT
-            var newValue = h.GetValue(parent, null, new List<ActionDecl>());
+            var newValue = h.GetValue(parent, null, new List<Operator>());
 
             // ASSERT
             Assert.AreEqual(expected, newValue);
