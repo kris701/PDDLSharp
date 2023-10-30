@@ -1,7 +1,9 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.SAS;
+using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Search;
+using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.Toolkit.StateSpace.PDDL;
 using PDDLSharp.Toolkit.StateSpace.SAS;
@@ -21,7 +23,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
         {
             Calculated++;
             var cost = 0;
-            var dict = GenerateCostStructure(state, operators);
+            var dict = GenerateRelaxedGraph(state, operators);
             foreach (var fact in state.Goals)
             {
                 var factCost = dict[fact];
@@ -32,81 +34,73 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             return cost;
         }
 
-        internal Dictionary<Fact, int> GenerateCostStructure(IState<Fact, Operator> state, List<Models.SAS.Operator> operators)
+        private Dictionary<int, List<Operator>> _operatorCache = new Dictionary<int, List<Operator>>();
+        private Dictionary<int, List<int>> _coveredCache = new Dictionary<int, List<int>>();
+        internal Dictionary<Fact, int> GenerateRelaxedGraph(IState<Fact, Operator> state, List<Models.SAS.Operator> operators)
         {
-            var Ucost = new Dictionary<Operator, int>();
+            if (state is not RelaxedSASStateSpace)
+                state = new RelaxedSASStateSpace(state.Declaration, state.State, state.Goals);
+
+            state = state.Copy();
+            bool[] covered = new bool[operators.Count];
             var dict = new Dictionary<Fact, int>();
-            var checkList = new PriorityQueue<Fact, int>();
-            // Add state facts
             foreach (var fact in state.State)
                 dict.Add(fact, 0);
 
-            // Add all possible effect facts
-            foreach (var act in operators)
-                foreach (var fact in act.Add)
-                    if (!dict.ContainsKey(fact))
-                        dict.Add(fact, int.MaxValue);
-
-            // Foreach applicable grounded action, set their adds cost to 1
-            foreach (var op in operators)
-                if (state.IsNodeTrue(op))
-                    foreach (var fact in op.Add)
-                        dict[fact] = Math.Min(dict[fact], 1);
-
-            // Count all the positive preconditions actions have
-            foreach (var op in operators)
-            {
-                int count = 0;
-                foreach (var pre in op.Pre)
-                    if (!state.Contains(pre))
-                        count++;
-                Ucost.Add(op, count);
-            }
-
-            foreach (var item in dict)
-                checkList.Enqueue(item.Key, item.Value);
-
-            state = state.Copy();
-
+            int layer = 1;
             while (!state.IsInGoal())
             {
-                var k = checkList.Dequeue();
-                state.Add(k);
-                if (_graphCache.ContainsKey(k))
+                var hash = state.GetHashCode();
+                if (_operatorCache.ContainsKey(hash))
                 {
-                    foreach(var index in _graphCache[k])
+                    foreach (var item in _coveredCache[hash])
+                        covered[item] = true;
+
+                    int changed = 0;
+                    foreach (var op in _operatorCache[hash])
                     {
-                        Ucost[operators[index]]--;
-                        if (Ucost[operators[index]] == 0)
-                        {
-                            var opCost = 0;
-                            foreach (var fact in operators[index].Add)
-                                opCost = AlwaysPossitive(opCost, Math.Min(dict[fact], AlwaysPossitive(dict[k], 1)));
-                            foreach (var fact in operators[index].Add)
-                                dict[fact] = Math.Min(dict[fact], AlwaysPossitive(dict[k], opCost));
-                        }
+                        changed += state.ExecuteNode(op);
+                        foreach (var add in op.Add)
+                            if (!dict.ContainsKey(add))
+                                dict.Add(add, layer);
                     }
+                    if (changed == 0)
+                        throw new RelaxedPlanningGraphException("Actions didnt change the state!");
                 }
                 else
                 {
-                    _graphCache.Add(k, new HashSet<int>());
-                    for (int i = 0; i < operators.Count; i++)
+                    var newCovers = new List<int>();
+                    var apply = new List<Operator>();
+                    for (int i = 0; i < covered.Length; i++)
                     {
-                        if (operators[i].Pre.Contains(k))
+                        if (!covered[i])
                         {
-                            _graphCache[k].Add(i);
-                            Ucost[operators[i]]--;
-                            if (Ucost[operators[i]] == 0)
+                            if (state.IsNodeTrue(operators[i]))
                             {
-                                var opCost = 0;
-                                foreach (var fact in operators[i].Pre)
-                                    opCost = AlwaysPossitive(opCost, dict[fact]);
-                                foreach (var fact in operators[i].Add)
-                                    dict[fact] = Math.Min(dict[fact], opCost);
+                                covered[i] = true;
+                                apply.Add(operators[i]);
+                                newCovers.Add(i);
                             }
                         }
                     }
+                    if (apply.Count == 0)
+                        throw new RelaxedPlanningGraphException("No applicable actions found!");
+
+                    state = state.Copy();
+                    int changed = 0;
+                    foreach (var op in apply)
+                    {
+                        changed += state.ExecuteNode(op);
+                        foreach (var add in op.Add)
+                            if (!dict.ContainsKey(add))
+                                dict.Add(add, layer);
+                    }
+                    if (changed == 0)
+                        throw new RelaxedPlanningGraphException("Actions didnt change the state!");
+                    _operatorCache.Add(hash, apply);
+                    _coveredCache.Add(hash, newCovers);
                 }
+                layer++;
             }
 
             return dict;

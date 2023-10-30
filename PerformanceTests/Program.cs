@@ -51,10 +51,10 @@ namespace PerformanceTests
             //var targetProblem = "benchmarks/tidybot-opt11-strips/p01.pddl";
             //var targetDomain = "benchmarks/logistics98/domain.pddl";
             //var targetProblem = "benchmarks/logistics98/prob35.pddl";
-            //var targetDomain = "benchmarks/gripper/domain.pddl";
-            //var targetProblem = "benchmarks/gripper/prob20.pddl";
-            var targetDomain = "benchmarks/depot/domain.pddl";
-            var targetProblem = "benchmarks/depot/p01.pddl";
+            var targetDomain = "benchmarks/gripper/domain.pddl";
+            var targetProblem = "benchmarks/gripper/prob20.pddl";
+            //var targetDomain = "benchmarks/depot/domain.pddl";
+            //var targetProblem = "benchmarks/depot/p20.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
@@ -101,7 +101,7 @@ namespace PerformanceTests
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
                 h7 = new hMax();
-                //actionPlan1 = greedyBFS_UAR.Solve(h7);
+                actionPlan1 = greedyBFS_UAR.Solve(h7);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} calculated heuristic {h2.Calculated} times");

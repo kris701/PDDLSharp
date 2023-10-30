@@ -16,7 +16,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
         {
             Calculated++;
             var max = 0;
-            var dict = GenerateCostStructure(state, operators);
+            var dict = GenerateRelaxedGraph(state, operators);
             foreach (var fact in state.Goals)
             {
                 var factCost = dict[fact];

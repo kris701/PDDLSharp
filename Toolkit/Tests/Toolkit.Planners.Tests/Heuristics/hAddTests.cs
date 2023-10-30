@@ -13,12 +13,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
     public class hAddTests : BasePlannerTests
     {
         [TestMethod]
-        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl", 6)]
-        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl", 42)]
-        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl", 2)]
-        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl", 9)]
-        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl", 7)]
-        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl", 14)]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl", 4)]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl", 28)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl", 8)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl", 43)]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl", 3)]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl", 6)]
         public void Can_GeneratehAddCorrectly_FromInitialState(string domain, string problem, int expected)
         {
             // ARRANGE

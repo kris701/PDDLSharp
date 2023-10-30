@@ -38,8 +38,8 @@ namespace PDDLSharp.Models.SAS
             const int modifier = 31;
             unchecked
             {
-                _hashCache = 25 * Name.GetHashCode() * Arguments.Aggregate(seed, (current, item) =>
-                    (current * modifier) + item.GetHashCode());
+                _hashCache = 50 * Arguments.Length * Name.GetHashCode() * Arguments.Aggregate(seed, (current, item) =>
+                    (current * modifier) * item.GetHashCode());
                 return _hashCache;
             }
         }
@@ -47,7 +47,14 @@ namespace PDDLSharp.Models.SAS
         public override bool Equals(object? obj)
         {
             if (obj is Fact f)
-                return f.GetHashCode() == GetHashCode();
+            {
+                if (f.Name != Name) return false;
+                if (f.Arguments.Length != Arguments.Length) return false;
+                for (int i = 0; i < Arguments.Length; i++)
+                    if (f.Arguments[i] != Arguments[i])
+                        return false;
+                return true;
+            }
             return false;
         }
 
