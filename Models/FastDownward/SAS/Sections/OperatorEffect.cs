@@ -1,4 +1,4 @@
-﻿namespace PDDLSharp.Models.SAS.Sections
+﻿namespace PDDLSharp.Models.FastDownward.SAS.Sections
 {
     public class OperatorEffect
     {

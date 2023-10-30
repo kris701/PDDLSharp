@@ -6,6 +6,7 @@ using PDDLSharp.CodeGenerators.Tests.Plans;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
+using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.Plans;
 using System;
 

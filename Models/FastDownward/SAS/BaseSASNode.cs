@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 
-namespace PDDLSharp.Models.SAS
+namespace PDDLSharp.Models.FastDownward.SAS
 {
     public class BaseSASNode : ISASNode
     {

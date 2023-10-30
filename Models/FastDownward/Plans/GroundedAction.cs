@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 
-namespace PDDLSharp.Models.Plans
+namespace PDDLSharp.Models.FastDownward.Plans
 {
     public class GroundedAction
     {

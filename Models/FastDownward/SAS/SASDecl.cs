@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models.AST;
-using PDDLSharp.Models.SAS.Sections;
+using PDDLSharp.Models.FastDownward.SAS.Sections;
 
-namespace PDDLSharp.Models.SAS
+namespace PDDLSharp.Models.FastDownward.SAS
 {
     public class SASDecl : BaseSASNode
     {

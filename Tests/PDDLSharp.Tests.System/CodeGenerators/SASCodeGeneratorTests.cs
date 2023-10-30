@@ -2,6 +2,7 @@
 using PDDLSharp.CodeGenerators.Plans;
 using PDDLSharp.CodeGenerators.SAS;
 using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers;

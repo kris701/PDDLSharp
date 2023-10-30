@@ -1,6 +1,5 @@
 ﻿using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.Plans;
 using PDDLSharp.Models;
 using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.StateSpace;
@@ -16,6 +15,7 @@ using PDDLSharp.Tools;
 using PDDLSharp.Toolkit.Planners.Tools;
 using System.Runtime.Intrinsics.X86;
 using PDDLSharp.Toolkit.Planners.Exceptions;
+using PDDLSharp.Models.FastDownward.Plans;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {

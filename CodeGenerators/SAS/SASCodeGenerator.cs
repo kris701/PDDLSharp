@@ -1,5 +1,5 @@
 ﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.SAS;
+using PDDLSharp.Models.FastDownward.SAS;
 
 namespace PDDLSharp.CodeGenerators.SAS
 {

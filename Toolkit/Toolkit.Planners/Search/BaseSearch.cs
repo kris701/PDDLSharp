@@ -1,5 +1,4 @@
 ﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.Plans;
 using PDDLSharp.Models;
 using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.StateSpace;
@@ -11,6 +10,7 @@ using System.Text;
 using System.Timers;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.FastDownward.Plans;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {

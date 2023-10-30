@@ -1,8 +1,8 @@
 ﻿using PDDLSharp.Models;
+using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.Plans;
 using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.StateSpace;

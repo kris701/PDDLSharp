@@ -1,4 +1,4 @@
-﻿namespace PDDLSharp.Models.SAS
+﻿namespace PDDLSharp.Models.FastDownward.SAS
 {
     public interface ISASNode
     {

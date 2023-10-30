@@ -1,5 +1,5 @@
-﻿using PDDLSharp.Models.SAS;
-using PDDLSharp.Models.SAS.Sections;
+﻿using PDDLSharp.Models.FastDownward.SAS;
+using PDDLSharp.Models.FastDownward.SAS.Sections;
 
 namespace PDDLSharp.CodeGenerators.SAS
 {

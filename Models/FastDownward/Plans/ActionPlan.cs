@@ -1,4 +1,4 @@
-﻿namespace PDDLSharp.Models.Plans
+﻿namespace PDDLSharp.Models.FastDownward.Plans
 {
     public class ActionPlan
     {
@@ -33,7 +33,7 @@
             unchecked
             {
                 return Cost + Plan.Aggregate(seed, (current, item) =>
-                    (current * modifier) + item.GetHashCode());
+                    current * modifier + item.GetHashCode());
             }
         }
 

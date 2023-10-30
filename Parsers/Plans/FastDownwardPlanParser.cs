@@ -1,5 +1,5 @@
 ﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.Plans;
+using PDDLSharp.Models.FastDownward.Plans;
 
 namespace PDDLSharp.Parsers.Plans
 {

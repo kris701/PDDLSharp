@@ -1,6 +1,7 @@
 ﻿using PDDLSharp;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
+using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.Plans;
