@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Models.PDDL.Expressions;
+﻿using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
@@ -87,7 +88,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            decl.Problem.Goal.GoalExp = new PredicateExp("non-existent");
+            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("non-existent") });
             var planner = new GreedyBFSDHE(decl);
             planner.Operators = GetOperators(decl);
             var h = new hDepth();

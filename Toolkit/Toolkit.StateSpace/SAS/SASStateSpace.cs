@@ -28,9 +28,13 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
                         State.Add(new Fact(pred));
             Goals = new HashSet<Fact>();
             if (declaration.Problem.Goal != null && declaration.Problem.Goal.GoalExp is AndExp and)
+            {
                 foreach (var child in and.Children)
                     if (child is PredicateExp pred)
                         Goals.Add(new Fact(pred));
+            }
+            else
+                throw new Exception("Error! Goal expression was not and and expression!");
         }
 
         public SASStateSpace(PDDLDecl declaration, HashSet<Fact> state, HashSet<Fact> goal)

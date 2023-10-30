@@ -119,7 +119,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             // ARRANGE
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new PredicateExp("abc");
+            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("abc") });
             var state = new RelaxedSASStateSpace(decl);
             var generator = new RelaxedPlanningGraph();
 
@@ -136,7 +136,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             // ARRANGE
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new PredicateExp("abc");
+            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("abc") });
             var state = new RelaxedSASStateSpace(decl);
 
             var actions = new List<Operator>()
@@ -163,7 +163,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             // ARRANGE
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new PredicateExp("abc");
+            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("abc") });
             var state = new RelaxedSASStateSpace(decl);
 
             var actions = new List<Operator>()

@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             // ARRANGE
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new PredicateExp("goal-fact");
+            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("goal-fact") });
             var h = new hGoal(decl);
             var parent = new StateMove();
             var state = new SASStateSpace(decl);

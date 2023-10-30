@@ -33,7 +33,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            var state = new SASStateSpace(decl);
+            var state = new RelaxedSASStateSpace(decl);
             var actions = GetOperators(decl);
             var generator = new RelaxedPlanGenerator(decl);
 
@@ -41,6 +41,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var result = generator.GenerateReplaxedPlan(state, actions);
 
             // ASSERT
+            Assert.IsFalse(generator.Failed);
             Assert.IsFalse(state.IsInGoal());
             foreach (var item in result)
                 state.ExecuteNode(item);
@@ -66,6 +67,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var result = generator.GenerateReplaxedPlan(state, operators);
 
             // ASSERT
+            Assert.IsFalse(generator.Failed);
             Assert.AreEqual(expected, result.Count);
         }
     }
