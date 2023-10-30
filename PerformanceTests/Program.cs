@@ -49,10 +49,12 @@ namespace PerformanceTests
             //var targetProblem = "benchmarks/barman-sat11-strips/pfile06-021.pddl";
             //var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
             //var targetProblem = "benchmarks/tidybot-opt11-strips/p01.pddl";
-            var targetDomain = "benchmarks/logistics98/domain.pddl";
-            var targetProblem = "benchmarks/logistics98/prob35.pddl";
+            //var targetDomain = "benchmarks/logistics98/domain.pddl";
+            //var targetProblem = "benchmarks/logistics98/prob35.pddl";
             //var targetDomain = "benchmarks/gripper/domain.pddl";
-            //var targetProblem = "benchmarks/gripper/prob01.pddl";
+            //var targetProblem = "benchmarks/gripper/prob20.pddl";
+            var targetDomain = "benchmarks/depot/domain.pddl";
+            var targetProblem = "benchmarks/depot/p01.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
@@ -98,32 +100,32 @@ namespace PerformanceTests
 
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                h2 = new hFF(decl);
-                actionPlan1 = greedyBFS_UAR.Solve(h2);
+                h7 = new hMax();
+                //actionPlan1 = greedyBFS_UAR.Solve(h7);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} calculated heuristic {h2.Calculated} times");
 
                 Console.WriteLine($"{nameof(greedyBFS)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                h2 = new hFF(decl);
-                actionPlan2 = greedyBFS.Solve(h2);
+                h7 = new hMax();
+                actionPlan2 = greedyBFS.Solve(h7);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
                 Console.WriteLine($"{nameof(greedyBFS)} calculated heuristic {h2.Calculated} times");
 
                 Console.WriteLine($"{nameof(greedyBFS_PO)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                h2 = new hFF(decl);
-                actionPlan3 = greedyBFS_PO.Solve(h2);
+                h7 = new hMax();
+                actionPlan3 = greedyBFS_PO.Solve(h7);
                 instanceWatch.Stop();
                 times[2] += instanceWatch.ElapsedMilliseconds;
                 Console.WriteLine($"{nameof(greedyBFS_PO)} calculated heuristic {h2.Calculated} times");
 
                 Console.WriteLine($"{nameof(greedyBFS_DHE)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                h2 = new hFF(decl);
-                actionPlan4 = greedyBFS_DHE.Solve(h2);
+                h7 = new hMax();
+                actionPlan4 = greedyBFS_DHE.Solve(h7);
                 instanceWatch.Stop();
                 times[3] += instanceWatch.ElapsedMilliseconds;
                 Console.WriteLine($"{nameof(greedyBFS_DHE)} calculated heuristic {h2.Calculated} times");

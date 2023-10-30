@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             foreach (var fact in state.Goals)
             {
                 var factCost = dict[fact];
-                if (factCost == int.MaxValue - 1)
+                if (factCost == int.MaxValue)
                     return int.MaxValue;
                 cost += factCost;
             }
@@ -45,9 +45,9 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             foreach (var act in operators)
                 foreach (var fact in act.Add)
                     if (!dict.ContainsKey(fact))
-                        dict.Add(fact, int.MaxValue - 1);
+                        dict.Add(fact, int.MaxValue);
 
-            // Foreach applicable grounded action, set their cost to 1
+            // Foreach applicable grounded action, set their adds cost to 1
             foreach (var op in operators)
                 if (state.IsNodeTrue(op))
                     foreach (var fact in op.Add)
@@ -64,12 +64,11 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             }
 
             foreach (var item in dict)
-                if (item.Value != 0)
-                    checkList.Enqueue(item.Key, item.Value);
+                checkList.Enqueue(item.Key, item.Value);
 
             state = state.Copy();
 
-            while (checkList.Count > 0)
+            while (!state.IsInGoal())
             {
                 var k = checkList.Dequeue();
                 state.Add(k);
@@ -80,8 +79,11 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
                         Ucost[operators[index]]--;
                         if (Ucost[operators[index]] == 0)
                         {
+                            var opCost = 0;
                             foreach (var fact in operators[index].Add)
-                                dict[fact] = Math.Min(dict[fact], dict[k] + 1);
+                                opCost = AlwaysPossitive(opCost, Math.Min(dict[fact], AlwaysPossitive(dict[k], 1)));
+                            foreach (var fact in operators[index].Add)
+                                dict[fact] = Math.Min(dict[fact], AlwaysPossitive(dict[k], opCost));
                         }
                     }
                 }
@@ -96,8 +98,11 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
                             Ucost[operators[i]]--;
                             if (Ucost[operators[i]] == 0)
                             {
+                                var opCost = 0;
+                                foreach (var fact in operators[i].Pre)
+                                    opCost = AlwaysPossitive(opCost, dict[fact]);
                                 foreach (var fact in operators[i].Add)
-                                    dict[fact] = Math.Min(dict[fact], dict[k] + 1);
+                                    dict[fact] = Math.Min(dict[fact], opCost);
                             }
                         }
                     }
@@ -105,6 +110,13 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             }
 
             return dict;
+        }
+
+        private int AlwaysPossitive(int value1, int value2)
+        {
+            if (value1 == int.MaxValue || value2 == int.MaxValue)
+                return int.MaxValue;
+            return value1 + value2;
         }
     }
 }
