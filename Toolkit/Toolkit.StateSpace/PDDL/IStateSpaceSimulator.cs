@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Models;
 
-namespace PDDLSharp.Toolkit.StateSpace
+namespace PDDLSharp.Toolkit.StateSpace.PDDL
 {
     public interface IStateSpaceSimulator
     {

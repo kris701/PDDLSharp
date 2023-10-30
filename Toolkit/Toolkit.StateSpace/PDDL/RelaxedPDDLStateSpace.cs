@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.Grounders;
 
-namespace PDDLSharp.Toolkit.StateSpace
+namespace PDDLSharp.Toolkit.StateSpace.PDDL
 {
     public class RelaxedPDDLStateSpace : PDDLStateSpace
     {

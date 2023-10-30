@@ -5,7 +5,7 @@ using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 
-namespace PDDLSharp.Toolkit.StateSpace
+namespace PDDLSharp.Toolkit.StateSpace.PDDL
 {
     public class StateSpaceSimulator : IStateSpaceSimulator
     {
