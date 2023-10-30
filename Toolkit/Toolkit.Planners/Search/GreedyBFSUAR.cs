@@ -1,6 +1,5 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
-using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Tools;
@@ -16,8 +15,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public int OperatorsUsed { get; set; }
 
         private RelaxedPlanGenerator _graphGenerator;
-
-        public GreedyBFSUAR(PDDLDecl decl) : base(decl)
+        public GreedyBFSUAR(PDDLDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
@@ -30,7 +28,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             int best = 0;
             int current = 0;
 
-            while (!_abort)
+            while (!Aborted)
             {
                 // Refinement Guards
                 if (_openList.Count == 0 || current > best)
@@ -46,7 +44,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 current = int.MaxValue;
                 foreach (var op in operators)
                 {
-                    if (_abort) break;
+                    if (Aborted) break;
                     if (stateMove.State.IsNodeTrue(op))
                     {
                         var newMove = new StateMove(GenerateNewState(stateMove.State, op));
@@ -196,9 +194,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 else
                 {
                     _applicableCache.Add(hash, new HashSet<Operator>());
-                    foreach (var op in Operators) 
+                    foreach (var op in Operators)
                     {
-                        if (item.State.IsNodeTrue(op)) 
+                        if (item.State.IsNodeTrue(op))
                         {
                             applicableOperators.Add(op);
                             _applicableCache[hash].Add(op);
@@ -207,6 +205,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 }
             }
             return applicableOperators.Except(operators).ToHashSet();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _graphGenerator.ClearCaches();
         }
     }
 }

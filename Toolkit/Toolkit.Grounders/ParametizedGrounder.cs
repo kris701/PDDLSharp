@@ -53,6 +53,7 @@ namespace PDDLSharp.Toolkit.Grounders
             GenerateStaticsPreconditions(item);
 
             var allPermutations = GenerateParameterPermutations(item.Parameters.Values);
+            if (_abort) return new List<IParametized>();
             if (RemoveStaticsFromOutput)
                 item = RemoveStaticsFromNode(item);
             foreach (var permutation in allPermutations)
@@ -144,6 +145,7 @@ namespace PDDLSharp.Toolkit.Grounders
 
         internal override bool IsPermutationLegal(int[] permutation, int index)
         {
+            if (_abort) return false;
             if (_statics.Count > 0)
             {
                 if (!IsPermutationLegal(permutation, index + 1, _staticsViolationPatterns))

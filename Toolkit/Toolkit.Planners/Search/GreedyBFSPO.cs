@@ -1,6 +1,5 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
-using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Tools;
@@ -17,7 +16,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
     public class GreedyBFSPO : BaseSearch
     {
         private RelaxedPlanGenerator _graphGenerator;
-        public GreedyBFSPO(PDDLDecl decl) : base(decl)
+        public GreedyBFSPO(PDDLDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
@@ -28,7 +27,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var preferredQueue = InitializeQueue(h, state);
 
             int iteration = 0;
-            while (!_abort && _openList.Count > 0 || preferredQueue.Count > 0)
+            while (!Aborted && _openList.Count > 0 || preferredQueue.Count > 0)
             {
                 if (iteration++ % 2 == 0 && preferredQueue.Count > 0)
                 {
@@ -38,7 +37,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
                     foreach (var op in preferedOperators)
                     {
-                        if (_abort) break;
+                        if (Aborted) break;
                         if (stateMove.State.IsNodeTrue(op))
                         {
                             var newMove = new StateMove(GenerateNewState(stateMove.State, op));
@@ -62,7 +61,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
                     foreach (var op in Operators)
                     {
-                        if (_abort) break;
+                        if (Aborted) break;
                         if (stateMove.State.IsNodeTrue(op))
                         {
                             var newMove = new StateMove(GenerateNewState(stateMove.State, op));
@@ -92,6 +91,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
             if (_graphGenerator.Failed)
                 throw new Exception("No relaxed plan could be found from the initial state! Could indicate the problem is unsolvable.");
             return operators;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _graphGenerator.ClearCaches();
         }
     }
 }

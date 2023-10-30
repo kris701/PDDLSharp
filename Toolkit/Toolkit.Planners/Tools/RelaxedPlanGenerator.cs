@@ -1,7 +1,4 @@
 ﻿using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.StateSpace;
@@ -21,6 +18,13 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             Declaration = declaration;
             _generator = new OperatorRPG();
             _opCache = new Dictionary<int, HashSet<Operator>>();
+        }
+
+        public void ClearCaches()
+        {
+            _opCache.Clear();
+            _opCache.EnsureCapacity(0);
+            _generator.ClearCaches();
         }
 
         public HashSet<Operator> GenerateReplaxedPlan(IState<Fact, Operator> state, List<Operator> operators)
@@ -76,6 +80,8 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                             foreach (var pre in op.Pre)
                             {
                                 var newGoal = FirstLevel(pre, graphLayers);
+                                if (newGoal == t)
+                                    break;
                                 G[newGoal].Add(pre);
                             }
                             break;

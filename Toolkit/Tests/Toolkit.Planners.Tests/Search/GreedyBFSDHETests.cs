@@ -25,13 +25,13 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            var planner = new GreedyBFSDHE(decl);
+            var planner = new GreedyBFSDHE(decl, new hDepth());
             planner.Operators = GetOperators(decl);
             var h = new hDepth();
             var validator = new PlanValidator.PlanValidator();
 
             // ACT
-            var result = planner.Solve(h);
+            var result = planner.Solve();
 
             // ASSERT
             Assert.IsTrue(validator.Validate(result, decl));
@@ -47,7 +47,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            var planner = new GreedyBFSDHE(decl);
+            var planner = new GreedyBFSDHE(decl, new hDepth());
             var expected = GetOperators(decl);
 
             // ACT
@@ -66,13 +66,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            var planner = new GreedyBFSDHE(decl);
+            var planner = new GreedyBFSDHE(decl, new hFF(decl));
             planner.Operators = GetOperators(decl);
-            var h = new hFF(decl);
             var validator = new PlanValidator.PlanValidator();
 
             // ACT
-            var result = planner.Solve(h);
+            var result = planner.Solve();
 
             // ASSERT
             Assert.IsTrue(validator.Validate(result, decl));
@@ -89,12 +88,11 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
             decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("non-existent") });
-            var planner = new GreedyBFSDHE(decl);
+            var planner = new GreedyBFSDHE(decl, new hDepth());
             planner.Operators = GetOperators(decl);
-            var h = new hDepth();
 
             // ACT
-            var result = planner.Solve(h);
+            var result = planner.Solve();
         }
     }
 }

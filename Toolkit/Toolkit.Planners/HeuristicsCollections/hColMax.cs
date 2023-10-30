@@ -1,5 +1,4 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.SAS;
+﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
 
@@ -21,7 +20,7 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
 
         public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
         {
-            Calculated++;
+            Evaluations++;
             int max = -1;
             foreach (var heuristic in Heuristics)
             {

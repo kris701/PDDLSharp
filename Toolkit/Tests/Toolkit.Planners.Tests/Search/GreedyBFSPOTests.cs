@@ -24,13 +24,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            var planner = new GreedyBFSPO(decl);
+            var planner = new GreedyBFSPO(decl, new hDepth());
             planner.Operators = GetOperators(decl);
-            var h = new hDepth();
             var validator = new PlanValidator.PlanValidator();
 
             // ACT
-            var result = planner.Solve(h);
+            var result = planner.Solve();
 
             // ASSERT
             Assert.IsTrue(validator.Validate(result, decl));
@@ -46,7 +45,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            var planner = new GreedyBFSPO(decl);
+            var planner = new GreedyBFSPO(decl, new hDepth());
             var expected = GetOperators(decl);
 
             // ACT
@@ -65,13 +64,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            var planner = new GreedyBFSPO(decl);
+            var planner = new GreedyBFSPO(decl, new hFF(decl));
             planner.Operators = GetOperators(decl);
-            var h = new hFF(decl);
             var validator = new PlanValidator.PlanValidator();
 
             // ACT
-            var result = planner.Solve(h);
+            var result = planner.Solve();
 
             // ASSERT
             Assert.IsTrue(validator.Validate(result, decl));

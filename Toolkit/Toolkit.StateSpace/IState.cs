@@ -1,7 +1,4 @@
 ﻿using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL;
-using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Toolkit.Grounders;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
@@ -11,7 +8,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         public HashSet<F> Goals { get; }
         public PDDLDecl Declaration { get; }
 
-        public IState<F,O> Copy();
+        public IState<F, O> Copy();
         public int Count { get; }
 
         public bool Add(F pred);

@@ -1,10 +1,4 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.PDDL.Expressions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Models.SAS
 {
@@ -38,7 +32,7 @@ namespace PDDLSharp.Models.SAS
             var pre = new HashSet<Fact>();
             if (act.Preconditions is AndExp preAnd)
             {
-                foreach(var item in preAnd.Children)
+                foreach (var item in preAnd.Children)
                 {
                     if (item is PredicateExp pred)
                         pre.Add(new Fact(pred));
@@ -84,9 +78,9 @@ namespace PDDLSharp.Models.SAS
                 return _hashCache;
 
             _hashCache = Name.GetHashCode();
-            foreach(var arg in Arguments)
+            foreach (var arg in Arguments)
                 _hashCache ^= arg.GetHashCode();
-            foreach(var pre in Pre)
+            foreach (var pre in Pre)
                 _hashCache ^= pre.GetHashCode();
             foreach (var del in Del)
                 _hashCache ^= del.GetHashCode();

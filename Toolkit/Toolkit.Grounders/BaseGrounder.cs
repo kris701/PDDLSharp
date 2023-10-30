@@ -14,6 +14,7 @@ namespace PDDLSharp.Toolkit.Grounders
         private Dictionary<int, string> _objDict = new Dictionary<int, string>();
         private Dictionary<string, int> _objRef = new Dictionary<string, int>();
         private Dictionary<int, int[]> _objCache = new Dictionary<int, int[]>();
+        internal bool _abort = false;
 
         protected BaseGrounder(PDDLDecl declaration)
         {
@@ -28,6 +29,11 @@ namespace PDDLSharp.Toolkit.Grounders
         }
 
         public abstract List<T> Ground(T item);
+
+        public void Abort()
+        {
+            _abort = true;
+        }
 
         private void IndexItems()
         {
@@ -94,6 +100,7 @@ namespace PDDLSharp.Toolkit.Grounders
         }
         private void GenerateParameterPermutations(int[] parameters, int[] carried, int index, Queue<int[]> returnQueue)
         {
+            if (_abort) return;
             var allOfType = _objCache[parameters[index]];
             foreach (var ofType in allOfType)
             {

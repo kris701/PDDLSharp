@@ -1,5 +1,4 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.SAS;
+﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
 
@@ -7,7 +6,7 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
 {
     public abstract class BaseHeuristicCollection : IHeuristicCollection
     {
-        public int Calculated { get; internal set; }
+        public int Evaluations { get; internal set; }
         public List<IHeuristic> Heuristics { get; set; }
 
         public BaseHeuristicCollection(List<IHeuristic> heuristics)

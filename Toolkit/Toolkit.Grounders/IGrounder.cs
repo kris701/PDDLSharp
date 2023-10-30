@@ -4,6 +4,7 @@ namespace PDDLSharp.Toolkit.Grounders
 {
     public interface IGrounder<T>
     {
+        public void Abort();
         public List<T> Ground(T item);
         public Queue<int[]> GenerateParameterPermutations(List<NameExp> parameters);
 

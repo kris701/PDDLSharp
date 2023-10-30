@@ -1,5 +1,4 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.SAS;
+﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.StateSpace;
 
 namespace PDDLSharp.Toolkit.Planners.Tools
@@ -7,6 +6,14 @@ namespace PDDLSharp.Toolkit.Planners.Tools
     // Operator Relaxed Planning Graph
     public class OperatorRPG
     {
+        public void ClearCaches()
+        {
+            _layerCache.Clear();
+            _layerCache.EnsureCapacity(0);
+            _coveredCache.Clear();
+            _coveredCache.EnsureCapacity(0);
+        }
+
         // Cache, from the hash of the previous state, that then links to the next layer
         private Dictionary<int, Layer> _layerCache = new Dictionary<int, Layer>();
         private Dictionary<int, List<int>> _coveredCache = new Dictionary<int, List<int>>();
