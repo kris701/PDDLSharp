@@ -35,7 +35,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = GetPDDLDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
             var actions = GetOperators(decl);
-            var generator = new OperatorRPG(decl);
+            var generator = new RelaxedPlanGenerator(decl);
 
             // ACT
             var result = generator.GenerateReplaxedPlan(state, actions);
@@ -61,7 +61,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = GetPDDLDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
             var operators = GetOperators(decl);
-            var generator = new OperatorRPG(decl);
+            var generator = new RelaxedPlanGenerator(decl);
 
             // ACT
             var result = generator.GenerateReplaxedPlan(state, operators);

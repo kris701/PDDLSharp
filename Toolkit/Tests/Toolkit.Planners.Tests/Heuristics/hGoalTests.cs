@@ -26,7 +26,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
             decl.Problem.Goal = new GoalDecl();
             decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("goal-fact") });
-            var h = new hGoal(decl);
+            var h = new hGoal();
             var parent = new StateMove();
             var state = new SASStateSpace(decl);
 
@@ -46,7 +46,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("goal-fact") });
             decl.Problem.Init = new InitDecl();
             decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact"));
-            var h = new hGoal(decl);
+            var h = new hGoal();
             var parent = new StateMove();
             var state = new SASStateSpace(decl);
 
@@ -67,7 +67,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             decl.Problem.Init = new InitDecl();
             decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact-1"));
             decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact-2"));
-            var h = new hGoal(decl);
+            var h = new hGoal();
             var parent = new StateMove();
             var state = new SASStateSpace(decl);
 
@@ -89,7 +89,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact-1"));
             decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact-2"));
             decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact-3"));
-            IHeuristic h = new hGoal(decl);
+            var h = new hGoal();
             var parent = new StateMove();
             var state = new SASStateSpace(decl);
 
