@@ -2,8 +2,9 @@
 using PDDLSharp.ASTGenerators.SAS;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.FastDownward.SAS;
+using PDDLSharp.Parsers.SAS;
 
-namespace PDDLSharp.Parsers.SAS
+namespace PDDLSharp.Parsers.FastDownward.SAS
 {
     public class SASParser : BaseParser<ISASNode>
     {

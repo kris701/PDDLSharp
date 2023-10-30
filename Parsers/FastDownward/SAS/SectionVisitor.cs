@@ -4,7 +4,7 @@ using PDDLSharp.Models.AST;
 using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Models.FastDownward.SAS.Sections;
 
-namespace PDDLSharp.Parsers.SAS
+namespace PDDLSharp.Parsers.FastDownward.SAS
 {
     public class SectionVisitor
     {
