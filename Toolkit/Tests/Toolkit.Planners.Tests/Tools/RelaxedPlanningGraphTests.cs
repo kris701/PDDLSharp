@@ -36,7 +36,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = GetPDDLDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
             var actions = GetOperators(decl);
-            var generator = new RelaxedPlanningGraph();
+            var generator = new OperatorRPG();
 
             // ACT
             var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
@@ -58,7 +58,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = GetPDDLDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
             var actions = GetOperators(decl);
-            var generator = new RelaxedPlanningGraph();
+            var generator = new OperatorRPG();
 
             // ACT
             var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
@@ -82,7 +82,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = GetPDDLDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
             var actions = GetOperators(decl);
-            var generator = new RelaxedPlanningGraph();
+            var generator = new OperatorRPG();
 
             // ACT
             var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
@@ -104,7 +104,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = GetPDDLDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
             var actions = GetOperators(decl);
-            var generator = new RelaxedPlanningGraph();
+            var generator = new OperatorRPG();
 
             // ACT
             var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
@@ -121,7 +121,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             decl.Problem.Goal = new GoalDecl();
             decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("abc") });
             var state = new RelaxedSASStateSpace(decl);
-            var generator = new RelaxedPlanningGraph();
+            var generator = new OperatorRPG();
 
             // ACT
             var result = generator.GenerateRelaxedPlanningGraph(state, new List<Operator>());
@@ -148,7 +148,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                     new HashSet<Fact>(){ },
                     new HashSet<Fact>(){ })
             };
-            var generator = new RelaxedPlanningGraph();
+            var generator = new OperatorRPG();
 
             // ACT
             var result = generator.GenerateRelaxedPlanningGraph(state, actions);
@@ -175,7 +175,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                     new HashSet<Fact>(){ },
                     new HashSet<Fact>(){ })
             };
-            var generator = new RelaxedPlanningGraph();
+            var generator = new OperatorRPG();
 
             // ACT
             var result = generator.GenerateRelaxedPlanningGraph(state, actions);

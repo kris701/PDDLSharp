@@ -13,7 +13,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     /// </summary>
     public class hGoal : BaseHeuristic
     {
-        public hGoal(PDDLDecl declaration)
+        public hGoal()
         {
         }
 

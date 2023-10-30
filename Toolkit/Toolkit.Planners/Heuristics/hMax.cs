@@ -2,21 +2,24 @@
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
+using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
-    public class hMax : hAdd
+    public class hMax : BaseHeuristic
     {
-        public hMax() : base()
+        private FactRPG _graphGenerator;
+        public hMax()
         {
+            _graphGenerator = new FactRPG();
         }
 
         public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
         {
             Calculated++;
             var max = 0;
-            var dict = GenerateRelaxedGraph(state, operators);
+            var dict = _graphGenerator.GenerateRelaxedGraph(state, operators);
             foreach (var fact in state.Goals)
             {
                 var factCost = dict[fact];

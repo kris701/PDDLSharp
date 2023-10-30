@@ -51,10 +51,10 @@ namespace PerformanceTests
             //var targetProblem = "benchmarks/tidybot-opt11-strips/p01.pddl";
             //var targetDomain = "benchmarks/logistics98/domain.pddl";
             //var targetProblem = "benchmarks/logistics98/prob35.pddl";
-            var targetDomain = "benchmarks/gripper/domain.pddl";
-            var targetProblem = "benchmarks/gripper/prob20.pddl";
-            //var targetDomain = "benchmarks/depot/domain.pddl";
-            //var targetProblem = "benchmarks/depot/p20.pddl";
+            //var targetDomain = "benchmarks/gripper/domain.pddl";
+            //var targetProblem = "benchmarks/gripper/prob20.pddl";
+            var targetDomain = "benchmarks/depot/domain.pddl";
+            var targetProblem = "benchmarks/depot/p20.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
@@ -68,7 +68,7 @@ namespace PerformanceTests
 
             var h1 = new hDepth();
             var h2 = new hFF(decl);
-            var h3 = new hGoal(decl);
+            var h3 = new hGoal();
             var h4 = new hConstant(1);
             var h5 = new hPath();
             var h6 = new hAdd();

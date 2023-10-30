@@ -13,13 +13,13 @@ namespace PDDLSharp.Toolkit.Planners.Tools
     {
         public bool Failed { get; internal set; } = false;
         public PDDLDecl Declaration { get; set; }
-        private RelaxedPlanningGraph _generator;
+        private OperatorRPG _generator;
         private Dictionary<int, HashSet<Operator>> _opCache;
 
         public RelaxedPlanGenerator(PDDLDecl declaration)
         {
             Declaration = declaration;
-            _generator = new RelaxedPlanningGraph();
+            _generator = new OperatorRPG();
             _opCache = new Dictionary<int, HashSet<Operator>>();
         }
 

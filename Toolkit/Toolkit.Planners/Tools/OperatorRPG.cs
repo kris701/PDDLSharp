@@ -4,7 +4,8 @@ using PDDLSharp.Toolkit.StateSpace;
 
 namespace PDDLSharp.Toolkit.Planners.Tools
 {
-    public class RelaxedPlanningGraph
+    // Operator Relaxed Planning Graph
+    public class OperatorRPG
     {
         // Cache, from the hash of the previous state, that then links to the next layer
         private Dictionary<int, Layer> _layerCache = new Dictionary<int, Layer>();
