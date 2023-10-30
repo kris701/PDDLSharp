@@ -2,6 +2,7 @@
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
 
@@ -44,11 +45,11 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             return newPred;
         }
 
-        public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
+        public override int GetValue(StateMove parent, IState<Fact, Models.SAS.Operator> state, List<Models.SAS.Operator> operators)
         {
             Calculated++;
             var cost = 0;
-            var dict = GenerateCostStructure(state, groundedActions);
+            var dict = GenerateCostStructure(state, operators);
             foreach (var fact in _goalCache)
             {
                 var factCost = dict[fact];
@@ -59,7 +60,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             return cost;
         }
 
-        internal Dictionary<PredicateExp, int> GenerateCostStructure(IState state, List<ActionDecl> groundedActions)
+        internal Dictionary<PredicateExp, int> GenerateCostStructure(IState<Fact, Models.SAS.Operator> state, List<Models.SAS.Operator> operators)
         {
             int hash = state.GetHashCode();
             if (_graphCache.ContainsKey(hash))
@@ -67,23 +68,23 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
 
             state = state.Copy();
 
-            var Ucost = new Dictionary<ActionDecl, int>();
+            var Ucost = new Dictionary<Models.PDDL.Domain.ActionDecl, int>();
             var dict = new Dictionary<PredicateExp, int>();
             var checkList = new List<KeyValuePair<PredicateExp, int>>();
-            var covered = new bool[groundedActions.Count];
+            var covered = new bool[operators.Count];
             // Add state facts
             foreach (var fact in state.State)
                 dict.Add(fact, 0);
 
             // Add all possible effect facts
-            foreach (var act in groundedActions)
+            foreach (var act in operators)
                 if (act.Effects is AndExp andEff)
                     foreach (var fact in andEff)
                         if (fact is PredicateExp pred && !dict.ContainsKey(pred))
                             dict.Add(pred, int.MaxValue - 1);
 
             // Foreach applicable grounded action, set their cost to 1
-            foreach (var op in groundedActions)
+            foreach (var op in operators)
                 if (state.IsNodeTrue(op.Preconditions))
                     if (op.Effects is AndExp effAnd)
                         foreach (var item in effAnd)
@@ -91,7 +92,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
                                 dict[pred] = Math.Min(dict[pred], 1);
 
             // Count all the positive preconditions actions have
-            foreach (var op in groundedActions)
+            foreach (var op in operators)
                 Ucost.Add(op, PositivePreconditionCount(op));
 
             foreach (var item in dict)
@@ -103,15 +104,15 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
                 var k = checkList.MinBy(x => x.Value);
                 state.Add(k.Key);
                 checkList.Remove(k);
-                for (int i = 0; i < groundedActions.Count; i++)
+                for (int i = 0; i < operators.Count; i++)
                 {
-                    if (!covered[i] && groundedActions[i].Preconditions is AndExp preAnd && preAnd.Children.Contains(k.Key))
+                    if (!covered[i] && operators[i].Preconditions is AndExp preAnd && preAnd.Children.Contains(k.Key))
                     {
-                        Ucost[groundedActions[i]]--;
-                        if (Ucost[groundedActions[i]] == 0)
+                        Ucost[operators[i]]--;
+                        if (Ucost[operators[i]] == 0)
                         {
                             covered[i] = true;
-                            if (groundedActions[i].Effects is AndExp effAnd)
+                            if (operators[i].Effects is AndExp effAnd)
                                 foreach (var item in effAnd)
                                     if (item is PredicateExp pred)
                                         dict[pred] = Math.Min(dict[pred], dict[k.Key] + 1);
@@ -125,7 +126,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             return dict;
         }
 
-        private int PositivePreconditionCount(ActionDecl act)
+        private int PositivePreconditionCount(Models.PDDL.Domain.ActionDecl act)
         {
             int count = 0;
             if (act.Preconditions is AndExp and)

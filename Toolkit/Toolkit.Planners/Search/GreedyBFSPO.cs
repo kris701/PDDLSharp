@@ -1,9 +1,11 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
@@ -20,7 +22,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
 
-        internal override ActionPlan Solve(IHeuristic h, IState state)
+        internal override ActionPlan Solve(IHeuristic h, IState<Fact, Operator> state)
         {
             var preferedOperators = GetPreferredOperators();
             var preferredQueue = InitializeQueue(h, state);
@@ -34,18 +36,18 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     if (stateMove.State.IsInGoal())
                         return new ActionPlan(stateMove.Steps);
 
-                    foreach (var act in preferedOperators)
+                    foreach (var op in preferedOperators)
                     {
                         if (_abort) break;
-                        if (stateMove.State.IsNodeTrue(act.Preconditions))
+                        if (stateMove.State.IsNodeTrue(op))
                         {
-                            var newMove = new StateMove(GenerateNewState(stateMove.State, act));
+                            var newMove = new StateMove(GenerateNewState(stateMove.State, op));
                             if (newMove.State.IsInGoal())
-                                return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
+                                return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) });
                             if (!_closedList.Contains(newMove) && !preferredQueue.Contains(newMove))
                             {
-                                var value = h.GetValue(stateMove, newMove.State, GroundedActions);
-                                newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
+                                var value = h.GetValue(stateMove, newMove.State, Operators);
+                                newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
                                 newMove.hValue = value;
                                 preferredQueue.Enqueue(newMove, value);
                             }
@@ -58,18 +60,18 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     if (stateMove.State.IsInGoal())
                         return new ActionPlan(stateMove.Steps);
 
-                    foreach (var act in GroundedActions)
+                    foreach (var op in Operators)
                     {
                         if (_abort) break;
-                        if (stateMove.State.IsNodeTrue(act.Preconditions))
+                        if (stateMove.State.IsNodeTrue(op))
                         {
-                            var newMove = new StateMove(GenerateNewState(stateMove.State, act));
+                            var newMove = new StateMove(GenerateNewState(stateMove.State, op));
                             if (newMove.State.IsInGoal())
-                                return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
+                                return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) });
                             if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                             {
-                                var value = h.GetValue(stateMove, newMove.State, GroundedActions);
-                                newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
+                                var value = h.GetValue(stateMove, newMove.State, Operators);
+                                newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
                                 newMove.hValue = value;
                                 preferredQueue.Enqueue(newMove, value);
                                 _openList.Enqueue(newMove, value);
@@ -81,11 +83,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
             throw new NoSolutionFoundException();
         }
 
-        private HashSet<ActionDecl> GetPreferredOperators()
+        private HashSet<Operator> GetPreferredOperators()
         {
             var operators = _graphGenerator.GenerateReplaxedPlan(
-                new RelaxedPDDLStateSpace(Declaration),
-                GroundedActions
+                new SASStateSpace(Declaration),
+                Operators
                 );
             if (_graphGenerator.Failed)
                 throw new Exception("No relaxed plan could be found from the initial state! Could indicate the problem is unsolvable.");

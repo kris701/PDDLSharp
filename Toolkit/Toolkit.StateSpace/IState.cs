@@ -5,25 +5,23 @@ using PDDLSharp.Toolkit.Grounders;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
-    public interface IState
+    public interface IState<F, O>
     {
-        public HashSet<PredicateExp> State { get; set; }
+        public HashSet<F> State { get; set; }
         public PDDLDecl Declaration { get; }
-        public IGrounder<IParametized> Grounder { get; }
 
-        public IState Copy();
+        public IState<F,O> Copy();
         public int Count { get; }
 
-        public bool Add(PredicateExp pred);
+        public bool Add(F pred);
         public bool Add(string pred, params string[] arguments);
-        public bool Del(PredicateExp pred);
+        public bool Del(F pred);
         public bool Del(string pred, params string[] arguments);
-        public bool Contains(PredicateExp pred);
+        public bool Contains(F pred);
         public bool Contains(string pred, params string[] arguments);
 
-        public int ExecuteNode(INode node);
-        public bool IsNodeTrue(INode node);
-        public int IsTrueCount(INode node);
+        public int ExecuteNode(O node);
+        public bool IsNodeTrue(O node);
 
         public bool IsInGoal();
     }

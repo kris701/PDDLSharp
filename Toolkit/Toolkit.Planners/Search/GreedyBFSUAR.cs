@@ -55,7 +55,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         }
                         if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
-                            var value = h.GetValue(stateMove, newMove.State, GroundedActions);
+                            var value = h.GetValue(stateMove, newMove.State, Operators);
                             if (value < current)
                                 current = value;
                             newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
@@ -72,7 +72,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
             var operators = _graphGenerator.GenerateReplaxedPlan(
                 new RelaxedPDDLStateSpace(Declaration),
-                GroundedActions
+                Operators
                 );
             if (_graphGenerator.Failed)
                 throw new Exception("No relaxed plan could be found from the initial state! Could indicate the problem is unsolvable.");
@@ -99,7 +99,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             bool lookForApplicaple = false;
             int smallestHValue = -1;
             // Refinement Step 2
-            while (!refinedOperatorsFound && operators.Count != GroundedActions.Count)
+            while (!refinedOperatorsFound && operators.Count != Operators.Count)
             {
                 var smallestItem = _closedList.Where(x => x.hValue > smallestHValue).MinBy(x => x.hValue);
                 if (smallestItem == null)
@@ -173,7 +173,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             {
                 var newOps = _graphGenerator.GenerateReplaxedPlan(
                         item.State,
-                        GroundedActions
+                        Operators
                         );
                 if (!_graphGenerator.Failed)
                     relaxedPlanOperators.AddRange(newOps);
@@ -186,7 +186,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var allSmallest = closedList.Where(x => x.hValue == smallestHValue).ToList();
             var applicableOperators = new HashSet<ActionDecl>();
             foreach (var item in allSmallest)
-                foreach (var act in GroundedActions)
+                foreach (var act in Operators)
                     if (item.State.IsNodeTrue(act.Preconditions))
                         applicableOperators.Add(act);
             return applicableOperators.Except(operators).ToHashSet();

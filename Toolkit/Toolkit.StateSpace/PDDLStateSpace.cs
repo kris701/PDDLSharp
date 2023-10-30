@@ -5,11 +5,11 @@ using PDDLSharp.Toolkit.Grounders;
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
-    public class PDDLStateSpace : IState
+    public class PDDLStateSpace : IState<PredicateExp, INode>
     {
         public PDDLDecl Declaration { get; internal set; }
         public HashSet<PredicateExp> State { get; set; }
-        public IGrounder<IParametized> Grounder { get; }
+        internal IGrounder<IParametized> _grounder;
 
         internal List<PredicateExp> _tempAdd = new List<PredicateExp>();
         internal List<PredicateExp> _tempDel = new List<PredicateExp>();
@@ -17,7 +17,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         public PDDLStateSpace(PDDLDecl declaration)
         {
             Declaration = declaration;
-            Grounder = new ParametizedGrounder(declaration);
+            _grounder = new ParametizedGrounder(declaration);
             State = new HashSet<PredicateExp>();
             if (declaration.Problem.Init != null)
                 foreach (var item in declaration.Problem.Init.Predicates)
@@ -27,16 +27,16 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         public PDDLStateSpace(PDDLDecl declaration, HashSet<PredicateExp> currentState, IGrounder<IParametized> grounder)
         {
-            Grounder = grounder;
+            _grounder = grounder;
             Declaration = declaration;
             State = currentState;
         }
 
-        public virtual IState Copy()
+        public virtual IState<PredicateExp, INode> Copy()
         {
             PredicateExp[] newState = new PredicateExp[State.Count];
             State.CopyTo(newState);
-            return new PDDLStateSpace(Declaration, newState.ToHashSet(), Grounder);
+            return new PDDLStateSpace(Declaration, newState.ToHashSet(), _grounder);
         }
 
         public int Count => State.Count;
@@ -102,7 +102,7 @@ namespace PDDLSharp.Toolkit.StateSpace
 
         public override bool Equals(object? obj)
         {
-            if (obj is IState other)
+            if (obj is IState<PredicateExp, INode> other)
                 foreach (var item in State)
                     if (!other.State.Contains(item))
                         return false;
@@ -241,38 +241,9 @@ namespace PDDLSharp.Toolkit.StateSpace
             throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
         }
 
-        public int IsTrueCount(INode node)
-        {
-            switch (node)
-            {
-                case PredicateExp predicate:
-                    // Handle Equality predicate
-                    if (predicate.Name == "=" && predicate.Arguments.Count == 2)
-                        if (predicate.Arguments[0].Name == predicate.Arguments[1].Name)
-                            return 1;
-                    if (Contains(predicate))
-                        return 1;
-                    return 0;
-                case NotExp not:
-                    return IsTrueCount(not.Child);
-                case OrExp or:
-                    int count = 0;
-                    foreach (var subNode in or)
-                        count += IsTrueCount(subNode);
-                    return count;
-                case AndExp and:
-                    int count2 = 0;
-                    foreach (var subNode in and)
-                        count2 += IsTrueCount(subNode);
-                    return count2;
-            }
-
-            throw new Exception($"Unknown node type to evaluate! '{node.GetType()}'");
-        }
-
         private bool CheckPermutationsStepwise(INode node, ParameterExp parameters, Func<INode, bool?> stopFunc, bool defaultReturn = true)
         {
-            var allPermuations = Grounder.GenerateParameterPermutations(parameters.Values);
+            var allPermuations = _grounder.GenerateParameterPermutations(parameters.Values);
             while (allPermuations.Count > 0)
             {
                 var res = stopFunc(GenerateNewParametized(node, parameters, allPermuations.Dequeue()));
@@ -289,7 +260,7 @@ namespace PDDLSharp.Toolkit.StateSpace
             {
                 var allRefs = checkNode.FindNames(replace.Values[i].Name);
                 foreach (var name in allRefs)
-                    name.Name = Grounder.GetObjectFromIndex(with[i]);
+                    name.Name = _grounder.GetObjectFromIndex(with[i]);
             }
 
             return checkNode;

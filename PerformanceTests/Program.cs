@@ -79,9 +79,9 @@ namespace PerformanceTests
 
             Console.WriteLine($"Grounding...");
             greedyBFS_UAR.PreProcess();
-            greedyBFS.GroundedActions = greedyBFS_UAR.GroundedActions;
-            greedyBFS_PO.GroundedActions = greedyBFS_UAR.GroundedActions;
-            greedyBFS_DHE.GroundedActions = greedyBFS_UAR.GroundedActions;
+            greedyBFS.Operators = greedyBFS_UAR.Operators;
+            greedyBFS_PO.Operators = greedyBFS_UAR.Operators;
+            greedyBFS_DHE.Operators = greedyBFS_UAR.Operators;
 
             Thread.Sleep(1000);
 
@@ -135,19 +135,19 @@ namespace PerformanceTests
 
             Console.WriteLine($"{nameof(greedyBFS_UAR)} took {times[0]}ms");
             Console.WriteLine($"{nameof(greedyBFS_UAR)} generated {greedyBFS_UAR.Generated} states and expanded {greedyBFS_UAR.Expanded}");
-            Console.WriteLine($"{nameof(greedyBFS_UAR)} had {greedyBFS_UAR.OperatorsUsed} operators to use out of {greedyBFS_UAR.GroundedActions.Count}");
+            Console.WriteLine($"{nameof(greedyBFS_UAR)} had {greedyBFS_UAR.OperatorsUsed} operators to use out of {greedyBFS_UAR.Operators.Count}");
             Console.WriteLine($"{nameof(greedyBFS_UAR)} actually used {actionPlan1.Plan.ToHashSet().Count} operators");
             Console.WriteLine($"{nameof(greedyBFS)} took {times[1]}ms");
             Console.WriteLine($"{nameof(greedyBFS)} generated {greedyBFS.Generated} states and expanded {greedyBFS.Expanded}");
-            Console.WriteLine($"{nameof(greedyBFS)} had {greedyBFS.GroundedActions.Count} operators to use out of {greedyBFS.GroundedActions.Count}");
+            Console.WriteLine($"{nameof(greedyBFS)} had {greedyBFS.Operators.Count} operators to use out of {greedyBFS.Operators.Count}");
             Console.WriteLine($"{nameof(greedyBFS)} actually used {actionPlan2.Plan.ToHashSet().Count} operators");
             Console.WriteLine($"{nameof(greedyBFS_PO)} took {times[2]}ms");
             Console.WriteLine($"{nameof(greedyBFS_PO)} generated {greedyBFS_PO.Generated} states and expanded {greedyBFS_PO.Expanded}");
-            Console.WriteLine($"{nameof(greedyBFS_PO)} had {greedyBFS_PO.GroundedActions.Count} operators to use out of {greedyBFS_PO.GroundedActions.Count}");
+            Console.WriteLine($"{nameof(greedyBFS_PO)} had {greedyBFS_PO.Operators.Count} operators to use out of {greedyBFS_PO.Operators.Count}");
             Console.WriteLine($"{nameof(greedyBFS_PO)} actually used {actionPlan3.Plan.ToHashSet().Count} operators");
             Console.WriteLine($"{nameof(greedyBFS_DHE)} took {times[3]}ms");
             Console.WriteLine($"{nameof(greedyBFS_DHE)} generated {greedyBFS_DHE.Generated} states and expanded {greedyBFS_DHE.Expanded}");
-            Console.WriteLine($"{nameof(greedyBFS_DHE)} had {greedyBFS_DHE.GroundedActions.Count} operators to use out of {greedyBFS_DHE.GroundedActions.Count}");
+            Console.WriteLine($"{nameof(greedyBFS_DHE)} had {greedyBFS_DHE.Operators.Count} operators to use out of {greedyBFS_DHE.Operators.Count}");
             Console.WriteLine($"{nameof(greedyBFS_DHE)} actually used {actionPlan4.Plan.ToHashSet().Count} operators");
 
             IPlanValidator validator = new PlanValidator();

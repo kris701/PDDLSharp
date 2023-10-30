@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Toolkit.Grounders\Toolkit.Grounders.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PDDL\" />
+  </ItemGroup>
+
 </Project>

@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
             IPlanner planner = new GreedyBFSPO(decl);
-            planner.GroundedActions = GetGroundedActions(decl);
+            planner.Operators = GetGroundedActions(decl);
             var h = new hDepth();
             IPlanValidator validator = new PlanValidator.PlanValidator();
 
@@ -53,7 +53,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
             planner.PreProcess();
 
             // ASSERT
-            Assert.AreEqual(expected.Count, planner.GroundedActions.Count);
+            Assert.AreEqual(expected.Count, planner.Operators.Count);
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
             IPlanner planner = new GreedyBFSPO(decl);
-            planner.GroundedActions = GetGroundedActions(decl);
+            planner.Operators = GetGroundedActions(decl);
             var h = new hFF(decl);
             IPlanValidator validator = new PlanValidator.PlanValidator();
 
