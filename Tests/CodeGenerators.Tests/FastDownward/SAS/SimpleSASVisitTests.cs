@@ -3,7 +3,9 @@ using PDDLSharp.CodeGenerators;
 using PDDLSharp.CodeGenerators.Plans;
 using PDDLSharp.CodeGenerators.SAS;
 using PDDLSharp.CodeGenerators.Tests;
+using PDDLSharp.CodeGenerators.Tests.FastDownward.SAS;
 using PDDLSharp.CodeGenerators.Tests.Plans;
+using PDDLSharp.CodeGenerators.Tests.SAS;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
@@ -11,7 +13,7 @@ using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Models.FastDownward.SAS.Sections;
 using System;
 
-namespace PDDLSharp.CodeGenerators.Tests.SAS
+namespace PDDLSharp.CodeGenerators.Tests.FastDownward.SAS
 {
     [TestClass]
     public class SimpleSASVisitTests

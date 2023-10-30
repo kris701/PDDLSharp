@@ -12,4 +12,8 @@
     <ProjectReference Include="..\Tools\Tools.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SAS\" />
+  </ItemGroup>
+
 </Project>

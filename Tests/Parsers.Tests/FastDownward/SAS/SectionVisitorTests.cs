@@ -1,17 +1,22 @@
-﻿using PDDLSharp.ASTGenerators;
+﻿using PDDLSharp;
+using PDDLSharp.ASTGenerators;
 using PDDLSharp.ASTGenerators.FastDownward.SAS;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Models.FastDownward.SAS.Sections;
+using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.FastDownward.SAS;
+using PDDLSharp.Parsers.Tests;
+using PDDLSharp.Parsers.Tests.FastDownward.SAS;
+using PDDLSharp.Parsers.Tests.SAS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Parsers.Tests.SAS
+namespace PDDLSharp.Parsers.Tests.FastDownward.SAS
 {
     [TestClass]
     public class SectionVisitorTests

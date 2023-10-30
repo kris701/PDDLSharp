@@ -1,11 +1,16 @@
-﻿using PDDLSharp.Models.FastDownward.Plans;
+﻿using PDDLSharp;
+using PDDLSharp.Models;
+using PDDLSharp.Models.FastDownward.Plans;
+using PDDLSharp.Models.Tests;
+using PDDLSharp.Models.Tests.FastDownward.Plans;
+using PDDLSharp.Models.Tests.Plans;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Models.Tests.Plans
+namespace PDDLSharp.Models.Tests.FastDownward.Plans
 {
     [TestClass]
     public class GroundedActionTests

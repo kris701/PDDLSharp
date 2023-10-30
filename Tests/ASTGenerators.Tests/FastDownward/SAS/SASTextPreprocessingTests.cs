@@ -3,6 +3,7 @@ using PDDLSharp.ASTGenerators;
 using PDDLSharp.ASTGenerators.FastDownward.SAS;
 using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ASTGenerators.Tests;
+using PDDLSharp.ASTGenerators.Tests.FastDownward.SAS;
 using PDDLSharp.ASTGenerators.Tests.PDDL;
 using PDDLSharp.Models.AST;
 using System;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.ASTGenerators.Tests.PDDL
+namespace PDDLSharp.ASTGenerators.Tests.FastDownward.SAS
 {
     [TestClass]
     public class SASTextPreprocessingTests

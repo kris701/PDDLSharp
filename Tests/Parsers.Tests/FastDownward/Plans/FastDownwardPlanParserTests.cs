@@ -5,6 +5,7 @@ using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Parsers.Tests;
+using PDDLSharp.Parsers.Tests.FastDownward.Plans;
 using PDDLSharp.Parsers.Tests.Plans;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Parsers.Tests.Plans
+namespace PDDLSharp.Parsers.Tests.FastDownward.Plans
 {
     [TestClass]
     public class FastDownwardPlanParserTests
