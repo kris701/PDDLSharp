@@ -64,7 +64,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             // ASSERT
             Assert.AreEqual(expecteds.Length, graph.Count);
             for (int i = 0; i < expecteds.Length; i++)
-                Assert.AreEqual(expecteds[i], graph[i].Actions.Count);
+                Assert.AreEqual(expecteds[i], graph[i].Operators.Count);
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
 
             // ASSERT
-            Assert.AreEqual(0, graph[0].Actions.Count);
+            Assert.AreEqual(0, graph[0].Operators.Count);
         }
 
         [TestMethod]

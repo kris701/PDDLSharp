@@ -8,6 +8,7 @@ namespace PDDLSharp.Toolkit.StateSpace
     public interface IState<F, O>
     {
         public HashSet<F> State { get; set; }
+        public HashSet<F> Goals { get; }
         public PDDLDecl Declaration { get; }
 
         public IState<F,O> Copy();

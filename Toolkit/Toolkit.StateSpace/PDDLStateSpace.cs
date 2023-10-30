@@ -9,6 +9,7 @@ namespace PDDLSharp.Toolkit.StateSpace
     {
         public PDDLDecl Declaration { get; internal set; }
         public HashSet<PredicateExp> State { get; set; }
+        public HashSet<PredicateExp> Goals { get; }
         internal IGrounder<IParametized> _grounder;
 
         internal List<PredicateExp> _tempAdd = new List<PredicateExp>();
@@ -17,6 +18,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         public PDDLStateSpace(PDDLDecl declaration)
         {
             Declaration = declaration;
+            Goals = new HashSet<PredicateExp>();
             _grounder = new ParametizedGrounder(declaration);
             State = new HashSet<PredicateExp>();
             if (declaration.Problem.Init != null)
@@ -28,6 +30,7 @@ namespace PDDLSharp.Toolkit.StateSpace
         public PDDLStateSpace(PDDLDecl declaration, HashSet<PredicateExp> currentState, IGrounder<IParametized> grounder)
         {
             _grounder = grounder;
+            Goals = new HashSet<PredicateExp>();
             Declaration = declaration;
             State = currentState;
         }

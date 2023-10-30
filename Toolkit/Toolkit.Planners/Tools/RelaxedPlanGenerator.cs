@@ -2,8 +2,10 @@
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Tools
 {
@@ -11,50 +13,46 @@ namespace PDDLSharp.Toolkit.Planners.Tools
     {
         public bool Failed { get; internal set; } = false;
         public PDDLDecl Declaration { get; set; }
-        private HashSet<PredicateExp> _goalCache;
         private RelaxedPlanningGraph _generator;
 
         public RelaxedPlanGenerator(PDDLDecl declaration)
         {
             Declaration = declaration;
-            _goalCache = new HashSet<PredicateExp>();
             _generator = new RelaxedPlanningGraph();
-            GetGoalFacts(declaration.Problem);
         }
 
-        public HashSet<ActionDecl> GenerateReplaxedPlan(IState state, List<ActionDecl> groundedActions)
+        public HashSet<Operator> GenerateReplaxedPlan(IState<Fact, Operator> state, List<Operator> operators)
         {
             Failed = false;
-            if (state is not RelaxedPDDLStateSpace)
-                state = new RelaxedPDDLStateSpace(Declaration, state.State, state.Grounder);
+            if (state is not RelaxedSASStateSpace)
+                state = new RelaxedSASStateSpace(Declaration, state.State, state.Goals);
 
-            var graphLayers = _generator.GenerateRelaxedPlanningGraph(state, groundedActions);
+            var graphLayers = _generator.GenerateRelaxedPlanningGraph(state, operators);
             if (graphLayers.Count == 0)
             {
                 Failed = true;
-                return new HashSet<ActionDecl>();
+                return new HashSet<Operator>();
             }
             var selectedActions = ReconstructPlan(state, graphLayers);
 
             return selectedActions;
         }
 
-        private HashSet<ActionDecl> ReconstructPlan(IState state, List<Layer> graphLayers)
+        private HashSet<Operator> ReconstructPlan(IState<Fact, Operator> state, List<Layer> graphLayers)
         {
-            var selectedActions = new HashSet<ActionDecl>();
-            var goals = GetGoalFacts(state.Declaration.Problem);
+            var selectedOperators = new HashSet<Operator>();
             var m = -1;
-            foreach (var fact in goals)
+            foreach (var fact in state.Goals)
                 m = Math.Max(m, FirstLevel(fact, graphLayers));
 
             if (m == -1)
                 throw new RelaxedPlanningGraphException("Relaxed plan graph was not valid!");
 
-            var G = new Dictionary<int, List<PredicateExp>>();
+            var G = new Dictionary<int, List<Fact>>();
             for (int t = 0; t <= m; t++)
             {
-                G.Add(t, new List<PredicateExp>());
-                foreach (var fact in goals)
+                G.Add(t, new List<Fact>());
+                foreach (var fact in state.Goals)
                     if (FirstLevel(fact, graphLayers) == t)
                         G[t].Add(fact);
             }
@@ -64,73 +62,32 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 foreach (var fact in G[t])
                 {
                     bool found = false;
-                    foreach (var act in graphLayers[t].Actions)
+                    foreach (var act in graphLayers[t].Operators)
                     {
                         if (found)
                             break;
-                        if (act.Effects is AndExp effAnd)
+                        foreach(var add in act.Add)
                         {
-                            foreach (var child in effAnd.Children)
+                            if (add.Equals(fact))
                             {
-                                if (child is PredicateExp pred && SimplifyPredicate(pred).Equals(fact))
+                                selectedOperators.Add(act);
+                                foreach(var pre in act.Pre)
                                 {
-                                    selectedActions.Add(act);
-                                    if (act.Preconditions is AndExp preAnd)
-                                    {
-                                        foreach (var child2 in preAnd.Children)
-                                        {
-                                            if (child2 is PredicateExp pred2)
-                                            {
-                                                var newGoal = FirstLevel(pred2, graphLayers);
-                                                G[newGoal].Add(pred2);
-                                            }
-                                        }
-                                    }
-                                    else
-                                        throw new RelaxedPlanningGraphException("Expected action preconditions to be an and expression!");
-                                    found = true;
-                                    break;
+                                    var newGoal = FirstLevel(pre, graphLayers);
+                                    G[newGoal].Add(pre);
                                 }
+                                found = true;
+                                break;
                             }
                         }
-                        else
-                            throw new RelaxedPlanningGraphException("Expected action effects to be an and expression!");
                     }
                 }
             }
 
-            return selectedActions;
+            return selectedOperators;
         }
 
-        private HashSet<PredicateExp> GetGoalFacts(ProblemDecl problem)
-        {
-            if (_goalCache.Count != 0)
-                return _goalCache;
-            var extracted = new HashSet<PredicateExp>();
-            if (problem.Goal != null)
-            {
-                var allPreds = problem.Goal.GoalExp.FindTypes<PredicateExp>();
-                foreach (var pred in allPreds)
-                    if (pred.Parent is not NotExp)
-                        extracted.Add(pred);
-            }
-            var simplified = new HashSet<PredicateExp>();
-            foreach (var fact in extracted)
-                simplified.Add(SimplifyPredicate(fact));
-
-            _goalCache = simplified;
-            return _goalCache;
-        }
-
-        private PredicateExp SimplifyPredicate(PredicateExp pred)
-        {
-            var newPred = new PredicateExp(pred.Name);
-            foreach (var arg in pred.Arguments)
-                newPred.Arguments.Add(new NameExp(arg.Name));
-            return newPred;
-        }
-
-        private int FirstLevel(PredicateExp fact, List<Layer> layers)
+        private int FirstLevel(Fact fact, List<Layer> layers)
         {
             for (int i = 0; i < layers.Count; i++)
                 if (layers[i].Propositions.Contains(fact))

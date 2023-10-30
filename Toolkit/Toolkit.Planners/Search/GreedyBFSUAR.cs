@@ -1,9 +1,11 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 using PDDLSharp.Tools;
 
 namespace PDDLSharp.Toolkit.Planners.Search
@@ -20,7 +22,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
 
-        internal override ActionPlan Solve(IHeuristic h, IState state)
+        internal override ActionPlan Solve(IHeuristic h, IState<Fact, Operator> state)
         {
             // Initial Operator Subset
             var operators = GetInitialOperators();
@@ -42,23 +44,23 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 }
                 best = stateMove.hValue;
                 current = int.MaxValue;
-                foreach (var act in operators)
+                foreach (var op in operators)
                 {
                     if (_abort) break;
-                    if (stateMove.State.IsNodeTrue(act.Preconditions))
+                    if (stateMove.State.IsNodeTrue(op))
                     {
-                        var newMove = new StateMove(GenerateNewState(stateMove.State, act));
+                        var newMove = new StateMove(GenerateNewState(stateMove.State, op));
                         if (newMove.State.IsInGoal())
                         {
                             OperatorsUsed = operators.Count;
-                            return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) });
+                            return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) });
                         }
                         if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
                             var value = h.GetValue(stateMove, newMove.State, Operators);
                             if (value < current)
                                 current = value;
-                            newMove.Steps = new List<GroundedAction>(stateMove.Steps) { new GroundedAction(act, act.Parameters.Values) };
+                            newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
                             newMove.hValue = value;
                             _openList.Enqueue(newMove, value);
                         }
@@ -68,10 +70,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
             throw new NoSolutionFoundException();
         }
 
-        private HashSet<ActionDecl> GetInitialOperators()
+        private HashSet<Operator> GetInitialOperators()
         {
             var operators = _graphGenerator.GenerateReplaxedPlan(
-                new RelaxedPDDLStateSpace(Declaration),
+                new RelaxedSASStateSpace(Declaration),
                 Operators
                 );
             if (_graphGenerator.Failed)
@@ -90,7 +92,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         /// <param name="operators">Set of unrefined operators</param>
         /// <returns>A set of refined operators</returns>
         /// <exception cref="NoSolutionFoundException">If no operators could be found with either the relaxed plans or just applicable operators, assume the problem is unsolvable.</exception>
-        private HashSet<ActionDecl> RefineOperators(HashSet<ActionDecl> operators)
+        private HashSet<Operator> RefineOperators(HashSet<Operator> operators)
         {
             if (_closedList.Count == 0)
                 return operators;
@@ -119,7 +121,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 {
                     // Refinement Step 1
                     smallestHValue = smallestItem.hValue;
-                    var newOperators = new HashSet<ActionDecl>();
+                    var newOperators = new HashSet<Operator>();
                     if (lookForApplicaple)
                         newOperators = GetNewApplicableOperators(smallestHValue, operators, _closedList);
                     else
@@ -134,7 +136,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                                 continue;
                             foreach (var newOperator in newOperators)
                             {
-                                if (closed.State.IsNodeTrue(newOperator.Preconditions))
+                                if (closed.State.IsNodeTrue(newOperator))
                                 {
                                     switchLists.Add(closed);
                                     break;
@@ -165,10 +167,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return operators;
         }
 
-        private HashSet<ActionDecl> GetNewRelaxedOperators(int smallestHValue, HashSet<ActionDecl> operators, HashSet<StateMove> closedList)
+        private HashSet<Operator> GetNewRelaxedOperators(int smallestHValue, HashSet<Operator> operators, HashSet<StateMove> closedList)
         {
             var allSmallest = closedList.Where(x => x.hValue == smallestHValue).ToList();
-            var relaxedPlanOperators = new HashSet<ActionDecl>();
+            var relaxedPlanOperators = new HashSet<Operator>();
             foreach (var item in allSmallest)
             {
                 var newOps = _graphGenerator.GenerateReplaxedPlan(
@@ -181,14 +183,14 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return relaxedPlanOperators.Except(operators).ToHashSet();
         }
 
-        private HashSet<ActionDecl> GetNewApplicableOperators(int smallestHValue, HashSet<ActionDecl> operators, HashSet<StateMove> closedList)
+        private HashSet<Operator> GetNewApplicableOperators(int smallestHValue, HashSet<Operator> operators, HashSet<StateMove> closedList)
         {
             var allSmallest = closedList.Where(x => x.hValue == smallestHValue).ToList();
-            var applicableOperators = new HashSet<ActionDecl>();
+            var applicableOperators = new HashSet<Operator>();
             foreach (var item in allSmallest)
-                foreach (var act in Operators)
-                    if (item.State.IsNodeTrue(act.Preconditions))
-                        applicableOperators.Add(act);
+                foreach (var op in Operators)
+                    if (item.State.IsNodeTrue(op))
+                        applicableOperators.Add(op);
             return applicableOperators.Except(operators).ToHashSet();
         }
     }

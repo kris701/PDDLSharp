@@ -50,5 +50,13 @@ namespace PDDLSharp.Models.SAS
                 return f.GetHashCode() == GetHashCode();
             return false;
         }
+
+        public override string? ToString()
+        {
+            var retStr = Name;
+            foreach (var arg in Arguments)
+                retStr += $" {arg}";
+            return retStr;
+        }
     }
 }

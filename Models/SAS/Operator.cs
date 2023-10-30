@@ -74,20 +74,24 @@ namespace PDDLSharp.Models.SAS
             Del = del.ToArray();
         }
 
+        // The order is important!
+        // Based on: https://stackoverflow.com/a/30758270
         private int _hashCache = -1;
         public override int GetHashCode()
         {
             if (_hashCache != -1)
                 return _hashCache;
-            int hash = Name.GetHashCode();
-            foreach(var fact in Pre)
-                hash ^= fact.GetHashCode();
-            foreach (var fact in Add)
-                hash ^= fact.GetHashCode();
-            foreach (var fact in Del)
-                hash ^= fact.GetHashCode();
-            _hashCache = hash;
-            return _hashCache;
+            const int seed = 487;
+            const int modifier = 31;
+            unchecked
+            {
+                _hashCache = Name.GetHashCode() * Arguments.Aggregate(seed, (current, item) =>
+                    (current * modifier) + item.GetHashCode()) * Pre.Aggregate(seed, (current, item) =>
+                    (current * modifier) + item.GetHashCode()) * Add.Aggregate(seed, (current, item) =>
+                    (current * modifier) + item.GetHashCode()) * Del.Aggregate(seed, (current, item) =>
+                    (current * modifier) + item.GetHashCode());
+                return _hashCache;
+            }
         }
 
         public override bool Equals(object? obj)
@@ -95,6 +99,14 @@ namespace PDDLSharp.Models.SAS
             if (obj is Operator o)
                 return o.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override string? ToString()
+        {
+            var retStr = Name;
+            foreach (var arg in Arguments)
+                retStr += $" {arg}";
+            return retStr;
         }
     }
 }

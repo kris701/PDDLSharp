@@ -14,10 +14,9 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
     public class SASStateSpace : IState<Fact, Operator>
     {
         public HashSet<Fact> State { get; set; }
+        public HashSet<Fact> Goals { get; }
         public PDDLDecl Declaration { get; }
         public int Count => State.Count;
-
-        private HashSet<Fact> _goal;
 
         public SASStateSpace(PDDLDecl declaration)
         {
@@ -27,25 +26,25 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
                 foreach (var child in declaration.Problem.Init.Predicates)
                     if (child is PredicateExp pred)
                         State.Add(new Fact(pred));
-            _goal = new HashSet<Fact>();
+            Goals = new HashSet<Fact>();
             if (declaration.Problem.Goal != null && declaration.Problem.Goal.GoalExp is AndExp and)
                 foreach (var child in and.Children)
                     if (child is PredicateExp pred)
-                        _goal.Add(new Fact(pred));
+                        Goals.Add(new Fact(pred));
         }
 
         public SASStateSpace(PDDLDecl declaration, HashSet<Fact> state, HashSet<Fact> goal)
         {
             Declaration = declaration;
             State = state;
-            _goal = goal;
+            Goals = goal;
         }
 
-        public IState<Fact, Operator> Copy()
+        public virtual IState<Fact, Operator> Copy()
         {
             var newState = new Fact[State.Count];
             State.CopyTo(newState);
-            return new SASStateSpace(Declaration, newState.ToHashSet(), _goal);
+            return new SASStateSpace(Declaration, newState.ToHashSet(), Goals);
         }
 
         public bool Add(Fact pred) => State.Add(pred);
@@ -55,7 +54,24 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
         public bool Contains(Fact pred) => State.Contains(pred);
         public bool Contains(string pred, params string[] arguments) => Contains(new Fact(pred, arguments));
 
-        public int ExecuteNode(Operator node)
+        public override bool Equals(object? obj)
+        {
+            if (obj is IState<Fact, Operator> other)
+                foreach (var item in State)
+                    if (!other.State.Contains(item))
+                        return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 0;
+            foreach (var item in State)
+                hash ^= item.GetHashCode();
+            return hash;
+        }
+
+        public virtual int ExecuteNode(Operator node)
         {
             int changes = 0;
             foreach (var fact in node.Del)
@@ -77,7 +93,7 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
 
         public bool IsInGoal()
         {
-            foreach (var fact in _goal)
+            foreach (var fact in Goals)
                 if (!State.Contains(fact))
                     return false;
             return true;
