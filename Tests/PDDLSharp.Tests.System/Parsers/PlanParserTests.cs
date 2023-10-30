@@ -1,11 +1,11 @@
 ﻿using PDDLSharp;
 using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers;
-using PDDLSharp.Parsers.Plans;
+using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.PDDLSharp;
 using PDDLSharp.PDDLSharp.Tests;
 using PDDLSharp.PDDLSharp.Tests.System;

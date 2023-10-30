@@ -1,23 +1,20 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.Plans;
-using PDDLSharp.Models;
+﻿using PDDLSharp.Models;
+using PDDLSharp.Models.FastDownward.Plans;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.StateSpace;
-using PDDLSharp.Tools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 using System.Timers;
-using PDDLSharp.Models.PDDL;
-using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
     public abstract class BaseSearch : IPlanner
     {
         public PDDLDecl Declaration { get; }
-        public List<ActionDecl> GroundedActions { get; set; }
+        public List<Models.SAS.Operator> Operators { get; set; }
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
 
@@ -32,7 +29,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public BaseSearch(PDDLDecl decl)
         {
             Declaration = decl;
-            GroundedActions = new List<ActionDecl>();
+            Operators = new List<Models.SAS.Operator>();
         }
 
         public void PreProcess()
@@ -41,12 +38,14 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 return;
             var grounder = new ParametizedGrounder(Declaration);
             grounder.RemoveStaticsFromOutput = true;
-            GroundedActions = new List<ActionDecl>();
+            Operators = new List<Models.SAS.Operator>();
             foreach (var action in Declaration.Domain.Actions)
             {
                 action.Preconditions = EnsureAndNode(action.Preconditions);
                 action.Effects = EnsureAndNode(action.Effects);
-                GroundedActions.AddRange(grounder.Ground(action).Cast<ActionDecl>());
+                var newActs = grounder.Ground(action).Cast<Models.PDDL.Domain.ActionDecl>();
+                foreach (var newAct in newActs)
+                    Operators.Add(new Models.SAS.Operator(newAct));
             }
             _preprocessed = true;
         }
@@ -60,7 +59,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         public ActionPlan Solve(IHeuristic h)
         {
-            IState state = new PDDLStateSpace(Declaration);
+            var state = new SASStateSpace(Declaration);
             var timeoutTimer = new System.Timers.Timer();
             timeoutTimer.Interval = Timeout.TotalMilliseconds;
             timeoutTimer.Elapsed += OnTimedOut;
@@ -82,20 +81,20 @@ namespace PDDLSharp.Toolkit.Planners.Search
             throw new Exception("Planner Timed out! Aborting search...");
         }
 
-        internal IState GenerateNewState(IState state, ActionDecl action)
+        internal IState<Fact, Models.SAS.Operator> GenerateNewState(IState<Fact, Models.SAS.Operator> state, Models.SAS.Operator op)
         {
             Generated++;
             var newState = state.Copy();
-            newState.ExecuteNode(action.Effects);
+            newState.ExecuteNode(op);
             return newState;
         }
 
-        internal RefPriorityQueue InitializeQueue(IHeuristic h, IState state) 
+        internal RefPriorityQueue InitializeQueue(IHeuristic h, IState<Fact, Models.SAS.Operator> state)
         {
             var queue = new RefPriorityQueue();
             var fromMove = new StateMove();
             fromMove.hValue = int.MaxValue;
-            var hValue = h.GetValue(fromMove, state, GroundedActions);
+            var hValue = h.GetValue(fromMove, state, Operators);
             queue.Enqueue(new StateMove(state, hValue), hValue);
             return queue;
         }
@@ -110,6 +109,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return stateMove;
         }
 
-        internal abstract ActionPlan Solve(IHeuristic h, IState state);
+        internal GroundedAction GenerateFromOp(Models.SAS.Operator op) => new GroundedAction(op.Name, op.Arguments);
+
+        internal abstract ActionPlan Solve(IHeuristic h, IState<Fact, Models.SAS.Operator> state);
     }
 }

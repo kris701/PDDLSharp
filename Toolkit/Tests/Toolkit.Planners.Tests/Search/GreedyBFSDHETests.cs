@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Models.PDDL.Expressions;
+﻿using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
@@ -24,10 +25,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IPlanner planner = new GreedyBFSDHE(decl);
-            planner.GroundedActions = GetGroundedActions(decl);
+            var planner = new GreedyBFSDHE(decl);
+            planner.Operators = GetOperators(decl);
             var h = new hDepth();
-            IPlanValidator validator = new PlanValidator.PlanValidator();
+            var validator = new PlanValidator.PlanValidator();
 
             // ACT
             var result = planner.Solve(h);
@@ -46,14 +47,14 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IPlanner planner = new GreedyBFSDHE(decl);
-            var expected = GetGroundedActions(decl);
+            var planner = new GreedyBFSDHE(decl);
+            var expected = GetOperators(decl);
 
             // ACT
             planner.PreProcess();
 
             // ASSERT
-            Assert.AreEqual(expected.Count, planner.GroundedActions.Count);
+            Assert.AreEqual(expected.Count, planner.Operators.Count);
         }
 
         [TestMethod]
@@ -65,10 +66,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IPlanner planner = new GreedyBFSDHE(decl);
-            planner.GroundedActions = GetGroundedActions(decl);
+            var planner = new GreedyBFSDHE(decl);
+            planner.Operators = GetOperators(decl);
             var h = new hFF(decl);
-            IPlanValidator validator = new PlanValidator.PlanValidator();
+            var validator = new PlanValidator.PlanValidator();
 
             // ACT
             var result = planner.Solve(h);
@@ -87,9 +88,9 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            decl.Problem.Goal.GoalExp = new PredicateExp("non-existent");
-            IPlanner planner = new GreedyBFSDHE(decl);
-            planner.GroundedActions = GetGroundedActions(decl);
+            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("non-existent") });
+            var planner = new GreedyBFSDHE(decl);
+            planner.Operators = GetOperators(decl);
             var h = new hDepth();
 
             // ACT

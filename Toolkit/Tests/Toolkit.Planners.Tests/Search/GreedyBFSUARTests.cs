@@ -23,10 +23,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IPlanner planner = new GreedyBFSUAR(decl);
-            planner.GroundedActions = GetGroundedActions(decl);
+            var planner = new GreedyBFSUAR(decl);
+            planner.Operators = GetOperators(decl);
             var h = new hDepth();
-            IPlanValidator validator = new PlanValidator.PlanValidator();
+            var validator = new PlanValidator.PlanValidator();
 
             // ACT
             var result = planner.Solve(h);
@@ -44,10 +44,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IPlanner planner = new GreedyBFSUAR(decl);
-            planner.GroundedActions = GetGroundedActions(decl);
+            var planner = new GreedyBFSUAR(decl);
+            planner.Operators = GetOperators(decl);
             var h = new hFF(decl);
-            IPlanValidator validator = new PlanValidator.PlanValidator();
+            var validator = new PlanValidator.PlanValidator();
 
             // ACT
             var result = planner.Solve(h);
@@ -66,14 +66,14 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         {
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
-            IPlanner planner = new GreedyBFSUAR(decl);
-            var expected = GetGroundedActions(decl);
+            var planner = new GreedyBFSUAR(decl);
+            var expected = GetOperators(decl);
 
             // ACT
             planner.PreProcess();
 
             // ASSERT
-            Assert.AreEqual(expected.Count, planner.GroundedActions.Count);
+            Assert.AreEqual(expected.Count, planner.Operators.Count);
         }
 
         [TestMethod]
@@ -86,14 +86,14 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
             // ARRANGE
             var decl = GetPDDLDecl(domain, problem);
             GreedyBFSUAR planner = new GreedyBFSUAR(decl);
-            planner.GroundedActions = GetGroundedActions(decl);
+            planner.Operators = GetOperators(decl);
             var h = new hDepth();
 
             // ACT
             var result = planner.Solve(h);
 
             // ASSERT
-            Assert.AreNotEqual(planner.OperatorsUsed, planner.GroundedActions.Count);
+            Assert.AreNotEqual(planner.OperatorsUsed, planner.Operators.Count);
         }
     }
 }

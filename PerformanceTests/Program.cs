@@ -4,16 +4,16 @@ using PDDLSharp.CodeGenerators;
 using PDDLSharp.CodeGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
+using PDDLSharp.Models.FastDownward.Plans;
+using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.Plans;
-using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.FastDownward.Plans;
+using PDDLSharp.Parsers.FastDownward.SAS;
 using PDDLSharp.Parsers.PDDL;
-using PDDLSharp.Parsers.Plans;
-using PDDLSharp.Parsers.SAS;
 using PDDLSharp.Toolkit.MacroGenerators;
 using PDDLSharp.Toolkit.Planners;
 using PDDLSharp.Toolkit.Planners.Heuristics;
@@ -49,10 +49,12 @@ namespace PerformanceTests
             //var targetProblem = "benchmarks/barman-sat11-strips/pfile06-021.pddl";
             //var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
             //var targetProblem = "benchmarks/tidybot-opt11-strips/p01.pddl";
-            var targetDomain = "benchmarks/logistics98/domain.pddl";
-            var targetProblem = "benchmarks/logistics98/prob01.pddl";
+            //var targetDomain = "benchmarks/logistics98/domain.pddl";
+            //var targetProblem = "benchmarks/logistics98/prob35.pddl";
             //var targetDomain = "benchmarks/gripper/domain.pddl";
-            //var targetProblem = "benchmarks/gripper/prob01.pddl";
+            //var targetProblem = "benchmarks/gripper/prob20.pddl";
+            var targetDomain = "benchmarks/depot/domain.pddl";
+            var targetProblem = "benchmarks/depot/p20.pddl";
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
@@ -66,11 +68,11 @@ namespace PerformanceTests
 
             var h1 = new hDepth();
             var h2 = new hFF(decl);
-            var h3 = new hGoal(decl);
+            var h3 = new hGoal();
             var h4 = new hConstant(1);
             var h5 = new hPath();
-            var h6 = new hAdd(decl);
-            var h7 = new hMax(decl);
+            var h6 = new hAdd();
+            var h7 = new hMax();
             var hc5 = new hColMax(new List<IHeuristic>()
             {
                 h2,
@@ -79,9 +81,9 @@ namespace PerformanceTests
 
             Console.WriteLine($"Grounding...");
             greedyBFS_UAR.PreProcess();
-            greedyBFS.GroundedActions = greedyBFS_UAR.GroundedActions;
-            greedyBFS_PO.GroundedActions = greedyBFS_UAR.GroundedActions;
-            greedyBFS_DHE.GroundedActions = greedyBFS_UAR.GroundedActions;
+            greedyBFS.Operators = greedyBFS_UAR.Operators;
+            greedyBFS_PO.Operators = greedyBFS_UAR.Operators;
+            greedyBFS_DHE.Operators = greedyBFS_UAR.Operators;
 
             Thread.Sleep(1000);
 
@@ -98,8 +100,7 @@ namespace PerformanceTests
 
                 Console.WriteLine($"{nameof(greedyBFS_UAR)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                h2 = new hFF(decl);
-                h7 = new hMax(decl);
+                h7 = new hMax();
                 actionPlan1 = greedyBFS_UAR.Solve(h7);
                 instanceWatch.Stop();
                 times[0] += instanceWatch.ElapsedMilliseconds;
@@ -107,8 +108,7 @@ namespace PerformanceTests
 
                 Console.WriteLine($"{nameof(greedyBFS)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                h2 = new hFF(decl);
-                h7 = new hMax(decl);
+                h7 = new hMax();
                 actionPlan2 = greedyBFS.Solve(h7);
                 instanceWatch.Stop();
                 times[1] += instanceWatch.ElapsedMilliseconds;
@@ -116,8 +116,7 @@ namespace PerformanceTests
 
                 Console.WriteLine($"{nameof(greedyBFS_PO)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                h2 = new hFF(decl);
-                h7 = new hMax(decl);
+                h7 = new hMax();
                 actionPlan3 = greedyBFS_PO.Solve(h7);
                 instanceWatch.Stop();
                 times[2] += instanceWatch.ElapsedMilliseconds;
@@ -125,8 +124,7 @@ namespace PerformanceTests
 
                 Console.WriteLine($"{nameof(greedyBFS_DHE)} using {h2.GetType().Name}");
                 instanceWatch.Restart();
-                h2 = new hFF(decl);
-                h7 = new hMax(decl);
+                h7 = new hMax();
                 actionPlan4 = greedyBFS_DHE.Solve(h7);
                 instanceWatch.Stop();
                 times[3] += instanceWatch.ElapsedMilliseconds;
@@ -135,19 +133,19 @@ namespace PerformanceTests
 
             Console.WriteLine($"{nameof(greedyBFS_UAR)} took {times[0]}ms");
             Console.WriteLine($"{nameof(greedyBFS_UAR)} generated {greedyBFS_UAR.Generated} states and expanded {greedyBFS_UAR.Expanded}");
-            Console.WriteLine($"{nameof(greedyBFS_UAR)} had {greedyBFS_UAR.OperatorsUsed} operators to use out of {greedyBFS_UAR.GroundedActions.Count}");
+            Console.WriteLine($"{nameof(greedyBFS_UAR)} had {greedyBFS_UAR.OperatorsUsed} operators to use out of {greedyBFS_UAR.Operators.Count}");
             Console.WriteLine($"{nameof(greedyBFS_UAR)} actually used {actionPlan1.Plan.ToHashSet().Count} operators");
             Console.WriteLine($"{nameof(greedyBFS)} took {times[1]}ms");
             Console.WriteLine($"{nameof(greedyBFS)} generated {greedyBFS.Generated} states and expanded {greedyBFS.Expanded}");
-            Console.WriteLine($"{nameof(greedyBFS)} had {greedyBFS.GroundedActions.Count} operators to use out of {greedyBFS.GroundedActions.Count}");
+            Console.WriteLine($"{nameof(greedyBFS)} had {greedyBFS.Operators.Count} operators to use out of {greedyBFS.Operators.Count}");
             Console.WriteLine($"{nameof(greedyBFS)} actually used {actionPlan2.Plan.ToHashSet().Count} operators");
             Console.WriteLine($"{nameof(greedyBFS_PO)} took {times[2]}ms");
             Console.WriteLine($"{nameof(greedyBFS_PO)} generated {greedyBFS_PO.Generated} states and expanded {greedyBFS_PO.Expanded}");
-            Console.WriteLine($"{nameof(greedyBFS_PO)} had {greedyBFS_PO.GroundedActions.Count} operators to use out of {greedyBFS_PO.GroundedActions.Count}");
+            Console.WriteLine($"{nameof(greedyBFS_PO)} had {greedyBFS_PO.Operators.Count} operators to use out of {greedyBFS_PO.Operators.Count}");
             Console.WriteLine($"{nameof(greedyBFS_PO)} actually used {actionPlan3.Plan.ToHashSet().Count} operators");
             Console.WriteLine($"{nameof(greedyBFS_DHE)} took {times[3]}ms");
             Console.WriteLine($"{nameof(greedyBFS_DHE)} generated {greedyBFS_DHE.Generated} states and expanded {greedyBFS_DHE.Expanded}");
-            Console.WriteLine($"{nameof(greedyBFS_DHE)} had {greedyBFS_DHE.GroundedActions.Count} operators to use out of {greedyBFS_DHE.GroundedActions.Count}");
+            Console.WriteLine($"{nameof(greedyBFS_DHE)} had {greedyBFS_DHE.Operators.Count} operators to use out of {greedyBFS_DHE.Operators.Count}");
             Console.WriteLine($"{nameof(greedyBFS_DHE)} actually used {actionPlan4.Plan.ToHashSet().Count} operators");
 
             IPlanValidator validator = new PlanValidator();

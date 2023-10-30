@@ -4,7 +4,6 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers;
 using System;
 using System.Collections.Generic;

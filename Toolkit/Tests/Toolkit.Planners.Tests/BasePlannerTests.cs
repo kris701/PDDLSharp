@@ -1,10 +1,12 @@
 ﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models;
-using PDDLSharp.Parsers.PDDL;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Tools;
 using System;
@@ -12,28 +14,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PDDLSharp.Models.PDDL.Expressions;
+using static System.Collections.Specialized.BitVector32;
 
 namespace PDDLSharp.Toolkit.Planners.Tests
 {
     public class BasePlannerTests
     {
-        private static Dictionary<string, List<ActionDecl>> _groundedCache = new Dictionary<string, List<ActionDecl>>();
-        internal static List<ActionDecl> GetGroundedActions(PDDLDecl decl)
+        private static Dictionary<string, List<Operator>> _groundedCache = new Dictionary<string, List<Operator>>();
+        internal static List<Operator> GetOperators(PDDLDecl decl)
         {
             if (_groundedCache.ContainsKey(decl.Domain.Name.Name + decl.Problem.Name.Name))
                 return _groundedCache[decl.Domain.Name.Name + decl.Problem.Name.Name];
 
             IGrounder<IParametized> grounder = new ParametizedGrounder(decl);
-            var actions = new List<ActionDecl>();
+            var operators = new List<Operator>();
             foreach (var act in decl.Domain.Actions)
             {
                 act.Preconditions = EnsureAndNode(act.Preconditions);
                 act.Effects = EnsureAndNode(act.Effects);
-                actions.AddRange(grounder.Ground(act).Cast<ActionDecl>());
+                var newActs = grounder.Ground(act).Cast<Models.PDDL.Domain.ActionDecl>();
+                foreach (var newAct in newActs)
+                    operators.Add(new Models.SAS.Operator(newAct));
             }
-            _groundedCache.Add(decl.Domain.Name.Name + decl.Problem.Name.Name, actions);
-            return actions;
+            _groundedCache.Add(decl.Domain.Name.Name + decl.Problem.Name.Name, operators);
+            return operators;
         }
 
         private static IExp EnsureAndNode(IExp from)

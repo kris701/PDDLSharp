@@ -1,13 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
+using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.Plans;
-using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.PDDL;
 using System;
 using System.Collections.Generic;
 using System.Linq;

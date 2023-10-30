@@ -2,11 +2,9 @@
 using PDDLSharp.CodeGenerators.Plans;
 using PDDLSharp.CodeGenerators.SAS;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.Plans;
-using PDDLSharp.Models.SAS;
+using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Parsers;
-using PDDLSharp.Parsers.Plans;
-using PDDLSharp.Parsers.SAS;
+using PDDLSharp.Parsers.FastDownward.SAS;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

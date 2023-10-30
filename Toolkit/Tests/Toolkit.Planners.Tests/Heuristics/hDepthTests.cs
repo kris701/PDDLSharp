@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
 using System;
@@ -26,7 +27,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             parent.hValue = inValue;
 
             // ACT
-            var newValue = h.GetValue(parent, null, new List<ActionDecl>());
+            var newValue = h.GetValue(parent, null, new List<Operator>());
 
             // ASSERT
             Assert.AreEqual(expected, newValue);

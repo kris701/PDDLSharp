@@ -1,8 +1,8 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
-using PDDLSharp.Models.Plans;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
+using PDDLSharp.Toolkit.StateSpace.PDDL;
 using System;
 using System.Collections.Generic;
 using System.Linq;

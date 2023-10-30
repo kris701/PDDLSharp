@@ -1,13 +1,8 @@
-﻿using PDDLSharp.Contextualisers;
-using PDDLSharp.Contextualisers.PDDL;
-using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models;
+﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.StaticPredicateDetectors;
-using System;
-using System.Linq;
 
 namespace PDDLSharp.Toolkit.Grounders
 {
@@ -112,7 +107,8 @@ namespace PDDLSharp.Toolkit.Grounders
                 {
                     var argIndexes = new int[stat.Arguments.Count];
                     var constantIndexes = new int[stat.Arguments.Count];
-                    for (int i = 0; i < refPred.Arguments.Count; i++) {
+                    for (int i = 0; i < refPred.Arguments.Count; i++)
+                    {
                         if (argumentIndexes.ContainsKey(refPred.Arguments[i].Name))
                         {
                             argIndexes[i] = argumentIndexes[refPred.Arguments[i].Name];
@@ -180,7 +176,7 @@ namespace PDDLSharp.Toolkit.Grounders
                 if (staticsPrecon.ArgIndexes[i] == int.MaxValue)
                     newArgs.Add(new NameExp(GetObjectFromIndex(staticsPrecon.ConstantsIndexes[i])));
                 else
-                    newArgs.Add(new NameExp(GetObjectFromIndex(permutation[staticsPrecon.ArgIndexes[i]])));                   
+                    newArgs.Add(new NameExp(GetObjectFromIndex(permutation[staticsPrecon.ArgIndexes[i]])));
             }
             return new PredicateExp(staticsPrecon.Predicate.Name, newArgs);
         }
@@ -218,7 +214,7 @@ namespace PDDLSharp.Toolkit.Grounders
             {
                 if (!violationPatterns.ContainsKey(i))
                     continue;
-                foreach(var pattern in violationPatterns[i])
+                foreach (var pattern in violationPatterns[i])
                 {
                     if (pattern.Length > index)
                         continue;

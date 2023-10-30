@@ -1,12 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
 {
@@ -24,13 +19,13 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
         }
 
 
-        public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
+        public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
         {
             Calculated++;
             int max = -1;
-            foreach(var heuristic in Heuristics)
+            foreach (var heuristic in Heuristics)
             {
-                var hValue = heuristic.GetValue(parent, state, groundedActions);
+                var hValue = heuristic.GetValue(parent, state, operators);
                 if (hValue > max)
                     max = hValue;
             }

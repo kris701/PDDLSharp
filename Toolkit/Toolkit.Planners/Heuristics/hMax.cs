@@ -1,29 +1,30 @@
 ﻿using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
+using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
-    public class hMax : hAdd
+    public class hMax : BaseHeuristic
     {
-        public hMax(PDDLDecl declaration) : base(declaration)
+        private FactRPG _graphGenerator;
+        public hMax()
         {
+            _graphGenerator = new FactRPG();
         }
 
-        public override int GetValue(StateMove parent, IState state, List<ActionDecl> groundedActions)
+        public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
         {
             Calculated++;
             var max = 0;
-            var dict = GenerateCostStructure(state, groundedActions);
-            foreach (var fact in _goalCache)
+            var dict = _graphGenerator.GenerateRelaxedGraph(state, operators);
+            foreach (var fact in state.Goals)
             {
                 var factCost = dict[fact];
+                if (factCost == int.MaxValue)
+                    return int.MaxValue;
                 if (factCost > max)
                     max = factCost;
             }
