@@ -6,7 +6,19 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Models.SAS
 {
-    internal class SASDecl
+    public class SASDecl
     {
+        public HashSet<string> DomainVariables { get; set; }
+        public HashSet<Operator> Operators { get; set; }
+        public HashSet<Fact> Goal { get; set; }
+        public HashSet<Fact> Init { get; set; }
+
+        public SASDecl(HashSet<string> domainVariables, HashSet<Operator> operators, HashSet<Fact> goal, HashSet<Fact> init)
+        {
+            DomainVariables = domainVariables;
+            Operators = operators;
+            Goal = goal;
+            Init = init;
+        }
     }
 }
