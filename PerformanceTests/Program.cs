@@ -53,16 +53,14 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                if (subDir.Name != "trucks")
-                    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
                 var domain = Path.Combine(subDir.FullName, "domain.pddl");
                 if (File.Exists(domain))
                 {
-                    //try
-                    //{
+                    try
+                    {
                         foreach (var file in new DirectoryInfo(subDir.FullName).GetFiles())
                         {
                             if (file.Name != "domain.pddl")
@@ -76,7 +74,7 @@ namespace PerformanceTests
 
                                 Console.WriteLine($"Translating...");
                                 ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
-                                translator.TimeLimit = TimeSpan.FromSeconds(5);
+                                translator.TimeLimit = TimeSpan.FromSeconds(60);
                                 var decl = translator.Translate(pddlDecl);
 
                                 if (translator.Aborted)
@@ -85,8 +83,6 @@ namespace PerformanceTests
                                     Console.WriteLine($"Translator timed out...");
                                     break;
                                 }
-
-                                break;
 
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
@@ -126,12 +122,12 @@ namespace PerformanceTests
                                 break;
                             }
                         }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    couldNotSolve++;
-                    //    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
-                    //}
+                    }
+                    catch (Exception ex)
+                    {
+                        couldNotSolve++;
+                        Console.WriteLine($"Cannot solve for domain: {ex.Message}");
+                    }
                 }
             }
             Console.WriteLine($"");

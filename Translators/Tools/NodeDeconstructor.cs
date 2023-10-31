@@ -35,7 +35,9 @@ namespace PDDLSharp.Translators.Tools
         public List<ActionDecl> DeconstructAction(ActionDecl act)
         {
             act = Deconstruct(act);
-            return _conditionalDeconstructor.DecontructConditionals(act);
+            if (act.Effects.FindTypes<WhenExp>().Count > 0)
+                return _conditionalDeconstructor.DecontructConditionals(act);
+            return new List<ActionDecl>() { act };
         }
     }
 }
