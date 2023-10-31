@@ -1,6 +1,4 @@
-﻿using PDDLSharp.Models.PDDL;
-using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Models.SAS;
+﻿using PDDLSharp.Models.SAS;
 
 namespace PDDLSharp.Toolkit.StateSpace.SAS
 {
@@ -14,7 +12,7 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
         {
             Declaration = declaration;
             State = new HashSet<Fact>();
-            foreach(var fact in declaration.Init)
+            foreach (var fact in declaration.Init)
                 State.Add(fact);
         }
 

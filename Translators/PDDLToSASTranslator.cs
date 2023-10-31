@@ -4,14 +4,8 @@ using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Tools;
 using PDDLSharp.Translators.Grounders;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
-using System.Xml.Linq;
 
 namespace PDDLSharp.Translators
 {
@@ -182,7 +176,7 @@ namespace PDDLSharp.Translators
 
         private void CheckIfValid(PDDLDecl decl)
         {
-            foreach(var action in decl.Domain.Actions)
+            foreach (var action in decl.Domain.Actions)
             {
                 if (action.Preconditions.FindTypes<NotExp>().Count > 0)
                     throw new Exception("Translator does not support negative preconditions!");

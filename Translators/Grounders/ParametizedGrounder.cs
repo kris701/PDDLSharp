@@ -49,7 +49,7 @@ namespace PDDLSharp.Translators.Grounders
                 return new List<IParametized>() { newItem };
 
             var otherParams = item.FindTypes<IParametized>(null, true);
-            foreach(var other in otherParams)
+            foreach (var other in otherParams)
                 other.IsHidden = true;
 
             InitializeViolationPatternDict(item.Parameters.Values.Count);

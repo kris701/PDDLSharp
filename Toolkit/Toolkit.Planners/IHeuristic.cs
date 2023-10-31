@@ -1,6 +1,5 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
-using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners

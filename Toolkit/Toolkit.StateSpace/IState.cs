@@ -1,6 +1,4 @@
-﻿using PDDLSharp.Models.PDDL;
-
-namespace PDDLSharp.Toolkit.StateSpace
+﻿namespace PDDLSharp.Toolkit.StateSpace
 {
     public interface IState
     {

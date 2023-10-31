@@ -1,5 +1,4 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.SAS;
 
 namespace PDDLSharp.Toolkit.Planners

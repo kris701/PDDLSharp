@@ -1,6 +1,4 @@
-﻿using PDDLSharp.Models.PDDL.Expressions;
-
-namespace PDDLSharp.Models.SAS
+﻿namespace PDDLSharp.Models.SAS
 {
     public class Operator
     {
