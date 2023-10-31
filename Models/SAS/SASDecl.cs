@@ -28,5 +28,24 @@ namespace PDDLSharp.Models.SAS
             Goal = new HashSet<Fact>();
             Init = new HashSet<Fact>();
         }
+
+        public SASDecl Copy()
+        {
+            var domainVariables = new HashSet<string>();
+            var operators = new List<Operator>();
+            var goal = new HashSet<Fact>();
+            var init = new HashSet<Fact>();
+
+            foreach (var domainVar in DomainVariables)
+                domainVariables.Add(domainVar);
+            foreach (var op in Operators)
+                operators.Add(op.Copy());
+            foreach (var g in Goal)
+                goal.Add(g.Copy());
+            foreach (var i in Init)
+                init.Add(i.Copy());
+
+            return new SASDecl(domainVariables, operators, goal, init);
+        }
     }
 }

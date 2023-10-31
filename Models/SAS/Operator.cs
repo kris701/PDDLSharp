@@ -19,6 +19,15 @@ namespace PDDLSharp.Models.SAS
             Del = del;
         }
 
+        public Operator()
+        {
+            Name = "";
+            Arguments = new string[0];
+            Pre = new HashSet<Fact>();
+            Add = new HashSet<Fact>();
+            Del = new HashSet<Fact>();
+        }
+
         private int _hashCache = -1;
         public override int GetHashCode()
         {
@@ -51,6 +60,25 @@ namespace PDDLSharp.Models.SAS
             foreach (var arg in Arguments)
                 retStr += $" {arg}";
             return retStr;
+        }
+
+        public Operator Copy()
+        {
+            var arguments = new string[Arguments.Length];
+            var pre = new HashSet<Fact>();
+            var add = new HashSet<Fact>();
+            var del = new HashSet<Fact>();
+
+            for (int i = 0; i < Arguments.Length; i++)
+                arguments[i] = Arguments[i];
+            foreach (var p in Pre)
+                pre.Add(p.Copy());
+            foreach (var a in Add)
+                add.Add(a.Copy());
+            foreach (var d in Del)
+                del.Add(d.Copy());
+
+            return new Operator(Name, arguments, pre, add, del);
         }
     }
 }

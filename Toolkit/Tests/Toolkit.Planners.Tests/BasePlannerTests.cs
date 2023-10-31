@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests
         internal static SASDecl GetSASDecl(string domain, string problem)
         {
             if (_declCache.ContainsKey(domain + problem))
-                return _declCache[domain + problem];
+                return _declCache[domain + problem].Copy();
 
             IErrorListener listener = new ErrorListener();
             IParser<INode> parser = new PDDLParser(listener);
@@ -46,7 +46,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests
         internal static PDDLDecl GetPDDLDecl(string domain, string problem)
         {
             if (_pddlDeclCache.ContainsKey(domain + problem))
-                return _pddlDeclCache[domain + problem];
+                return _pddlDeclCache[domain + problem].Copy();
 
             IErrorListener listener = new ErrorListener();
             IParser<INode> parser = new PDDLParser(listener);
