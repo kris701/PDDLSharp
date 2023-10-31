@@ -1,9 +1,8 @@
-﻿using PDDLSharp.Models.PDDL;
-using PDDLSharp.Models.PDDL.Domain;
+﻿using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using System.Collections;
 
-namespace PDDLSharp.Models
+namespace PDDLSharp.Models.PDDL
 {
     public class PDDLDecl : IEnumerable<INode>
     {

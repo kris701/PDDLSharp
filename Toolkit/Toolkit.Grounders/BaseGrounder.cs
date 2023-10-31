@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Contextualisers.PDDL;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Toolkit.Grounders

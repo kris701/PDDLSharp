@@ -1,4 +1,4 @@
-﻿using PDDLSharp.Models;
+﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 
 namespace PDDLSharp.Toolkit.MacroGenerators

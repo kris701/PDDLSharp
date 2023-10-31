@@ -1,4 +1,4 @@
-﻿using PDDLSharp.Models;
+﻿using PDDLSharp.Models.PDDL;
 
 namespace PDDLSharp.Toolkit.StateSpace.PDDL
 {

@@ -1,4 +1,4 @@
-﻿using PDDLSharp.Models;
+﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.Planners.Tools;

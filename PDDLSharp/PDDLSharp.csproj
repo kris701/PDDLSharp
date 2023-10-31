@@ -63,6 +63,7 @@
 		<ProjectReference Include="..\Toolkit\Toolkit.StateSpace\Toolkit.StateSpace.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Toolkit\Toolkit.StaticPredicateDetectors\Toolkit.StaticPredicateDetectors.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Tools\Tools.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\Translators\Translators.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

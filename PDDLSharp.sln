@@ -84,7 +84,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.MacroGenerators.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Planners", "Toolkit\Toolkit.Planners\Toolkit.Planners.csproj", "{971B1505-6DBB-4BD3-83DB-D2B477344806}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolkit.Planners.Tests", "Toolkit\Tests\Toolkit.Planners.Tests\Toolkit.Planners.Tests.csproj", "{2C0E234D-7E3F-4099-A79E-7DEBC725E4A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Planners.Tests", "Toolkit\Tests\Toolkit.Planners.Tests\Toolkit.Planners.Tests.csproj", "{2C0E234D-7E3F-4099-A79E-7DEBC725E4A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translators", "Translators\Translators.csproj", "{F4880F51-EBBF-4BD1-A228-6C0E44F29A0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -228,6 +230,10 @@ Global
 		{2C0E234D-7E3F-4099-A79E-7DEBC725E4A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C0E234D-7E3F-4099-A79E-7DEBC725E4A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C0E234D-7E3F-4099-A79E-7DEBC725E4A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4880F51-EBBF-4BD1-A228-6C0E44F29A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4880F51-EBBF-4BD1-A228-6C0E44F29A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4880F51-EBBF-4BD1-A228-6C0E44F29A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4880F51-EBBF-4BD1-A228-6C0E44F29A0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
