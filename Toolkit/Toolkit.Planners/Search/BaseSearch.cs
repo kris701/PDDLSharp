@@ -12,8 +12,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 {
     public abstract class BaseSearch : IPlanner
     {
-        public PDDLDecl Declaration { get; }
-        public List<Models.SAS.Operator> Operators { get; set; }
+        public SASDecl Declaration { get; }
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
         public int Evaluations => Heuristic.Evaluations;
@@ -27,16 +26,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
         internal HashSet<StateMove> _closedList = new HashSet<StateMove>();
         internal RefPriorityQueue _openList = new RefPriorityQueue();
 
-        private bool _preprocessed = false;
-        private ParametizedGrounder _grounder;
-
-        public BaseSearch(PDDLDecl decl, IHeuristic heuristic)
+        public BaseSearch(SASDecl decl, IHeuristic heuristic)
         {
             Declaration = decl;
             Heuristic = heuristic;
-            Operators = new List<Operator>();
-            _grounder = new ParametizedGrounder(decl);
-            _grounder.RemoveStaticsFromOutput = true;
         }
 
         private System.Timers.Timer GetTimer(TimeSpan interval)
@@ -48,41 +41,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return newTimer;
         }
 
-        public void PreProcess()
-        {
-            if (_preprocessed)
-                return;
-            var timer = GetTimer(PreprocessLimit);
-            timer.Start();
-            var watch = new Stopwatch();
-            watch.Start();
-            Operators = new List<Models.SAS.Operator>();
-            foreach (var action in Declaration.Domain.Actions)
-            {
-                action.Preconditions = EnsureAndNode(action.Preconditions);
-                action.Effects = EnsureAndNode(action.Effects);
-                var newActs = _grounder.Ground(action).Cast<Models.PDDL.Domain.ActionDecl>();
-                foreach (var newAct in newActs)
-                    Operators.Add(new Models.SAS.Operator(newAct));
-            }
-            watch.Stop();
-            timer.Stop();
-            PreprocessTime = watch.Elapsed;
-            _preprocessed = true;
-        }
-
-        private IExp EnsureAndNode(IExp from)
-        {
-            if (from is AndExp)
-                return from;
-            return new AndExp(new List<IExp>() { from });
-        }
-
         public ActionPlan Solve()
         {
-            if (!_preprocessed)
-                PreProcess();
-
             var timer = GetTimer(SearchLimit);
             timer.Start();
             var watch = new Stopwatch();
@@ -106,10 +66,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
         private void OnTimedOut(object? source, ElapsedEventArgs e)
         {
             Aborted = true;
-            _grounder.Abort();
         }
 
-        internal IState<Fact, Models.SAS.Operator> GenerateNewState(IState<Fact, Models.SAS.Operator> state, Models.SAS.Operator op)
+        internal IState<Fact, Operator, SASDecl> GenerateNewState(IState<Fact, Operator, SASDecl> state, Operator op)
         {
             Generated++;
             var newState = state.Copy();
@@ -117,12 +76,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return newState;
         }
 
-        internal RefPriorityQueue InitializeQueue(IHeuristic h, IState<Fact, Models.SAS.Operator> state)
+        internal RefPriorityQueue InitializeQueue(IHeuristic h, IState<Fact, Operator, SASDecl> state)
         {
             var queue = new RefPriorityQueue();
             var fromMove = new StateMove();
             fromMove.hValue = int.MaxValue;
-            var hValue = h.GetValue(fromMove, state, Operators);
+            var hValue = h.GetValue(fromMove, state, Declaration.Operators);
             queue.Enqueue(new StateMove(state, hValue), hValue);
             return queue;
         }
@@ -139,7 +98,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         internal GroundedAction GenerateFromOp(Models.SAS.Operator op) => new GroundedAction(op.Name, op.Arguments);
 
-        internal abstract ActionPlan Solve(IHeuristic h, IState<Fact, Models.SAS.Operator> state);
+        internal abstract ActionPlan Solve(IHeuristic h, IState<Fact, Operator, SASDecl> state);
 
         public virtual void Dispose()
         {
@@ -147,8 +106,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
             _closedList.EnsureCapacity(0);
             _openList.Clear();
             _openList.Queue.EnsureCapacity(0);
-            Operators.Clear();
-            Operators.EnsureCapacity(0);
         }
     }
 }

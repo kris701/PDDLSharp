@@ -2,13 +2,12 @@
 
 namespace PDDLSharp.Toolkit.StateSpace
 {
-    public interface IState<F, O>
+    public interface IState<F, O, D>
     {
         public HashSet<F> State { get; set; }
-        public HashSet<F> Goals { get; }
-        public PDDLDecl Declaration { get; }
+        public D Declaration { get; }
 
-        public IState<F, O> Copy();
+        public IState<F, O, D> Copy();
         public int Count { get; }
 
         public bool Add(F pred);

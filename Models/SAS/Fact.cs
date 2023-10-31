@@ -13,15 +13,6 @@ namespace PDDLSharp.Models.SAS
             Arguments = arguments;
         }
 
-        public Fact(PredicateExp pred)
-        {
-            Name = pred.Name;
-            var args = new List<string>();
-            foreach (var arg in pred.Arguments)
-                args.Add(arg.Name);
-            Arguments = args.ToArray();
-        }
-
         // The order is important!
         // Based on: https://stackoverflow.com/a/30758270
         private int _hashCache = -1;

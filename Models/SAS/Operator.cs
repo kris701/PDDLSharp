@@ -19,58 +19,6 @@ namespace PDDLSharp.Models.SAS
             Del = del;
         }
 
-        public Operator(PDDL.Domain.ActionDecl act)
-        {
-            Name = act.Name;
-            // Arguments
-            var args = new List<string>();
-            foreach (var arg in act.Parameters.Values)
-                args.Add(arg.Name);
-            Arguments = args.ToArray();
-
-            // Preconditions
-            var pre = new HashSet<Fact>();
-            if (act.Preconditions is AndExp preAnd)
-            {
-                foreach (var item in preAnd.Children)
-                {
-                    if (item is PredicateExp pred)
-                        pre.Add(new Fact(pred));
-                    else
-                        throw new ArgumentException("Unsupported node for operator!");
-                }
-            }
-            else
-                throw new ArgumentException("Action precondition must be an and expression.");
-            Pre = pre;
-
-            // Effects
-            var add = new HashSet<Fact>();
-            var del = new HashSet<Fact>();
-            if (act.Effects is AndExp effAnd)
-            {
-                foreach (var item in effAnd.Children)
-                {
-                    if (item is NumericExp)
-                        continue;
-
-                    if (item is PredicateExp pred)
-                        add.Add(new Fact(pred));
-                    else
-                    {
-                        if (item is NotExp not && not.Child is PredicateExp nPred)
-                            del.Add(new Fact(nPred));
-                        else
-                            throw new ArgumentException("Unsupported node for operator!");
-                    }
-                }
-            }
-            else
-                throw new ArgumentException("Action effect must be an and expression.");
-            Add = add;
-            Del = del;
-        }
-
         private int _hashCache = -1;
         public override int GetHashCode()
         {

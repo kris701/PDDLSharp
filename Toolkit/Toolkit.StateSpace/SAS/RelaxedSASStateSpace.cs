@@ -5,11 +5,11 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
 {
     public class RelaxedSASStateSpace : SASStateSpace
     {
-        public RelaxedSASStateSpace(PDDLDecl declaration) : base(declaration)
+        public RelaxedSASStateSpace(SASDecl declaration) : base(declaration)
         {
         }
 
-        public RelaxedSASStateSpace(PDDLDecl declaration, HashSet<Fact> state, HashSet<Fact> goal) : base(declaration, state, goal)
+        public RelaxedSASStateSpace(SASDecl declaration, HashSet<Fact> state) : base(declaration, state)
         {
         }
 
@@ -25,11 +25,11 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
             return changes;
         }
 
-        public override IState<Fact, Operator> Copy()
+        public override IState<Fact, Operator, SASDecl> Copy()
         {
             var newState = new Fact[State.Count];
             State.CopyTo(newState);
-            return new RelaxedSASStateSpace(Declaration, newState.ToHashSet(), Goals);
+            return new RelaxedSASStateSpace(Declaration, newState.ToHashSet());
         }
     }
 }

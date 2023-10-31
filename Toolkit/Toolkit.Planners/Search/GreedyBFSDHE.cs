@@ -12,11 +12,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
     /// </summary>
     public class GreedyBFSDHE : BaseSearch
     {
-        public GreedyBFSDHE(PDDLDecl decl, IHeuristic heuristic) : base(decl, heuristic)
+        public GreedyBFSDHE(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
         }
 
-        internal override ActionPlan Solve(IHeuristic h, IState<Fact, Operator> state)
+        internal override ActionPlan Solve(IHeuristic h, IState<Fact, Operator, SASDecl> state)
         {
             while (!Aborted && _openList.Count > 0)
             {
@@ -24,10 +24,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 if (stateMove.State.IsInGoal())
                     return new ActionPlan(stateMove.Steps);
                 if (!stateMove.Evaluated)
-                    stateMove.hValue = h.GetValue(stateMove, stateMove.State, Operators);
+                    stateMove.hValue = h.GetValue(stateMove, stateMove.State, Declaration.Operators);
 
                 bool lowerFound = false;
-                foreach (var op in Operators)
+                foreach (var op in Declaration.Operators)
                 {
                     if (Aborted) break;
                     if (stateMove.State.IsNodeTrue(op))
@@ -46,7 +46,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                             }
                             else
                             {
-                                var value = h.GetValue(stateMove, newMove.State, Operators);
+                                var value = h.GetValue(stateMove, newMove.State, Declaration.Operators);
                                 if (value < stateMove.hValue)
                                     lowerFound = true;
                                 newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };

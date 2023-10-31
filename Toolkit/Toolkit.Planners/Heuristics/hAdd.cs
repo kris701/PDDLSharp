@@ -13,12 +13,12 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             _graphGenerator = new FactRPG();
         }
 
-        public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
+        public override int GetValue(StateMove parent, IState<Fact, Operator, SASDecl> state, List<Operator> operators)
         {
             Evaluations++;
             var cost = 0;
             var dict = _graphGenerator.GenerateRelaxedGraph(state, operators);
-            foreach (var fact in state.Goals)
+            foreach (var fact in state.Declaration.Goal)
             {
                 var factCost = dict[fact];
                 if (factCost == int.MaxValue)

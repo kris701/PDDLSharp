@@ -9,11 +9,11 @@ namespace PDDLSharp.Toolkit.Planners.Tools
     public class RelaxedPlanGenerator
     {
         public bool Failed { get; internal set; } = false;
-        public PDDLDecl Declaration { get; set; }
+        public SASDecl Declaration { get; set; }
         private OperatorRPG _generator;
         private Dictionary<int, HashSet<Operator>> _opCache;
 
-        public RelaxedPlanGenerator(PDDLDecl declaration)
+        public RelaxedPlanGenerator(SASDecl declaration)
         {
             Declaration = declaration;
             _generator = new OperatorRPG();
@@ -27,7 +27,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             _generator.ClearCaches();
         }
 
-        public HashSet<Operator> GenerateReplaxedPlan(IState<Fact, Operator> state, List<Operator> operators)
+        public HashSet<Operator> GenerateReplaxedPlan(IState<Fact, Operator, SASDecl> state, List<Operator> operators)
         {
             var hash = state.GetHashCode();
             if (_opCache.ContainsKey(hash))
@@ -35,7 +35,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 
             Failed = false;
             if (state is not RelaxedSASStateSpace)
-                state = new RelaxedSASStateSpace(Declaration, state.State, state.Goals);
+                state = new RelaxedSASStateSpace(Declaration, state.State);
 
             var graphLayers = _generator.GenerateRelaxedPlanningGraph(state, operators);
             if (graphLayers.Count == 0)
@@ -49,11 +49,11 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             return selectedOperators;
         }
 
-        private HashSet<Operator> ReconstructPlan(IState<Fact, Operator> state, List<Layer> graphLayers)
+        private HashSet<Operator> ReconstructPlan(IState<Fact, Operator, SASDecl> state, List<Layer> graphLayers)
         {
             var selectedOperators = new HashSet<Operator>();
             var m = -1;
-            foreach (var fact in state.Goals)
+            foreach (var fact in Declaration.Goal)
                 m = Math.Max(m, FirstLevel(fact, graphLayers));
 
             if (m == -1)
@@ -63,7 +63,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             for (int t = 0; t <= m; t++)
             {
                 G.Add(t, new List<Fact>());
-                foreach (var fact in state.Goals)
+                foreach (var fact in Declaration.Goal)
                     if (FirstLevel(fact, graphLayers) == t)
                         G[t].Add(fact);
             }

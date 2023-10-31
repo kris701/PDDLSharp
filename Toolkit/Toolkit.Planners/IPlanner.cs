@@ -6,11 +6,9 @@ namespace PDDLSharp.Toolkit.Planners
 {
     public interface IPlanner : IDisposable
     {
-        public PDDLDecl Declaration { get; }
-        public List<Operator> Operators { get; set; }
+        public SASDecl Declaration { get; }
         public IHeuristic Heuristic { get; }
 
-        public TimeSpan PreprocessLimit { get; set; }
         public TimeSpan SearchLimit { get; set; }
 
         public int Generated { get; }
@@ -18,10 +16,8 @@ namespace PDDLSharp.Toolkit.Planners
         public int Evaluations { get; }
 
         public bool Aborted { get; }
-        public TimeSpan PreprocessTime { get; }
         public TimeSpan SearchTime { get; }
 
-        public void PreProcess();
         public ActionPlan Solve();
     }
 }

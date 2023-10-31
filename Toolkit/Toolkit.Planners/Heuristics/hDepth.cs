@@ -9,7 +9,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     /// </summary>
     public class hDepth : BaseHeuristic
     {
-        public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
+        public override int GetValue(StateMove parent, IState<Fact, Operator, SASDecl> state, List<Operator> operators)
         {
             Evaluations++;
             return parent.hValue - 1;

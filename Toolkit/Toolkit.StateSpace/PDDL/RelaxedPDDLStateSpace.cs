@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.StateSpace.PDDL
             return changes;
         }
 
-        public override IState<PredicateExp, INode> Copy()
+        public override IState<PredicateExp, INode, PDDLDecl> Copy()
         {
             PredicateExp[] newState = new PredicateExp[State.Count];
             State.CopyTo(newState);

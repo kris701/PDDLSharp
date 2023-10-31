@@ -17,7 +17,7 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
         {
         }
 
-        public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
+        public override int GetValue(StateMove parent, IState<Fact, Operator, SASDecl> state, List<Operator> operators)
         {
             Evaluations++;
             int sum = 0;

@@ -10,10 +10,10 @@ namespace PDDLSharp.Toolkit.Planners.Tools
     {
         private Dictionary<int, HashSet<Fact>> _stateCache = new Dictionary<int, HashSet<Fact>>();
         private Dictionary<int, List<int>> _coveredCache = new Dictionary<int, List<int>>();
-        internal Dictionary<Fact, int> GenerateRelaxedGraph(IState<Fact, Operator> state, List<Models.SAS.Operator> operators)
+        internal Dictionary<Fact, int> GenerateRelaxedGraph(IState<Fact, Operator, SASDecl> state, List<Models.SAS.Operator> operators)
         {
             if (state is not RelaxedSASStateSpace)
-                state = new RelaxedSASStateSpace(state.Declaration, state.State, state.Goals);
+                state = new RelaxedSASStateSpace(state.Declaration, state.State);
 
             state = state.Copy();
             bool[] covered = new bool[operators.Count];

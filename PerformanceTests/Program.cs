@@ -18,6 +18,7 @@ using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
+using PDDLSharp.Translators;
 using System.Diagnostics;
 
 namespace PerformanceTests
@@ -44,6 +45,7 @@ namespace PerformanceTests
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
             IPlanValidator validator = new PlanValidator();
+            ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator();
 
             var path = new DirectoryInfo("benchmarks");
             var paths = path.GetDirectories();
@@ -52,21 +54,25 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
+                if (subDir.Name != "gripper")
+                    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
                 var domain = Path.Combine(subDir.FullName, "domain.pddl");
                 if (File.Exists(domain))
                 {
-                    try
-                    {
+                    //try
+                    //{
                         foreach (var file in new DirectoryInfo(subDir.FullName).GetFiles())
                         {
                             if (file.Name != "domain.pddl")
                             {
-                                PDDLDecl decl = new PDDLDecl(
+                                PDDLDecl pddlDecl = new PDDLDecl(
                                     parser.ParseAs<DomainDecl>(new FileInfo(domain)),
                                     parser.ParseAs<ProblemDecl>(file));
+
+                                var decl = translator.Translate(pddlDecl);
 
                                 Console.WriteLine($"Domain: {subDir.Name}");
                                 Console.WriteLine($"Problem: {file.Name}");
@@ -77,9 +83,7 @@ namespace PerformanceTests
                                     planner.PreprocessLimit = TimeSpan.FromSeconds(60);
                                     planner.SearchLimit = TimeSpan.FromSeconds(60);
 
-                                    Console.WriteLine($"Grounding...");
-                                    planner.PreProcess();
-                                    Console.WriteLine($"{planner.Operators.Count} total operators");
+                                    Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
                                     Console.WriteLine($"Solving...");
                                     var plan = new ActionPlan(new List<GroundedAction>());
                                     try
@@ -93,12 +97,12 @@ namespace PerformanceTests
                                         couldSolve++;
                                         Console.WriteLine($"Search took {planner.SearchTime.TotalSeconds}s");
                                         Console.WriteLine($"Generated {planner.Generated} states and expanded {planner.Expanded}");
-                                        Console.WriteLine($"Had {planner.OperatorsUsed} operators to use out of {planner.Operators.Count}");
+                                        Console.WriteLine($"Had {planner.OperatorsUsed} operators to use out of {planner.Declaration.Operators.Count}");
                                         Console.WriteLine($"Heuristic evaluated {planner.Evaluations} times");
                                         Console.WriteLine($"Actually used {plan.Plan.Count} operators");
 
                                         Console.WriteLine($"{planner.GetType().Name} plan have a cost of {plan.Cost}");
-                                        if (validator.Validate(plan, decl))
+                                        if (validator.Validate(plan, pddlDecl))
                                             Console.WriteLine($"{planner.GetType().Name} plan is valid!");
                                         else
                                             Console.WriteLine($"{planner.GetType().Name} plan is NOT valid!");
@@ -112,12 +116,12 @@ namespace PerformanceTests
                                 break;
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        couldNotSolve++;
-                        Console.WriteLine($"Cannot solve for domain: {ex.Message}");
-                    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    couldNotSolve++;
+                    //    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
+                    //}
                 }
             }
             Console.WriteLine($"");
