@@ -35,16 +35,16 @@ namespace PDDLSharp.Translators
                 foreach (var cons in from.Domain.Constants.Constants)
                     domainVariables.Add(cons.Name);
 
-            // Goal
-            if (from.Problem.Goal != null)
-                goal = ExtractFactsFromExp(grounder, from.Problem.Goal.GoalExp)[true];
-
             // Init
             if (from.Problem.Init != null)
                 init = ExtractInitFacts(from.Problem.Init.Predicates);
 
+            // Goal
+            if (from.Problem.Goal != null)
+                goal = ExtractFactsFromExp(grounder, from.Problem.Goal.GoalExp)[true].Except(init).ToHashSet();
+
             // Operators
-            operators = GetOperators(grounder, from).ToList();
+            operators = GetOperators(grounder, init, from).ToList();
 
             return new SASDecl(domainVariables, operators, goal, init);
         }
@@ -57,7 +57,7 @@ namespace PDDLSharp.Translators
 
             switch (exp)
             {
-                case NumericExp num: break;
+                case NumericExp: break;
                 case PredicateExp pred: facts[possitive].Add(GetFactFromPredicate(pred)); break;
                 case NotExp not: facts = MergeDictionaries(facts, ExtractFactsFromExp(grounder, not.Child, !possitive)); break;
                 case ForAllExp forAll:
@@ -98,11 +98,16 @@ namespace PDDLSharp.Translators
             return initFacts;
         }
 
-        private HashSet<Operator> GetOperators(IGrounder<IParametized> grounder, PDDLDecl decl)
+        private HashSet<Operator> GetOperators(IGrounder<IParametized> grounder, HashSet<Fact> inits, PDDLDecl decl)
         {
             var operators = new HashSet<Operator>();
             foreach (var action in decl.Domain.Actions)
             {
+                if (action.Preconditions.FindTypes<NotExp>().Count > 0)
+                    throw new Exception("Translator does not support negative preconditions!");
+                if (action.Effects.FindTypes<IParametized>().Count > 0)
+                    throw new Exception("Translator does not IParametized nodes in effects!");
+
                 var newActs = grounder.Ground(action).Cast<ActionDecl>();
                 foreach (var act in newActs)
                 {
@@ -113,7 +118,7 @@ namespace PDDLSharp.Translators
                     var preFacts = ExtractFactsFromExp(grounder, act.Preconditions);
                     var pre = preFacts[true];
                     var effFacts = ExtractFactsFromExp(grounder, act.Effects);
-                    var add = effFacts[true];
+                    var add = effFacts[true].Except(inits).ToHashSet();
                     var del = effFacts[false];
 
                     operators.Add(new Operator(act.Name, args.ToArray(), pre, add, del));

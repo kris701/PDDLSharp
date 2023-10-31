@@ -54,16 +54,14 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                if (subDir.Name != "gripper")
-                    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
                 var domain = Path.Combine(subDir.FullName, "domain.pddl");
                 if (File.Exists(domain))
                 {
-                    //try
-                    //{
+                    try
+                    {
                         foreach (var file in new DirectoryInfo(subDir.FullName).GetFiles())
                         {
                             if (file.Name != "domain.pddl")
@@ -116,12 +114,12 @@ namespace PerformanceTests
                                 break;
                             }
                         }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    couldNotSolve++;
-                    //    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
-                    //}
+                    }
+                    catch (Exception ex)
+                    {
+                        couldNotSolve++;
+                        Console.WriteLine($"Cannot solve for domain: {ex.Message}");
+                    }
                 }
             }
             Console.WriteLine($"");

@@ -48,6 +48,10 @@ namespace PDDLSharp.Translators.Grounders
             if (item.Parameters.Values.Count == 0 && item.Copy() is IParametized newItem)
                 return new List<IParametized>() { newItem };
 
+            var otherParams = item.FindTypes<IParametized>(null, true);
+            foreach(var other in otherParams)
+                other.IsHidden = true;
+
             InitializeViolationPatternDict(item.Parameters.Values.Count);
             GenerateStaticsPreconditions(item);
 
