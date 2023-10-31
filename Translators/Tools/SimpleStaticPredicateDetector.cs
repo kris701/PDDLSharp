@@ -3,9 +3,9 @@ using PDDLSharp.Models.PDDL.Expressions;
 
 namespace PDDLSharp.Translators.StaticPredicateDetectors
 {
-    public class SimpleStaticPredicateDetector : IStaticPredicateDetectors
+    public static class SimpleStaticPredicateDetector
     {
-        public List<PredicateExp> FindStaticPredicates(PDDLDecl decl)
+        public static List<PredicateExp> FindStaticPredicates(PDDLDecl decl)
         {
             List<PredicateExp> statics = new List<PredicateExp>();
 

@@ -15,8 +15,7 @@ namespace PDDLSharp.Translators.Grounders
         private List<PredicateViolationCheck> _staticsPreconditions;
         public ParametizedGrounder(PDDLDecl declaration) : base(declaration)
         {
-            var staticPredicateDetector = new SimpleStaticPredicateDetector();
-            _statics = staticPredicateDetector.FindStaticPredicates(Declaration).ToHashSet();
+            _statics = SimpleStaticPredicateDetector.FindStaticPredicates(Declaration).ToHashSet();
             _inits = GenerateSimpleInits();
             _staticsViolationPatterns = new Dictionary<int, List<int[]>>();
             _staticsPreconditions = new List<PredicateViolationCheck>();

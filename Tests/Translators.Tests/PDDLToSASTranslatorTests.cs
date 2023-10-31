@@ -88,8 +88,7 @@ namespace PDDLSharp.Translators.Tests
             var parser = new PDDLParser(listener);
             var decl = parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
             var translator = new PDDLToSASTranslator(true);
-            var staticsDetector = new SimpleStaticPredicateDetector();
-            var statics = staticsDetector.FindStaticPredicates(decl);
+            var statics = SimpleStaticPredicateDetector.FindStaticPredicates(decl);
 
             // ACT
             var sas = translator.Translate(decl);

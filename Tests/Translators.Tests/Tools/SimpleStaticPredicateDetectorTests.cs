@@ -39,10 +39,9 @@ namespace PDDLSharp.Translators.Tests.Tools
             var decl = new PDDLDecl(
                 parser.ParseAs<DomainDecl>(new FileInfo(domain)),
                 new ProblemDecl());
-            IStaticPredicateDetectors detector = new SimpleStaticPredicateDetector();
 
             // ACT
-            var statics = detector.FindStaticPredicates(decl);
+            var statics = SimpleStaticPredicateDetector.FindStaticPredicates(decl);
 
             // ASSERT
             Assert.AreEqual(expectedStatics.Length, statics.Count);
