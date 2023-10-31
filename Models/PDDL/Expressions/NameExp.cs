@@ -45,6 +45,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             var newNode = new NameExp(new ASTNode(Start, End, Line, "", ""), newParent, Name);
             newNode.Type = Type.Copy(newNode);
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

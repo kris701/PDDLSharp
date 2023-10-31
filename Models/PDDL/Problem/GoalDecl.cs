@@ -51,6 +51,7 @@ namespace PDDLSharp.Models.PDDL.Problem
         {
             var newNode = new GoalDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             newNode.GoalExp = ((dynamic)GoalExp).Copy(newNode);
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

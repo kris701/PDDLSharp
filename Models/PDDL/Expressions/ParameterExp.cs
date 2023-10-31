@@ -62,6 +62,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             var newNode = new ParameterExp(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Values)
                 newNode.Values.Add(((dynamic)node).Copy(newNode));
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

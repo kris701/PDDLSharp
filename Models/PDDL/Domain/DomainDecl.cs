@@ -123,6 +123,7 @@ namespace PDDLSharp.Models.PDDL.Domain
             foreach (var act in Deriveds)
                 newNode.Deriveds.Add(act.Copy(newNode));
 
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

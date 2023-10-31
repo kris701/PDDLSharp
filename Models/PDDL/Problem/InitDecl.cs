@@ -54,6 +54,7 @@ namespace PDDLSharp.Models.PDDL.Problem
             var newNode = new InitDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Predicates)
                 newNode.Predicates.Add(((dynamic)node).Copy(newNode));
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

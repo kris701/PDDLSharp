@@ -15,8 +15,7 @@ namespace PDDLSharp.Translators.Grounders
         private List<PredicateViolationCheck> _staticsPreconditions;
         public ParametizedGrounder(PDDLDecl declaration) : base(declaration)
         {
-            var staticPredicateDetector = new SimpleStaticPredicateDetector();
-            _statics = staticPredicateDetector.FindStaticPredicates(Declaration).ToHashSet();
+            _statics = SimpleStaticPredicateDetector.FindStaticPredicates(Declaration).ToHashSet();
             _inits = GenerateSimpleInits();
             _staticsViolationPatterns = new Dictionary<int, List<int[]>>();
             _staticsPreconditions = new List<PredicateViolationCheck>();
@@ -41,16 +40,13 @@ namespace PDDLSharp.Translators.Grounders
             return simpleInits;
         }
 
+        public int Skip = 1;
         public override List<IParametized> Ground(IParametized item)
         {
             List<IParametized> groundedActions = new List<IParametized>();
 
             if (item.Parameters.Values.Count == 0 && item.Copy() is IParametized newItem)
                 return new List<IParametized>() { newItem };
-
-            var otherParams = item.FindTypes<IParametized>(null, true);
-            foreach (var other in otherParams)
-                other.IsHidden = true;
 
             InitializeViolationPatternDict(item.Parameters.Values.Count);
             GenerateStaticsPreconditions(item);
@@ -109,6 +105,7 @@ namespace PDDLSharp.Translators.Grounders
                 var allRefs = allPredicates.Where(x => x.Name == stat.Name);
                 foreach (var refPred in allRefs)
                 {
+                    bool valid = true;
                     var argIndexes = new int[stat.Arguments.Count];
                     var constantIndexes = new int[stat.Arguments.Count];
                     for (int i = 0; i < refPred.Arguments.Count; i++)
@@ -120,11 +117,17 @@ namespace PDDLSharp.Translators.Grounders
                         }
                         else
                         {
+                            if (refPred.Arguments[i].Name.Contains("?"))
+                            {
+                                valid = false;
+                                break;
+                            }
                             argIndexes[i] = int.MaxValue;
                             constantIndexes[i] = GetIndexFromObject(refPred.Arguments[i].Name);
                         }
                     }
-                    staticsPreconditions.Add(new PredicateViolationCheck(stat, argIndexes, constantIndexes));
+                    if (valid)
+                        staticsPreconditions.Add(new PredicateViolationCheck(stat, argIndexes, constantIndexes));
                 }
             }
             return staticsPreconditions;

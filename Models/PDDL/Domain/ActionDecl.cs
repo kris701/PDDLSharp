@@ -75,6 +75,7 @@ namespace PDDLSharp.Models.PDDL.Domain
             newNode.Parameters = newParams;
             newNode.Preconditions = newPreconditions;
             newNode.Effects = newEffects;
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

@@ -60,6 +60,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             var newNode = new TimedLiteralExp(new ASTNode(Start, End, Line, "", ""), newParent, Value);
             newNode.Literal = ((dynamic)Literal).Copy(newNode);
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

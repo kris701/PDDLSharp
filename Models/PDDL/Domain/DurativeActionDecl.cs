@@ -86,6 +86,7 @@ namespace PDDLSharp.Models.PDDL.Domain
             newNode.Condition = newCondition;
             newNode.Effects = newEffects;
             newNode.Duration = newDuration;
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

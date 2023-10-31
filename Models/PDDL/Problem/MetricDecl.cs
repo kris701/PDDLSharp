@@ -58,6 +58,7 @@ namespace PDDLSharp.Models.PDDL.Problem
         {
             var newNode = new MetricDecl(new ASTNode(Start, End, Line, "", ""), newParent, MetricType);
             newNode.MetricExp = ((dynamic)MetricExp).Copy(newNode);
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

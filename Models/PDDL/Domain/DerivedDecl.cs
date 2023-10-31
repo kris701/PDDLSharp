@@ -63,6 +63,7 @@ namespace PDDLSharp.Models.PDDL.Domain
             var newNode = new DerivedDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             newNode.Predicate = Predicate.Copy(newParent);
             newNode.Expression = ((dynamic)Expression).Copy(newParent);
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

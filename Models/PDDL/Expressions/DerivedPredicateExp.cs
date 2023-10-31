@@ -44,6 +44,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             var newNode = new DerivedPredicateExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, _derivedDecls);
             foreach (var node in Arguments)
                 newNode.Arguments.Add(((dynamic)node).Copy(newNode));
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
     }

@@ -50,6 +50,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             var newNode = new NotExp(new ASTNode(Start, End, Line, "", ""), newParent);
             newNode.Child = ((dynamic)Child).Copy(newNode);
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 
