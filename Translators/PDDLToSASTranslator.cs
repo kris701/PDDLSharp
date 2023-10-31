@@ -151,16 +151,16 @@ namespace PDDLSharp.Translators
                     foreach (var act in newActs)
                     {
                         var args = new List<string>();
-                        foreach (var arg in deconstructed.Parameters.Values)
+                        foreach (var arg in act.Parameters.Values)
                             args.Add(arg.Name);
 
-                        var preFacts = ExtractFactsFromExp(deconstructed.Preconditions);
+                        var preFacts = ExtractFactsFromExp(act.Preconditions);
                         var pre = preFacts[true];
-                        var effFacts = ExtractFactsFromExp(deconstructed.Effects);
+                        var effFacts = ExtractFactsFromExp(act.Effects);
                         var add = effFacts[true];
                         var del = effFacts[false];
 
-                        operators.Add(new Operator(deconstructed.Name, args.ToArray(), pre, add, del));
+                        operators.Add(new Operator(act.Name, args.ToArray(), pre, add, del));
                     }
                 }
                 
@@ -181,10 +181,10 @@ namespace PDDLSharp.Translators
         {
             foreach (var action in decl.Domain.Actions)
             {
-                if (action.Preconditions.FindTypes<NotExp>().Count > 0)
-                    throw new Exception("Translator does not support negative preconditions!");
-                if (action.FindTypes<ImplyExp>().Count > 0)
-                    throw new Exception("Translator does not support Imply nodes!");
+                //if (action.Preconditions.FindTypes<NotExp>().Count > 0)
+                //    throw new Exception("Translator does not support negative preconditions!");
+                //if (action.FindTypes<ImplyExp>().Count > 0)
+                //    throw new Exception("Translator does not support Imply nodes!");
             }
         }
     }
