@@ -19,13 +19,9 @@ namespace PDDLSharp.Translators.Tests
     public class PDDLToSASTranslatorTests
     {
         [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
+        public static async Task InitialiseAsync(TestContext context)
         {
-            if (!Directory.Exists("benchmarks"))
-            {
-                Console.WriteLine("Fetching benchmarks...");
-                GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks", "benchmarks");
-            }
+            await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks", "benchmarks");
         }
 
         [TestMethod]
