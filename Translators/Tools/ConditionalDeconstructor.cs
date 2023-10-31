@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace PDDLSharp.Translators.Tools
 {
@@ -25,11 +26,15 @@ namespace PDDLSharp.Translators.Tools
             source.Preconditions = EnsureAnd(source.Preconditions);
             source.Effects = EnsureAnd(source.Effects);
             var allWhens = source.Effects.FindTypes<WhenExp>();
+
+            if (allWhens.Count == 0)
+                return new List<ActionDecl>() { source };
+
             foreach (var when in allWhens)
             {
                 var useful = GetMostUsefullParent(when);
-                if (useful.Parent is IListable list)
-                    list.Remove(useful);
+                if (useful.Parent is IWalkable walk)
+                    walk.Replace(useful, new EmptyExp());
             }
 
             var permutations = GeneratePermutations(allWhens.Count);
@@ -56,7 +61,7 @@ namespace PDDLSharp.Translators.Tools
 
         private INode GetMostUsefullParent(INode from)
         {
-            if (from.Parent is AndExp)
+            if (from.Parent is IWalkable)
                 return from;
             if (from.Parent == null)
                 throw new ArgumentNullException("Expected a parent");
@@ -80,15 +85,17 @@ namespace PDDLSharp.Translators.Tools
         private void GeneratePermutations(int count, bool[] source, int index, Queue<bool[]> returnQueue)
         {
             var trueSource = new bool[count];
+            Array.Copy(source, trueSource, count);
             trueSource[index] = true;
             returnQueue.Enqueue(trueSource);
-            if (index < count)
+            if (index < count - 1)
                 GeneratePermutations(count, trueSource, index + 1, returnQueue);
 
             var falseSource = new bool[count];
+            Array.Copy(source, falseSource, count);
             falseSource[index] = true;
             returnQueue.Enqueue(falseSource);
-            if (index < count)
+            if (index < count - 1)
                 GeneratePermutations(count, falseSource, index + 1, returnQueue);
         }
     }

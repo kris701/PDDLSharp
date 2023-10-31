@@ -55,9 +55,10 @@ namespace PDDLSharp.Translators
             var goal = new HashSet<Fact>();
             var init = new HashSet<Fact>();
 
-            _grounder = new ParametizedGrounder(from);
-            _grounder.RemoveStaticsFromOutput = RemoveStaticsFromOutput;
-            var deconstructor = new NodeDeconstructor(_grounder);
+            var grounder = new ParametizedGrounder(from);
+            _grounder = grounder;
+            grounder.RemoveStaticsFromOutput = RemoveStaticsFromOutput;
+            var deconstructor = new NodeDeconstructor(grounder);
 
             // Domain variables
             if (from.Problem.Objects != null)
@@ -75,11 +76,12 @@ namespace PDDLSharp.Translators
             // Goal
             if (from.Problem.Goal != null)
                 goal = ExtractFactsFromExp(
-                    deconstructor.Deconstruct(from.Problem.Goal.GoalExp))[true];
+                    deconstructor.Deconstruct(from.Problem.Goal.GoalExp),
+                    grounder)[true];
             if (Aborted) return new SASDecl();
 
             // Operators
-            operators = GetOperators(from, deconstructor);
+            operators = GetOperators(from, grounder, deconstructor);
             if (Aborted) return new SASDecl();
 
             var result = new SASDecl(domainVariables, operators, goal, init);
@@ -89,23 +91,20 @@ namespace PDDLSharp.Translators
             return result;
         }
 
-        private Dictionary<bool, HashSet<Fact>> ExtractFactsFromExp(IExp exp, bool possitive = true)
+        private Dictionary<bool, HashSet<Fact>> ExtractFactsFromExp(IExp exp, IGrounder<IParametized> grounder, bool possitive = true)
         {
             var facts = new Dictionary<bool, HashSet<Fact>>();
             facts.Add(true, new HashSet<Fact>());
             facts.Add(false, new HashSet<Fact>());
 
-            if (_grounder == null)
-                throw new NullReferenceException("Grounder was null?");
-
             switch (exp)
             {
                 case NumericExp: break;
                 case PredicateExp pred: facts[possitive].Add(GetFactFromPredicate(pred)); break;
-                case NotExp not: facts = MergeDictionaries(facts, ExtractFactsFromExp(not.Child, !possitive)); break;
+                case NotExp not: facts = MergeDictionaries(facts, ExtractFactsFromExp(not.Child, grounder, !possitive)); break;
                 case AndExp and:
                     foreach (var child in and.Children)
-                        facts = MergeDictionaries(facts, ExtractFactsFromExp(child, possitive));
+                        facts = MergeDictionaries(facts, ExtractFactsFromExp(child, grounder, possitive));
                     break;
                 default:
                     throw new ArgumentException($"Cannot translate node type '{exp.GetType().Name}'");
@@ -136,27 +135,24 @@ namespace PDDLSharp.Translators
             return initFacts;
         }
 
-        private List<Operator> GetOperators(PDDLDecl decl, NodeDeconstructor deconstructor)
+        private List<Operator> GetOperators(PDDLDecl decl, IGrounder<IParametized> grounder, NodeDeconstructor deconstructor)
         {
-            if (_grounder == null)
-                throw new NullReferenceException("Grounder was null?");
-
             var operators = new List<Operator>();
             foreach (var action in decl.Domain.Actions)
             {
                 var deconstructedActions = deconstructor.DeconstructAction(action);
                 foreach (var deconstructed in deconstructedActions) 
                 { 
-                    var newActs = _grounder.Ground(deconstructed).Cast<ActionDecl>();
+                    var newActs = grounder.Ground(deconstructed).Cast<ActionDecl>();
                     foreach (var act in newActs)
                     {
                         var args = new List<string>();
                         foreach (var arg in act.Parameters.Values)
                             args.Add(arg.Name);
 
-                        var preFacts = ExtractFactsFromExp(act.Preconditions);
+                        var preFacts = ExtractFactsFromExp(act.Preconditions, grounder);
                         var pre = preFacts[true];
-                        var effFacts = ExtractFactsFromExp(act.Effects);
+                        var effFacts = ExtractFactsFromExp(act.Effects, grounder);
                         var add = effFacts[true];
                         var del = effFacts[false];
 
