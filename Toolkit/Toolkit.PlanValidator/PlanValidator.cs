@@ -1,5 +1,5 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.FastDownward.Plans;
+﻿using PDDLSharp.Models.FastDownward.Plans;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Toolkit.StateSpace.PDDL;
 
 namespace PDDLSharp.Toolkit.PlanValidator

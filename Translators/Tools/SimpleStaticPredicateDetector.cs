@@ -1,7 +1,7 @@
-﻿using PDDLSharp.Models;
+﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 
-namespace PDDLSharp.Toolkit.StaticPredicateDetectors
+namespace PDDLSharp.Translators.StaticPredicateDetectors
 {
     public class SimpleStaticPredicateDetector : IStaticPredicateDetectors
     {

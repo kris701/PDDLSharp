@@ -1,7 +1,6 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL;
+﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Toolkit.Grounders;
+using PDDLSharp.Translators.Grounders;
 
 namespace PDDLSharp.Toolkit.StateSpace.PDDL
 {
@@ -26,7 +25,7 @@ namespace PDDLSharp.Toolkit.StateSpace.PDDL
             return changes;
         }
 
-        public override IState<PredicateExp, INode> Copy()
+        public override IPDDLState Copy()
         {
             PredicateExp[] newState = new PredicateExp[State.Count];
             State.CopyTo(newState);

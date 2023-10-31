@@ -1,9 +1,7 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.FastDownward.Plans;
+﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Tools;
-using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.Toolkit.StateSpace.SAS;
 using PDDLSharp.Tools;
 
@@ -15,12 +13,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public int OperatorsUsed { get; set; }
 
         private RelaxedPlanGenerator _graphGenerator;
-        public GreedyBFSUAR(PDDLDecl decl, IHeuristic heuristic) : base(decl, heuristic)
+        public GreedyBFSUAR(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
 
-        internal override ActionPlan Solve(IHeuristic h, IState<Fact, Operator> state)
+        internal override ActionPlan Solve(IHeuristic h, ISASState state)
         {
             // Initial Operator Subset
             var operators = GetInitialOperators();
@@ -55,7 +53,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         }
                         if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
-                            var value = h.GetValue(stateMove, newMove.State, Operators);
+                            var value = h.GetValue(stateMove, newMove.State, Declaration.Operators);
                             if (value < current)
                                 current = value;
                             newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
@@ -72,7 +70,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
             var operators = _graphGenerator.GenerateReplaxedPlan(
                 new RelaxedSASStateSpace(Declaration),
-                Operators
+                Declaration.Operators
                 );
             if (_graphGenerator.Failed)
                 throw new Exception("No relaxed plan could be found from the initial state! Could indicate the problem is unsolvable.");
@@ -99,7 +97,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             bool lookForApplicaple = false;
             int smallestHValue = -1;
             // Refinement Step 2
-            while (!refinedOperatorsFound && operators.Count != Operators.Count)
+            while (!refinedOperatorsFound && operators.Count != Declaration.Operators.Count)
             {
                 var smallestItem = _closedList.Where(x => x.hValue > smallestHValue).MinBy(x => x.hValue);
                 if (smallestItem == null)
@@ -173,7 +171,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             {
                 var newOps = _graphGenerator.GenerateReplaxedPlan(
                         item.State,
-                        Operators
+                        Declaration.Operators
                         );
                 if (!_graphGenerator.Failed)
                     relaxedPlanOperators.AddRange(newOps);
@@ -194,7 +192,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 else
                 {
                     _applicableCache.Add(hash, new HashSet<Operator>());
-                    foreach (var op in Operators)
+                    foreach (var op in Declaration.Operators)
                     {
                         if (item.State.IsNodeTrue(op))
                         {

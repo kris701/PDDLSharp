@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Models.PDDL.Expressions;
 
-namespace PDDLSharp.Toolkit.Grounders
+namespace PDDLSharp.Translators.Grounders
 {
     public interface IGrounder<T>
     {

@@ -1,50 +1,32 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Models.SAS;
+﻿using PDDLSharp.Models.SAS;
 
 namespace PDDLSharp.Toolkit.StateSpace.SAS
 {
-    public class SASStateSpace : IState<Fact, Operator>
+    public class SASStateSpace : ISASState
     {
         public HashSet<Fact> State { get; set; }
-        public HashSet<Fact> Goals { get; }
-        public PDDLDecl Declaration { get; }
+        public SASDecl Declaration { get; }
         public int Count => State.Count;
 
-        public SASStateSpace(PDDLDecl declaration)
+        public SASStateSpace(SASDecl declaration)
         {
             Declaration = declaration;
             State = new HashSet<Fact>();
-            if (declaration.Problem.Init != null)
-                foreach (var child in declaration.Problem.Init.Predicates)
-                    if (child is PredicateExp pred)
-                        State.Add(new Fact(pred));
-            Goals = new HashSet<Fact>();
-            if (declaration.Problem.Goal != null)
-            {
-                if (declaration.Problem.Goal.GoalExp is AndExp and)
-                {
-                    foreach (var child in and.Children)
-                        if (child is PredicateExp pred)
-                            Goals.Add(new Fact(pred));
-                }
-                else
-                    throw new Exception("Error! Goal expression was not and and expression!");
-            }
+            foreach (var fact in declaration.Init)
+                State.Add(fact);
         }
 
-        public SASStateSpace(PDDLDecl declaration, HashSet<Fact> state, HashSet<Fact> goal)
+        public SASStateSpace(SASDecl declaration, HashSet<Fact> state)
         {
             Declaration = declaration;
             State = state;
-            Goals = goal;
         }
 
-        public virtual IState<Fact, Operator> Copy()
+        public virtual ISASState Copy()
         {
             var newState = new Fact[State.Count];
             State.CopyTo(newState);
-            return new SASStateSpace(Declaration, newState.ToHashSet(), Goals);
+            return new SASStateSpace(Declaration, newState.ToHashSet());
         }
 
         public bool Add(Fact pred) => State.Add(pred);
@@ -56,7 +38,7 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
 
         public override bool Equals(object? obj)
         {
-            if (obj is IState<Fact, Operator> other)
+            if (obj is ISASState other)
             {
                 foreach (var item in State)
                     if (!other.State.Contains(item))
@@ -96,7 +78,7 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
 
         public bool IsInGoal()
         {
-            foreach (var fact in Goals)
+            foreach (var fact in Declaration.Goal)
                 if (!State.Contains(fact))
                     return false;
             return true;

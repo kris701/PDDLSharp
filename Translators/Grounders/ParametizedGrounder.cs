@@ -1,10 +1,9 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL;
+﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Toolkit.StaticPredicateDetectors;
+using PDDLSharp.Translators.StaticPredicateDetectors;
 
-namespace PDDLSharp.Toolkit.Grounders
+namespace PDDLSharp.Translators.Grounders
 {
     public class ParametizedGrounder : BaseGrounder<IParametized>
     {
@@ -48,6 +47,10 @@ namespace PDDLSharp.Toolkit.Grounders
 
             if (item.Parameters.Values.Count == 0 && item.Copy() is IParametized newItem)
                 return new List<IParametized>() { newItem };
+
+            var otherParams = item.FindTypes<IParametized>(null, true);
+            foreach (var other in otherParams)
+                other.IsHidden = true;
 
             InitializeViolationPatternDict(item.Parameters.Values.Count);
             GenerateStaticsPreconditions(item);

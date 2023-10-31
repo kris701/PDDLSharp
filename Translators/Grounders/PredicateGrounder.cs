@@ -1,8 +1,7 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL;
+﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 
-namespace PDDLSharp.Toolkit.Grounders
+namespace PDDLSharp.Translators.Grounders
 {
     public class PredicateGrounder : BaseGrounder<PredicateExp>
     {

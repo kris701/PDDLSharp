@@ -1,11 +1,10 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.PDDL;
+﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Toolkit.Grounders;
+using PDDLSharp.Translators.Grounders;
 
 namespace PDDLSharp.Toolkit.StateSpace.PDDL
 {
-    public class PDDLStateSpace : IState<PredicateExp, INode>
+    public class PDDLStateSpace : IPDDLState
     {
         public PDDLDecl Declaration { get; internal set; }
         public HashSet<PredicateExp> State { get; set; }
@@ -35,7 +34,7 @@ namespace PDDLSharp.Toolkit.StateSpace.PDDL
             State = currentState;
         }
 
-        public virtual IState<PredicateExp, INode> Copy()
+        public virtual IPDDLState Copy()
         {
             PredicateExp[] newState = new PredicateExp[State.Count];
             State.CopyTo(newState);
@@ -105,7 +104,7 @@ namespace PDDLSharp.Toolkit.StateSpace.PDDL
 
         public override bool Equals(object? obj)
         {
-            if (obj is IState<PredicateExp, INode> other)
+            if (obj is IPDDLState other)
                 foreach (var item in State)
                     if (!other.State.Contains(item))
                         return false;

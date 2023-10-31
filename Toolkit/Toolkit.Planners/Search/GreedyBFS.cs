@@ -1,18 +1,17 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.FastDownward.Plans;
+﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
-using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
     public class GreedyBFS : BaseSearch
     {
-        public GreedyBFS(PDDLDecl decl, IHeuristic heuristic) : base(decl, heuristic)
+        public GreedyBFS(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
         }
 
-        internal override ActionPlan Solve(IHeuristic h, IState<Fact, Operator> state)
+        internal override ActionPlan Solve(IHeuristic h, ISASState state)
         {
             while (!Aborted && _openList.Count > 0)
             {
@@ -20,7 +19,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 if (stateMove.State.IsInGoal())
                     return new ActionPlan(stateMove.Steps);
 
-                foreach (var op in Operators)
+                foreach (var op in Declaration.Operators)
                 {
                     if (Aborted) break;
                     if (stateMove.State.IsNodeTrue(op))
@@ -30,7 +29,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                             return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) });
                         if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
-                            var value = h.GetValue(stateMove, newMove.State, Operators);
+                            var value = h.GetValue(stateMove, newMove.State, Declaration.Operators);
                             newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
                             newMove.hValue = value;
                             _openList.Enqueue(newMove, value);

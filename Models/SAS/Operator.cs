@@ -1,6 +1,4 @@
-﻿using PDDLSharp.Models.PDDL.Expressions;
-
-namespace PDDLSharp.Models.SAS
+﻿namespace PDDLSharp.Models.SAS
 {
     public class Operator
     {
@@ -19,56 +17,13 @@ namespace PDDLSharp.Models.SAS
             Del = del;
         }
 
-        public Operator(PDDL.Domain.ActionDecl act)
+        public Operator()
         {
-            Name = act.Name;
-            // Arguments
-            var args = new List<string>();
-            foreach (var arg in act.Parameters.Values)
-                args.Add(arg.Name);
-            Arguments = args.ToArray();
-
-            // Preconditions
-            var pre = new HashSet<Fact>();
-            if (act.Preconditions is AndExp preAnd)
-            {
-                foreach (var item in preAnd.Children)
-                {
-                    if (item is PredicateExp pred)
-                        pre.Add(new Fact(pred));
-                    else
-                        throw new ArgumentException("Unsupported node for operator!");
-                }
-            }
-            else
-                throw new ArgumentException("Action precondition must be an and expression.");
-            Pre = pre;
-
-            // Effects
-            var add = new HashSet<Fact>();
-            var del = new HashSet<Fact>();
-            if (act.Effects is AndExp effAnd)
-            {
-                foreach (var item in effAnd.Children)
-                {
-                    if (item is NumericExp)
-                        continue;
-
-                    if (item is PredicateExp pred)
-                        add.Add(new Fact(pred));
-                    else
-                    {
-                        if (item is NotExp not && not.Child is PredicateExp nPred)
-                            del.Add(new Fact(nPred));
-                        else
-                            throw new ArgumentException("Unsupported node for operator!");
-                    }
-                }
-            }
-            else
-                throw new ArgumentException("Action effect must be an and expression.");
-            Add = add;
-            Del = del;
+            Name = "";
+            Arguments = new string[0];
+            Pre = new HashSet<Fact>();
+            Add = new HashSet<Fact>();
+            Del = new HashSet<Fact>();
         }
 
         private int _hashCache = -1;
@@ -103,6 +58,25 @@ namespace PDDLSharp.Models.SAS
             foreach (var arg in Arguments)
                 retStr += $" {arg}";
             return retStr;
+        }
+
+        public Operator Copy()
+        {
+            var arguments = new string[Arguments.Length];
+            var pre = new HashSet<Fact>();
+            var add = new HashSet<Fact>();
+            var del = new HashSet<Fact>();
+
+            for (int i = 0; i < Arguments.Length; i++)
+                arguments[i] = Arguments[i];
+            foreach (var p in Pre)
+                pre.Add(p.Copy());
+            foreach (var a in Add)
+                add.Add(a.Copy());
+            foreach (var d in Del)
+                del.Add(d.Copy());
+
+            return new Operator(Name, arguments, pre, add, del);
         }
     }
 }

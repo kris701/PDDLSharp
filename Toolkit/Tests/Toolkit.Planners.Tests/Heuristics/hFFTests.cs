@@ -5,7 +5,6 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
-using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.StateSpace;
@@ -32,13 +31,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         public void Can_GeneratehFFCorrectly_FromInitialState(string domain, string problem, int expected)
         {
             // ARRANGE
-            var decl = GetPDDLDecl(domain, problem);
+            var decl = GetSASDecl(domain, problem);
             var h = new hFF(decl);
             var state = new SASStateSpace(decl);
-            var actions = GetOperators(decl);
 
             // ACT
-            var newValue = h.GetValue(new StateMove(), state, actions);
+            var newValue = h.GetValue(new StateMove(), state, decl.Operators);
 
             // ASSERT
             Assert.AreEqual(expected, newValue);
@@ -54,15 +52,14 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         public void Can_GeneratehFFCorrectly_FromGoalState(string domain, string problem, int expected)
         {
             // ARRANGE
-            var decl = GetPDDLDecl(domain, problem);
+            var decl = GetSASDecl(domain, problem);
             var h = new hFF(decl);
             var state = new SASStateSpace(decl);
-            foreach (var goal in state.Goals)
+            foreach (var goal in decl.Goal)
                 state.Add(goal);
-            var actions = GetOperators(decl);
 
             // ACT
-            var newValue = h.GetValue(new StateMove(), state, actions);
+            var newValue = h.GetValue(new StateMove(), state, decl.Operators);
 
             // ASSERT
             Assert.AreEqual(expected, newValue);

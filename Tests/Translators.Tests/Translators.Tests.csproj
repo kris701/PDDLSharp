@@ -11,13 +11,14 @@
 	  <RootNamespace>PDDLSharp.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<WarningLevel>0</WarningLevel>
-	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<WarningLevel>0</WarningLevel>
-	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
@@ -26,108 +27,119 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Parsers\Parsers.csproj" />
-    <ProjectReference Include="..\..\Toolkit.Grounders\Toolkit.Grounders.csproj" />
+    <ProjectReference Include="..\..\ErrorListeners\ErrorListeners.csproj" />
+    <ProjectReference Include="..\..\Models\Models.csproj" />
+    <ProjectReference Include="..\..\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\..\Translators\Translators.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestData\gripper\domain.pddl">
+    <None Update="Grounders\TestData\gripper\domain.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01small\expected1.pddl">
+    <None Update="Grounders\TestData\gripper\prob01small\expected1.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01small\expected2.pddl">
+    <None Update="Grounders\TestData\gripper\prob01small\expected2.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01small\expected3.pddl">
+    <None Update="Grounders\TestData\gripper\prob01small\expected3.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01small\expected4.pddl">
+    <None Update="Grounders\TestData\gripper\prob01small\expected4.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01zero\prob01zero.pddl">
+    <None Update="Grounders\TestData\gripper\prob01small\prob01small.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected17.pddl">
+    <None Update="Grounders\TestData\gripper\prob01zero\prob01zero.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected18.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected1.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected19.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected10.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected20.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected11.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected16.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected12.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected15.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected13.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected14.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected14.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected4.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected15.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected3.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected16.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected2.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected17.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected9.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected18.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected10.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected19.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected11.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected2.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected7.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected20.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected12.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected3.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected8.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected4.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected6.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected5.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected5.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected6.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected13.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected7.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\expected1.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected8.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01small\prob01small.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\expected9.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\gripper\prob01\prob01.pddl">
+    <None Update="Grounders\TestData\gripper\prob01\prob01.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\logistics98\domain.pddl">
+    <None Update="Grounders\TestData\logistics98\domain.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\logistics98\prob01small\expected2.pddl">
+    <None Update="Grounders\TestData\logistics98\prob01small\expected1.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\logistics98\prob01small\expected1.pddl">
+    <None Update="Grounders\TestData\logistics98\prob01small\expected2.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\logistics98\prob01small\prob01small.pddl">
+    <None Update="Grounders\TestData\logistics98\prob01small\prob01small.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\logistics98\prob01zero\prob01zero.pddl">
+    <None Update="Grounders\TestData\logistics98\prob01zero\prob01zero.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Tools\TestFiles\gripper-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Tools\TestFiles\gripper-typed-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Tools\TestFiles\satellite-domain.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

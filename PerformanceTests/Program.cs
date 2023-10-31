@@ -3,7 +3,6 @@ using PDDLSharp.Analysers.PDDL;
 using PDDLSharp.CodeGenerators;
 using PDDLSharp.CodeGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models;
 using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Models.PDDL;
@@ -19,6 +18,7 @@ using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
+using PDDLSharp.Translators;
 using System.Diagnostics;
 
 namespace PerformanceTests
@@ -65,22 +65,31 @@ namespace PerformanceTests
                         {
                             if (file.Name != "domain.pddl")
                             {
-                                PDDLDecl decl = new PDDLDecl(
+                                Console.WriteLine($"Domain: {subDir.Name}");
+                                Console.WriteLine($"Problem: {file.Name}");
+
+                                PDDLDecl pddlDecl = new PDDLDecl(
                                     parser.ParseAs<DomainDecl>(new FileInfo(domain)),
                                     parser.ParseAs<ProblemDecl>(file));
 
-                                Console.WriteLine($"Domain: {subDir.Name}");
-                                Console.WriteLine($"Problem: {file.Name}");
+                                Console.WriteLine($"Translating...");
+                                ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
+                                translator.TimeLimit = TimeSpan.FromSeconds(60);
+                                var decl = translator.Translate(pddlDecl);
+
+                                if (translator.Aborted)
+                                {
+                                    couldNotSolve++;
+                                    Console.WriteLine($"Translator timed out...");
+                                    break;
+                                }
 
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
                                     Console.WriteLine(planner.GetType().Name);
-                                    planner.PreprocessLimit = TimeSpan.FromSeconds(60);
                                     planner.SearchLimit = TimeSpan.FromSeconds(60);
 
-                                    Console.WriteLine($"Grounding...");
-                                    planner.PreProcess();
-                                    Console.WriteLine($"{planner.Operators.Count} total operators");
+                                    Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
                                     Console.WriteLine($"Solving...");
                                     var plan = new ActionPlan(new List<GroundedAction>());
                                     try
@@ -94,12 +103,12 @@ namespace PerformanceTests
                                         couldSolve++;
                                         Console.WriteLine($"Search took {planner.SearchTime.TotalSeconds}s");
                                         Console.WriteLine($"Generated {planner.Generated} states and expanded {planner.Expanded}");
-                                        Console.WriteLine($"Had {planner.OperatorsUsed} operators to use out of {planner.Operators.Count}");
+                                        Console.WriteLine($"Had {planner.OperatorsUsed} operators to use out of {planner.Declaration.Operators.Count}");
                                         Console.WriteLine($"Heuristic evaluated {planner.Evaluations} times");
                                         Console.WriteLine($"Actually used {plan.Plan.Count} operators");
 
                                         Console.WriteLine($"{planner.GetType().Name} plan have a cost of {plan.Cost}");
-                                        if (validator.Validate(plan, decl))
+                                        if (validator.Validate(plan, pddlDecl))
                                             Console.WriteLine($"{planner.GetType().Name} plan is valid!");
                                         else
                                             Console.WriteLine($"{planner.GetType().Name} plan is NOT valid!");
@@ -107,7 +116,7 @@ namespace PerformanceTests
                                     else
                                     {
                                         couldNotSolve++;
-                                        Console.WriteLine($"Planner aborted...");
+                                        Console.WriteLine($"Planner timed out...");
                                     }
                                 }
                                 break;

@@ -1,8 +1,7 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.SAS;
+﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.Planners.Tools;
-using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
@@ -10,12 +9,12 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     {
         private RelaxedPlanGenerator _graphGenerator;
 
-        public hFF(PDDLDecl declaration)
+        public hFF(SASDecl declaration)
         {
             _graphGenerator = new RelaxedPlanGenerator(declaration);
         }
 
-        public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
+        public override int GetValue(StateMove parent, ISASState state, List<Operator> operators)
         {
             Evaluations++;
             var relaxedPlan = _graphGenerator.GenerateReplaxedPlan(

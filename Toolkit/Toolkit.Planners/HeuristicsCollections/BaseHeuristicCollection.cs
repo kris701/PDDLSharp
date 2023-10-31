@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
-using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
 {
@@ -19,6 +19,6 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
             Heuristics = new List<IHeuristic>();
         }
 
-        public abstract int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators);
+        public abstract int GetValue(StateMove parent, ISASState state, List<Operator> operators);
     }
 }

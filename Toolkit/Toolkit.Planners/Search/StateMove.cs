@@ -1,33 +1,31 @@
-﻿using PDDLSharp.Models;
-using PDDLSharp.Models.FastDownward.Plans;
+﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.SAS;
-using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
     public class StateMove
     {
-        public IState<Fact, Operator> State { get; private set; }
+        public ISASState State { get; private set; }
         public List<GroundedAction> Steps { get; set; }
         public int hValue { get; set; }
         public bool Evaluated { get; set; } = true;
 
-        public StateMove(IState<Fact, Operator> state, List<GroundedAction> steps)
+        public StateMove(ISASState state, List<GroundedAction> steps)
         {
             State = state;
             Steps = steps;
             hValue = -1;
         }
 
-        public StateMove(IState<Fact, Operator> state, int hvalue)
+        public StateMove(ISASState state, int hvalue)
         {
             State = state;
             Steps = new List<GroundedAction>();
             hValue = hvalue;
         }
 
-        public StateMove(IState<Fact, Operator> state)
+        public StateMove(ISASState state)
         {
             State = state;
             Steps = new List<GroundedAction>();
@@ -36,7 +34,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         public StateMove()
         {
-            State = new SASStateSpace(new PDDLDecl());
+            State = new SASStateSpace(new SASDecl());
             Steps = new List<GroundedAction>();
             hValue = -1;
         }

@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
-using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
@@ -13,14 +13,14 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
         {
         }
 
-        public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
+        public override int GetValue(StateMove parent, ISASState state, List<Operator> operators)
         {
             Evaluations++;
             int count = 0;
-            foreach (var goal in state.Goals)
+            foreach (var goal in state.Declaration.Goal)
                 if (state.Contains(goal))
                     count++;
-            return state.Goals.Count - count;
+            return state.Declaration.Goal.Count - count;
         }
     }
 }

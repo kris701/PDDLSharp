@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.Planners.Tools;
-using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
@@ -13,12 +13,12 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             _graphGenerator = new FactRPG();
         }
 
-        public override int GetValue(StateMove parent, IState<Fact, Operator> state, List<Operator> operators)
+        public override int GetValue(StateMove parent, ISASState state, List<Operator> operators)
         {
             Evaluations++;
             var max = 0;
             var dict = _graphGenerator.GenerateRelaxedGraph(state, operators);
-            foreach (var fact in state.Goals)
+            foreach (var fact in state.Declaration.Goal)
             {
                 var factCost = dict[fact];
                 if (factCost == int.MaxValue)

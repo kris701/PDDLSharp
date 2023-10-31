@@ -1,6 +1,4 @@
-﻿using PDDLSharp.Models.PDDL.Expressions;
-
-namespace PDDLSharp.Models.SAS
+﻿namespace PDDLSharp.Models.SAS
 {
     public class Fact
     {
@@ -11,15 +9,6 @@ namespace PDDLSharp.Models.SAS
         {
             Name = name;
             Arguments = arguments;
-        }
-
-        public Fact(PredicateExp pred)
-        {
-            Name = pred.Name;
-            var args = new List<string>();
-            foreach (var arg in pred.Arguments)
-                args.Add(arg.Name);
-            Arguments = args.ToArray();
         }
 
         // The order is important!
@@ -59,6 +48,14 @@ namespace PDDLSharp.Models.SAS
             foreach (var arg in Arguments)
                 retStr += $" {arg}";
             return retStr;
+        }
+
+        public Fact Copy()
+        {
+            var arguments = new string[Arguments.Length];
+            for (int i = 0; i < Arguments.Length; i++)
+                arguments[i] = Arguments[i];
+            return new Fact(Name, arguments);
         }
     }
 }
