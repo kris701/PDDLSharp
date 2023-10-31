@@ -72,7 +72,7 @@ namespace PDDLSharp.Translators
 
             // Goal
             if (from.Problem.Goal != null)
-                goal = ExtractFactsFromExp(from.Problem.Goal.GoalExp)[true].Except(init).ToHashSet();
+                goal = ExtractFactsFromExp(from.Problem.Goal.GoalExp)[true];
             if (Aborted) return new SASDecl();
 
             // Operators

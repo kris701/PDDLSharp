@@ -164,50 +164,50 @@ namespace PDDLSharp.Translators.Tests.Grounders
         #region ActionDecl
 
         [TestMethod]
-        [DataRow("Grounders/TestData/gripper/domain.pddl", "Grounders/TestData/gripper/prob01/prob01.pddl",
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01/prob01.pddl",
     // Move
-    "Grounders/TestData/gripper/prob01/expected1.pddl",
-    "Grounders/TestData/gripper/prob01/expected2.pddl",
-    "Grounders/TestData/gripper/prob01/expected3.pddl",
-    "Grounders/TestData/gripper/prob01/expected4.pddl",
+    "TestData/gripper/prob01/expected1.pddl",
+    "TestData/gripper/prob01/expected2.pddl",
+    "TestData/gripper/prob01/expected3.pddl",
+    "TestData/gripper/prob01/expected4.pddl",
 
     // Pick
-    "Grounders/TestData/gripper/prob01/expected5.pddl",
-    "Grounders/TestData/gripper/prob01/expected6.pddl",
-    "Grounders/TestData/gripper/prob01/expected7.pddl",
-    "Grounders/TestData/gripper/prob01/expected8.pddl",
+    "TestData/gripper/prob01/expected5.pddl",
+    "TestData/gripper/prob01/expected6.pddl",
+    "TestData/gripper/prob01/expected7.pddl",
+    "TestData/gripper/prob01/expected8.pddl",
 
-    "Grounders/TestData/gripper/prob01/expected9.pddl",
-    "Grounders/TestData/gripper/prob01/expected10.pddl",
-    "Grounders/TestData/gripper/prob01/expected11.pddl",
-    "Grounders/TestData/gripper/prob01/expected12.pddl",
+    "TestData/gripper/prob01/expected9.pddl",
+    "TestData/gripper/prob01/expected10.pddl",
+    "TestData/gripper/prob01/expected11.pddl",
+    "TestData/gripper/prob01/expected12.pddl",
 
     // Drop
-    "Grounders/TestData/gripper/prob01/expected13.pddl",
-    "Grounders/TestData/gripper/prob01/expected14.pddl",
-    "Grounders/TestData/gripper/prob01/expected15.pddl",
-    "Grounders/TestData/gripper/prob01/expected16.pddl",
+    "TestData/gripper/prob01/expected13.pddl",
+    "TestData/gripper/prob01/expected14.pddl",
+    "TestData/gripper/prob01/expected15.pddl",
+    "TestData/gripper/prob01/expected16.pddl",
 
-    "Grounders/TestData/gripper/prob01/expected17.pddl",
-    "Grounders/TestData/gripper/prob01/expected18.pddl",
-    "Grounders/TestData/gripper/prob01/expected19.pddl",
-    "Grounders/TestData/gripper/prob01/expected20.pddl"
+    "TestData/gripper/prob01/expected17.pddl",
+    "TestData/gripper/prob01/expected18.pddl",
+    "TestData/gripper/prob01/expected19.pddl",
+    "TestData/gripper/prob01/expected20.pddl"
 )]
-        [DataRow("Grounders/TestData/gripper/domain.pddl", "Grounders/TestData/gripper/prob01small/prob01small.pddl",
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01small/prob01small.pddl",
     // Move
-    "Grounders/TestData/gripper/prob01/expected1.pddl",
-    "Grounders/TestData/gripper/prob01/expected2.pddl",
-    "Grounders/TestData/gripper/prob01/expected3.pddl",
-    "Grounders/TestData/gripper/prob01/expected4.pddl"
+    "TestData/gripper/prob01/expected1.pddl",
+    "TestData/gripper/prob01/expected2.pddl",
+    "TestData/gripper/prob01/expected3.pddl",
+    "TestData/gripper/prob01/expected4.pddl"
 )]
-        [DataRow("Grounders/TestData/gripper/domain.pddl", "Grounders/TestData/gripper/prob01zero/prob01zero.pddl")]
-        [DataRow("Grounders/TestData/logistics98/domain.pddl", "Grounders/TestData/logistics98/prob01zero/prob01zero.pddl")]
-        [DataRow("Grounders/TestData/logistics98/domain.pddl", "Grounders/TestData/logistics98/prob01small/prob01small.pddl",
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01zero/prob01zero.pddl")]
+        [DataRow("TestData/logistics98/domain.pddl", "TestData/logistics98/prob01zero/prob01zero.pddl")]
+        [DataRow("TestData/logistics98/domain.pddl", "TestData/logistics98/prob01small/prob01small.pddl",
     // LOAD-TRUCK
-    "Grounders/TestData/logistics98/prob01small/expected1.pddl",
+    "TestData/logistics98/prob01small/expected1.pddl",
 
     // UNLOAD-TRUCK
-    "Grounders/TestData/logistics98/prob01small/expected2.pddl"
+    "TestData/logistics98/prob01small/expected2.pddl"
 )]
         public void Can_FullGroundDomains(string domain, string problem, params string[] expecteds)
         {

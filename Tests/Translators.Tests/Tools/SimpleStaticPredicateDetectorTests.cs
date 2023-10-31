@@ -5,6 +5,7 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
+using PDDLSharp.Tools;
 using PDDLSharp.Translators.StaticPredicateDetectors;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,19 @@ namespace PDDLSharp.Translators.Tests.Tools
     [TestClass]
     public class SimpleStaticPredicateDetectorTests
     {
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            if (!Directory.Exists("benchmarks"))
+            {
+                Console.WriteLine("Fetching benchmarks...");
+                GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks", "benchmarks");
+            }
+        }
+
         [TestMethod]
-        [DataRow("Tools/TestFiles/gripper-typed-domain.pddl")]
-        [DataRow("Tools/TestFiles/gripper-domain.pddl", "room", "gripper", "ball")]
-        [DataRow("Tools/TestFiles/satellite-domain.pddl", "on_board", "supports", "calibration_target", "satellite", "direction", "instrument", "mode")]
+        [DataRow("benchmarks/gripper/domain.pddl", "room", "ball", "gripper")]
+        [DataRow("benchmarks/satellite/domain.pddl", "on_board", "supports", "calibration_target", "satellite", "direction", "instrument", "mode")]
         public void Can_Detect(string domain, params string[] expectedStatics)
         {
             // ARRANGE
