@@ -80,7 +80,7 @@ namespace PerformanceTests
                                 if (translator.Aborted)
                                 {
                                     couldNotSolve++;
-                                    Console.WriteLine($"Translator aborted...");
+                                    Console.WriteLine($"Translator timed out...");
                                     break;
                                 }
 
@@ -116,7 +116,7 @@ namespace PerformanceTests
                                     else
                                     {
                                         couldNotSolve++;
-                                        Console.WriteLine($"Planner aborted...");
+                                        Console.WriteLine($"Planner timed out...");
                                     }
                                 }
                                 break;

@@ -21,7 +21,7 @@ namespace PDDLSharp.Translators
         public TimeSpan TimeLimit { get; set; }
         public TimeSpan TranslationTime { get; internal set; }
         public bool Aborted { get; internal set; }
-        private ParametizedGrounder _grounder;
+        private ParametizedGrounder? _grounder;
 
         public PDDLToSASTranslator(bool removeStaticsFromOperators)
         {
@@ -40,12 +40,16 @@ namespace PDDLSharp.Translators
         private void OnTimedOut(object? source, ElapsedEventArgs e)
         {
             Aborted = true;
-            _grounder.Abort();
+            if (_grounder != null)
+                _grounder.Abort();
         }
 
         public SASDecl Translate(PDDLDecl from)
         {
+            Aborted = true;
+            CheckIfValid(from);
             Aborted = false;
+
             var timer = GetTimer(TimeLimit);
             timer.Start();
             var watch = new Stopwatch();
@@ -94,6 +98,9 @@ namespace PDDLSharp.Translators
             facts.Add(true, new HashSet<Fact>());
             facts.Add(false, new HashSet<Fact>());
 
+            if (_grounder == null)
+                throw new NullReferenceException("Grounder was null?");
+
             switch (exp)
             {
                 case NumericExp: break;
@@ -139,14 +146,12 @@ namespace PDDLSharp.Translators
 
         private List<Operator> GetOperators(PDDLDecl decl)
         {
+            if (_grounder == null)
+                throw new NullReferenceException("Grounder was null?");
+
             var operators = new List<Operator>();
             foreach (var action in decl.Domain.Actions)
             {
-                if (action.Preconditions.FindTypes<NotExp>().Count > 0)
-                    throw new Exception("Translator does not support negative preconditions!");
-                if (action.Effects.FindTypes<IParametized>().Count > 0)
-                    throw new Exception("Translator does not IParametized nodes in effects!");
-
                 var newActs = _grounder.Ground(action).Cast<ActionDecl>();
                 foreach (var act in newActs)
                 {
@@ -173,6 +178,17 @@ namespace PDDLSharp.Translators
             foreach (var arg in pred.Arguments)
                 args.Add(arg.Name);
             return new Fact(name, args.ToArray());
+        }
+
+        private void CheckIfValid(PDDLDecl decl)
+        {
+            foreach(var action in decl.Domain.Actions)
+            {
+                if (action.Preconditions.FindTypes<NotExp>().Count > 0)
+                    throw new Exception("Translator does not support negative preconditions!");
+                if (action.Effects.FindTypes<IParametized>().Count > 0)
+                    throw new Exception("Translator does not IParametized nodes in effects!");
+            }
         }
     }
 }
