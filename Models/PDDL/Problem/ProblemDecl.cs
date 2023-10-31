@@ -71,6 +71,7 @@ namespace PDDLSharp.Models.PDDL.Problem
                 newNode.Goal = Goal.Copy(newNode);
             if (Metric != null)
                 newNode.Metric = Metric.Copy(newNode);
+            newNode.IsHidden = IsHidden;
 
             return newNode;
         }

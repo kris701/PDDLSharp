@@ -107,6 +107,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             var newNode = new TypeExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, SuperType);
             foreach (var superType in SuperTypes)
                 newNode.SuperTypes.Add(superType);
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
     }

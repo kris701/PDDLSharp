@@ -64,6 +64,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             var newExp = ((dynamic)Expression).Copy(newNode);
             newNode.Parameters = newParams;
             newNode.Expression = newExp;
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

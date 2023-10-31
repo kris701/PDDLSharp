@@ -55,6 +55,7 @@ namespace PDDLSharp.Models.PDDL.Domain
             var newNode = new TypesDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Types)
                 newNode.Types.Add(node.Copy(newNode));
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

@@ -4,6 +4,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Tools;
 using PDDLSharp.Translators.Grounders;
+using PDDLSharp.Translators.Tools;
 using System.Diagnostics;
 using System.Timers;
 
@@ -56,6 +57,7 @@ namespace PDDLSharp.Translators
 
             _grounder = new ParametizedGrounder(from);
             _grounder.RemoveStaticsFromOutput = RemoveStaticsFromOutput;
+            var forAllDeconstructor = new ForAllDeconstructor(_grounder);
 
             // Domain variables
             if (from.Problem.Objects != null)
@@ -72,11 +74,12 @@ namespace PDDLSharp.Translators
 
             // Goal
             if (from.Problem.Goal != null)
-                goal = ExtractFactsFromExp(from.Problem.Goal.GoalExp)[true];
+                goal = ExtractFactsFromExp(
+                    forAllDeconstructor.DeconstructForAlls(from.Problem.Goal.GoalExp))[true];
             if (Aborted) return new SASDecl();
 
             // Operators
-            operators = GetOperators(from);
+            operators = GetOperators(from, forAllDeconstructor);
             if (Aborted) return new SASDecl();
 
             var result = new SASDecl(domainVariables, operators, goal, init);
@@ -100,11 +103,6 @@ namespace PDDLSharp.Translators
                 case NumericExp: break;
                 case PredicateExp pred: facts[possitive].Add(GetFactFromPredicate(pred)); break;
                 case NotExp not: facts = MergeDictionaries(facts, ExtractFactsFromExp(not.Child, !possitive)); break;
-                case ForAllExp forAll:
-                    var allForalls = _grounder.Ground(forAll).Cast<ForAllExp>();
-                    foreach (var all in allForalls)
-                        facts = MergeDictionaries(facts, ExtractFactsFromExp(all.Expression, possitive));
-                    break;
                 case AndExp and:
                     foreach (var child in and.Children)
                         facts = MergeDictionaries(facts, ExtractFactsFromExp(child, possitive));
@@ -138,7 +136,7 @@ namespace PDDLSharp.Translators
             return initFacts;
         }
 
-        private List<Operator> GetOperators(PDDLDecl decl)
+        private List<Operator> GetOperators(PDDLDecl decl, ForAllDeconstructor forAllDeconstructor)
         {
             if (_grounder == null)
                 throw new NullReferenceException("Grounder was null?");
@@ -146,20 +144,27 @@ namespace PDDLSharp.Translators
             var operators = new List<Operator>();
             foreach (var action in decl.Domain.Actions)
             {
-                var newActs = _grounder.Ground(action).Cast<ActionDecl>();
+                var newActs = _grounder.Ground(forAllDeconstructor.DeconstructForAlls(action)).Cast<ActionDecl>();
                 foreach (var act in newActs)
                 {
-                    var args = new List<string>();
-                    foreach (var arg in act.Parameters.Values)
-                        args.Add(arg.Name);
+                    var deconstructedActions = new List<ActionDecl>();
+                    if (act.FindTypes<WhenExp>().Count > 0)
+                        deconstructedActions = ConditionalDeconstructor.DecontructConditionals(act);
 
-                    var preFacts = ExtractFactsFromExp(act.Preconditions);
-                    var pre = preFacts[true];
-                    var effFacts = ExtractFactsFromExp(act.Effects);
-                    var add = effFacts[true];
-                    var del = effFacts[false];
+                    foreach (var deconstructed in deconstructedActions)
+                    {
+                        var args = new List<string>();
+                        foreach (var arg in deconstructed.Parameters.Values)
+                            args.Add(arg.Name);
 
-                    operators.Add(new Operator(act.Name, args.ToArray(), pre, add, del));
+                        var preFacts = ExtractFactsFromExp(deconstructed.Preconditions);
+                        var pre = preFacts[true];
+                        var effFacts = ExtractFactsFromExp(deconstructed.Effects);
+                        var add = effFacts[true];
+                        var del = effFacts[false];
+
+                        operators.Add(new Operator(deconstructed.Name, args.ToArray(), pre, add, del));
+                    }
                 }
             }
             return operators;

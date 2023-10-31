@@ -55,6 +55,7 @@ namespace PDDLSharp.Models.PDDL.Domain
             var newNode = new TimelessDecl(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Items)
                 newNode.Items.Add(node.Copy(newNode));
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

@@ -24,7 +24,9 @@ namespace PDDLSharp.Models.PDDL.Problem
 
         public override SituationDecl Copy(INode? newParent = null)
         {
-            return new SituationDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
+            var newNode = new SituationDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
+            newNode.IsHidden = IsHidden;
+            return newNode;
         }
     }
 }

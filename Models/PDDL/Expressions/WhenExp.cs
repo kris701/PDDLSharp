@@ -64,6 +64,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             var newEffect = ((dynamic)Effect).Copy(newNode);
             newNode.Condition = newCondition;
             newNode.Effect = newEffect;
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

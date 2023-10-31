@@ -54,6 +54,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             var newNode = new OrExp(new ASTNode(Start, End, Line, "", ""), newParent);
             foreach (var node in Options)
                 newNode.Options.Add(((dynamic)node).Copy(newNode));
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 

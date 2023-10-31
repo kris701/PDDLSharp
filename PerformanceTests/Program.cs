@@ -74,7 +74,7 @@ namespace PerformanceTests
 
                                 Console.WriteLine($"Translating...");
                                 ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
-                                translator.TimeLimit = TimeSpan.FromSeconds(60);
+                                translator.TimeLimit = TimeSpan.FromSeconds(5);
                                 var decl = translator.Translate(pddlDecl);
 
                                 if (translator.Aborted)
@@ -84,10 +84,12 @@ namespace PerformanceTests
                                     break;
                                 }
 
+                                break;
+
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
                                     Console.WriteLine(planner.GetType().Name);
-                                    planner.SearchLimit = TimeSpan.FromSeconds(10);
+                                    planner.SearchLimit = TimeSpan.FromSeconds(60);
 
                                     Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
                                     Console.WriteLine($"Solving...");

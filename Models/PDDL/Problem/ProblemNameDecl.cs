@@ -23,7 +23,9 @@ namespace PDDLSharp.Models.PDDL.Problem
 
         public override ProblemNameDecl Copy(INode? newParent = null)
         {
-            return new ProblemNameDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
+            var newNode = new ProblemNameDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
+            newNode.IsHidden = IsHidden;
+            return newNode;
         }
     }
 }

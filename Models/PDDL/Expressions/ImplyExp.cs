@@ -64,6 +64,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             var newConsequent = ((dynamic)Consequent).Copy(newNode);
             newNode.Antecedent = newAntecedent;
             newNode.Consequent = newConsequent;
+            newNode.IsHidden = IsHidden;
             return newNode;
         }
 
