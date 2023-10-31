@@ -49,9 +49,6 @@ namespace PDDLSharp.Translators.Grounders
             if (item.Parameters.Values.Count == 0 && item.Copy() is IParametized newItem)
                 return new List<IParametized>() { newItem };
 
-            if (item.FindTypes<IParametized>().Count > 1)
-                throw new Exception("Cannot ground with multiple IParametized nodes!");
-
             InitializeViolationPatternDict(item.Parameters.Values.Count);
             GenerateStaticsPreconditions(item);
 
@@ -109,6 +106,7 @@ namespace PDDLSharp.Translators.Grounders
                 var allRefs = allPredicates.Where(x => x.Name == stat.Name);
                 foreach (var refPred in allRefs)
                 {
+                    bool valid = true;
                     var argIndexes = new int[stat.Arguments.Count];
                     var constantIndexes = new int[stat.Arguments.Count];
                     for (int i = 0; i < refPred.Arguments.Count; i++)
@@ -120,11 +118,17 @@ namespace PDDLSharp.Translators.Grounders
                         }
                         else
                         {
+                            if (refPred.Arguments[i].Name.Contains("?"))
+                            {
+                                valid = false;
+                                break;
+                            }
                             argIndexes[i] = int.MaxValue;
                             constantIndexes[i] = GetIndexFromObject(refPred.Arguments[i].Name);
                         }
                     }
-                    staticsPreconditions.Add(new PredicateViolationCheck(stat, argIndexes, constantIndexes));
+                    if (valid)
+                        staticsPreconditions.Add(new PredicateViolationCheck(stat, argIndexes, constantIndexes));
                 }
             }
             return staticsPreconditions;

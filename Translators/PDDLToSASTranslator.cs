@@ -57,7 +57,7 @@ namespace PDDLSharp.Translators
 
             _grounder = new ParametizedGrounder(from);
             _grounder.RemoveStaticsFromOutput = RemoveStaticsFromOutput;
-            var forAllDeconstructor = new ForAllDeconstructor(_grounder);
+            var deconstructor = new NodeDeconstructor(_grounder);
 
             // Domain variables
             if (from.Problem.Objects != null)
@@ -75,11 +75,11 @@ namespace PDDLSharp.Translators
             // Goal
             if (from.Problem.Goal != null)
                 goal = ExtractFactsFromExp(
-                    forAllDeconstructor.DeconstructForAlls(from.Problem.Goal.GoalExp))[true];
+                    deconstructor.Deconstruct(from.Problem.Goal.GoalExp))[true];
             if (Aborted) return new SASDecl();
 
             // Operators
-            operators = GetOperators(from, forAllDeconstructor);
+            operators = GetOperators(from, deconstructor);
             if (Aborted) return new SASDecl();
 
             var result = new SASDecl(domainVariables, operators, goal, init);
@@ -136,7 +136,7 @@ namespace PDDLSharp.Translators
             return initFacts;
         }
 
-        private List<Operator> GetOperators(PDDLDecl decl, ForAllDeconstructor forAllDeconstructor)
+        private List<Operator> GetOperators(PDDLDecl decl, NodeDeconstructor deconstructor)
         {
             if (_grounder == null)
                 throw new NullReferenceException("Grounder was null?");
@@ -144,14 +144,11 @@ namespace PDDLSharp.Translators
             var operators = new List<Operator>();
             foreach (var action in decl.Domain.Actions)
             {
-                var newActs = _grounder.Ground(forAllDeconstructor.DeconstructForAlls(action)).Cast<ActionDecl>();
-                foreach (var act in newActs)
-                {
-                    var deconstructedActions = new List<ActionDecl>();
-                    if (act.FindTypes<WhenExp>().Count > 0)
-                        deconstructedActions = ConditionalDeconstructor.DecontructConditionals(act);
-
-                    foreach (var deconstructed in deconstructedActions)
+                var deconstructedActions = deconstructor.DeconstructAction(action);
+                foreach (var deconstructed in deconstructedActions) 
+                { 
+                    var newActs = _grounder.Ground(deconstructed).Cast<ActionDecl>();
+                    foreach (var act in newActs)
                     {
                         var args = new List<string>();
                         foreach (var arg in deconstructed.Parameters.Values)
@@ -166,6 +163,7 @@ namespace PDDLSharp.Translators
                         operators.Add(new Operator(deconstructed.Name, args.ToArray(), pre, add, del));
                     }
                 }
+                
             }
             return operators;
         }

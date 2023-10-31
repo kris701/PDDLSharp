@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Translators.Tools
 {
-    public static class ConditionalDeconstructor
+    public class ConditionalDeconstructor
     {
-        public static List<ActionDecl> DecontructConditionals(ActionDecl action)
+        public List<ActionDecl> DecontructConditionals(ActionDecl action)
         {
             List<ActionDecl> newActions = new List<ActionDecl>();
             newActions.AddRange(GeneratePossibleActions(action.Copy()));
             return newActions;
         }
 
-        private static List<ActionDecl> GeneratePossibleActions(ActionDecl source)
+        private List<ActionDecl> GeneratePossibleActions(ActionDecl source)
         {
             List<ActionDecl> newActions = new List<ActionDecl>();
             source.Preconditions = EnsureAnd(source.Preconditions);
@@ -54,7 +54,7 @@ namespace PDDLSharp.Translators.Tools
             return newActions;
         }
 
-        private static INode GetMostUsefullParent(INode from)
+        private INode GetMostUsefullParent(INode from)
         {
             if (from.Parent is AndExp)
                 return from;
@@ -63,21 +63,21 @@ namespace PDDLSharp.Translators.Tools
             return GetMostUsefullParent(from.Parent);
         }
 
-        private static IExp EnsureAnd(IExp exp)
+        private IExp EnsureAnd(IExp exp)
         {
             if (exp is AndExp)
                 return exp;
             return new AndExp(new List<IExp>() { exp });
         }
 
-        private static Queue<bool[]> GeneratePermutations(int count)
+        private Queue<bool[]> GeneratePermutations(int count)
         {
             var returnQueue = new Queue<bool[]>();
             GeneratePermutations(count, new bool[count], 0, returnQueue);
             return returnQueue;
         }
 
-        private static void GeneratePermutations(int count, bool[] source, int index, Queue<bool[]> returnQueue)
+        private void GeneratePermutations(int count, bool[] source, int index, Queue<bool[]> returnQueue)
         {
             var trueSource = new bool[count];
             trueSource[index] = true;
