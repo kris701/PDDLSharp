@@ -181,10 +181,10 @@ namespace PDDLSharp.Translators
         {
             foreach (var action in decl.Domain.Actions)
             {
-                //if (action.Preconditions.FindTypes<NotExp>().Count > 0)
-                //    throw new Exception("Translator does not support negative preconditions!");
-                //if (action.FindTypes<ImplyExp>().Count > 0)
-                //    throw new Exception("Translator does not support Imply nodes!");
+                if (action.Preconditions.FindTypes<NotExp>().Count > 0)
+                    throw new Exception("Translator does not support negative preconditions!");
+                if (action.FindTypes<ImplyExp>().Count > 0)
+                    throw new Exception("Translator does not support Imply nodes!");
             }
         }
     }
