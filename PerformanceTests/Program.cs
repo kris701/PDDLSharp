@@ -74,7 +74,7 @@ namespace PerformanceTests
 
                                 Console.WriteLine($"Translating...");
                                 ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
-                                translator.TimeLimit = TimeSpan.FromSeconds(30);
+                                translator.TimeLimit = TimeSpan.FromSeconds(60);
                                 var decl = translator.Translate(pddlDecl);
 
                                 if (translator.Aborted)

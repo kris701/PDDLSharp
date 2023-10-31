@@ -17,15 +17,15 @@ namespace PDDLSharp.Translators
 {
     public class PDDLToSASTranslator : ITranslator<PDDLDecl, SASDecl>
     {
-        public bool RemoveStaticsFromOperators { get; set; } = false;
-        public TimeSpan TimeLimit { get; set; }
+        public bool RemoveStaticsFromOutput { get; set; } = false;
+        public TimeSpan TimeLimit { get; set; } = TimeSpan.FromMinutes(30);
         public TimeSpan TranslationTime { get; internal set; }
         public bool Aborted { get; internal set; }
         private ParametizedGrounder? _grounder;
 
-        public PDDLToSASTranslator(bool removeStaticsFromOperators)
+        public PDDLToSASTranslator(bool removeStaticsFromOutput = false)
         {
-            RemoveStaticsFromOperators = removeStaticsFromOperators;
+            RemoveStaticsFromOutput = removeStaticsFromOutput;
         }
 
         private System.Timers.Timer GetTimer(TimeSpan interval)
@@ -61,7 +61,7 @@ namespace PDDLSharp.Translators
             var init = new HashSet<Fact>();
 
             _grounder = new ParametizedGrounder(from);
-            _grounder.RemoveStaticsFromOutput = RemoveStaticsFromOperators;
+            _grounder.RemoveStaticsFromOutput = RemoveStaticsFromOutput;
 
             // Domain variables
             if (from.Problem.Objects != null)
