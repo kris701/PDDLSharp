@@ -1,9 +1,12 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Tools;
+using PDDLSharp.Translators.StaticPredicateDetectors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,6 +76,47 @@ namespace PDDLSharp.Translators.Tests
         }
 
         [TestMethod]
+        [DataRow("benchmarks/gripper/domain.pddl", "benchmarks/gripper/prob01.pddl")]
+        [DataRow("benchmarks/logistics98/domain.pddl", "benchmarks/logistics98/prob01.pddl")]
+        [DataRow("benchmarks/satellite/domain.pddl", "benchmarks/satellite/p01-pfile1.pddl")]
+        [DataRow("benchmarks/depot/domain.pddl", "benchmarks/depot/p01.pddl")]
+        [DataRow("benchmarks/miconic/domain.pddl", "benchmarks/miconic/s1-0.pddl")]
+        public void Can_Translate_ExpectedOperators_NoStatics(string domain, string problem)
+        {
+            // ARRANGE
+            var listener = new ErrorListener();
+            var parser = new PDDLParser(listener);
+            var decl = parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
+            var translator = new PDDLToSASTranslator(true);
+            var staticsDetector = new SimpleStaticPredicateDetector();
+            var statics = staticsDetector.FindStaticPredicates(decl);
+
+            // ACT
+            var sas = translator.Translate(decl);
+
+            // ASSERT
+            foreach(var staticPred in statics)
+            {
+                var fact = GetFactFromPredicate(staticPred);
+                foreach(var op in sas.Operators)
+                {
+                    Assert.IsFalse(op.Pre.Contains(fact));
+                    Assert.IsFalse(op.Add.Contains(fact));
+                    Assert.IsFalse(op.Del.Contains(fact));
+                }
+            }
+        }
+
+        private Fact GetFactFromPredicate(PredicateExp pred)
+        {
+            var name = pred.Name;
+            var args = new List<string>();
+            foreach (var arg in pred.Arguments)
+                args.Add(arg.Name);
+            return new Fact(name, args.ToArray());
+        }
+
+        [TestMethod]
         [DataRow("benchmarks/gripper/domain.pddl", "benchmarks/gripper/prob01.pddl", 4)]
         [DataRow("benchmarks/logistics98/domain.pddl", "benchmarks/logistics98/prob01.pddl", 6)]
         [DataRow("benchmarks/satellite/domain.pddl", "benchmarks/satellite/p01-pfile1.pddl", 3)]
@@ -112,6 +156,25 @@ namespace PDDLSharp.Translators.Tests
 
             // ASSERT
             Assert.AreEqual(expected, sas.Init.Count);
+        }
+
+        [TestMethod]
+        [DataRow("benchmarks/gripper/domain.pddl", "benchmarks/gripper/prob20.pddl")]
+        [DataRow("benchmarks/logistics98/domain.pddl", "benchmarks/logistics98/prob20.pddl")]
+        public void Cant_Translate_IfTimedOut(string domain, string problem)
+        {
+            // ARRANGE
+            var listener = new ErrorListener();
+            var parser = new PDDLParser(listener);
+            var decl = parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
+            var translator = new PDDLToSASTranslator();
+            translator.TimeLimit = TimeSpan.FromMilliseconds(1);
+
+            // ACT
+            var sas = translator.Translate(decl);
+
+            // ASSERT
+            Assert.IsTrue(translator.Aborted);
         }
     }
 }
