@@ -11,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Contextualisers\Contextualisers.csproj" />
     <ProjectReference Include="..\..\Models\Models.csproj" />
-    <ProjectReference Include="..\Toolkit.Grounders\Toolkit.Grounders.csproj" />
+    <ProjectReference Include="..\..\Translators\Translators.csproj" />
   </ItemGroup>
 
 </Project>

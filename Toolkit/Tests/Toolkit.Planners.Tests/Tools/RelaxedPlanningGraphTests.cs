@@ -7,7 +7,6 @@ using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
-using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.Toolkit.StateSpace.SAS;
@@ -33,13 +32,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         public void Can_GenerateGraph_Layer_Size(string domain, string problem, int expected)
         {
             // ARRANGE
-            var decl = GetPDDLDecl(domain, problem);
+            var decl = GetSASDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
-            var actions = GetOperators(decl);
             var generator = new OperatorRPG();
 
             // ACT
-            var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
+            var graph = generator.GenerateRelaxedPlanningGraph(state, decl.Operators);
 
             // ASSERT
             Assert.AreEqual(expected, graph.Count);
@@ -55,13 +53,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         public void Can_GenerateGraph_Layer_ActionSize(string domain, string problem, params int[] expecteds)
         {
             // ARRANGE
-            var decl = GetPDDLDecl(domain, problem);
+            var decl = GetSASDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
-            var actions = GetOperators(decl);
             var generator = new OperatorRPG();
 
             // ACT
-            var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
+            var graph = generator.GenerateRelaxedPlanningGraph(state, decl.Operators);
 
             // ASSERT
             Assert.AreEqual(expecteds.Length, graph.Count);
@@ -79,13 +76,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         public void Can_GenerateGraph_Layer_ActionSize_FirstAlwaysZero(string domain, string problem)
         {
             // ARRANGE
-            var decl = GetPDDLDecl(domain, problem);
+            var decl = GetSASDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
-            var actions = GetOperators(decl);
             var generator = new OperatorRPG();
 
             // ACT
-            var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
+            var graph = generator.GenerateRelaxedPlanningGraph(state, decl.Operators);
 
             // ASSERT
             Assert.AreEqual(0, graph[0].Operators.Count);
@@ -101,25 +97,23 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         public void Can_GenerateGraph_Layer_Proposition_FirstAlwaysInits(string domain, string problem)
         {
             // ARRANGE
-            var decl = GetPDDLDecl(domain, problem);
+            var decl = GetSASDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
-            var actions = GetOperators(decl);
             var generator = new OperatorRPG();
 
             // ACT
-            var graph = generator.GenerateRelaxedPlanningGraph(state, actions);
+            var graph = generator.GenerateRelaxedPlanningGraph(state, decl.Operators);
 
             // ASSERT
-            Assert.AreEqual(decl.Problem.Init.Predicates.Count, graph[0].Propositions.Count);
+            Assert.AreEqual(decl.Init.Count, graph[0].Propositions.Count);
         }
 
         [TestMethod]
         public void Cant_GenerateGraph_IfNoApplicableActions_1()
         {
             // ARRANGE
-            var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
-            decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("abc") });
+            var decl = new SASDecl();
+            decl.Goal.Add(new Fact("abc"));
             var state = new RelaxedSASStateSpace(decl);
             var generator = new OperatorRPG();
 
@@ -134,9 +128,8 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         public void Cant_GenerateGraph_IfNoApplicableActions_2()
         {
             // ARRANGE
-            var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
-            decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("abc") });
+            var decl = new SASDecl();
+            decl.Goal.Add(new Fact("abc"));
             var state = new RelaxedSASStateSpace(decl);
 
             var actions = new List<Operator>()
@@ -161,9 +154,8 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         public void Cant_GenerateGraph_IfActionDoesNothing()
         {
             // ARRANGE
-            var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
-            decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("abc") });
+            var decl = new SASDecl();
+            decl.Goal.Add(new Fact("abc"));
             var state = new RelaxedSASStateSpace(decl);
 
             var actions = new List<Operator>()

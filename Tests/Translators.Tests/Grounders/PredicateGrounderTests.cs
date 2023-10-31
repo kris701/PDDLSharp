@@ -1,12 +1,11 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Toolkit.Grounders;
+using PDDLSharp.Translators.Grounders;
 
-namespace PDDLSharp.Toolkit.Grounders.Tests
+namespace PDDLSharp.Translators.Tests.Grounders
 {
     [TestClass]
     public class PredicateGrounderTests

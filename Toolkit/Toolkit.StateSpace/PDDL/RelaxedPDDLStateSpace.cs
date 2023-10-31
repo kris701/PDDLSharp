@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Toolkit.Grounders;
+using PDDLSharp.Translators.Grounders;
 
 namespace PDDLSharp.Toolkit.StateSpace.PDDL
 {

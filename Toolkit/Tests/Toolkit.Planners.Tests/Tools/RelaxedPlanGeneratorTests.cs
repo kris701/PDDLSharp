@@ -6,7 +6,6 @@ using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
-using PDDLSharp.Toolkit.Grounders;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
 using PDDLSharp.Toolkit.StateSpace.SAS;
@@ -32,13 +31,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         public void Can_GenerateRelaxedPlan_ResultsInGoal(string domain, string problem)
         {
             // ARRANGE
-            var decl = GetPDDLDecl(domain, problem);
+            var decl = GetSASDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
-            var actions = GetOperators(decl);
             var generator = new RelaxedPlanGenerator(decl);
 
             // ACT
-            var result = generator.GenerateReplaxedPlan(state, actions);
+            var result = generator.GenerateReplaxedPlan(state, decl.Operators);
 
             // ASSERT
             Assert.IsFalse(generator.Failed);
@@ -58,13 +56,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         public void Can_GenerateRelaxedPlan_Length(string domain, string problem, int expected)
         {
             // ARRANGE
-            var decl = GetPDDLDecl(domain, problem);
+            var decl = GetSASDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
-            var operators = GetOperators(decl);
             var generator = new RelaxedPlanGenerator(decl);
 
             // ACT
-            var result = generator.GenerateReplaxedPlan(state, operators);
+            var result = generator.GenerateReplaxedPlan(state, decl.Operators);
 
             // ASSERT
             Assert.IsFalse(generator.Failed);

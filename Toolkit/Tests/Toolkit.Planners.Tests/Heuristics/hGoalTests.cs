@@ -23,9 +23,9 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         public void Can_GeneratehGoalCorrectly_NoGoals()
         {
             // ARRANGE
-            var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
-            decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("goal-fact") });
+            var decl = new SASDecl();
+            decl.Goal.Clear();
+            decl.Goal.Add(new Fact("goal-fact"));
             var h = new hGoal();
             var parent = new StateMove();
             var state = new SASStateSpace(decl);
@@ -41,11 +41,11 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         public void Can_GeneratehGoalCorrectly_OneGoal()
         {
             // ARRANGE
-            var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
-            decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("goal-fact") });
-            decl.Problem.Init = new InitDecl();
-            decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact"));
+            var decl = new SASDecl();
+            decl.Goal.Clear();
+            decl.Goal.Add(new Fact("goal-fact"));
+            decl.Init.Clear();
+            decl.Init.Add(new Fact("goal-fact"));
             var h = new hGoal();
             var parent = new StateMove();
             var state = new SASStateSpace(decl);
@@ -61,12 +61,14 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         public void Can_GeneratehGoalCorrectly_MultipleGoals_1()
         {
             // ARRANGE
-            var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
-            decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("goal-fact-1"), new PredicateExp("goal-fact-2"), new PredicateExp("goal-fact-3") });
-            decl.Problem.Init = new InitDecl();
-            decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact-1"));
-            decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact-2"));
+            var decl = new SASDecl();
+            decl.Goal.Clear();
+            decl.Goal.Add(new Fact("goal-fact-1"));
+            decl.Goal.Add(new Fact("goal-fact-2"));
+            decl.Goal.Add(new Fact("goal-fact-3"));
+            decl.Init.Clear();
+            decl.Init.Add(new Fact("goal-fact-1"));
+            decl.Init.Add(new Fact("goal-fact-2"));
             var h = new hGoal();
             var parent = new StateMove();
             var state = new SASStateSpace(decl);
@@ -82,13 +84,15 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         public void Can_GeneratehGoalCorrectly_MultipleGoals_2()
         {
             // ARRANGE
-            var decl = new PDDLDecl(new DomainDecl(), new ProblemDecl());
-            decl.Problem.Goal = new GoalDecl();
-            decl.Problem.Goal.GoalExp = new AndExp(new List<IExp>() { new PredicateExp("goal-fact-1"), new PredicateExp("goal-fact-2"), new PredicateExp("goal-fact-3") });
-            decl.Problem.Init = new InitDecl();
-            decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact-1"));
-            decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact-2"));
-            decl.Problem.Init.Predicates.Add(new PredicateExp("goal-fact-3"));
+            var decl = new SASDecl();
+            decl.Goal.Clear();
+            decl.Goal.Add(new Fact("goal-fact-1"));
+            decl.Goal.Add(new Fact("goal-fact-2"));
+            decl.Goal.Add(new Fact("goal-fact-3"));
+            decl.Init.Clear();
+            decl.Init.Add(new Fact("goal-fact-1"));
+            decl.Init.Add(new Fact("goal-fact-2"));
+            decl.Init.Add(new Fact("goal-fact-3"));
             var h = new hGoal();
             var parent = new StateMove();
             var state = new SASStateSpace(decl);

@@ -22,13 +22,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         public void Can_GeneratehAddCorrectly_FromInitialState(string domain, string problem, int expected)
         {
             // ARRANGE
-            var decl = GetPDDLDecl(domain, problem);
+            var decl = GetSASDecl(domain, problem);
             var h = new hAdd();
             var state = new SASStateSpace(decl);
-            var actions = GetOperators(decl);
 
             // ACT
-            var newValue = h.GetValue(new StateMove(), state, actions);
+            var newValue = h.GetValue(new StateMove(), state, decl.Operators);
 
             // ASSERT
             Assert.AreEqual(expected, newValue);
@@ -44,15 +43,14 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
         public void Can_GeneratehAddCorrectly_FromGoalState(string domain, string problem, int expected)
         {
             // ARRANGE
-            var decl = GetPDDLDecl(domain, problem);
+            var decl = GetSASDecl(domain, problem);
             var h = new hAdd();
             var state = new SASStateSpace(decl);
-            foreach (var goal in state.Goals)
+            foreach (var goal in decl.Goal)
                 state.Add(goal);
-            var actions = GetOperators(decl);
 
             // ACT
-            var newValue = h.GetValue(new StateMove(), state, actions);
+            var newValue = h.GetValue(new StateMove(), state, decl.Operators);
 
             // ASSERT
             Assert.AreEqual(expected, newValue);
