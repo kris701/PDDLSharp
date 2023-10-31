@@ -2,6 +2,7 @@
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
@@ -13,7 +14,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             _graphGenerator = new FactRPG();
         }
 
-        public override int GetValue(StateMove parent, IState<Fact, Operator, SASDecl> state, List<Operator> operators)
+        public override int GetValue(StateMove parent, ISASState state, List<Operator> operators)
         {
             Evaluations++;
             var cost = 0;

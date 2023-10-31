@@ -9,26 +9,26 @@ namespace PDDLSharp.Toolkit.Planners.Search
 {
     public class StateMove
     {
-        public IState<Fact, Operator, SASDecl> State { get; private set; }
+        public ISASState State { get; private set; }
         public List<GroundedAction> Steps { get; set; }
         public int hValue { get; set; }
         public bool Evaluated { get; set; } = true;
 
-        public StateMove(IState<Fact, Operator, SASDecl> state, List<GroundedAction> steps)
+        public StateMove(ISASState state, List<GroundedAction> steps)
         {
             State = state;
             Steps = steps;
             hValue = -1;
         }
 
-        public StateMove(IState<Fact, Operator, SASDecl> state, int hvalue)
+        public StateMove(ISASState state, int hvalue)
         {
             State = state;
             Steps = new List<GroundedAction>();
             hValue = hvalue;
         }
 
-        public StateMove(IState<Fact, Operator, SASDecl> state)
+        public StateMove(ISASState state)
         {
             State = state;
             Steps = new List<GroundedAction>();

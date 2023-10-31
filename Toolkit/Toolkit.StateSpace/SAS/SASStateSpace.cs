@@ -4,7 +4,7 @@ using PDDLSharp.Models.SAS;
 
 namespace PDDLSharp.Toolkit.StateSpace.SAS
 {
-    public class SASStateSpace : IState<Fact, Operator, SASDecl>
+    public class SASStateSpace : ISASState
     {
         public HashSet<Fact> State { get; set; }
         public SASDecl Declaration { get; }
@@ -24,7 +24,7 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
             State = state;
         }
 
-        public virtual IState<Fact, Operator, SASDecl> Copy()
+        public virtual ISASState Copy()
         {
             var newState = new Fact[State.Count];
             State.CopyTo(newState);
@@ -40,7 +40,7 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
 
         public override bool Equals(object? obj)
         {
-            if (obj is IState<Fact, Operator, SASDecl> other)
+            if (obj is ISASState other)
             {
                 foreach (var item in State)
                     if (!other.State.Contains(item))

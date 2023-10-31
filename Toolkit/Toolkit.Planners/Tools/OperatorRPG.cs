@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Tools
 {
@@ -17,7 +18,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
         // Cache, from the hash of the previous state, that then links to the next layer
         private Dictionary<int, Layer> _layerCache = new Dictionary<int, Layer>();
         private Dictionary<int, List<int>> _coveredCache = new Dictionary<int, List<int>>();
-        public List<Layer> GenerateRelaxedPlanningGraph(IState<Fact, Operator, SASDecl> state, List<Operator> operators)
+        public List<Layer> GenerateRelaxedPlanningGraph(ISASState state, List<Operator> operators)
         {
             state = state.Copy();
             bool[] covered = new bool[operators.Count];

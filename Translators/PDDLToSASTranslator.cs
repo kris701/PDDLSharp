@@ -15,6 +15,8 @@ namespace PDDLSharp.Translators
 {
     public class PDDLToSASTranslator : ITranslator<PDDLDecl, SASDecl>
     {
+        public bool RemoveStaticsFromOperators { get; set; } = false;
+
         public SASDecl Translate(PDDLDecl from)
         {
             var domainVariables = new HashSet<string>();
@@ -23,6 +25,7 @@ namespace PDDLSharp.Translators
             var init = new HashSet<Fact>();
 
             var grounder = new ParametizedGrounder(from);
+            grounder.RemoveStaticsFromOutput = RemoveStaticsFromOperators;
 
             // Domain variables
             if (from.Problem.Objects != null)

@@ -27,7 +27,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             _generator.ClearCaches();
         }
 
-        public HashSet<Operator> GenerateReplaxedPlan(IState<Fact, Operator, SASDecl> state, List<Operator> operators)
+        public HashSet<Operator> GenerateReplaxedPlan(ISASState state, List<Operator> operators)
         {
             var hash = state.GetHashCode();
             if (_opCache.ContainsKey(hash))
@@ -49,7 +49,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             return selectedOperators;
         }
 
-        private HashSet<Operator> ReconstructPlan(IState<Fact, Operator, SASDecl> state, List<Layer> graphLayers)
+        private HashSet<Operator> ReconstructPlan(ISASState state, List<Layer> graphLayers)
         {
             var selectedOperators = new HashSet<Operator>();
             var m = -1;

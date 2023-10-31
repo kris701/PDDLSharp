@@ -21,7 +21,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
 
-        internal override ActionPlan Solve(IHeuristic h, IState<Fact, Operator, SASDecl> state)
+        internal override ActionPlan Solve(IHeuristic h, ISASState state)
         {
             var preferedOperators = GetPreferredOperators();
             var preferredQueue = InitializeQueue(h, state);

@@ -67,7 +67,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             Aborted = true;
         }
 
-        internal IState<Fact, Operator, SASDecl> GenerateNewState(IState<Fact, Operator, SASDecl> state, Operator op)
+        internal ISASState GenerateNewState(ISASState state, Operator op)
         {
             Generated++;
             var newState = state.Copy();
@@ -75,7 +75,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return newState;
         }
 
-        internal RefPriorityQueue InitializeQueue(IHeuristic h, IState<Fact, Operator, SASDecl> state)
+        internal RefPriorityQueue InitializeQueue(IHeuristic h, ISASState state)
         {
             var queue = new RefPriorityQueue();
             var fromMove = new StateMove();
@@ -97,7 +97,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         internal GroundedAction GenerateFromOp(Models.SAS.Operator op) => new GroundedAction(op.Name, op.Arguments);
 
-        internal abstract ActionPlan Solve(IHeuristic h, IState<Fact, Operator, SASDecl> state);
+        internal abstract ActionPlan Solve(IHeuristic h, ISASState state);
 
         public virtual void Dispose()
         {

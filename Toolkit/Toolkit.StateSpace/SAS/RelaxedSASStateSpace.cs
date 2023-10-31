@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
             return changes;
         }
 
-        public override IState<Fact, Operator, SASDecl> Copy()
+        public override ISASState Copy()
         {
             var newState = new Fact[State.Count];
             State.CopyTo(newState);

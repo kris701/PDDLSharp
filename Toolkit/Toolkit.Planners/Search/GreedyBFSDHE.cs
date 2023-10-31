@@ -3,6 +3,7 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.StateSpace;
+using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
@@ -16,7 +17,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
         }
 
-        internal override ActionPlan Solve(IHeuristic h, IState<Fact, Operator, SASDecl> state)
+        internal override ActionPlan Solve(IHeuristic h, ISASState state)
         {
             while (!Aborted && _openList.Count > 0)
             {
