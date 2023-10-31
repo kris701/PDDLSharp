@@ -18,8 +18,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public bool Aborted { get; internal set; }
         public IHeuristic Heuristic { get; }
         public TimeSpan SearchTime { get; internal set; }
-        public TimeSpan PreprocessTime { get; internal set; }
-        public TimeSpan PreprocessLimit { get; set; } = TimeSpan.FromMinutes(30);
         public TimeSpan SearchLimit { get; set; } = TimeSpan.FromMinutes(30);
 
         internal HashSet<StateMove> _closedList = new HashSet<StateMove>();
@@ -95,7 +93,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return stateMove;
         }
 
-        internal GroundedAction GenerateFromOp(Models.SAS.Operator op) => new GroundedAction(op.Name, op.Arguments);
+        internal GroundedAction GenerateFromOp(Operator op) => new GroundedAction(op.Name, op.Arguments);
 
         internal abstract ActionPlan Solve(IHeuristic h, ISASState state);
 

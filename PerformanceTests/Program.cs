@@ -45,7 +45,6 @@ namespace PerformanceTests
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
             IPlanValidator validator = new PlanValidator();
-            ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator();
 
             var path = new DirectoryInfo("benchmarks");
             var paths = path.GetDirectories();
@@ -66,19 +65,28 @@ namespace PerformanceTests
                         {
                             if (file.Name != "domain.pddl")
                             {
+                                Console.WriteLine($"Domain: {subDir.Name}");
+                                Console.WriteLine($"Problem: {file.Name}");
+
                                 PDDLDecl pddlDecl = new PDDLDecl(
                                     parser.ParseAs<DomainDecl>(new FileInfo(domain)),
                                     parser.ParseAs<ProblemDecl>(file));
 
+                                Console.WriteLine($"Translating...");
+                                ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
+                                translator.TimeLimit = TimeSpan.FromSeconds(30);
                                 var decl = translator.Translate(pddlDecl);
 
-                                Console.WriteLine($"Domain: {subDir.Name}");
-                                Console.WriteLine($"Problem: {file.Name}");
+                                if (translator.Aborted)
+                                {
+                                    couldNotSolve++;
+                                    Console.WriteLine($"Translator aborted...");
+                                    break;
+                                }
 
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
                                     Console.WriteLine(planner.GetType().Name);
-                                    planner.PreprocessLimit = TimeSpan.FromSeconds(60);
                                     planner.SearchLimit = TimeSpan.FromSeconds(60);
 
                                     Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
