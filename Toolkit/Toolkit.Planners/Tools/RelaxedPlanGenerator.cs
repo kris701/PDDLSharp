@@ -39,15 +39,16 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             if (graphLayers.Count == 0)
             {
                 Failed = true;
+                _opCache.Add(hash, new HashSet<Operator>());
                 return new HashSet<Operator>();
             }
-            var selectedOperators = ReconstructPlan(state, graphLayers);
+            var selectedOperators = ReconstructPlan(graphLayers);
 
             _opCache.Add(hash, selectedOperators);
             return selectedOperators;
         }
 
-        private HashSet<Operator> ReconstructPlan(ISASState state, List<Layer> graphLayers)
+        private HashSet<Operator> ReconstructPlan(List<Layer> graphLayers)
         {
             var selectedOperators = new HashSet<Operator>();
             var m = -1;

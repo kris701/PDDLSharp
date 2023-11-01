@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
-    public class EmptyExp : BaseNode
+    public class EmptyExp : BaseNode, IExp
     {
         public override INode Copy(INode? newParent = null)
         {

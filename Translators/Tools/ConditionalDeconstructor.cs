@@ -13,6 +13,7 @@ namespace PDDLSharp.Translators.Tools
 {
     public class ConditionalDeconstructor
     {
+        public bool Aborted { get; set; } = false;
         public List<ActionDecl> DecontructConditionals(ActionDecl action)
         {
             List<ActionDecl> newActions = new List<ActionDecl>();
@@ -40,6 +41,7 @@ namespace PDDLSharp.Translators.Tools
             var permutations = GeneratePermutations(allWhens.Count);
             foreach(var permutation in permutations)
             {
+                if (Aborted) return new List<ActionDecl>();
                 var newAct = source.Copy();
 
                 for (int i = 0; i < permutation.Length; i++)
@@ -84,19 +86,23 @@ namespace PDDLSharp.Translators.Tools
 
         private void GeneratePermutations(int count, bool[] source, int index, Queue<bool[]> returnQueue)
         {
+            if (Aborted) return;
+
             var trueSource = new bool[count];
             Array.Copy(source, trueSource, count);
             trueSource[index] = true;
-            returnQueue.Enqueue(trueSource);
             if (index < count - 1)
                 GeneratePermutations(count, trueSource, index + 1, returnQueue);
+            else
+                returnQueue.Enqueue(trueSource);
 
             var falseSource = new bool[count];
             Array.Copy(source, falseSource, count);
-            falseSource[index] = true;
-            returnQueue.Enqueue(falseSource);
+            falseSource[index] = false;
             if (index < count - 1)
                 GeneratePermutations(count, falseSource, index + 1, returnQueue);
+            else
+                returnQueue.Enqueue(falseSource);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace PDDLSharp.Translators
         public TimeSpan TranslationTime { get; internal set; }
         public bool Aborted { get; internal set; }
         private ParametizedGrounder? _grounder;
+        private NodeDeconstructor? _deconstructor;
 
         public PDDLToSASTranslator(bool removeStaticsFromOutput = false)
         {
@@ -37,6 +38,8 @@ namespace PDDLSharp.Translators
             Aborted = true;
             if (_grounder != null)
                 _grounder.Abort();
+            if (_deconstructor != null)
+                _deconstructor.Abort();
         }
 
         public SASDecl Translate(PDDLDecl from)
@@ -59,6 +62,7 @@ namespace PDDLSharp.Translators
             _grounder = grounder;
             grounder.RemoveStaticsFromOutput = RemoveStaticsFromOutput;
             var deconstructor = new NodeDeconstructor(grounder);
+            _deconstructor = deconstructor;
 
             // Domain variables
             if (from.Problem.Objects != null)
@@ -100,6 +104,7 @@ namespace PDDLSharp.Translators
             switch (exp)
             {
                 case NumericExp: break;
+                case EmptyExp: break;
                 case PredicateExp pred: facts[possitive].Add(GetFactFromPredicate(pred)); break;
                 case NotExp not: facts = MergeDictionaries(facts, ExtractFactsFromExp(not.Child, grounder, !possitive)); break;
                 case AndExp and:

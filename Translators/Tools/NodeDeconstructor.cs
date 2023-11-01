@@ -32,6 +32,13 @@ namespace PDDLSharp.Translators.Tools
             return item;
         }
 
+        public void Abort()
+        {
+            _forAllDeconstructor.Aborted = true;
+            _existsDeconstructor.Aborted = true;
+            _conditionalDeconstructor.Aborted = true;
+        }
+
         public List<ActionDecl> DeconstructAction(ActionDecl act)
         {
             act = Deconstruct(act);

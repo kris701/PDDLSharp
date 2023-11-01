@@ -20,6 +20,7 @@ using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
 using PDDLSharp.Translators;
 using System.Diagnostics;
+using System.Linq.Expressions;
 
 namespace PerformanceTests
 {
@@ -53,6 +54,8 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
+                //if (subDir.Name != "maintenance-opt14-adl")
+                //    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
@@ -74,7 +77,7 @@ namespace PerformanceTests
 
                                 Console.WriteLine($"Translating...");
                                 ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
-                                translator.TimeLimit = TimeSpan.FromSeconds(60);
+                                translator.TimeLimit = TimeSpan.FromSeconds(10);
                                 var decl = translator.Translate(pddlDecl);
 
                                 if (translator.Aborted)
@@ -87,18 +90,22 @@ namespace PerformanceTests
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
                                     Console.WriteLine(planner.GetType().Name);
-                                    planner.SearchLimit = TimeSpan.FromSeconds(60);
+                                    planner.SearchLimit = TimeSpan.FromSeconds(10);
 
                                     Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
                                     Console.WriteLine($"Solving...");
                                     var plan = new ActionPlan(new List<GroundedAction>());
-                                    try
-                                    {
-                                        plan = planner.Solve();
-                                    }
-                                    catch (NoSolutionFoundException) { };
+                                try
+                                {
+                                    plan = planner.Solve();
+                            }
+                                    catch (RelaxedPlanningGraphException ex) {
 
-                                    if (!planner.Aborted)
+                            }
+                                    catch (NoSolutionFoundException ex) {
+                            };
+
+                            if (!planner.Aborted)
                                     {
                                         couldSolve++;
                                         Console.WriteLine($"Search took {planner.SearchTime.TotalSeconds}s");

@@ -13,6 +13,7 @@ namespace PDDLSharp.Translators.Tools
     public class ForAllDeconstructor
     {
         public IGrounder<IParametized> Grounder { get; }
+        public bool Aborted { get; set; } = false;
 
         public ForAllDeconstructor(IGrounder<IParametized> grounder)
         {

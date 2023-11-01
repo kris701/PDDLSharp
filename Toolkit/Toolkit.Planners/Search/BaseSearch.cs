@@ -45,7 +45,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var state = new SASStateSpace(Declaration);
 
             _closedList = new HashSet<StateMove>();
-            _openList = InitializeQueue(Heuristic, state);
+            _openList = InitializeQueue(Heuristic, state, Declaration.Operators);
 
             Expanded = 0;
             Generated = 0;
@@ -70,12 +70,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
             return newState;
         }
 
-        internal RefPriorityQueue InitializeQueue(IHeuristic h, ISASState state)
+        internal RefPriorityQueue InitializeQueue(IHeuristic h, ISASState state, List<Operator> operators)
         {
             var queue = new RefPriorityQueue();
             var fromMove = new StateMove();
             fromMove.hValue = int.MaxValue;
-            var hValue = h.GetValue(fromMove, state, Declaration.Operators);
+            var hValue = h.GetValue(fromMove, state, operators);
             queue.Enqueue(new StateMove(state, hValue), hValue);
             return queue;
         }

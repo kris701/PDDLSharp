@@ -9,7 +9,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
     {
         private Dictionary<int, HashSet<Fact>> _stateCache = new Dictionary<int, HashSet<Fact>>();
         private Dictionary<int, List<int>> _coveredCache = new Dictionary<int, List<int>>();
-        internal Dictionary<Fact, int> GenerateRelaxedGraph(ISASState state, List<Models.SAS.Operator> operators)
+        internal Dictionary<Fact, int> GenerateRelaxedGraph(ISASState state, List<Operator> operators)
         {
             if (state is not RelaxedSASStateSpace)
                 state = new RelaxedSASStateSpace(state.Declaration, state.State);
@@ -23,7 +23,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             int layer = 1;
             while (!state.IsInGoal())
             {
-                var hash = state.GetHashCode();
+                var hash = state.GetHashCode() ^ operators.Count;
                 if (_stateCache.ContainsKey(hash))
                 {
                     foreach (var item in _coveredCache[hash])
