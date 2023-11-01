@@ -1,7 +1,7 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
+﻿using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Translators.Grounders;
 using PDDLSharp.Translators.Tools;
 using System;
@@ -36,7 +36,7 @@ namespace PDDLSharp.Translators.Tests.Tools
                         new WhenExp(new PredicateExp("d"), new PredicateExp("e"))
                     })
                 ),
-                6
+                4
             };
             yield return new object[] {
                 new ActionDecl(
@@ -49,7 +49,7 @@ namespace PDDLSharp.Translators.Tests.Tools
                         new WhenExp(new PredicateExp("f"), new PredicateExp("g"))
                     })
                 ),
-                14
+                8
             };
         }
 

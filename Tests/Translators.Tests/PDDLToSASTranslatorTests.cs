@@ -90,10 +90,10 @@ namespace PDDLSharp.Translators.Tests
             var sas = translator.Translate(decl);
 
             // ASSERT
-            foreach(var staticPred in statics)
+            foreach (var staticPred in statics)
             {
                 var fact = GetFactFromPredicate(staticPred);
-                foreach(var op in sas.Operators)
+                foreach (var op in sas.Operators)
                 {
                     Assert.IsFalse(op.Pre.Contains(fact));
                     Assert.IsFalse(op.Add.Contains(fact));

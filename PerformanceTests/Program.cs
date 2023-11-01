@@ -20,7 +20,6 @@ using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
 using PDDLSharp.Translators;
 using System.Diagnostics;
-using System.Linq.Expressions;
 
 namespace PerformanceTests
 {
@@ -95,17 +94,19 @@ namespace PerformanceTests
                                     Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
                                     Console.WriteLine($"Solving...");
                                     var plan = new ActionPlan(new List<GroundedAction>());
-                                try
-                                {
-                                    plan = planner.Solve();
-                            }
-                                    catch (RelaxedPlanningGraphException ex) {
+                                    try
+                                    {
+                                        plan = planner.Solve();
+                                    }
+                                    catch (RelaxedPlanningGraphException ex)
+                                    {
 
-                            }
-                                    catch (NoSolutionFoundException ex) {
-                            };
+                                    }
+                                    catch (NoSolutionFoundException ex)
+                                    {
+                                    };
 
-                            if (!planner.Aborted)
+                                    if (!planner.Aborted)
                                     {
                                         couldSolve++;
                                         Console.WriteLine($"Search took {planner.SearchTime.TotalSeconds}s");

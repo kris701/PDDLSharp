@@ -28,7 +28,7 @@ namespace PDDLSharp.Translators.Tests.Tools
                     {
                         new PredicateExp("pred", new List<NameExp>(){ new NameExp("obj1") }),
                         new PredicateExp("pred", new List<NameExp>(){ new NameExp("obj2") })
-                    }) 
+                    })
                 }),
                 new List<NameExp>(){
                     new NameExp("obj1"),

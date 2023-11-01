@@ -146,8 +146,8 @@ namespace PDDLSharp.Translators
             foreach (var action in decl.Domain.Actions)
             {
                 var deconstructedActions = deconstructor.DeconstructAction(action);
-                foreach (var deconstructed in deconstructedActions) 
-                { 
+                foreach (var deconstructed in deconstructedActions)
+                {
                     var newActs = grounder.Ground(deconstructed).Cast<ActionDecl>();
                     foreach (var act in newActs)
                     {
@@ -164,7 +164,7 @@ namespace PDDLSharp.Translators
                         operators.Add(new Operator(act.Name, args.ToArray(), pre, add, del));
                     }
                 }
-                
+
             }
             return operators;
         }
