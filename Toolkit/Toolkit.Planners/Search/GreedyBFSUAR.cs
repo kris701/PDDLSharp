@@ -36,8 +36,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     OperatorsUsed = operators.Count;
                     return new ActionPlan(stateMove.Steps);
                 }
-                //int best = stateMove.hValue;
-                //int current = int.MaxValue;
+                int best = stateMove.hValue;
+                int current = int.MaxValue;
                 foreach (var op in operators)
                 {
                     if (Aborted) break;
@@ -52,8 +52,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
                             var value = h.GetValue(stateMove, newMove.State, operators.ToList());
-                            //if (value < current)
-                            //    current = value;
+                            if (value < current)
+                                current = value;
                             newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
                             newMove.hValue = value;
                             _openList.Enqueue(newMove, value);
@@ -61,8 +61,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     }
                 }
 
-                //if (current > best || best == int.MaxValue)
-                //    operators = RefineOperators(operators);
+                if (current > best || best == int.MaxValue)
+                    operators = RefineOperators(operators);
             }
             throw new NoSolutionFoundException();
         }
@@ -98,7 +98,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             bool lookForApplicaple = false;
             int smallestHValue = -1;
             // Refinement Step 2
-            while (!refinedOperatorsFound && operators.Count != Declaration.Operators.Count)
+            while (!refinedOperatorsFound)
             {
                 var smallestItem = _closedList.Where(x => x.hValue > smallestHValue).MinBy(x => x.hValue);
                 if (smallestItem == null)
@@ -126,38 +126,29 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
                     if (newOperators.Count > 0)
                     {
-                        List<StateMove> switchLists = new List<StateMove>();
-                        foreach (var closed in _closedList)
-                        {
-                            foreach (var newOperator in newOperators)
-                            {
-                                if (closed.State.IsNodeTrue(newOperator))
-                                {
-                                    switchLists.Add(closed);
-                                    break;
-                                }
-                            }
-                        }
-
-                        // Only count as a success if there was any new operators
-                        if (switchLists.Count > 0)
-                        {
-                            int preCount = operators.Count;
-                            operators.AddRange(newOperators);
-                            if (operators.Count != preCount)
-                            {
-                                foreach (var item in switchLists)
-                                {
-                                    _closedList.Remove(item);
-                                    _openList.Enqueue(item, item.hValue);
-                                }
-                                refinedOperatorsFound = true;
-                            }
-                        }
+                        ReopenClosedStates(newOperators);
+                        operators.AddRange(newOperators);
+                        refinedOperatorsFound = true;
                     }
                 }
             }
             return operators;
+        }
+
+        private void ReopenClosedStates(HashSet<Operator> newOperators)
+        {
+            foreach (var closed in _closedList)
+            {
+                foreach (var newOperator in newOperators)
+                {
+                    if (closed.State.IsNodeTrue(newOperator))
+                    {
+                        _closedList.Remove(closed);
+                        _openList.Enqueue(closed, closed.hValue);
+                        break;
+                    }
+                }
+            }
         }
 
         private HashSet<Operator> GetNewRelaxedOperators(int smallestHValue, HashSet<Operator> operators, HashSet<StateMove> closedList)
