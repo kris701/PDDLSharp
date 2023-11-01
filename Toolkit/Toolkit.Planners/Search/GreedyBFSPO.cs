@@ -30,8 +30,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 if (iteration++ % 2 == 0 && preferredQueue.Count > 0)
                 {
                     var stateMove = ExpandBestState(preferredQueue);
-                    if (stateMove.State.IsInGoal())
-                        return new ActionPlan(stateMove.Steps);
 
                     foreach (var op in preferedOperators)
                     {

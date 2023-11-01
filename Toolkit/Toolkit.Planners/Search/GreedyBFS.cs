@@ -16,9 +16,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
             while (!Aborted && _openList.Count > 0)
             {
                 var stateMove = ExpandBestState();
-                if (stateMove.State.IsInGoal())
-                    return new ActionPlan(stateMove.Steps);
-
                 foreach (var op in Declaration.Operators)
                 {
                     if (Aborted) break;

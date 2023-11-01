@@ -4,6 +4,7 @@ using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace.SAS;
 using PDDLSharp.Tools;
+using System.Diagnostics;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
@@ -24,18 +25,24 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var operators = GetInitialOperators();
             _openList = InitializeQueue(Heuristic, state, operators.ToList());
 
+            int itt = 0;
+            int secs = 0;
+            var watch = new Stopwatch();
+            watch.Start();
             while (!Aborted)
             {
+                itt++;
+                if (watch.ElapsedMilliseconds > 1000)
+                {
+                    Console.WriteLine($"[t={secs++}] Expansions pr second: {itt}. Evaluated {Evaluations}. Expanded {Expanded}. Generated {Generated}. Ops {operators.Count}");
+                    watch.Restart();
+                    itt = 0;
+                }
                 // Refinement Guards
                 if (_openList.Count == 0)
                     operators = RefineOperators(operators);
 
                 var stateMove = ExpandBestState();
-                if (stateMove.State.IsInGoal())
-                {
-                    OperatorsUsed = operators.Count;
-                    return new ActionPlan(stateMove.Steps);
-                }
                 int best = stateMove.hValue;
                 int current = int.MaxValue;
                 foreach (var op in operators)
@@ -61,8 +68,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     }
                 }
 
-                if (current > best || best == int.MaxValue)
-                    operators = RefineOperators(operators);
+                //if (current > best || best == int.MaxValue)
+                //    operators = RefineOperators(operators);
             }
             throw new NoSolutionFoundException();
         }
@@ -104,7 +111,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 if (smallestItem == null)
                 {
                     // Refinement step 3
-                    if (_openList.Count != 0)
+                    if (lookForApplicaple && _openList.Count != 0)
                         return operators;
 
                     if (lookForApplicaple)
@@ -120,9 +127,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     smallestHValue = smallestItem.hValue;
                     var newOperators = new HashSet<Operator>();
                     if (lookForApplicaple)
-                        newOperators = GetNewApplicableOperators(smallestHValue, operators, _closedList);
+                        newOperators = GetNewApplicableOperators(smallestHValue, operators);
                     else
-                        newOperators = GetNewRelaxedOperators(smallestHValue, operators, _closedList);
+                        newOperators = GetNewRelaxedOperators(smallestHValue, operators);
 
                     if (newOperators.Count > 0)
                     {
@@ -151,48 +158,61 @@ namespace PDDLSharp.Toolkit.Planners.Search
             }
         }
 
-        private HashSet<Operator> GetNewRelaxedOperators(int smallestHValue, HashSet<Operator> operators, HashSet<StateMove> closedList)
+        private Dictionary<int, HashSet<Operator>> _relaxedCache = new Dictionary<int, HashSet<Operator>>();
+        private HashSet<Operator> GetNewRelaxedOperators(int smallestHValue, HashSet<Operator> operators)
         {
-            var allSmallest = closedList.Where(x => x.hValue == smallestHValue).ToList();
-            var relaxedPlanOperators = new List<Operator>();
+            var allSmallest = _closedList.Where(x => x.hValue == smallestHValue).ToList();
+            var relaxedPlanOperators = new HashSet<Operator>();
             foreach (var item in allSmallest)
             {
                 if (Aborted) throw new NoSolutionFoundException();
-                var newOps = _graphGenerator.GenerateReplaxedPlan(
+                var hash = item.GetHashCode();
+                if (_relaxedCache.ContainsKey(hash))
+                    relaxedPlanOperators.AddRange(_relaxedCache[hash].Except(operators).ToHashSet());
+                else
+                {
+                    var newOps = _graphGenerator.GenerateReplaxedPlan(
                         item.State,
                         Declaration.Operators
                         );
-                if (!_graphGenerator.Failed)
-                    relaxedPlanOperators.AddRange(newOps);
+                    if (!_graphGenerator.Failed)
+                    {
+                        _relaxedCache.Add(hash, newOps);
+                        relaxedPlanOperators.AddRange(newOps.Except(operators).ToHashSet());
+                    }
+                }
             }
-            return relaxedPlanOperators.Except(operators).ToHashSet();
+            return relaxedPlanOperators;
         }
 
-        private Dictionary<int, List<Operator>> _applicableCache = new Dictionary<int, List<Operator>>();
-        private HashSet<Operator> GetNewApplicableOperators(int smallestHValue, HashSet<Operator> operators, HashSet<StateMove> closedList)
+        private Dictionary<int, HashSet<Operator>> _applicableCache = new Dictionary<int, HashSet<Operator>>();
+        private HashSet<Operator> GetNewApplicableOperators(int smallestHValue, HashSet<Operator> operators)
         {
-            var allSmallest = closedList.Where(x => x.hValue == smallestHValue).ToList();
-            var applicableOperators = new List<Operator>();
+            var allSmallest = _closedList.Where(x => x.hValue == smallestHValue).ToList();
+            var applicableOperators = new HashSet<Operator>();
             foreach (var item in allSmallest)
             {
                 if (Aborted) throw new NoSolutionFoundException();
                 var hash = item.GetHashCode();
                 if (_applicableCache.ContainsKey(hash))
-                    applicableOperators.AddRange(_applicableCache[hash]);
+                    applicableOperators.AddRange(_applicableCache[hash].Except(operators).ToHashSet());
                 else
                 {
-                    _applicableCache.Add(hash, new List<Operator>());
+                    _applicableCache.Add(hash, new HashSet<Operator>());
                     foreach (var op in Declaration.Operators)
                     {
-                        if (item.State.IsNodeTrue(op))
+                        if (!operators.Contains(op))
                         {
-                            applicableOperators.Add(op);
-                            _applicableCache[hash].Add(op);
+                            if (item.State.IsNodeTrue(op))
+                            {
+                                applicableOperators.Add(op);
+                                _applicableCache[hash].Add(op);
+                            }
                         }
                     }
                 }
             }
-            return applicableOperators.Except(operators).ToHashSet();
+            return applicableOperators;
         }
 
         public override void Dispose()

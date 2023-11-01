@@ -20,8 +20,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
             while (!Aborted && _openList.Count > 0)
             {
                 var stateMove = ExpandBestState();
-                if (stateMove.State.IsInGoal())
-                    return new ActionPlan(stateMove.Steps);
                 if (!stateMove.Evaluated)
                     stateMove.hValue = h.GetValue(stateMove, stateMove.State, Declaration.Operators);
 

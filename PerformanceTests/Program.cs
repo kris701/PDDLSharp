@@ -16,6 +16,7 @@ using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.MacroGenerators;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Heuristics;
+using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
 using PDDLSharp.Translators;
@@ -53,8 +54,8 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                //if (subDir.Name != "maintenance-opt14-adl")
-                //    continue;
+                if (subDir.Name != "barman-opt11-strips")
+                    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
@@ -89,7 +90,7 @@ namespace PerformanceTests
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
                                     Console.WriteLine(planner.GetType().Name);
-                                    planner.SearchLimit = TimeSpan.FromSeconds(60);
+                                    planner.SearchLimit = TimeSpan.FromMinutes(30);
 
                                     Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
                                     Console.WriteLine($"Solving...");

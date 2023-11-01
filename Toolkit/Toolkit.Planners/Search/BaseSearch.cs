@@ -43,6 +43,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
             watch.Start();
 
             var state = new SASStateSpace(Declaration);
+            if (state.IsInGoal())
+                return new ActionPlan(new List<GroundedAction>());
 
             _closedList = new HashSet<StateMove>();
             _openList = InitializeQueue(Heuristic, state, Declaration.Operators);
