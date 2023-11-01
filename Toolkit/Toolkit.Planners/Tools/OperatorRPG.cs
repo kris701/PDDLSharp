@@ -27,7 +27,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             while (!state.IsInGoal())
             {
                 // Take from cache if it exists
-                var hash = state.GetHashCode();
+                var hash = state.GetHashCode() ^ operators.Count;
                 if (_layerCache.ContainsKey(hash))
                 {
                     state.State = _layerCache[hash].Propositions;

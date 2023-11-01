@@ -1,18 +1,13 @@
 ﻿using PDDLSharp.Models.PDDL;
-using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Translators.Grounders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PDDLSharp.Translators.Tools
 {
     public class ForAllDeconstructor
     {
         public IGrounder<IParametized> Grounder { get; }
+        public bool Aborted { get; set; } = false;
 
         public ForAllDeconstructor(IGrounder<IParametized> grounder)
         {
@@ -23,7 +18,7 @@ namespace PDDLSharp.Translators.Tools
         {
             var copy = node.Copy();
             var forAlls = copy.FindTypes<ForAllExp>();
-            foreach(var forAll in forAlls)
+            foreach (var forAll in forAlls)
             {
                 if (forAll.Parent is IWalkable walk)
                 {

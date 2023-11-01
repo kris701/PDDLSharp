@@ -39,12 +39,9 @@ namespace PDDLSharp.Toolkit.Planners.Search
             hValue = -1;
         }
 
-        private int _hashCache = -1;
         public override int GetHashCode()
         {
-            if (_hashCache == -1)
-                _hashCache = State.GetHashCode();
-            return _hashCache;
+            return State.GetHashCode();
         }
 
         public override bool Equals(object? obj)

@@ -22,7 +22,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         internal override ActionPlan Solve(IHeuristic h, ISASState state)
         {
             var preferedOperators = GetPreferredOperators();
-            var preferredQueue = InitializeQueue(h, state);
+            var preferredQueue = InitializeQueue(h, state, preferedOperators);
 
             int iteration = 0;
             while (!Aborted && _openList.Count > 0 || preferredQueue.Count > 0)
@@ -80,7 +80,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             throw new NoSolutionFoundException();
         }
 
-        private HashSet<Operator> GetPreferredOperators()
+        private List<Operator> GetPreferredOperators()
         {
             var operators = _graphGenerator.GenerateReplaxedPlan(
                 new SASStateSpace(Declaration),
@@ -88,7 +88,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                 );
             if (_graphGenerator.Failed)
                 throw new Exception("No relaxed plan could be found from the initial state! Could indicate the problem is unsolvable.");
-            return operators;
+            return operators.ToList();
         }
 
         public override void Dispose()

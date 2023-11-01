@@ -1,11 +1,6 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
+﻿using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Models.PDDL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PDDLSharp.Translators.Grounders;
 
 namespace PDDLSharp.Translators.Tools
@@ -30,6 +25,13 @@ namespace PDDLSharp.Translators.Tools
             if (item.FindTypes<ExistsExp>().Count > 0)
                 item = _existsDeconstructor.DeconstructExists(item);
             return item;
+        }
+
+        public void Abort()
+        {
+            _forAllDeconstructor.Aborted = true;
+            _existsDeconstructor.Aborted = true;
+            _conditionalDeconstructor.Aborted = true;
         }
 
         public List<ActionDecl> DeconstructAction(ActionDecl act)

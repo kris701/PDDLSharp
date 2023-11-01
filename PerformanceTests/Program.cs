@@ -53,6 +53,8 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
+                //if (subDir.Name != "maintenance-opt14-adl")
+                //    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
@@ -74,7 +76,7 @@ namespace PerformanceTests
 
                                 Console.WriteLine($"Translating...");
                                 ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
-                                translator.TimeLimit = TimeSpan.FromSeconds(60);
+                                translator.TimeLimit = TimeSpan.FromSeconds(10);
                                 var decl = translator.Translate(pddlDecl);
 
                                 if (translator.Aborted)
@@ -87,7 +89,7 @@ namespace PerformanceTests
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
                                     Console.WriteLine(planner.GetType().Name);
-                                    planner.SearchLimit = TimeSpan.FromSeconds(60);
+                                    planner.SearchLimit = TimeSpan.FromSeconds(10);
 
                                     Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
                                     Console.WriteLine($"Solving...");
@@ -96,7 +98,13 @@ namespace PerformanceTests
                                     {
                                         plan = planner.Solve();
                                     }
-                                    catch (NoSolutionFoundException) { };
+                                    catch (RelaxedPlanningGraphException ex)
+                                    {
+
+                                    }
+                                    catch (NoSolutionFoundException ex)
+                                    {
+                                    };
 
                                     if (!planner.Aborted)
                                     {
