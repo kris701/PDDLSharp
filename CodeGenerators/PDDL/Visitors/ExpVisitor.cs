@@ -75,9 +75,9 @@ namespace PDDLSharp.CodeGenerators.Visitors
         {
             if (node.IsHidden)
                 return "";
-            _printType = true;
+            PrintTypes(true);
             string retStr = $"{IndentStr(indent)}(forall {Visit((dynamic)node.Parameters, indent + 1)}{Environment.NewLine}";
-            _printType = false;
+            PrintTypes(false);
             retStr += $"{Visit((dynamic)node.Expression, indent + 1)}{Environment.NewLine}";
             retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
@@ -87,9 +87,9 @@ namespace PDDLSharp.CodeGenerators.Visitors
         {
             if (node.IsHidden)
                 return "";
-            _printType = true;
+            PrintTypes(true);
             string retStr = $"{IndentStr(indent)}(exists {Visit((dynamic)node.Parameters, indent + 1)}{Environment.NewLine}";
-            _printType = false;
+            PrintTypes(false);
             retStr += $"{Visit((dynamic)node.Expression, indent + 1)}{Environment.NewLine}";
             retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
