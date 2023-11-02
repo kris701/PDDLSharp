@@ -15,5 +15,13 @@
                 return "";
             return new string('\t', by);
         }
+
+        private bool _printTypeOverride = false;
+        internal void PrintTypes(bool state)
+        {
+            if (_printTypeOverride)
+                return;
+            _printType = state;
+        }
     }
 }

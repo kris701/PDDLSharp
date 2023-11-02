@@ -8,6 +8,13 @@ namespace PDDLSharp.CodeGenerators.Visitors
         {
             if (node.IsHidden)
                 return "";
+
+            _printTypeOverride = false;
+            if (node.Objects == null)
+                _printTypeOverride = true;
+            else if (node.Objects.Objs.All(x => x.Type.Name == "object"))
+                _printTypeOverride = true;
+
             string retStr = $"{IndentStr(indent)}(define{Environment.NewLine}";
             if (node.Name != null)
                 retStr += $"{Visit(node.Name, indent + 1)}{Environment.NewLine}";
@@ -23,6 +30,9 @@ namespace PDDLSharp.CodeGenerators.Visitors
                 retStr += $"{Visit(node.Metric, indent + 1)}{Environment.NewLine}";
 
             retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+
+            _printTypeOverride = false;
+
             return retStr;
         }
 
@@ -70,10 +80,10 @@ namespace PDDLSharp.CodeGenerators.Visitors
             if (node.IsHidden)
                 return "";
             string retStr = $"{IndentStr(indent)}(:objects{Environment.NewLine}";
-            _printType = true;
+            PrintTypes(true);
             foreach (var obj in node.Objs)
                 retStr += $"{Visit(obj, indent + 1)}{Environment.NewLine}".Replace("(", "").Replace(")", "");
-            _printType = false;
+            PrintTypes(false);
             retStr += $"{IndentStr(indent)}){Environment.NewLine}";
             return retStr;
         }
