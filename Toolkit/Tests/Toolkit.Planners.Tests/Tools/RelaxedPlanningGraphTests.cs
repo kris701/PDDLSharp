@@ -137,9 +137,9 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                 new Operator(
                     "non-applicable",
                     new string[]{ "?a" },
-                    new HashSet<Fact>(){ new Fact("wew", "?a") },
-                    new HashSet<Fact>(){ },
-                    new HashSet<Fact>(){ })
+                    new Fact[]{ new Fact("wew", "?a") },
+                    new Fact[]{ },
+                    new Fact[]{ })
             };
             var generator = new OperatorRPG();
 
@@ -163,9 +163,9 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                 new Operator(
                     "non-applicable",
                     new string[]{ "?a" },
-                    new HashSet<Fact>(){ },
-                    new HashSet<Fact>(){ },
-                    new HashSet<Fact>(){ })
+                    new Fact[]{ },
+                    new Fact[]{ },
+                    new Fact[]{ })
             };
             var generator = new OperatorRPG();
 
