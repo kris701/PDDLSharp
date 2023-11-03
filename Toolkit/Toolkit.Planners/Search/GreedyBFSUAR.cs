@@ -134,7 +134,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
                     if (newOperators.Count > 0)
                     {
-                        ReopenClosedStates(newOperators, _closedList);
+                        ReopenClosedStates(newOperators, newClosed);
                         operators.AddRange(newOperators);
                         refinedOperatorsFound = true;
                     }
