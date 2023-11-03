@@ -52,8 +52,8 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                //if (subDir.Name != "barman-opt11-strips")
-                //    continue;
+                if (subDir.Name != "barman-opt11-strips")
+                    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");

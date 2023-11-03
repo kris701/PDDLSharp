@@ -48,7 +48,23 @@
         public override bool Equals(object? obj)
         {
             if (obj is Operator o)
-                return o.GetHashCode() == GetHashCode();
+            {
+                if (Name != o.Name) return false;
+                if (Arguments.Length != o.Arguments.Length) return false;
+                for (int i = 0; i < Arguments.Length; i++)
+                    if (Arguments[i] != o.Arguments[i])
+                        return false;
+                foreach (var pre in Pre)
+                    if (!o.Pre.Contains(pre))
+                        return false;
+                foreach (var add in Add)
+                    if (!o.Add.Contains(add))
+                        return false;
+                foreach (var del in Del)
+                    if (!o.Del.Contains(del))
+                        return false;
+                return true;
+            }
             return false;
         }
 
