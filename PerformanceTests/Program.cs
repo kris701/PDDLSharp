@@ -52,7 +52,7 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                if (subDir.Name != "barman-opt11-strips")
+                if (subDir.Name != "barman-opt14-strips")
                     continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
@@ -88,7 +88,7 @@ namespace PerformanceTests
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
                                     planner.Log = true;
-                                    planner.SearchLimit = TimeSpan.FromSeconds(60);
+                                    planner.SearchLimit = TimeSpan.FromSeconds(600);
 
                                     var plan = new ActionPlan(new List<GroundedAction>());
 

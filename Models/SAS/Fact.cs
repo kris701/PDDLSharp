@@ -2,6 +2,7 @@
 {
     public class Fact
     {
+        public int ID { get; set; } = -1;
         public string Name { get; }
         public string[] Arguments { get; }
 
@@ -32,12 +33,8 @@
         {
             if (obj is Fact f)
             {
-                if (GetHashCode() != f.GetHashCode()) return false;
-                if (f.Name != Name) return false;
-                if (f.Arguments.Length != Arguments.Length) return false;
-                for (int i = 0; i < Arguments.Length; i++)
-                    if (f.Arguments[i] != Arguments[i])
-                        return false;
+                if (ID != f.ID)
+                    return false;
                 return true;
             }
             return false;

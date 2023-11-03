@@ -18,6 +18,9 @@ namespace PDDLSharp.Translators
         public bool Aborted { get; internal set; }
         private ParametizedGrounder? _grounder;
         private NodeDeconstructor? _deconstructor;
+        private HashSet<Fact> _factSet = new HashSet<Fact>();
+        private int _factID = 0;
+        private int _opID = 0;
 
         public PDDLToSASTranslator(bool removeStaticsFromOutput = false)
         {
@@ -63,6 +66,9 @@ namespace PDDLSharp.Translators
             grounder.RemoveStaticsFromOutput = RemoveStaticsFromOutput;
             var deconstructor = new NodeDeconstructor(grounder);
             _deconstructor = deconstructor;
+            _factID = 0;
+            _factSet = new HashSet<Fact>();
+            _opID = 0;
 
             // Domain variables
             if (from.Problem.Objects != null)
@@ -161,7 +167,9 @@ namespace PDDLSharp.Translators
                         var add = effFacts[true];
                         var del = effFacts[false];
 
-                        operators.Add(new Operator(act.Name, args.ToArray(), pre.ToArray(), add.ToArray(), del.ToArray()));
+                        var newOp = new Operator(act.Name, args.ToArray(), pre.ToArray(), add.ToArray(), del.ToArray());
+                        newOp.ID = _opID++;
+                        operators.Add(newOp);
                     }
                 }
 
@@ -175,7 +183,27 @@ namespace PDDLSharp.Translators
             var args = new List<string>();
             foreach (var arg in pred.Arguments)
                 args.Add(arg.Name);
-            return new Fact(name, args.ToArray());
+            var newFact = new Fact(name, args.ToArray());
+            var compound = GetCompound(newFact);
+            var find = _factSet.FirstOrDefault(x => GetCompound(x) == compound);
+            if (find == null)
+            {
+                newFact.ID = _factID++;
+                _factSet.Add(newFact);
+            }
+            else
+            {
+                newFact.ID = find.ID;
+            }
+            return newFact;
+        }
+
+        private string GetCompound(Fact f)
+        {
+            var retStr = f.Name;
+            foreach (var arg in f.Arguments)
+                retStr += arg;
+            return retStr;
         }
 
         private void CheckIfValid(PDDLDecl decl)
