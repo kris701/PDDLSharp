@@ -9,6 +9,7 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Parsers.FastDownward.SAS;
@@ -20,6 +21,7 @@ using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
 using PDDLSharp.Translators;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace PerformanceTests
@@ -62,8 +64,8 @@ namespace PerformanceTests
                 var domain = Path.Combine(subDir.FullName, "domain.pddl");
                 if (File.Exists(domain))
                 {
-                    try
-                    {
+                    //try
+                    //{
                         foreach (var file in new DirectoryInfo(subDir.FullName).GetFiles())
                         {
                             if (file.Name != "domain.pddl")
@@ -85,34 +87,38 @@ namespace PerformanceTests
                                     couldNotSolve++;
                                     Console.WriteLine($"Translator timed out...");
                                     break;
-                                }
+                                }                                    
 
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
                                     Console.WriteLine(planner.GetType().Name);
                                     planner.SearchLimit = TimeSpan.FromMinutes(30);
 
-                                    Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
+                                planner.OnLog += (planner) =>
+                                {
+                                    Console.WriteLine($"[t={planner.SearchTime.TotalSeconds}] Evaluated {planner.Evaluations}. Expanded {planner.Expanded}. Generated {planner.Generated}.");
+                                };
+                                Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
                                     Console.WriteLine($"Solving...");
                                     var plan = new ActionPlan(new List<GroundedAction>());
-                                    try
-                                    {
+                                    //try
+                                    //{
                                         plan = planner.Solve();
-                                    }
-                                    catch (RelaxedPlanningGraphException ex)
-                                    {
+                    //            }
+                    //                catch (RelaxedPlanningGraphException ex)
+                    //{
 
-                                    }
-                                    catch (NoSolutionFoundException ex)
-                                    {
-                                    };
+                    //}
+                    //catch (NoSolutionFoundException ex)
+                    //{
+                    //};
 
-                                    if (!planner.Aborted)
+                    if (!planner.Aborted)
                                     {
                                         couldSolve++;
                                         Console.WriteLine($"Search took {planner.SearchTime.TotalSeconds}s");
                                         Console.WriteLine($"Generated {planner.Generated} states and expanded {planner.Expanded}");
-                                        Console.WriteLine($"Had {planner.OperatorsUsed} operators to use out of {planner.Declaration.Operators.Count}");
+                                        //Console.WriteLine($"Had {planner.OperatorsUsed} operators to use out of {planner.Declaration.Operators.Count}");
                                         Console.WriteLine($"Heuristic evaluated {planner.Evaluations} times");
                                         Console.WriteLine($"Actually used {plan.Plan.Count} operators");
 
@@ -131,12 +137,12 @@ namespace PerformanceTests
                                 break;
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        couldNotSolve++;
-                        Console.WriteLine($"Cannot solve for domain: {ex.Message}");
-                    }
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    couldNotSolve++;
+                    //    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
+                    //}
                 }
             }
             Console.WriteLine($"");

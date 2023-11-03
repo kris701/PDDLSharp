@@ -25,11 +25,11 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             _generator.ClearCaches();
         }
 
-        public HashSet<Operator> GenerateReplaxedPlan(ISASState state, List<Operator> operators)
+        public List<Operator> GenerateReplaxedPlan(ISASState state, List<Operator> operators)
         {
-            var hash = state.GetHashCode();
-            if (_opCache.ContainsKey(hash))
-                return _opCache[hash];
+            //var hash = state.GetHashCode();
+            //if (_opCache.ContainsKey(hash))
+            //    return _opCache[hash];
 
             Failed = false;
             if (state is not RelaxedSASStateSpace)
@@ -39,51 +39,64 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             if (graphLayers.Count == 0)
             {
                 Failed = true;
-                _opCache.Add(hash, new HashSet<Operator>());
-                return new HashSet<Operator>();
+                //_opCache.Add(hash, new HashSet<Operator>());
+                return new List<Operator>();
             }
-            var selectedOperators = ReconstructPlan(graphLayers);
+            var selectedOperators = ReconstructPlan2(graphLayers);
 
-            _opCache.Add(hash, selectedOperators);
+            //_opCache.Add(hash, selectedOperators);
             return selectedOperators;
         }
 
-        private HashSet<Operator> ReconstructPlan(List<Layer> graphLayers)
+        // Hoffman & Nebel 2001, Figure 2
+        private List<Operator> ReconstructPlan2(List<Layer> graphLayers)
         {
-            var selectedOperators = new HashSet<Operator>();
+            var selectedOperators = new List<Operator>();
+            var G = new Dictionary<int, HashSet<Fact>>();
+            var trues = new Dictionary<int, HashSet<Fact>>();
             var m = -1;
             foreach (var fact in Declaration.Goal)
                 m = Math.Max(m, FirstLevel(fact, graphLayers));
 
-            if (m == -1)
-                throw new RelaxedPlanningGraphException("Relaxed plan graph was not valid!");
-
-            var G = new Dictionary<int, List<Fact>>();
-            for (int t = 0; t <= m; t++)
+            G.Add(0, new HashSet<Fact>());
+            trues.Add(0, new HashSet<Fact>());
+            for (int t = 1; t <= m; t++)
             {
-                G.Add(t, new List<Fact>());
+                G.Add(t, new HashSet<Fact>());
+                trues.Add(t, new HashSet<Fact>());
                 foreach (var fact in Declaration.Goal)
                     if (FirstLevel(fact, graphLayers) == t)
                         G[t].Add(fact);
             }
 
-            for (int t = m; t >= 0; t--)
+            for (int i = m; i > 0; i--)
             {
-                foreach (var fact in G[t])
+                foreach (var fact in G[i])
                 {
-                    foreach (var op in graphLayers[t].Operators)
-                    {
+                    if (trues[i].Contains(fact))
+                        continue;
+
+                    var options = new PriorityQueue<Operator, int>();
+                    foreach (var op in graphLayers[i - 1].Operators)
                         if (op.Add.Contains(fact))
+                            options.Enqueue(op, Difficulty(op, graphLayers));
+
+                    if (options.Count > 0)
+                    {
+                        var best = options.Dequeue();
+                        selectedOperators.Add(best);
+                        foreach (var pre in best.Pre)
                         {
-                            selectedOperators.Add(op);
-                            foreach (var pre in op.Pre)
-                            {
-                                var newGoal = FirstLevel(pre, graphLayers);
-                                if (newGoal == t)
-                                    break;
-                                G[newGoal].Add(pre);
-                            }
-                            break;
+                            var targetLayer = FirstLevel(pre, graphLayers);
+                            if (targetLayer == i || trues[i - 1].Contains(pre))
+                                continue;
+                            G[targetLayer].Add(pre);
+                        }
+
+                        foreach (var add in best.Add)
+                        {
+                            trues[i - 1].Add(add);
+                            trues[i].Add(add);
                         }
                     }
                 }
@@ -92,12 +105,21 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             return selectedOperators;
         }
 
+        // Hoffman & Nebel 2001, Equation 4
+        private int Difficulty(Operator op, List<Layer> graphLayers)
+        {
+            int diff = int.MaxValue;
+            foreach (var pre in op.Pre)
+                diff = Math.Min(diff, FirstLevel(pre, graphLayers));
+            return diff;
+        }
+
         private int FirstLevel(Fact fact, List<Layer> layers)
         {
             for (int i = 0; i < layers.Count; i++)
                 if (layers[i].Propositions.Contains(fact))
                     return i;
-            return -1;
+            throw new Exception();
         }
     }
 }

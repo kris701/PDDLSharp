@@ -5,6 +5,9 @@ namespace PDDLSharp.Toolkit.Planners
 {
     public interface IPlanner : IDisposable
     {
+        public delegate void LogHandler(IPlanner plannerState);
+        public event LogHandler? OnLog;
+
         public SASDecl Declaration { get; }
         public IHeuristic Heuristic { get; }
 

@@ -3,11 +3,14 @@ using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.StateSpace.SAS;
 using System.Diagnostics;
 using System.Timers;
+using static PDDLSharp.Toolkit.Planners.IPlanner;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
     public abstract class BaseSearch : IPlanner
     {
+        public event LogHandler? OnLog;
+
         public SASDecl Declaration { get; }
         public int Generated { get; internal set; }
         public int Expanded { get; internal set; }
@@ -19,6 +22,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         internal HashSet<StateMove> _closedList = new HashSet<StateMove>();
         internal RefPriorityQueue _openList = new RefPriorityQueue();
+        Stopwatch _watch = new Stopwatch();
 
         public BaseSearch(SASDecl decl, IHeuristic heuristic)
         {
@@ -37,10 +41,16 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         public ActionPlan Solve()
         {
+            var logTimer = GetTimer(TimeSpan.FromSeconds(1));
+            logTimer.Elapsed -= OnTimedOut;
+            logTimer.Elapsed += OnLogStart;
+            logTimer.AutoReset = true;
+            if (OnLog != null)
+                logTimer.Start();
+
             var timer = GetTimer(SearchLimit);
             timer.Start();
-            var watch = new Stopwatch();
-            watch.Start();
+            _watch.Start();
 
             var state = new SASStateSpace(Declaration);
             if (state.IsInGoal())
@@ -53,15 +63,24 @@ namespace PDDLSharp.Toolkit.Planners.Search
             Generated = 0;
 
             var result = Solve(Heuristic, state);
-            watch.Stop();
+            _watch.Stop();
             timer.Stop();
-            SearchTime = watch.Elapsed;
+            if (OnLog != null)
+                logTimer.Stop();
+            SearchTime = _watch.Elapsed;
             return result;
         }
 
         private void OnTimedOut(object? source, ElapsedEventArgs e)
         {
             Aborted = true;
+        }
+
+        private void OnLogStart(object? source, ElapsedEventArgs e)
+        {
+            SearchTime = _watch.Elapsed;
+            if (OnLog != null)
+                OnLog.Invoke(this);
         }
 
         internal ISASState GenerateNewState(ISASState state, Operator op)

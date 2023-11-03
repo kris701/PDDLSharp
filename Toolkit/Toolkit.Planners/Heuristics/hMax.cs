@@ -20,6 +20,8 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             var dict = _graphGenerator.GenerateRelaxedGraph(state, operators);
             foreach (var fact in state.Declaration.Goal)
             {
+                if (!dict.ContainsKey(fact))
+                    return int.MaxValue;
                 var factCost = dict[fact];
                 if (factCost == int.MaxValue)
                     return int.MaxValue;
