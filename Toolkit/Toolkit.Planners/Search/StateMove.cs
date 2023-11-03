@@ -47,7 +47,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public override bool Equals(object? obj)
         {
             if (obj is StateMove move)
-                return move.GetHashCode() == GetHashCode();
+                return move.State.Equals(State);
             return false;
         }
     }

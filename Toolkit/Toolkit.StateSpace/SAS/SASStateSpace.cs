@@ -29,9 +29,21 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
             return new SASStateSpace(Declaration, newState.ToHashSet());
         }
 
-        public bool Add(Fact pred) => State.Add(pred);
+        public bool Add(Fact pred)
+        {
+            var changed = State.Add(pred);
+            if (changed)
+                _hashCache = -1;
+            return changed;
+        }
         public bool Add(string pred, params string[] arguments) => Add(new Fact(pred, arguments));
-        public bool Del(Fact pred) => State.Remove(pred);
+        public bool Del(Fact pred)
+        {
+            var changed = State.Remove(pred);
+            if (changed)
+                _hashCache = -1;
+            return changed;
+        }
         public bool Del(string pred, params string[] arguments) => Del(new Fact(pred, arguments));
         public bool Contains(Fact pred) => State.Contains(pred);
         public bool Contains(string pred, params string[] arguments) => Contains(new Fact(pred, arguments));
@@ -40,6 +52,8 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
         {
             if (obj is ISASState other)
             {
+                if (GetHashCode() != other.GetHashCode()) return false;
+                if (other.State.Count != State.Count) return false;
                 foreach (var item in State)
                     if (!other.State.Contains(item))
                         return false;
@@ -48,11 +62,15 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
             return false;
         }
 
+        private int _hashCache = -1;
         public override int GetHashCode()
         {
+            if (_hashCache != -1)
+                return _hashCache;
             int hash = State.Count;
             foreach (var item in State)
                 hash ^= item.GetHashCode();
+            _hashCache = hash;
             return hash;
         }
 

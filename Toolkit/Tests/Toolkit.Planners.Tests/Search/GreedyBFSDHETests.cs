@@ -1,4 +1,5 @@
-﻿using PDDLSharp.Models.PDDL;
+﻿using PDDLSharp.Models.FastDownward.Plans;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Heuristics;
@@ -59,7 +60,6 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
         [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl")]
         [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl")]
         [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl")]
-        [ExpectedException(typeof(NoSolutionFoundException))]
         public void Cant_FindSolution_hDepth_IfImpossible(string domain, string problem)
         {
             // ARRANGE
@@ -70,6 +70,9 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search
 
             // ACT
             var result = planner.Solve();
+
+            // ASSERT
+            Assert.AreEqual(new ActionPlan(), result);
         }
     }
 }

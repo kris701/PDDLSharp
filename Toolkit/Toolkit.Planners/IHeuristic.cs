@@ -8,5 +8,6 @@ namespace PDDLSharp.Toolkit.Planners
     {
         public int Evaluations { get; }
         public int GetValue(StateMove parent, ISASState state, List<Operator> operators);
+        public void Reset();
     }
 }

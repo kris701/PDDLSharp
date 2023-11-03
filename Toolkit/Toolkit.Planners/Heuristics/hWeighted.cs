@@ -23,5 +23,11 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             Evaluations++;
             return (int)((double)Heuristic.GetValue(parent, state, operators) * Weight);
         }
+
+        public override void Reset()
+        {
+            base.Reset();
+            Heuristic.Reset();
+        }
     }
 }

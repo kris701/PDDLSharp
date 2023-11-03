@@ -14,7 +14,6 @@ using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Parsers.FastDownward.SAS;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.MacroGenerators;
-using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
@@ -53,8 +52,6 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                //if (subDir.Name != "maintenance-opt14-adl")
-                //    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
@@ -76,7 +73,7 @@ namespace PerformanceTests
 
                                 Console.WriteLine($"Translating...");
                                 ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
-                                translator.TimeLimit = TimeSpan.FromSeconds(10);
+                                translator.TimeLimit = TimeSpan.FromSeconds(30);
                                 var decl = translator.Translate(pddlDecl);
 
                                 if (translator.Aborted)
@@ -88,44 +85,22 @@ namespace PerformanceTests
 
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
-                                    Console.WriteLine(planner.GetType().Name);
-                                    planner.SearchLimit = TimeSpan.FromSeconds(10);
+                                    planner.Log = true;
+                                    planner.SearchLimit = TimeSpan.FromSeconds(60);
 
-                                    Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
-                                    Console.WriteLine($"Solving...");
                                     var plan = new ActionPlan(new List<GroundedAction>());
-                                    try
-                                    {
-                                        plan = planner.Solve();
-                                    }
-                                    catch (RelaxedPlanningGraphException ex)
-                                    {
 
-                                    }
-                                    catch (NoSolutionFoundException ex)
-                                    {
-                                    };
+                                    plan = planner.Solve();
 
                                     if (!planner.Aborted)
                                     {
-                                        couldSolve++;
-                                        Console.WriteLine($"Search took {planner.SearchTime.TotalSeconds}s");
-                                        Console.WriteLine($"Generated {planner.Generated} states and expanded {planner.Expanded}");
-                                        Console.WriteLine($"Had {planner.OperatorsUsed} operators to use out of {planner.Declaration.Operators.Count}");
-                                        Console.WriteLine($"Heuristic evaluated {planner.Evaluations} times");
-                                        Console.WriteLine($"Actually used {plan.Plan.Count} operators");
-
-                                        Console.WriteLine($"{planner.GetType().Name} plan have a cost of {plan.Cost}");
                                         if (validator.Validate(plan, pddlDecl))
-                                            Console.WriteLine($"{planner.GetType().Name} plan is valid!");
+                                            couldSolve++;
                                         else
-                                            Console.WriteLine($"{planner.GetType().Name} plan is NOT valid!");
+                                            couldNotSolve++;
                                     }
                                     else
-                                    {
                                         couldNotSolve++;
-                                        Console.WriteLine($"Planner timed out...");
-                                    }
                                 }
                                 break;
                             }
@@ -133,7 +108,6 @@ namespace PerformanceTests
                     }
                     catch (Exception ex)
                     {
-                        couldNotSolve++;
                         Console.WriteLine($"Cannot solve for domain: {ex.Message}");
                     }
                 }

@@ -44,12 +44,12 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
         }
 
         [TestMethod]
-        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl", 0, 6, 10)]
-        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl", 0, 30, 58)]
-        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl", 0, 8, 20, 14, 14)]
-        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl", 0, 9, 27, 42, 88, 223, 239)]
-        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl", 0, 1, 2, 1)]
-        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl", 0, 3, 11, 2)]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl", 6, 16, 20)]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl", 30, 88, 116)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl", 8, 28, 42, 56, 90)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl", 9, 36, 78, 166, 389, 628, 808)]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl", 1, 3, 4, 4)]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl", 3, 14, 16, 16)]
         public void Can_GenerateGraph_Layer_ActionSize(string domain, string problem, params int[] expecteds)
         {
             // ARRANGE
@@ -64,27 +64,6 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             Assert.AreEqual(expecteds.Length, graph.Count);
             for (int i = 0; i < expecteds.Length; i++)
                 Assert.AreEqual(expecteds[i], graph[i].Operators.Count);
-        }
-
-        [TestMethod]
-        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl")]
-        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl")]
-        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl")]
-        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl")]
-        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl")]
-        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl")]
-        public void Can_GenerateGraph_Layer_ActionSize_FirstAlwaysZero(string domain, string problem)
-        {
-            // ARRANGE
-            var decl = GetSASDecl(domain, problem);
-            var state = new RelaxedSASStateSpace(decl);
-            var generator = new OperatorRPG();
-
-            // ACT
-            var graph = generator.GenerateRelaxedPlanningGraph(state, decl.Operators);
-
-            // ASSERT
-            Assert.AreEqual(0, graph[0].Operators.Count);
         }
 
         [TestMethod]
@@ -137,9 +116,9 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                 new Operator(
                     "non-applicable",
                     new string[]{ "?a" },
-                    new HashSet<Fact>(){ new Fact("wew", "?a") },
-                    new HashSet<Fact>(){ },
-                    new HashSet<Fact>(){ })
+                    new Fact[]{ new Fact("wew", "?a") },
+                    new Fact[]{ },
+                    new Fact[]{ })
             };
             var generator = new OperatorRPG();
 
@@ -163,9 +142,9 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                 new Operator(
                     "non-applicable",
                     new string[]{ "?a" },
-                    new HashSet<Fact>(){ },
-                    new HashSet<Fact>(){ },
-                    new HashSet<Fact>(){ })
+                    new Fact[]{ },
+                    new Fact[]{ },
+                    new Fact[]{ })
             };
             var generator = new OperatorRPG();
 

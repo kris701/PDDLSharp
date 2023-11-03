@@ -2,13 +2,14 @@
 {
     public class Operator
     {
+        public int ID { get; set; } = -1;
         public string Name { get; }
         public string[] Arguments { get; }
-        public HashSet<Fact> Pre { get; }
-        public HashSet<Fact> Add { get; }
-        public HashSet<Fact> Del { get; }
+        public Fact[] Pre { get; }
+        public Fact[] Add { get; }
+        public Fact[] Del { get; }
 
-        public Operator(string name, string[] arguments, HashSet<Fact> pre, HashSet<Fact> add, HashSet<Fact> del)
+        public Operator(string name, string[] arguments, Fact[] pre, Fact[] add, Fact[] del)
         {
             Name = name;
             Arguments = arguments;
@@ -21,9 +22,9 @@
         {
             Name = "";
             Arguments = new string[0];
-            Pre = new HashSet<Fact>();
-            Add = new HashSet<Fact>();
-            Del = new HashSet<Fact>();
+            Pre = new Fact[0];
+            Add = new Fact[0];
+            Del = new Fact[0];
         }
 
         private int _hashCache = -1;
@@ -48,7 +49,11 @@
         public override bool Equals(object? obj)
         {
             if (obj is Operator o)
-                return o.GetHashCode() == GetHashCode();
+            {
+                if (ID != o.ID)
+                    return false;
+                return true;
+            }
             return false;
         }
 
@@ -63,20 +68,22 @@
         public Operator Copy()
         {
             var arguments = new string[Arguments.Length];
-            var pre = new HashSet<Fact>();
-            var add = new HashSet<Fact>();
-            var del = new HashSet<Fact>();
+            var pre = new Fact[Pre.Length];
+            var add = new Fact[Add.Length];
+            var del = new Fact[Del.Length];
 
             for (int i = 0; i < Arguments.Length; i++)
                 arguments[i] = Arguments[i];
-            foreach (var p in Pre)
-                pre.Add(p.Copy());
-            foreach (var a in Add)
-                add.Add(a.Copy());
-            foreach (var d in Del)
-                del.Add(d.Copy());
+            for (int i = 0; i < Pre.Length; i++)
+                pre[i] = Pre[i].Copy();
+            for (int i = 0; i < Add.Length; i++)
+                add[i] = Add[i].Copy();
+            for (int i = 0; i < Del.Length; i++)
+                del[i] = Del[i].Copy();
 
-            return new Operator(Name, arguments, pre, add, del);
+            var newOp = new Operator(Name, arguments, pre, add, del);
+            newOp.ID = ID;
+            return newOp;
         }
     }
 }

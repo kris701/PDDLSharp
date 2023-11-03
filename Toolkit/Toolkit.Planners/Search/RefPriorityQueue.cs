@@ -31,5 +31,13 @@
             ReferenceList.Remove(item.GetHashCode());
             return item;
         }
+
+        public List<StateMove> DequeueAll()
+        {
+            var list = new List<StateMove>();
+            while (Queue.Count > 0)
+                list.Add(Dequeue());
+            return list;
+        }
     }
 }

@@ -22,8 +22,16 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
             Evaluations++;
             int sum = 0;
             foreach (var heuristic in Heuristics)
-                sum += heuristic.GetValue(parent, state, operators);
+                if (sum < int.MaxValue)
+                    sum = ClampSum(sum, heuristic.GetValue(parent, state, operators));
             return sum;
+        }
+
+        private int ClampSum(int value1, int value2)
+        {
+            if (value1 == int.MaxValue || value2 == int.MaxValue)
+                return int.MaxValue;
+            return value1 + value2;
         }
     }
 }

@@ -20,5 +20,11 @@ namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
         }
 
         public abstract int GetValue(StateMove parent, ISASState state, List<Operator> operators);
+        public virtual void Reset()
+        {
+            Evaluations = 0;
+            foreach (var h in Heuristics)
+                h.Reset();
+        }
     }
 }

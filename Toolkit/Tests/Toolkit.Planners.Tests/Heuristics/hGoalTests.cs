@@ -64,11 +64,16 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             var decl = new SASDecl();
             decl.Goal.Clear();
             decl.Goal.Add(new Fact("goal-fact-1"));
+            decl.Goal.ElementAt(0).ID = 0;
             decl.Goal.Add(new Fact("goal-fact-2"));
+            decl.Goal.ElementAt(1).ID = 1;
             decl.Goal.Add(new Fact("goal-fact-3"));
+            decl.Goal.ElementAt(2).ID = 2;
             decl.Init.Clear();
             decl.Init.Add(new Fact("goal-fact-1"));
+            decl.Init.ElementAt(0).ID = 0;
             decl.Init.Add(new Fact("goal-fact-2"));
+            decl.Init.ElementAt(1).ID = 1;
             var h = new hGoal();
             var parent = new StateMove();
             var state = new SASStateSpace(decl);
