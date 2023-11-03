@@ -79,9 +79,11 @@
             for (int i = 0; i < Add.Length; i++)
                 add[i] = Add[i].Copy();
             for (int i = 0; i < Del.Length; i++)
-                add[i] = Del[i].Copy();
+                del[i] = Del[i].Copy();
 
-            return new Operator(Name, arguments, pre, add, del);
+            var newOp = new Operator(Name, arguments, pre, add, del);
+            newOp.ID = ID;
+            return newOp;
         }
     }
 }

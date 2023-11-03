@@ -15,7 +15,11 @@ namespace PDDLSharp.Models.Tests.SAS
             var facts = new List<Fact>();
             var rnd = new Random();
             for (int i = 0; i < amount; i++)
-                facts.Add(new Fact($"fact-{fromID + i}"));
+            {
+                var newFact = new Fact($"fact-{fromID + i}");
+                newFact.ID = fromID + i;
+                facts.Add(newFact);
+            }
 
             return facts;
         }

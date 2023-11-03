@@ -53,7 +53,9 @@
             var arguments = new string[Arguments.Length];
             for (int i = 0; i < Arguments.Length; i++)
                 arguments[i] = Arguments[i];
-            return new Fact(Name, arguments);
+            var newFact = new Fact(Name, arguments);
+            newFact.ID = ID;
+            return newFact;
         }
     }
 }

@@ -18,5 +18,10 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             Operators = new HashSet<Operator>();
             Propositions = new HashSet<Fact>();
         }
+
+        public override string? ToString()
+        {
+            return $"Ops: {Operators.Count}, Props: {Propositions.Count}";
+        }
     }
 }

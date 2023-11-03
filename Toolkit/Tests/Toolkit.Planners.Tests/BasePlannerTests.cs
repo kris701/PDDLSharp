@@ -37,7 +37,6 @@ namespace PDDLSharp.Toolkit.Planners.Tests
             ITranslator<PDDLDecl, SASDecl> translator = new PDDLToSASTranslator();
             var decl = translator.Translate(pddlDecl);
 
-
             _declCache.Add(domain + problem, decl);
             return decl;
         }
