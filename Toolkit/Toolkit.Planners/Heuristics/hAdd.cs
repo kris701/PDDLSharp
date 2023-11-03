@@ -29,5 +29,11 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
             }
             return cost;
         }
+
+        public override void Reset()
+        {
+            base.Reset();
+            _graphGenerator = new FactRPG();
+        }
     }
 }

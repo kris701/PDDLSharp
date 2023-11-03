@@ -9,28 +9,15 @@ namespace PDDLSharp.Toolkit.Planners.Tools
         public bool Failed { get; internal set; } = false;
         public SASDecl Declaration { get; set; }
         private OperatorRPG _generator;
-        private Dictionary<int, HashSet<Operator>> _opCache;
 
         public RelaxedPlanGenerator(SASDecl declaration)
         {
             Declaration = declaration;
             _generator = new OperatorRPG();
-            _opCache = new Dictionary<int, HashSet<Operator>>();
-        }
-
-        public void ClearCaches()
-        {
-            _opCache.Clear();
-            _opCache.EnsureCapacity(0);
-            _generator.ClearCaches();
         }
 
         public List<Operator> GenerateReplaxedPlan(ISASState state, List<Operator> operators)
         {
-            //var hash = state.GetHashCode();
-            //if (_opCache.ContainsKey(hash))
-            //    return _opCache[hash];
-
             Failed = false;
             if (state is not RelaxedSASStateSpace)
                 state = new RelaxedSASStateSpace(Declaration, state.State);
@@ -39,12 +26,10 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             if (graphLayers.Count == 0)
             {
                 Failed = true;
-                //_opCache.Add(hash, new HashSet<Operator>());
                 return new List<Operator>();
             }
             var selectedOperators = ReconstructPlan2(graphLayers);
 
-            //_opCache.Add(hash, selectedOperators);
             return selectedOperators;
         }
 

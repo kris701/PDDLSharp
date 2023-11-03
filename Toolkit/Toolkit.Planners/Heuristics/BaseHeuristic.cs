@@ -8,5 +8,9 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     {
         public int Evaluations { get; internal set; }
         public abstract int GetValue(StateMove parent, ISASState state, List<Operator> operators);
+        public virtual void Reset()
+        {
+            Evaluations = 0;
+        }
     }
 }

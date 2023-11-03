@@ -56,8 +56,8 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                if (subDir.Name != "barman-opt11-strips")
-                    continue;
+                //if (subDir.Name != "barman-opt11-strips")
+                //    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
@@ -91,48 +91,17 @@ namespace PerformanceTests
 
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
-                                    Console.WriteLine(planner.GetType().Name);
+                                planner.Log = true;
                                     planner.SearchLimit = TimeSpan.FromMinutes(30);
 
-                                planner.OnLog += (planner) =>
-                                {
-                                    Console.WriteLine($"[t={planner.SearchTime.TotalSeconds}] Evaluated {planner.Evaluations}. Expanded {planner.Expanded}. Generated {planner.Generated}.");
-                                };
-                                Console.WriteLine($"{planner.Declaration.Operators.Count} total operators");
-                                    Console.WriteLine($"Solving...");
                                     var plan = new ActionPlan(new List<GroundedAction>());
-                                    //try
-                                    //{
+
                                         plan = planner.Solve();
-                    //            }
-                    //                catch (RelaxedPlanningGraphException ex)
-                    //{
 
-                    //}
-                    //catch (NoSolutionFoundException ex)
-                    //{
-                    //};
-
-                    if (!planner.Aborted)
-                                    {
-                                        couldSolve++;
-                                        Console.WriteLine($"Search took {planner.SearchTime.TotalSeconds}s");
-                                        Console.WriteLine($"Generated {planner.Generated} states and expanded {planner.Expanded}");
-                                        //Console.WriteLine($"Had {planner.OperatorsUsed} operators to use out of {planner.Declaration.Operators.Count}");
-                                        Console.WriteLine($"Heuristic evaluated {planner.Evaluations} times");
-                                        Console.WriteLine($"Actually used {plan.Plan.Count} operators");
-
-                                        Console.WriteLine($"{planner.GetType().Name} plan have a cost of {plan.Cost}");
-                                        if (validator.Validate(plan, pddlDecl))
-                                            Console.WriteLine($"{planner.GetType().Name} plan is valid!");
-                                        else
-                                            Console.WriteLine($"{planner.GetType().Name} plan is NOT valid!");
-                                    }
-                                    else
-                                    {
-                                        couldNotSolve++;
-                                        Console.WriteLine($"Planner timed out...");
-                                    }
+                                if (!planner.Aborted)
+                                    couldSolve++;
+                                else
+                                    couldNotSolve++;
                                 }
                                 break;
                             }

@@ -19,7 +19,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
 
-        internal override ActionPlan Solve(IHeuristic h, ISASState state)
+        internal override ActionPlan? Solve(IHeuristic h, ISASState state)
         {
             var preferedOperators = GetPreferredOperators();
             var preferredQueue = InitializeQueue(h, state, preferedOperators);
@@ -75,7 +75,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     }
                 }
             }
-            throw new NoSolutionFoundException();
+            return null;
         }
 
         private List<Operator> GetPreferredOperators()
@@ -87,12 +87,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
             if (_graphGenerator.Failed)
                 throw new Exception("No relaxed plan could be found from the initial state! Could indicate the problem is unsolvable.");
             return operators.ToList();
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            _graphGenerator.ClearCaches();
         }
     }
 }

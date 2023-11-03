@@ -12,7 +12,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
         }
 
-        internal override ActionPlan Solve(IHeuristic h, ISASState state)
+        internal override ActionPlan? Solve(IHeuristic h, ISASState state)
         {
             while (!Aborted && _openList.Count > 0)
             {
@@ -35,7 +35,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     }
                 }
             }
-            throw new NoSolutionFoundException();
+            return null;
         }
     }
 }

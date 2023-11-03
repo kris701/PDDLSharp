@@ -21,7 +21,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             _graphGenerator = new RelaxedPlanGenerator(decl);
         }
 
-        internal override ActionPlan Solve(IHeuristic h, ISASState state)
+        internal override ActionPlan? Solve(IHeuristic h, ISASState state)
         {
             // Initial Operator Subset
             var operators = GetInitialOperators();
@@ -45,10 +45,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     {
                         var newMove = new StateMove(GenerateNewState(stateMove.State, op));
                         if (newMove.State.IsInGoal())
-                        {
-                            OperatorsUsed = operators.Count;
                             return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) });
-                        }
                         if (!_closedList.Contains(newMove) && !_fullyClosed.Contains(newMove.GetHashCode()) && !_openList.Contains(newMove))
                         {
                             var value = h.GetValue(stateMove, newMove.State, operators.ToList());
@@ -72,7 +69,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         operators = RefineOperators(operators, new HashSet<StateMove>() { stateMove });
                 }
             }
-            throw new NoSolutionFoundException();
+            return null;
         }
 
         private List<Operator> GetInitialOperators()
@@ -142,7 +139,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         ReopenClosedStates(newOperators, newClosed);
                         operators.AddRange(newOperators);
                         refinedOperatorsFound = true;
-                        Console.WriteLine("Refined!");
                     }
                     else if (lookForApplicaple)
                     {
@@ -155,6 +151,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     }
                 }
             }
+            OperatorsUsed = operators.Count;
             return operators;
         }
 
@@ -225,9 +222,13 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public override void Dispose()
         {
             base.Dispose();
-            _graphGenerator.ClearCaches();
             _fullyClosed.Clear();
             _fullyClosed.EnsureCapacity(0);
+        }
+
+        public override void LogTick()
+        {
+            Console.WriteLine($"[{GetPassedTime()}s] Expanded {Expanded} ({ExpandedPrSecond}/s). Generated {Generated} ({GeneratedPrSecond}/s). Evaluations {Heuristic.Evaluations} ({EvaluationsPrSecond}/s). Operators {OperatorsUsed} out of {Declaration.Operators.Count}");
         }
     }
 }
