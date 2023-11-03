@@ -163,7 +163,11 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         public virtual void LogStarted()
         {
-            Console.WriteLine($"Planner started: {this.GetType().Name}");
+            Console.WriteLine($"Planner {this.GetType().Name} started with heuristic {Heuristic.GetType().Name}");
+            Console.WriteLine($"Task has: {Declaration.DomainVariables.Count} domain variables");
+            Console.WriteLine($"          {Declaration.Operators.Count} operators");
+            Console.WriteLine($"          {Declaration.Init.Count} initial facts");
+            Console.WriteLine($"          {Declaration.Goal.Count} goal facts");
             Console.WriteLine($"Solving...");
         }
 

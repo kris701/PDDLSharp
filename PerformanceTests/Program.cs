@@ -64,8 +64,8 @@ namespace PerformanceTests
                 var domain = Path.Combine(subDir.FullName, "domain.pddl");
                 if (File.Exists(domain))
                 {
-                    //try
-                    //{
+                    try
+                    {
                         foreach (var file in new DirectoryInfo(subDir.FullName).GetFiles())
                         {
                             if (file.Name != "domain.pddl")
@@ -92,7 +92,7 @@ namespace PerformanceTests
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
                                 planner.Log = true;
-                                    planner.SearchLimit = TimeSpan.FromMinutes(30);
+                                    planner.SearchLimit = TimeSpan.FromSeconds(60);
 
                                     var plan = new ActionPlan(new List<GroundedAction>());
 
@@ -106,12 +106,11 @@ namespace PerformanceTests
                                 break;
                             }
                         }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    couldNotSolve++;
-                    //    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
-                    //}
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Cannot solve for domain: {ex.Message}");
+                    }
                 }
             }
             Console.WriteLine($"");
