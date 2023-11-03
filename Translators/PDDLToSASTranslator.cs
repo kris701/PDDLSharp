@@ -161,7 +161,7 @@ namespace PDDLSharp.Translators
                         var add = effFacts[true];
                         var del = effFacts[false];
 
-                        operators.Add(new Operator(act.Name, args.ToArray(), pre, add, del));
+                        operators.Add(new Operator(act.Name, args.ToArray(), pre.ToArray(), add.ToArray(), del.ToArray()));
                     }
                 }
 

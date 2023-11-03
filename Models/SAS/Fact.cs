@@ -32,6 +32,7 @@
         {
             if (obj is Fact f)
             {
+                if (GetHashCode() != f.GetHashCode()) return false;
                 if (f.Name != Name) return false;
                 if (f.Arguments.Length != Arguments.Length) return false;
                 for (int i = 0; i < Arguments.Length; i++)

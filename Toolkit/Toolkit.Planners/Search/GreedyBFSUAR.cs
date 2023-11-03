@@ -56,7 +56,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
                     }
                 }
 
-                if (current > best || best == int.MaxValue)
+                if (current > best)
                 {
                     if (!haveOnce)
                     {

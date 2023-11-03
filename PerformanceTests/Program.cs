@@ -95,7 +95,12 @@ namespace PerformanceTests
                                     plan = planner.Solve();
 
                                     if (!planner.Aborted)
-                                        couldSolve++;
+                                    {
+                                        if (validator.Validate(plan, pddlDecl))
+                                            couldSolve++;
+                                        else
+                                            couldNotSolve++;
+                                    }
                                     else
                                         couldNotSolve++;
                                 }

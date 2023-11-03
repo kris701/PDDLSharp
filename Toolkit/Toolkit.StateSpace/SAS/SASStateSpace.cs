@@ -52,6 +52,8 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
         {
             if (obj is ISASState other)
             {
+                if (GetHashCode() != other.GetHashCode()) return false;
+                if (other.State.Count != State.Count) return false;
                 foreach (var item in State)
                     if (!other.State.Contains(item))
                         return false;
