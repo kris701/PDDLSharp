@@ -9,19 +9,15 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Parsers.FastDownward.SAS;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.MacroGenerators;
-using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Heuristics;
-using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
 using PDDLSharp.Translators;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace PerformanceTests
@@ -87,21 +83,21 @@ namespace PerformanceTests
                                     couldNotSolve++;
                                     Console.WriteLine($"Translator timed out...");
                                     break;
-                                }                                    
+                                }
 
                                 using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
-                                planner.Log = true;
+                                    planner.Log = true;
                                     planner.SearchLimit = TimeSpan.FromSeconds(60);
 
                                     var plan = new ActionPlan(new List<GroundedAction>());
 
-                                        plan = planner.Solve();
+                                    plan = planner.Solve();
 
-                                if (!planner.Aborted)
-                                    couldSolve++;
-                                else
-                                    couldNotSolve++;
+                                    if (!planner.Aborted)
+                                        couldSolve++;
+                                    else
+                                        couldNotSolve++;
                                 }
                                 break;
                             }

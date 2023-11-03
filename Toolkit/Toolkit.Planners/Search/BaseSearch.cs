@@ -3,7 +3,6 @@ using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.StateSpace.SAS;
 using System.Diagnostics;
 using System.Timers;
-using static PDDLSharp.Toolkit.Planners.IPlanner;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {
@@ -179,7 +178,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
         public virtual void LogAbort()
         {
             Console.WriteLine($"[{GetPassedTime()}s] Aborting!");
-            Console.WriteLine($"[{GetPassedTime()}s] Planner timed out...");        }
+            Console.WriteLine($"[{GetPassedTime()}s] Planner timed out...");
+        }
 
         public virtual void LogFail()
         {

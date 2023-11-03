@@ -3,8 +3,6 @@ using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace.SAS;
-using PDDLSharp.Tools;
-using System.Diagnostics;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {

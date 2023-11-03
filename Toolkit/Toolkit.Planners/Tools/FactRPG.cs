@@ -1,5 +1,4 @@
 ﻿using PDDLSharp.Models.SAS;
-using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Tools
@@ -57,7 +56,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                     }
                     if (apply.Count == 0)
                         return dict;
-                        //throw new RelaxedPlanningGraphException("No applicable actions found!");
+                    //throw new RelaxedPlanningGraphException("No applicable actions found!");
 
                     state = state.Copy();
                     int changed = 0;

@@ -29,7 +29,7 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
             return new SASStateSpace(Declaration, newState.ToHashSet());
         }
 
-        public bool Add(Fact pred) 
+        public bool Add(Fact pred)
         {
             var changed = State.Add(pred);
             if (changed)
