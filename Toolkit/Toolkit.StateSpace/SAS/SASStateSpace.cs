@@ -74,16 +74,12 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
             return hash;
         }
 
-        public virtual int ExecuteNode(Operator node)
+        public virtual void ExecuteNode(Operator node)
         {
-            int changes = 0;
             foreach (var fact in node.Del)
-                if (State.Remove(fact))
-                    changes--;
+                State.Remove(fact);
             foreach (var fact in node.Add)
-                if (State.Add(fact))
-                    changes++;
-            return changes;
+                State.Add(fact);
         }
 
         public bool IsNodeTrue(Operator node)

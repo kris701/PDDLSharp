@@ -8,12 +8,12 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
     public class hFF : BaseHeuristic
     {
         private SASDecl _declaration;
-        private RelaxedPlanGenerator _graphGenerator;
+        private OperatorRPG _graphGenerator;
 
         public hFF(SASDecl declaration)
         {
             _declaration = declaration;
-            _graphGenerator = new RelaxedPlanGenerator(declaration);
+            _graphGenerator = new OperatorRPG(declaration);
         }
 
         public override int GetValue(StateMove parent, ISASState state, List<Operator> operators)
@@ -30,7 +30,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
         public override void Reset()
         {
             base.Reset();
-            _graphGenerator = new RelaxedPlanGenerator(_declaration);
+            _graphGenerator = new OperatorRPG(_declaration);
         }
     }
 }

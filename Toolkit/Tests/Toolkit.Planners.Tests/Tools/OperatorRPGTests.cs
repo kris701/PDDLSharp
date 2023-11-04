@@ -20,8 +20,55 @@ using System.Threading.Tasks;
 namespace PDDLSharp.Toolkit.Planners.Tests.Tools
 {
     [TestClass]
-    public class RelaxedPlanningGraphTests : BasePlannerTests
+    public class OperatorRPGTests : BasePlannerTests
     {
+        [TestMethod]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl")]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl")]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl")]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl")]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl")]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl")]
+        public void Can_GenerateRelaxedPlan_ResultsInGoal(string domain, string problem)
+        {
+            // ARRANGE
+            var decl = GetSASDecl(domain, problem);
+            var state = new RelaxedSASStateSpace(decl);
+            var generator = new OperatorRPG(decl);
+
+            // ACT
+            var result = generator.GenerateReplaxedPlan(state, decl.Operators);
+
+            // ASSERT
+            Assert.IsFalse(generator.Failed);
+            Assert.IsFalse(state.IsInGoal());
+            foreach (var item in result)
+                state.ExecuteNode(item);
+            Assert.IsTrue(state.IsInGoal());
+        }
+
+        [TestMethod]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl", 5)]
+        [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl", 29)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p01.pddl", 10)]
+        [DataRow("TestData/depot/domain.pddl", "TestData/depot/p05.pddl", 37)]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s1-0.pddl", 3)]
+        [DataRow("TestData/miconic/domain.pddl", "TestData/miconic/s2-4.pddl", 6)]
+        public void Can_GenerateRelaxedPlan_Length(string domain, string problem, int expected)
+        {
+            // ARRANGE
+            var decl = GetSASDecl(domain, problem);
+            var state = new RelaxedSASStateSpace(decl);
+            var generator = new OperatorRPG(decl);
+
+            // ACT
+            var result = generator.GenerateReplaxedPlan(state, decl.Operators);
+
+            // ASSERT
+            Assert.IsFalse(generator.Failed);
+            Assert.AreEqual(expected, result.Count);
+        }
+
         [TestMethod]
         [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob01.pddl", 3)]
         [DataRow("TestData/gripper/domain.pddl", "TestData/gripper/prob06.pddl", 3)]
@@ -34,7 +81,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             // ARRANGE
             var decl = GetSASDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
-            var generator = new OperatorRPG();
+            var generator = new OperatorRPG(decl);
 
             // ACT
             var graph = generator.GenerateRelaxedPlanningGraph(state, decl.Operators);
@@ -55,7 +102,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             // ARRANGE
             var decl = GetSASDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
-            var generator = new OperatorRPG();
+            var generator = new OperatorRPG(decl);
 
             // ACT
             var graph = generator.GenerateRelaxedPlanningGraph(state, decl.Operators);
@@ -78,7 +125,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             // ARRANGE
             var decl = GetSASDecl(domain, problem);
             var state = new RelaxedSASStateSpace(decl);
-            var generator = new OperatorRPG();
+            var generator = new OperatorRPG(decl);
 
             // ACT
             var graph = generator.GenerateRelaxedPlanningGraph(state, decl.Operators);
@@ -94,7 +141,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
             var decl = new SASDecl();
             decl.Goal.Add(new Fact("abc"));
             var state = new RelaxedSASStateSpace(decl);
-            var generator = new OperatorRPG();
+            var generator = new OperatorRPG(decl);
 
             // ACT
             var result = generator.GenerateRelaxedPlanningGraph(state, new List<Operator>());
@@ -120,7 +167,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                     new Fact[]{ },
                     new Fact[]{ })
             };
-            var generator = new OperatorRPG();
+            var generator = new OperatorRPG(decl);
 
             // ACT
             var result = generator.GenerateRelaxedPlanningGraph(state, actions);
@@ -146,7 +193,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Tools
                     new Fact[]{ },
                     new Fact[]{ })
             };
-            var generator = new OperatorRPG();
+            var generator = new OperatorRPG(decl);
 
             // ACT
             var result = generator.GenerateRelaxedPlanningGraph(state, actions);

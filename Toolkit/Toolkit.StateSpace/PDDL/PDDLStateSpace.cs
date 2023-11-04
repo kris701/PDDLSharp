@@ -119,19 +119,15 @@ namespace PDDLSharp.Toolkit.StateSpace.PDDL
             return hash;
         }
 
-        public virtual int ExecuteNode(INode node)
+        public virtual void ExecuteNode(INode node)
         {
             _tempAdd.Clear();
             _tempDel.Clear();
             ExecuteNode(node, false);
-            int changes = 0;
             foreach (var item in _tempDel)
-                if (Del(item))
-                    changes--;
+                Del(item);
             foreach (var item in _tempAdd)
-                if (Add(item))
-                    changes++;
-            return changes;
+                Add(item);
         }
         internal void ExecuteNode(INode node, bool isNegative)
         {

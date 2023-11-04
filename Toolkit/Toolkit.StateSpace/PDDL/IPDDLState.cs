@@ -17,7 +17,7 @@ namespace PDDLSharp.Toolkit.StateSpace.PDDL
         public bool Contains(PredicateExp pred);
         public bool Contains(string pred, params string[] arguments);
 
-        public int ExecuteNode(INode op);
+        public void ExecuteNode(INode op);
         public bool IsNodeTrue(INode op);
     }
 }

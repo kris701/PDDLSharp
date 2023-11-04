@@ -16,7 +16,7 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
         public bool Contains(Fact fact);
         public bool Contains(string fact, params string[] arguments);
 
-        public int ExecuteNode(Operator op);
+        public void ExecuteNode(Operator op);
         public bool IsNodeTrue(Operator op);
     }
 }
