@@ -1,6 +1,5 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.SAS;
-using PDDLSharp.Toolkit.Planners.Exceptions;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Toolkit.StateSpace.SAS;
 
@@ -116,7 +115,10 @@ namespace PDDLSharp.Toolkit.Planners.Search
                         return operators;
 
                     if (lookForApplicaple)
-                        throw new NoSolutionFoundException();
+                    {
+                        Aborted = true;
+                        return operators;
+                    }
 
                     // Refinement Step 4
                     smallestHValue = -1;
@@ -176,7 +178,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var relaxedPlanOperators = new List<Operator>();
             foreach (var item in allSmallest)
             {
-                if (Aborted) throw new NoSolutionFoundException();
+                if (Aborted) return new List<Operator>();
                 var hash = item.GetHashCode();
                 if (_relaxedCache.ContainsKey(hash))
                     relaxedPlanOperators.AddRange(_relaxedCache[hash].Except(operators).Except(relaxedPlanOperators));
@@ -202,7 +204,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             var applicableOperators = new List<Operator>();
             foreach (var item in allSmallest)
             {
-                if (Aborted) throw new NoSolutionFoundException();
+                if (Aborted) return new List<Operator>();
                 foreach (var op in Declaration.Operators)
                 {
                     if (!operators.Contains(op))

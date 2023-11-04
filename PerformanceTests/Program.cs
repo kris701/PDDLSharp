@@ -83,7 +83,7 @@ namespace PerformanceTests
                                     break;
                                 }
 
-                                using (var planner = new GreedyBFSUAR(decl, new hMax()))
+                                using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
                                 {
                                     planner.Log = true;
                                     planner.SearchLimit = TimeSpan.FromSeconds(60);
