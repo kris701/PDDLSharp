@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace PDDLSharp.Toolkit.Planners.Tools
 {
-    public class OperatorRPG
+    public class OperatorRPG : BaseRPG
     {
         public bool Failed { get; internal set; } = false;
         public SASDecl Declaration { get; set; }
@@ -124,9 +124,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 if (state.State.Count == layers[previousLayer].Propositions.Count)
                     return new List<Layer>();
 
-                newLayer = new Layer();
-                newLayer.Propositions = state.State;
-                newLayer.Operators = new List<Operator>(layers[previousLayer].Operators);
+                newLayer = new Layer(new List<Operator>(layers[previousLayer].Operators), state.State);
                 newLayer.Operators.AddRange(GetNewApplicableOperators(state, operators, covered));
 
                 // Error condition: there are no applicable actions at all (most likely means the problem is unsolvable)
@@ -139,20 +137,6 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 layers.Add(newLayer);
             }
             return layers;
-        }
-
-        private List<Operator> GetNewApplicableOperators(ISASState state, List<Operator> operators, bool[] covered)
-        {
-            var result = new List<Operator>();
-            for (int i = 0; i < covered.Length; i++)
-            {
-                if (!covered[i] && state.IsNodeTrue(operators[i]))
-                {
-                    result.Add(operators[i]);
-                    covered[i] = true;
-                }
-            }
-            return result;
         }
     }
 }

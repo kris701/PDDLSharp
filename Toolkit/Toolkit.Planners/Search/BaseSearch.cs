@@ -32,7 +32,6 @@ namespace PDDLSharp.Toolkit.Planners.Search
         {
             if (elapsed.TotalMilliseconds == 0)
                 return 0;
-
             return Math.Round(amount / (elapsed.TotalMilliseconds / 1000), 1);
         }
 
