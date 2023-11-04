@@ -62,7 +62,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 
                     var options = new PriorityQueue<Operator, int>();
                     foreach (var op in graphLayers[i - 1].Operators)
-                        if (op.Add.Contains(fact))
+                        if (op.AddRef.Contains(fact.ID))
                             options.Enqueue(op, Difficulty(op, graphLayers));
 
                     if (options.Count > 0)
@@ -111,7 +111,9 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             state = state.Copy();
             bool[] covered = new bool[operators.Count];
             List<Layer> layers = new List<Layer>();
-            var newLayer = new Layer(GetNewApplicableOperators(state, operators, covered), state.State);
+            var newLayer = new Layer(
+                GetNewApplicableOperators(state, new List<Operator>(), operators, covered), 
+                state.State);
             layers.Add(newLayer);
             int previousLayer = 0;
             while (!state.IsInGoal())
@@ -124,8 +126,9 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                 if (state.State.Count == layers[previousLayer].Propositions.Count)
                     return new List<Layer>();
 
-                newLayer = new Layer(new List<Operator>(layers[previousLayer].Operators), state.State);
-                newLayer.Operators.AddRange(GetNewApplicableOperators(state, operators, covered));
+                newLayer = new Layer(
+                    GetNewApplicableOperators(state, layers[previousLayer].Operators, operators, covered), 
+                    state.State);
 
                 // Error condition: there are no applicable actions at all (most likely means the problem is unsolvable)
                 if (newLayer.Operators.Count == 0 && !state.IsInGoal())
