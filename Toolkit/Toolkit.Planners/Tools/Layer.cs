@@ -4,10 +4,10 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 {
     public class Layer
     {
-        public HashSet<Operator> Operators { get; set; }
+        public List<Operator> Operators { get; set; }
         public HashSet<Fact> Propositions { get; set; }
 
-        public Layer(HashSet<Operator> actions, HashSet<Fact> propositions)
+        public Layer(List<Operator> actions, HashSet<Fact> propositions)
         {
             Operators = actions;
             Propositions = propositions;
@@ -15,7 +15,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 
         public Layer()
         {
-            Operators = new HashSet<Operator>();
+            Operators = new List<Operator>();
             Propositions = new HashSet<Fact>();
         }
 

@@ -30,7 +30,6 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 
                     if (state.State.Count == _stateCache[hash].Count)
                         return dict;
-                    //throw new RelaxedPlanningGraphException("Actions didnt change the state!");
 
                     foreach (var fact in _stateCache[hash])
                         if (!dict.ContainsKey(fact))
@@ -56,20 +55,18 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                     }
                     if (apply.Count == 0)
                         return dict;
-                    //throw new RelaxedPlanningGraphException("No applicable actions found!");
 
                     state = state.Copy();
-                    int changed = 0;
+                    int changed = state.State.Count;
                     foreach (var op in apply)
                     {
-                        changed += state.ExecuteNode(op);
+                        state.ExecuteNode(op);
                         foreach (var add in op.Add)
                             if (!dict.ContainsKey(add))
                                 dict.Add(add, layer);
                     }
-                    if (changed == 0)
+                    if (changed == state.State.Count)
                         return dict;
-                    //throw new RelaxedPlanningGraphException("Actions didnt change the state!");
 
                     _stateCache.Add(hash, state.State);
                     _coveredCache.Add(hash, newCovers);

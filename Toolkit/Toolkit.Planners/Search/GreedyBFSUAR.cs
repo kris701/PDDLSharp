@@ -11,12 +11,12 @@ namespace PDDLSharp.Toolkit.Planners.Search
     {
         public int OperatorsUsed { get; set; }
 
-        private RelaxedPlanGenerator _graphGenerator;
+        private OperatorRPG _graphGenerator;
         private HashSet<int> _fullyClosed = new HashSet<int>();
 
         public GreedyBFSUAR(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
-            _graphGenerator = new RelaxedPlanGenerator(decl);
+            _graphGenerator = new OperatorRPG(decl);
         }
 
         internal override ActionPlan? Solve(IHeuristic h, ISASState state)
