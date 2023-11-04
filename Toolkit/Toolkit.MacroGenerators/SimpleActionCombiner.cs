@@ -86,11 +86,9 @@ namespace PDDLSharp.Toolkit.MacroGenerators
         {
             var allRefs = baseAction.Preconditions.FindTypes<NameExp>();
             allRefs.AddRange(baseAction.Effects.FindTypes<NameExp>());
-            var param = new HashSet<NameExp>();
-            foreach (var reference in allRefs)
-                if (!param.Contains(reference))
-                    param.Add(reference);
-            return param.ToList();
+            baseAction.Parameters.Values = baseAction.Parameters.Values.DistinctBy(x => x.Name).ToList();
+            baseAction.Parameters.Values.RemoveAll(x => !allRefs.Any(y => y.Name == x.Name));
+            return baseAction.Parameters.Values;
         }
     }
 }
