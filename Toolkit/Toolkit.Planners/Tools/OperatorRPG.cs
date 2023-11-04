@@ -1,7 +1,5 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.StateSpace.SAS;
-using PDDLSharp.Tools;
-using System.Collections.Generic;
 
 namespace PDDLSharp.Toolkit.Planners.Tools
 {
@@ -112,7 +110,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             bool[] covered = new bool[operators.Count];
             List<Layer> layers = new List<Layer>();
             var newLayer = new Layer(
-                GetNewApplicableOperators(state, new List<Operator>(), operators, covered), 
+                GetNewApplicableOperators(state, new List<Operator>(), operators, covered),
                 state.State);
             layers.Add(newLayer);
             int previousLayer = 0;
@@ -127,7 +125,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
                     return new List<Layer>();
 
                 newLayer = new Layer(
-                    GetNewApplicableOperators(state, layers[previousLayer].Operators, operators, covered), 
+                    GetNewApplicableOperators(state, layers[previousLayer].Operators, operators, covered),
                     state.State);
 
                 // Error condition: there are no applicable actions at all (most likely means the problem is unsolvable)
