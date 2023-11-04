@@ -12,16 +12,10 @@ namespace PDDLSharp.Toolkit.StateSpace.SAS
         {
         }
 
-        public override int ExecuteNode(Operator node)
+        public override void ExecuteNode(Operator node)
         {
-            int changes = 0;
-            //foreach (var fact in node.Del)
-            //    if (State.Remove(fact))
-            //        changes--;
             foreach (var fact in node.Add)
-                if (State.Add(fact))
-                    changes++;
-            return changes;
+                State.Add(fact);
         }
 
         public override ISASState Copy()
