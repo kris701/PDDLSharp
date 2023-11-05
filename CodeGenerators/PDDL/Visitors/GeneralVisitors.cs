@@ -3,7 +3,7 @@
     public partial class GeneratorVisitors
     {
         private bool _printType = false;
-        private bool _readable = false;
+        private readonly bool _readable = false;
         public GeneratorVisitors(bool readable)
         {
             _readable = readable;

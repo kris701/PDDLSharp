@@ -10,7 +10,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
     {
         public int OperatorsUsed { get; set; }
 
-        private OperatorRPG _graphGenerator;
+        private readonly OperatorRPG _graphGenerator;
         private HashSet<int> _fullyClosed = new HashSet<int>();
 
         public GreedyBFSUAR(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
@@ -171,7 +171,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
             }
         }
 
-        private Dictionary<int, List<Operator>> _relaxedCache = new Dictionary<int, List<Operator>>();
+        private readonly Dictionary<int, List<Operator>> _relaxedCache = new Dictionary<int, List<Operator>>();
         private List<Operator> GetNewRelaxedOperators(int smallestHValue, List<Operator> operators, HashSet<StateMove> newClosed)
         {
             var allSmallest = newClosed.Where(x => x.hValue == smallestHValue).ToList();
@@ -224,6 +224,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
             base.Dispose();
             _fullyClosed.Clear();
             _fullyClosed.EnsureCapacity(0);
+
+            GC.SuppressFinalize(this);
         }
 
         public override void LogTick()

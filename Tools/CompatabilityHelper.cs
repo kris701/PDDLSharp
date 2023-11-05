@@ -2,7 +2,7 @@
 {
     public static class CompatabilityHelper
     {
-        public static List<string> UnsupportedPackages = new List<string>()
+        public static readonly List<string> UnsupportedPackages = new List<string>()
         {
             ":action-expansions",
             ":foreach-expansions",

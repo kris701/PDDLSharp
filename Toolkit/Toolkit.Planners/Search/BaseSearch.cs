@@ -24,7 +24,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         internal HashSet<StateMove> _closedList = new HashSet<StateMove>();
         internal RefPriorityQueue _openList = new RefPriorityQueue();
-        private Stopwatch _logWatch = new Stopwatch();
+        private readonly Stopwatch _logWatch = new Stopwatch();
         private System.Timers.Timer _timeoutTimer = new System.Timers.Timer();
         private System.Timers.Timer _logTimer = new System.Timers.Timer();
 
@@ -152,6 +152,8 @@ namespace PDDLSharp.Toolkit.Planners.Search
             _logWatch.Stop();
             _logTimer.Stop();
             _timeoutTimer.Stop();
+
+            GC.SuppressFinalize(this);
         }
 
         internal int GetPassedTime()

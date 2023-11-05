@@ -11,7 +11,7 @@ namespace PDDLSharp.Parsers.Visitors
         public IDecl? VisitProblem(ASTNode node, INode? parent)
         {
             IDecl? returnNode;
-            if ((returnNode = TryVisitProblemDeclNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitProblemDeclNode(node)) != null) return returnNode;
             if ((returnNode = TryVisitProblemNameNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitDomainRefNameNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitSituationNode(node, parent)) != null) return returnNode;
@@ -27,7 +27,7 @@ namespace PDDLSharp.Parsers.Visitors
             return returnNode;
         }
 
-        public IDecl? TryVisitProblemDeclNode(ASTNode node, INode? parent)
+        public IDecl? TryVisitProblemDeclNode(ASTNode node)
         {
             if (IsOfValidNodeType(node.InnerContent, "define") &&
                 DoesNotContainStrayCharacters(node, "define"))
@@ -128,7 +128,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        private static HashSet<string> MetricNodeTypes = new HashSet<string>()
+        private static readonly HashSet<string> MetricNodeTypes = new HashSet<string>()
         {
             "maximize", "minimize"
         };
