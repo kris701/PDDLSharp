@@ -2,7 +2,6 @@
 using PDDLSharp.Analysers;
 using PDDLSharp.Analysers.Tests;
 using PDDLSharp.Analysers.Tests.PDDL.Visitors;
-using PDDLSharp.Analysers.Tests.Visitors;
 using PDDLSharp.Analysers.Visitors;
 using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
@@ -22,23 +21,23 @@ namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
     public class AnalyserVisitorsTests : BaseVisitorsTests
     {
         [TestMethod]
-        [DataRow("TestFiles/gripper-domain-badaction.pddl", "TestFiles/gripper-prob01.pddl", 2, 0, 3)]
-        [DataRow("TestFiles/gripper-domain-badaction.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 4)]
-        [DataRow("TestFiles/gripper-domain-badaction.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 5)]
-        [DataRow("TestFiles/gripper-domain-badaction.pddl", "TestFiles/gripper-prob01.pddl", 2, 0)]
-        [DataRow("TestFiles/gripper-domain-badaction.pddl", "TestFiles/gripper-prob01.pddl", 0, 1)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 3)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 4)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 5)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 1)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 1)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 1)]
-        [DataRow("TestFiles/agricola-domain-badaction.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 9)]
-        [DataRow("TestFiles/agricola-domain-badaction.pddl", "TestFiles/agricola-prob01.pddl", 2, 0, 8)]
-        [DataRow("TestFiles/agricola-domain-badaction.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 7)]
+        [DataRow("PDDL/TestFiles/gripper-domain-badaction.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 2, 0, 3)]
+        [DataRow("PDDL/TestFiles/gripper-domain-badaction.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 4)]
+        [DataRow("PDDL/TestFiles/gripper-domain-badaction.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 5)]
+        [DataRow("PDDL/TestFiles/gripper-domain-badaction.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 2, 0)]
+        [DataRow("PDDL/TestFiles/gripper-domain-badaction.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 1)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 3)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 4)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 5)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 1)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 1)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 0)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 1)]
+        [DataRow("PDDL/TestFiles/agricola-domain-badaction.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 0, 9)]
+        [DataRow("PDDL/TestFiles/agricola-domain-badaction.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 2, 0, 8)]
+        [DataRow("PDDL/TestFiles/agricola-domain-badaction.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 0, 7)]
         public void Can_CheckForCorrectPredicateTypes(string domain, string problem, int expectedErrors, params int[] targetNode)
         {
             // ARRANGE
@@ -64,19 +63,19 @@ namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
         }
 
         [TestMethod]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 1)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01-undeclaredgoalpredicate.pddl", 1, 1)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 1)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 1)]
-        [DataRow("TestFiles/agricola-domain-undeclaredactionpredicate.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 10)]
-        [DataRow("TestFiles/agricola-domain-undeclaredactionpredicate.pddl", "TestFiles/agricola-prob01.pddl", 1, 0, 11)]
-        [DataRow("TestFiles/agricola-domain-undeclaredactionpredicate.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 12)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01-undeclaredinitpredicate.pddl", 0, 1, 2)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01-undeclaredinitpredicate.pddl", 1, 1, 3)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01-undeclaredinitpredicate.pddl", 0, 1, 4)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 1)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01-undeclaredgoalpredicate.pddl", 1, 1)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 1)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 0)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 1)]
+        [DataRow("PDDL/TestFiles/agricola-domain-undeclaredactionpredicate.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 0, 10)]
+        [DataRow("PDDL/TestFiles/agricola-domain-undeclaredactionpredicate.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 1, 0, 11)]
+        [DataRow("PDDL/TestFiles/agricola-domain-undeclaredactionpredicate.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 0, 12)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01-undeclaredinitpredicate.pddl", 0, 1, 2)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01-undeclaredinitpredicate.pddl", 1, 1, 3)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01-undeclaredinitpredicate.pddl", 0, 1, 4)]
         public void Can_CheckForUndeclaredPredicates(string domain, string problem, int expectedErrors, params int[] targetNode)
         {
             // ARRANGE
@@ -102,17 +101,17 @@ namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
         }
 
         [TestMethod]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 1)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 2)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 1, 2)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 2)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 1, 2)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01-duplicateobjects.pddl", 2, 1, 2)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 2)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 3)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 4)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 0, 5)]
-        [DataRow("TestFiles/agricola-domain.pddl", "TestFiles/agricola-prob01.pddl", 0, 1, 2)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 1)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 2)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 1, 2)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0, 2)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 1, 2)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01-duplicateobjects.pddl", 2, 1, 2)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 0, 2)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 0, 3)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 0, 4)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 0, 5)]
+        [DataRow("PDDL/TestFiles/agricola-domain.pddl", "PDDL/TestFiles/agricola-prob01.pddl", 0, 1, 2)]
         public void Can_CheckForUniqueNames(string domain, string problem, int expectedErrors, params int[] targetNode)
         {
             // ARRANGE
@@ -138,12 +137,12 @@ namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
         }
 
         [TestMethod]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 3)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 4)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 5)]
-        [DataRow("TestFiles/gripper-domain-unusedparamsaction.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 3)]
-        [DataRow("TestFiles/gripper-domain-unusedparamsaction.pddl", "TestFiles/gripper-prob01.pddl", 1, 0, 4)]
-        [DataRow("TestFiles/gripper-domain-unusedparamsaction.pddl", "TestFiles/gripper-prob01.pddl", 2, 0, 5)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 3)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 4)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 5)]
+        [DataRow("PDDL/TestFiles/gripper-domain-unusedparamsaction.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 3)]
+        [DataRow("PDDL/TestFiles/gripper-domain-unusedparamsaction.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 1, 0, 4)]
+        [DataRow("PDDL/TestFiles/gripper-domain-unusedparamsaction.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 2, 0, 5)]
         public void Can_CheckForUnusedParameters(string domain, string problem, int expectedErrors, params int[] targetNode)
         {
             // ARRANGE
@@ -169,22 +168,22 @@ namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
         }
 
         [TestMethod]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 3)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 4)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 5)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 6)]
-        [DataRow("TestFiles/satellite-domain.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 7)]
-        [DataRow("TestFiles/satellite-domain-undeclaredparameter.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 3)]
-        [DataRow("TestFiles/satellite-domain-undeclaredparameter.pddl", "TestFiles/satellite-prob01.pddl", 1, 0, 4)]
-        [DataRow("TestFiles/satellite-domain-undeclaredparameter.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 5)]
-        [DataRow("TestFiles/satellite-domain-undeclaredparameter.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 6)]
-        [DataRow("TestFiles/satellite-domain-undeclaredparameter.pddl", "TestFiles/satellite-prob01.pddl", 0, 0, 7)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 3)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 4)]
-        [DataRow("TestFiles/gripper-domain.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 5)]
-        [DataRow("TestFiles/gripper-domain-undeclaredparameter.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 3)]
-        [DataRow("TestFiles/gripper-domain-undeclaredparameter.pddl", "TestFiles/gripper-prob01.pddl", 1, 0, 4)]
-        [DataRow("TestFiles/gripper-domain-undeclaredparameter.pddl", "TestFiles/gripper-prob01.pddl", 0, 0, 5)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0, 3)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0, 4)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0, 5)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0, 6)]
+        [DataRow("PDDL/TestFiles/satellite-domain.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0, 7)]
+        [DataRow("PDDL/TestFiles/satellite-domain-undeclaredparameter.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0, 3)]
+        [DataRow("PDDL/TestFiles/satellite-domain-undeclaredparameter.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 1, 0, 4)]
+        [DataRow("PDDL/TestFiles/satellite-domain-undeclaredparameter.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0, 5)]
+        [DataRow("PDDL/TestFiles/satellite-domain-undeclaredparameter.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0, 6)]
+        [DataRow("PDDL/TestFiles/satellite-domain-undeclaredparameter.pddl", "PDDL/TestFiles/satellite-prob01.pddl", 0, 0, 7)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 3)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 4)]
+        [DataRow("PDDL/TestFiles/gripper-domain.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 5)]
+        [DataRow("PDDL/TestFiles/gripper-domain-undeclaredparameter.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 3)]
+        [DataRow("PDDL/TestFiles/gripper-domain-undeclaredparameter.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 1, 0, 4)]
+        [DataRow("PDDL/TestFiles/gripper-domain-undeclaredparameter.pddl", "PDDL/TestFiles/gripper-prob01.pddl", 0, 0, 5)]
         public void Can_CheckForUndeclaredParameters(string domain, string problem, int expectedErrors, params int[] targetNode)
         {
             // ARRANGE
