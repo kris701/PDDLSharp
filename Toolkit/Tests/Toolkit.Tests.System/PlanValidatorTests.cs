@@ -45,7 +45,7 @@ namespace PDDLSharp.Toolit.Tests.System
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IParser<INode> parser = GetParser(domain, listener);
-            IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> planParser = new FDPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
 
             // ACT
@@ -83,7 +83,7 @@ namespace PDDLSharp.Toolit.Tests.System
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IParser<INode> parser = GetParser(domain, listener);
-            IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> planParser = new FDPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
 
 
@@ -128,7 +128,7 @@ namespace PDDLSharp.Toolit.Tests.System
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IParser<INode> parser = GetParser(domain, listener);
-            IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> planParser = new FDPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
 
             // ACT
@@ -168,7 +168,7 @@ namespace PDDLSharp.Toolit.Tests.System
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IParser<INode> parser = GetParser(domain, listener);
-            IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> planParser = new FDPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
 
             // ACT

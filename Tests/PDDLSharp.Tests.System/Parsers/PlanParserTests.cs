@@ -48,7 +48,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.Parsers
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IParser<INode> parser = GetParser(domain, listener);
-            IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> planParser = new FDPlanParser(listener);
 
             // ACT
             bool any = false;

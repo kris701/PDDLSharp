@@ -124,7 +124,7 @@ namespace PerformanceTests
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
-            FastDownwardPlanParser planParser = new FastDownwardPlanParser(listener);
+            FDPlanParser planParser = new FDPlanParser(listener);
             var decl = parser.ParseDecl(new FileInfo(targetDomain), new FileInfo(targetProblem));
             IMacroGenerator<List<ActionPlan>> generator = new SequentialMacroGenerator(decl);
             List<ActionPlan> plans = new List<ActionPlan>();
@@ -149,7 +149,7 @@ namespace PerformanceTests
             var targetSAS = "benchmarks-plans/lama-first/psr-large/p24-s166-n15-l3-f10.sas";
 
             IErrorListener listener = new ErrorListener();
-            IParser<ISASNode> sasParser = new SASParser(listener);
+            IParser<ISASNode> sasParser = new FDSASParser(listener);
 
             for (int i = 0; i < number; i++)
             {
@@ -168,7 +168,7 @@ namespace PerformanceTests
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
-            FastDownwardPlanParser planParser = new FastDownwardPlanParser(listener);
+            FDPlanParser planParser = new FDPlanParser(listener);
             IPlanValidator validator = new PlanValidator();
 
             Stopwatch instanceWatch = new Stopwatch();

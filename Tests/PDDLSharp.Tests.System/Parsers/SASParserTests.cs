@@ -42,7 +42,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.Parsers
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser<ISASNode> parser = new SASParser(listener);
+            IParser<ISASNode> parser = new FDSASParser(listener);
 
             // ACT
             foreach (var sas in sass)
