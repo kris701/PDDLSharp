@@ -33,49 +33,61 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="TestFiles\agricola-domain-undeclaredactionpredicate.pddl">
+    <None Update="PDDL\TestFiles\agricola-domain-undeclaredactionpredicate.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\agricola-domain-badaction.pddl">
+    <None Update="PDDL\TestFiles\agricola-domain-badaction.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\agricola-domain.pddl">
+    <None Update="PDDL\TestFiles\agricola-domain.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\agricola-prob01-undeclaredinitpredicate.pddl">
+    <None Update="PDDL\TestFiles\agricola-prob01-undeclaredinitpredicate.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\agricola-prob01.pddl">
+    <None Update="PDDL\TestFiles\agricola-prob01.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\gripper-domain-undeclaredparameter.pddl">
+    <None Update="PDDL\TestFiles\gripper-domain-undeclaredparameter.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\gripper-domain-unusedparamsaction.pddl">
+    <None Update="PDDL\TestFiles\gripper-domain-unusedparamsaction.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\gripper-domain-badaction.pddl">
+    <None Update="PDDL\TestFiles\gripper-domain-badaction.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\gripper-domain.pddl">
+    <None Update="PDDL\TestFiles\gripper-domain.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\gripper-prob01-undeclaredgoalpredicate.pddl">
+    <None Update="PDDL\TestFiles\gripper-prob01-undeclaredgoalpredicate.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\gripper-prob01.pddl">
+    <None Update="PDDL\TestFiles\gripper-prob01.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\satellite-domain-undeclaredparameter.pddl">
+    <None Update="PDDL\TestFiles\satellite-domain-undeclaredparameter.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\satellite-domain.pddl">
+    <None Update="PDDL\TestFiles\satellite-domain.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\satellite-prob01-duplicateobjects.pddl">
+    <None Update="PDDL\TestFiles\satellite-prob01-duplicateobjects.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\satellite-prob01.pddl">
+    <None Update="PDDL\TestFiles\satellite-prob01.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SAS\TestFiles\gripper-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SAS\TestFiles\gripper-prob01.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SAS\TestFiles\satellite-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SAS\TestFiles\satellite-prob01.pddl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

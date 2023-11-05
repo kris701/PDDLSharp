@@ -46,7 +46,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.Analysers
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IContextualiser contextualiser = new PDDLContextualiser(listener);
-            IAnalyser analyser = new PDDLAnalyser(listener);
+            IAnalyser<PDDLDecl> analyser = new PDDLAnalyser(listener);
 
             // ACT
             foreach (var problem in problems)

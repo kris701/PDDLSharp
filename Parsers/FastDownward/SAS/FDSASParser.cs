@@ -5,9 +5,9 @@ using PDDLSharp.Models.FastDownward.SAS;
 
 namespace PDDLSharp.Parsers.FastDownward.SAS
 {
-    public class SASParser : BaseParser<ISASNode>
+    public class FDSASParser : BaseParser<ISASNode>
     {
-        public SASParser(IErrorListener listener) : base(listener)
+        public FDSASParser(IErrorListener listener) : base(listener)
         {
         }
 

@@ -55,7 +55,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators
             {
                 // Select only occurences that is larger than 1.
                 occurenceCount = occurenceCount.Where(x => x.Value > 1).ToDictionary(pair => pair.Key, pair => pair.Value);
-                occurenceCount.OrderBy(x => x.Value);
+                occurenceCount = occurenceCount.OrderBy(x => x.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
                 n = Math.Min(n, occurenceCount.Count);
 
                 var cache = new Dictionary<GroundedAction, ActionDecl>();

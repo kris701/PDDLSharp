@@ -97,7 +97,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
             IParser<INode> parser = GetParser(domain, listener);
             ICodeGenerator<INode> generator = new PDDLCodeGenerator(listener);
             IContextualiser contextualiser = new PDDLContextualiser(listener);
-            IAnalyser analyser = new PDDLAnalyser(listener);
+            IAnalyser<PDDLDecl> analyser = new PDDLAnalyser(listener);
 
             // ACT
             foreach (var problem in problems)

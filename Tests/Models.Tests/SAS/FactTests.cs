@@ -8,28 +8,17 @@ using System.Threading.Tasks;
 namespace PDDLSharp.Models.Tests.SAS
 {
     [TestClass]
-    public class FactTests
+    public class FactTests : BaseSASTests
     {
-        private List<Fact> GenerateRandomFacts(int fromID, int amount)
-        {
-            var facts = new List<Fact>();
-            var rnd = new Random();
-            for (int i = 0; i < amount; i++)
-            {
-                var newFact = new Fact($"fact-{fromID + i}");
-                newFact.ID = fromID + i;
-                facts.Add(newFact);
-            }
-
-            return facts;
-        }
-
         [TestMethod]
-        public void Can_Equals_IfTrue()
+        [DataRow(0, 1)]
+        [DataRow(0, 10)]
+        [DataRow(0, 10000)]
+        public void Can_Equals_IfTrue(int from, int count)
         {
             // ARRANGE
-            var facts1 = GenerateRandomFacts(0, 100);
-            var facts2 = GenerateRandomFacts(0, 100);
+            var facts1 = GenerateRandomFacts(from, count);
+            var facts2 = GenerateRandomFacts(from, count);
 
             // ACT
             // ASSERT
@@ -38,11 +27,14 @@ namespace PDDLSharp.Models.Tests.SAS
         }
 
         [TestMethod]
-        public void Can_Equals_IfFalse()
+        [DataRow(0, 100, 100)]
+        [DataRow(10, 30, 1)]
+        [DataRow(10, 20, 5)]
+        public void Can_Equals_IfFalse(int from1, int from2, int count)
         {
             // ARRANGE
-            var facts1 = GenerateRandomFacts(0, 100);
-            var facts2 = GenerateRandomFacts(500, 100);
+            var facts1 = GenerateRandomFacts(from1, count);
+            var facts2 = GenerateRandomFacts(from2, count);
 
             // ACT
             // ASSERT
@@ -64,6 +56,20 @@ namespace PDDLSharp.Models.Tests.SAS
             // ASSERT
             for (int i = 0; i < facts1.Count; i++)
                 Assert.IsTrue(facts1[i].Equals(facts2[i]));
+        }
+
+        [TestMethod]
+        [DataRow(1)]
+        [DataRow(100)]
+        [DataRow(1000)]
+        public void Can_GetHashCode(int count)
+        {
+            // ARRANGE
+            var facts = GenerateRandomFacts(0, count);
+
+            // ACT
+            // ASSERT
+            Assert.AreEqual(facts.Count, facts.DistinctBy(x => x.GetHashCode()).Count());
         }
     }
 }

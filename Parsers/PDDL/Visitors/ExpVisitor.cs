@@ -173,7 +173,7 @@ namespace PDDLSharp.Parsers.Visitors
             return null;
         }
 
-        private static HashSet<string> NumericNodeTypes = new HashSet<string>()
+        private static readonly HashSet<string> NumericNodeTypes = new HashSet<string>()
         {
             "increase", "decrease", "assign", "scale-up", "scale-down", "=", "+", "-", "*", "/", "<", ">"
         };

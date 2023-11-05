@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Models.SAS;
 
-namespace PDDLSharp.Toolkit.StateSpace.SAS
+namespace PDDLSharp.StateSpaces.SAS
 {
     public interface ISASState : IState
     {

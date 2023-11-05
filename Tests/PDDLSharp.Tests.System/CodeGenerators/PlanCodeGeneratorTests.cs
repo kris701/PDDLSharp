@@ -47,7 +47,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> parser = new FDPlanParser(listener);
             ICodeGenerator<ActionPlan> generator = new FastDownwardPlanGenerator(listener);
 
             // ACT

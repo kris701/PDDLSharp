@@ -4,8 +4,9 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.StateSpaces.PDDL;
 
-namespace PDDLSharp.Toolkit.StateSpace.PDDL
+namespace PDDLSharp.Toolkit.Simulators.PDDL
 {
     public class StateSpaceSimulator : IStateSpaceSimulator
     {

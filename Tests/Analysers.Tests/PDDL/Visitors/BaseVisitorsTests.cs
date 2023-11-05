@@ -1,4 +1,8 @@
-﻿using PDDLSharp.Contextualisers;
+﻿using PDDLSharp;
+using PDDLSharp.Analysers;
+using PDDLSharp.Analysers.Tests;
+using PDDLSharp.Analysers.Tests.PDDL.Visitors;
+using PDDLSharp.Contextualisers;
 using PDDLSharp.Contextualisers.PDDL;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
@@ -11,7 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Analysers.Tests.Visitors
+namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
 {
     public class BaseVisitorsTests
     {

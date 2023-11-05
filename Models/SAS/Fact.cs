@@ -23,12 +23,17 @@
             const int modifier = 31;
             unchecked
             {
-                _hashCache = 50 * Arguments.Length * Name.GetHashCode() * Arguments.Aggregate(seed, (current, item) =>
+                _hashCache = 50 * Name.GetHashCode() + Arguments.Length * Arguments.Aggregate(seed, (current, item) =>
                     (current * modifier) * item.GetHashCode());
                 return _hashCache;
             }
         }
 
+        /// <summary>
+        /// Equals is just based on the ID of the fact, since the translator only outputs unique IDs
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object? obj)
         {
             if (obj is Fact f)

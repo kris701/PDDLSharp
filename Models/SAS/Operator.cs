@@ -33,10 +33,10 @@
         public Operator()
         {
             Name = "";
-            Arguments = new string[0];
-            Pre = new Fact[0];
-            Add = new Fact[0];
-            Del = new Fact[0];
+            Arguments = Array.Empty<string>();
+            Pre = Array.Empty<Fact>();
+            Add = Array.Empty<Fact>();
+            Del = Array.Empty<Fact>();
             PreRef = new HashSet<int>();
             AddRef = new HashSet<int>();
             DelRef = new HashSet<int>();
@@ -61,6 +61,11 @@
             return _hashCache;
         }
 
+        /// <summary>
+        /// Equals is just based on the ID of the operator, since the translator only outputs unique IDs
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object? obj)
         {
             if (obj is Operator o)

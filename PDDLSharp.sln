@@ -46,9 +46,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceTests", "Perform
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorListeners.Tests", "Tests\ErrorListeners.Tests\ErrorListeners.Tests.csproj", "{0D8146BF-4BA1-421D-A4FE-A1BC190343DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.StateSpace", "Toolkit\Toolkit.StateSpace\Toolkit.StateSpace.csproj", "{741E5650-7C79-43E0-9034-1F353A04954F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Simulators", "Toolkit\Toolkit.StateSpace\Toolkit.Simulators.csproj", "{741E5650-7C79-43E0-9034-1F353A04954F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.StateSpace.Tests", "Toolkit\Tests\Toolkit.StateSpace.Tests\Toolkit.StateSpace.Tests.csproj", "{EB2AB0A3-14F6-48C2-A667-51AB24FD6EA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Simulators.Tests", "Toolkit\Tests\Toolkit.StateSpace.Tests\Toolkit.Simulators.Tests.csproj", "{EB2AB0A3-14F6-48C2-A667-51AB24FD6EA3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analysers.Tests", "Tests\Analysers.Tests\Analysers.Tests.csproj", "{16492AC2-BC0C-43A3-A723-54A1B6587A56}"
 EndProject
@@ -78,9 +78,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Planners", "Toolkit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Planners.Tests", "Toolkit\Tests\Toolkit.Planners.Tests\Toolkit.Planners.Tests.csproj", "{2C0E234D-7E3F-4099-A79E-7DEBC725E4A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translators", "Translators\Translators.csproj", "{F4880F51-EBBF-4BD1-A228-6C0E44F29A0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Translators", "Translators\Translators.csproj", "{F4880F51-EBBF-4BD1-A228-6C0E44F29A0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translators.Tests", "Tests\Translators.Tests\Translators.Tests.csproj", "{C86D57D8-0BF0-4569-B236-BEBD74665F06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Translators.Tests", "Tests\Translators.Tests\Translators.Tests.csproj", "{C86D57D8-0BF0-4569-B236-BEBD74665F06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateSpaces", "StateSpaces\StateSpaces.csproj", "{96373672-0235-4809-BFA1-71DD33E55933}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateSpaces.Tests", "Tests\StateSpaces.Tests\StateSpaces.Tests.csproj", "{E6A451B3-E965-4167-B12C-0E0D47DFF1B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -216,6 +220,14 @@ Global
 		{C86D57D8-0BF0-4569-B236-BEBD74665F06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C86D57D8-0BF0-4569-B236-BEBD74665F06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C86D57D8-0BF0-4569-B236-BEBD74665F06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96373672-0235-4809-BFA1-71DD33E55933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96373672-0235-4809-BFA1-71DD33E55933}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96373672-0235-4809-BFA1-71DD33E55933}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96373672-0235-4809-BFA1-71DD33E55933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6A451B3-E965-4167-B12C-0E0D47DFF1B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6A451B3-E965-4167-B12C-0E0D47DFF1B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6A451B3-E965-4167-B12C-0E0D47DFF1B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6A451B3-E965-4167-B12C-0E0D47DFF1B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -243,6 +255,7 @@ Global
 		{971B1505-6DBB-4BD3-83DB-D2B477344806} = {884017F5-D4E7-4631-A6EB-361BDB63F130}
 		{2C0E234D-7E3F-4099-A79E-7DEBC725E4A2} = {A1F7B33E-DC44-4954-965F-09A549BA0813}
 		{C86D57D8-0BF0-4569-B236-BEBD74665F06} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
+		{E6A451B3-E965-4167-B12C-0E0D47DFF1B7} = {3E9E1F41-BF75-4D07-8FD1-3FED670863D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4318FA26-2735-43B3-A9D9-1FFB4E409256}

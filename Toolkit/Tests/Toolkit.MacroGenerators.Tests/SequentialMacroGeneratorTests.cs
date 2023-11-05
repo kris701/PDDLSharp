@@ -34,7 +34,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
             IErrorListener listener = new ErrorListener();
             IParser<INode> parser = new PDDLParser(listener);
             var domain = parser.ParseAs<DomainDecl>(new FileInfo(domainFile));
-            IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> planParser = new FDPlanParser(listener);
             List<ActionPlan> plans = new List<ActionPlan>();
             foreach (var file in planFiles)
                 plans.Add(planParser.Parse(new FileInfo(file)));
@@ -57,7 +57,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
             IErrorListener listener = new ErrorListener();
             IParser<INode> parser = new PDDLParser(listener);
             var domain = parser.ParseAs<DomainDecl>(new FileInfo(domainFile));
-            IParser<ActionPlan> planParser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> planParser = new FDPlanParser(listener);
             List<ActionPlan> plans = new List<ActionPlan>() { planParser.Parse(new FileInfo(planFile)) };
             var decl = new PDDLDecl(domain, new ProblemDecl());
             IMacroGenerator<List<ActionPlan>> generator = new SequentialMacroGenerator(decl);

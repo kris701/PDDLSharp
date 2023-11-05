@@ -61,7 +61,7 @@ namespace PDDLSharp.Parsers.Tests.PDDL.Visitors
 
 
             // ACT
-            IDecl? decl = new ParserVisitor(null).TryVisitProblemDeclNode(node, null);
+            IDecl? decl = new ParserVisitor(null).TryVisitProblemDeclNode(node);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ProblemDecl));
@@ -79,7 +79,7 @@ namespace PDDLSharp.Parsers.Tests.PDDL.Visitors
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
             // ACT
-            IDecl? decl = new ParserVisitor(listener).TryVisitProblemDeclNode(node, null);
+            IDecl? decl = new ParserVisitor(listener).TryVisitProblemDeclNode(node);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);

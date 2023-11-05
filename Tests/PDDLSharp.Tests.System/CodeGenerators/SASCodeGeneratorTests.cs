@@ -37,7 +37,7 @@ namespace PDDLSharp.PDDLSharp.Tests.System.CodeGenerators
 
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser<ISASNode> parser = new SASParser(listener);
+            IParser<ISASNode> parser = new FDSASParser(listener);
             ICodeGenerator<ISASNode> generator = new SASCodeGenerator(listener);
 
             // ACT

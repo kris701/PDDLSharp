@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace PDDLSharp.Parsers.Tests.FastDownward.Plans
 {
     [TestClass]
-    public class FastDownwardPlanParserTests
+    public class FDPlanParserTests
     {
         [TestMethod]
         [DataRow("PlanTestData/plan1.plan", 0)]
@@ -26,7 +26,7 @@ namespace PDDLSharp.Parsers.Tests.FastDownward.Plans
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> parser = new FDPlanParser(listener);
 
             // ACT
             var res = parser.Parse(new FileInfo(testFile));
@@ -44,7 +44,7 @@ namespace PDDLSharp.Parsers.Tests.FastDownward.Plans
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> parser = new FDPlanParser(listener);
 
             // ACT
             var res = parser.Parse(new FileInfo(testFile));
@@ -62,7 +62,7 @@ namespace PDDLSharp.Parsers.Tests.FastDownward.Plans
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> parser = new FDPlanParser(listener);
 
             // ACT
             var res = parser.Parse(new FileInfo(testFile));
@@ -81,7 +81,7 @@ namespace PDDLSharp.Parsers.Tests.FastDownward.Plans
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
-            IParser<ActionPlan> parser = new FastDownwardPlanParser(listener);
+            IParser<ActionPlan> parser = new FDPlanParser(listener);
 
             // ACT
             var res = parser.Parse(new FileInfo(testFile));

@@ -3,7 +3,7 @@ using PDDLSharp.Models;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
-using PDDLSharp.Toolkit.StateSpace.PDDL;
+using PDDLSharp.Toolkit.Simulators.PDDL;
 using System;
 using System.Collections.Generic;
 using System.Linq;

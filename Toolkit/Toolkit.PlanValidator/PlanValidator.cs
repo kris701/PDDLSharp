@@ -1,12 +1,13 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL;
-using PDDLSharp.Toolkit.StateSpace.PDDL;
+using PDDLSharp.Toolkit.Simulators.PDDL;
 
 namespace PDDLSharp.Toolkit.PlanValidator
 {
     public class PlanValidator : IPlanValidator
     {
         public int Step { get; internal set; }
+        public string ValidationError { get; internal set; } = "";
 
         public PlanValidator()
         {
@@ -15,6 +16,7 @@ namespace PDDLSharp.Toolkit.PlanValidator
         public bool Validate(ActionPlan plan, PDDLDecl decl)
         {
             Step = 0;
+            ValidationError = "";
             IStateSpaceSimulator simulator = new StateSpaceSimulator(decl);
             try
             {
@@ -31,6 +33,7 @@ namespace PDDLSharp.Toolkit.PlanValidator
             }
             catch (Exception ex)
             {
+                ValidationError = ex.Message;
                 return false;
             }
         }

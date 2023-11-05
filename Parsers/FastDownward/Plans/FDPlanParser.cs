@@ -3,9 +3,9 @@ using PDDLSharp.Models.FastDownward.Plans;
 
 namespace PDDLSharp.Parsers.FastDownward.Plans
 {
-    public class FastDownwardPlanParser : BaseParser<ActionPlan>
+    public class FDPlanParser : BaseParser<ActionPlan>
     {
-        public FastDownwardPlanParser(IErrorListener listener) : base(listener)
+        public FDPlanParser(IErrorListener listener) : base(listener)
         {
         }
 

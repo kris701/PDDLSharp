@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Parsers\Parsers.csproj" />
-    <ProjectReference Include="..\..\Toolkit.StateSpace\Toolkit.StateSpace.csproj" />
+    <ProjectReference Include="..\..\Toolkit.StateSpace\Toolkit.Simulators.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -58,7 +58,7 @@ namespace PDDLSharp.Parsers.Visitors
             typeof(T) == typeof(DerivedDecl) ? TryVisitDerivedNode(node, parent) :
 
             // Problem
-            typeof(T) == typeof(ProblemDecl) ? TryVisitProblemDeclNode(node, parent) :
+            typeof(T) == typeof(ProblemDecl) ? TryVisitProblemDeclNode(node) :
             typeof(T) == typeof(ProblemNameDecl) ? TryVisitProblemNameNode(node, parent) :
             typeof(T) == typeof(DomainNameRefDecl) ? TryVisitDomainRefNameNode(node, parent) :
             typeof(T) == typeof(SituationDecl) ? TryVisitSituationNode(node, parent) :

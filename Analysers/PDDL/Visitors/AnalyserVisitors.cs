@@ -15,7 +15,7 @@ namespace PDDLSharp.Analysers.Visitors
             Declaration = declaration;
         }
 
-        private List<PredicateExp> _predicateCache = new List<PredicateExp>();
+        private readonly List<PredicateExp> _predicateCache = new List<PredicateExp>();
         private List<PredicateExp> GetPredicateCache()
         {
             if (_predicateCache.Count == 0)

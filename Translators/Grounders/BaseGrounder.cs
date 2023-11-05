@@ -9,11 +9,11 @@ namespace PDDLSharp.Translators.Grounders
     {
         public PDDLDecl Declaration { get; internal set; }
 
-        private Dictionary<int, string> _typeDict = new Dictionary<int, string>();
-        private Dictionary<string, int> _typeRef = new Dictionary<string, int>();
-        private Dictionary<int, string> _objDict = new Dictionary<int, string>();
-        private Dictionary<string, int> _objRef = new Dictionary<string, int>();
-        private Dictionary<int, int[]> _objCache = new Dictionary<int, int[]>();
+        private readonly Dictionary<int, string> _typeDict = new Dictionary<int, string>();
+        private readonly Dictionary<string, int> _typeRef = new Dictionary<string, int>();
+        private readonly Dictionary<int, string> _objDict = new Dictionary<int, string>();
+        private readonly Dictionary<string, int> _objRef = new Dictionary<string, int>();
+        private readonly Dictionary<int, int[]> _objCache = new Dictionary<int, int[]>();
         internal bool _abort = false;
 
         protected BaseGrounder(PDDLDecl declaration)
