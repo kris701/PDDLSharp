@@ -1,4 +1,9 @@
-﻿using PDDLSharp.Analysers.Visitors;
+﻿using PDDLSharp;
+using PDDLSharp.Analysers;
+using PDDLSharp.Analysers.Tests;
+using PDDLSharp.Analysers.Tests.PDDL.Visitors;
+using PDDLSharp.Analysers.Tests.Visitors;
+using PDDLSharp.Analysers.Visitors;
 using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models;
@@ -11,7 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Analysers.Tests.Visitors
+namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
 {
     [TestClass]
     public class AnalyserVisitorsTests : BaseVisitorsTests
