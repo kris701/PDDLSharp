@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Models\Models.csproj" />
-    <ProjectReference Include="..\Toolkit.StateSpace\Toolkit.StateSpace.csproj" />
+    <ProjectReference Include="..\Toolkit.StateSpace\Toolkit.Simulators.csproj" />
   </ItemGroup>
 
 </Project>

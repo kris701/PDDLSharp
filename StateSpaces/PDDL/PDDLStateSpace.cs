@@ -2,7 +2,7 @@
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Translators.Grounders;
 
-namespace PDDLSharp.Toolkit.StateSpace.PDDL
+namespace PDDLSharp.StateSpaces.PDDL
 {
     public class PDDLStateSpace : IPDDLState
     {

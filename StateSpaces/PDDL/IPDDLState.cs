@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 
-namespace PDDLSharp.Toolkit.StateSpace.PDDL
+namespace PDDLSharp.StateSpaces.PDDL
 {
     public interface IPDDLState : IState
     {

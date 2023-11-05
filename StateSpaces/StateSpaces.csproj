@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Models\Models.csproj" />
-    <ProjectReference Include="..\Toolkit.StateSpace\Toolkit.Simulators.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Translators\Translators.csproj" />
   </ItemGroup>
 
 </Project>

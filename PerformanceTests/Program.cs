@@ -225,7 +225,7 @@ namespace PerformanceTests
 
             IErrorListener listener = new ErrorListener();
             PDDLParser parser = new PDDLParser(listener);
-            IAnalyser analyser = new PDDLAnalyser(listener);
+            IAnalyser<PDDLDecl> analyser = new PDDLAnalyser(listener);
             ICodeGenerator<INode> generator = new PDDLCodeGenerator(listener);
 
             generator.Readable = true;

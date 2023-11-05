@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.SAS;
+using PDDLSharp.StateSpaces.SAS;
 using PDDLSharp.Toolkit.Planners.Tools;
-using PDDLSharp.Toolkit.StateSpace.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Search
 {

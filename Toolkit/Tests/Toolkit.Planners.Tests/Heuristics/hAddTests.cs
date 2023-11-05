@@ -1,6 +1,6 @@
-﻿using PDDLSharp.Toolkit.Planners.Heuristics;
+﻿using PDDLSharp.StateSpaces.SAS;
+using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
-using PDDLSharp.Toolkit.StateSpace.SAS;
 using System;
 using System.Collections.Generic;
 using System.Linq;

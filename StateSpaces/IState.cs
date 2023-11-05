@@ -1,4 +1,4 @@
-﻿namespace PDDLSharp.Toolkit.StateSpace
+﻿namespace PDDLSharp.StateSpaces
 {
     public interface IState
     {
