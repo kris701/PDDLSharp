@@ -29,7 +29,7 @@ namespace PDDLSharp.Analysers.SAS
             GoalReachabilityCheck(decl);
         }
 
-        private void CheckForBasicSAS(SASDecl decl)
+        public void CheckForBasicSAS(SASDecl decl)
         {
             if (decl.DomainVariables.Count == 0)
                 Listener.AddError(new PDDLSharpError(
@@ -53,7 +53,7 @@ namespace PDDLSharp.Analysers.SAS
                     ParseErrorLevel.Analyser));
         }
 
-        private void InitReachabilityCheck(SASDecl decl)
+        public void InitReachabilityCheck(SASDecl decl)
         {
             foreach(var op in decl.Operators)
             {
@@ -75,7 +75,7 @@ namespace PDDLSharp.Analysers.SAS
                 ParseErrorLevel.Analyser));
         }
 
-        private void GoalReachabilityCheck(SASDecl decl)
+        public void GoalReachabilityCheck(SASDecl decl)
         {
             foreach(var goal in decl.Goal)
             {
