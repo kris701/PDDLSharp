@@ -29,6 +29,11 @@
             }
         }
 
+        /// <summary>
+        /// Equals is just based on the ID of the fact, since the translator only outputs unique IDs
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object? obj)
         {
             if (obj is Fact f)

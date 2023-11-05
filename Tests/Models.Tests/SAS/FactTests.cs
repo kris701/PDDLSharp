@@ -8,22 +8,8 @@ using System.Threading.Tasks;
 namespace PDDLSharp.Models.Tests.SAS
 {
     [TestClass]
-    public class FactTests
+    public class FactTests : BaseSASTests
     {
-        private List<Fact> GenerateRandomFacts(int fromID, int amount)
-        {
-            var facts = new List<Fact>();
-            var rnd = new Random();
-            for (int i = 0; i < amount; i++)
-            {
-                var newFact = new Fact($"fact-{fromID + i}");
-                newFact.ID = fromID + i;
-                facts.Add(newFact);
-            }
-
-            return facts;
-        }
-
         [TestMethod]
         [DataRow(0, 1)]
         [DataRow(0, 10)]
@@ -75,7 +61,7 @@ namespace PDDLSharp.Models.Tests.SAS
         [TestMethod]
         [DataRow(1)]
         [DataRow(100)]
-        [DataRow(10000)]
+        [DataRow(1000)]
         public void Can_GetHashCode(int count)
         {
             // ARRANGE

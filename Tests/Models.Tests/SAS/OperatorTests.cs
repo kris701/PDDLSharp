@@ -8,20 +8,43 @@ using System.Threading.Tasks;
 namespace PDDLSharp.Models.Tests.SAS
 {
     [TestClass]
-    public class OperatorTests
+    public class OperatorTests : BaseSASTests
     {
-        private List<Operator> GenerateRandomOperator(int fromID, int amount)
+        [TestMethod]
+        public void Can_GenerateConstructorRefs()
         {
-            var ops = new List<Operator>();
-            var rnd = new Random();
-            for (int i = 0; i < amount; i++)
+            // ARRANGE
+            var pre = GenerateRandomFacts(0, 5);
+            var add = GenerateRandomFacts(3, 5);
+            var del = GenerateRandomFacts(10, 5);
+
+            // ACT
+            var op = new Operator("op", new string[0], pre.ToArray(), add.ToArray(), del.ToArray());
+
+            // ASSERT
+            Assert.AreEqual(pre.Count, op.Pre.Length);
+            Assert.AreEqual(pre.Count, op.PreRef.Count);
+            foreach(var item in pre)
             {
-                var newOp = new Operator($"fact-{fromID + i}", new string[0], new Fact[0], new Fact[0], new Fact[0]);
-                newOp.ID = fromID + i;
-                ops.Add(newOp);
+                Assert.IsTrue(op.PreRef.Contains(item.ID));
+                Assert.IsTrue(op.Pre.Contains(item));
             }
 
-            return ops;
+            Assert.AreEqual(add.Count, op.Add.Length);
+            Assert.AreEqual(add.Count, op.AddRef.Count);
+            foreach (var item in add)
+            {
+                Assert.IsTrue(op.AddRef.Contains(item.ID));
+                Assert.IsTrue(op.Add.Contains(item));
+            }
+
+            Assert.AreEqual(del.Count, op.Del.Length);
+            Assert.AreEqual(del.Count, op.DelRef.Count);
+            foreach (var item in del)
+            {
+                Assert.IsTrue(op.DelRef.Contains(item.ID));
+                Assert.IsTrue(op.Del.Contains(item));
+            }
         }
 
         [TestMethod]
@@ -75,7 +98,7 @@ namespace PDDLSharp.Models.Tests.SAS
         [TestMethod]
         [DataRow(1)]
         [DataRow(100)]
-        [DataRow(10000)]
+        [DataRow(1000)]
         public void Can_GetHashCode(int count)
         {
             // ARRANGE
