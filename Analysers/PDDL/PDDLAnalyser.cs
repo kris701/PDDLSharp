@@ -6,7 +6,7 @@ using PDDLSharp.Models.PDDL;
 
 namespace PDDLSharp.Analysers.PDDL
 {
-    public class PDDLAnalyser : IAnalyser
+    public class PDDLAnalyser : IAnalyser<PDDLDecl>
     {
         public IErrorListener Listener { get; internal set; }
 
