@@ -97,6 +97,7 @@ namespace PDDLSharp.Translators
             operators = GetOperators(from, grounder, deconstructor);
             if (Aborted) return new SASDecl();
 
+            // Handle negative preconditions, if there where any
             if (_negativeFacts.Count > 0)
             {
                 var negInits = new HashSet<Fact>();
