@@ -154,6 +154,23 @@ namespace PDDLSharp.Translators.Tests
         }
 
         [TestMethod]
+        [DataRow("benchmarks/pathways/domain_p01.pddl", "benchmarks/pathways/p01.pddl", 15)]
+        public void Can_Translate_ExpectedInits_NegativePreconditions(string domain, string problem, int expected)
+        {
+            // ARRANGE
+            var listener = new ErrorListener();
+            var parser = new PDDLParser(listener);
+            var decl = parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
+            var translator = new PDDLToSASTranslator();
+
+            // ACT
+            var sas = translator.Translate(decl);
+
+            // ASSERT
+            Assert.AreEqual(expected, sas.Init.Count);
+        }
+
+        [TestMethod]
         [DataRow("benchmarks/gripper/domain.pddl", "benchmarks/gripper/prob20.pddl")]
         [DataRow("benchmarks/logistics98/domain.pddl", "benchmarks/logistics98/prob20.pddl")]
         public void Cant_Translate_IfTimedOut(string domain, string problem)

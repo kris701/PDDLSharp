@@ -7,12 +7,14 @@ namespace PDDLSharp.Translators.Tools
 {
     public class NodeDeconstructor
     {
+        private OrDeconstructor _orDeconstructor;
         private ForAllDeconstructor _forAllDeconstructor;
         private ExistsDeconstructor _existsDeconstructor;
         private ConditionalDeconstructor _conditionalDeconstructor;
 
         public NodeDeconstructor(IGrounder<IParametized> grounder)
         {
+            _orDeconstructor = new OrDeconstructor();
             _forAllDeconstructor = new ForAllDeconstructor(grounder);
             _existsDeconstructor = new ExistsDeconstructor(grounder);
             _conditionalDeconstructor = new ConditionalDeconstructor();
@@ -29,6 +31,7 @@ namespace PDDLSharp.Translators.Tools
 
         public void Abort()
         {
+            _orDeconstructor.Aborted = true;
             _forAllDeconstructor.Aborted = true;
             _existsDeconstructor.Aborted = true;
             _conditionalDeconstructor.Aborted = true;
@@ -36,10 +39,15 @@ namespace PDDLSharp.Translators.Tools
 
         public List<ActionDecl> DeconstructAction(ActionDecl act)
         {
+            // Initial unary deconstruction
             act = Deconstruct(act);
-            if (act.Effects.FindTypes<WhenExp>().Count > 0)
-                return _conditionalDeconstructor.DecontructConditionals(act);
-            return new List<ActionDecl>() { act };
+
+            // Multiple deconstruction
+            var conditionalsDeconstructed = _conditionalDeconstructor.DecontructConditionals(act);
+            var orDeconstructed = new List<ActionDecl>();
+            foreach (var decon in conditionalsDeconstructed)
+                orDeconstructed.AddRange(_orDeconstructor.DeconstructOrs(decon));
+            return orDeconstructed;
         }
     }
 }

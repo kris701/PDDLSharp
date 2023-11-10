@@ -21,6 +21,8 @@ namespace PDDLSharp.Translators
         private HashSet<Fact> _factSet = new HashSet<Fact>();
         private int _factID = 0;
         private int _opID = 0;
+        private HashSet<Fact> _negativeFacts = new HashSet<Fact>();
+        private string _negatedPrefix = "$neg-";
 
         public PDDLToSASTranslator(bool removeStaticsFromOutput = false)
         {
@@ -69,6 +71,7 @@ namespace PDDLSharp.Translators
             _factID = 0;
             _factSet = new HashSet<Fact>();
             _opID = 0;
+            _negativeFacts = new HashSet<Fact>();
 
             // Domain variables
             if (from.Problem.Objects != null)
@@ -93,6 +96,11 @@ namespace PDDLSharp.Translators
             // Operators
             operators = GetOperators(from, grounder, deconstructor);
             if (Aborted) return new SASDecl();
+
+            if (_negativeFacts.Count > 0)
+            {
+                
+            }
 
             var result = new SASDecl(domainVariables, operators, goal, init);
             watch.Stop();
@@ -163,6 +171,16 @@ namespace PDDLSharp.Translators
 
                         var preFacts = ExtractFactsFromExp(act.Preconditions, grounder);
                         var pre = preFacts[true];
+                        if (preFacts[false].Count > 0)
+                        {
+                            foreach (var fact in preFacts[false])
+                            {
+                                var nFact = GetNegatedOf(fact);
+                                if (!_negativeFacts.Any(x => x.Name == nFact.Name))
+                                    _negativeFacts.Add(nFact);
+                                pre.Add(nFact);
+                            }
+                        }
                         var effFacts = ExtractFactsFromExp(act.Effects, grounder);
                         var add = effFacts[true];
                         var del = effFacts[false];
@@ -198,6 +216,11 @@ namespace PDDLSharp.Translators
             return newFact;
         }
 
+        private Fact GetNegatedOf(Fact fact)
+        {
+            return new Fact($"{_negatedPrefix}{fact.Name}", fact.Arguments);
+        }
+
         private string GetCompound(Fact f)
         {
             var retStr = f.Name;
@@ -210,8 +233,8 @@ namespace PDDLSharp.Translators
         {
             foreach (var action in decl.Domain.Actions)
             {
-                if (action.Preconditions.FindTypes<NotExp>().Count > 0)
-                    throw new Exception("Translator does not support negative preconditions!");
+                //if (action.Preconditions.FindTypes<NotExp>().Count > 0)
+                //    throw new Exception("Translator does not support negative preconditions!");
                 if (action.FindTypes<ImplyExp>().Count > 0)
                     throw new Exception("Translator does not support Imply nodes!");
             }

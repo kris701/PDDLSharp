@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.SAS;
 
 namespace PDDLSharp.Translators.Tools
 {
@@ -9,7 +10,9 @@ namespace PDDLSharp.Translators.Tools
         public bool Aborted { get; set; } = false;
         public List<ActionDecl> DecontructConditionals(ActionDecl action)
         {
-            List<ActionDecl> newActions = new List<ActionDecl>();
+            var newActions = new List<ActionDecl>();
+            if (action.Effects.FindTypes<WhenExp>().Count == 0)
+                return new List<ActionDecl>() { action };
             newActions.AddRange(GeneratePossibleActions(action.Copy()));
             return newActions;
         }
