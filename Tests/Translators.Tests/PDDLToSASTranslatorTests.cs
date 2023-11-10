@@ -154,7 +154,7 @@ namespace PDDLSharp.Translators.Tests
         }
 
         [TestMethod]
-        [DataRow("benchmarks/pathways/domain_p01.pddl", "benchmarks/pathways/p01.pddl", 15)]
+        [DataRow("benchmarks/pathways/domain_p01.pddl", "benchmarks/pathways/p01.pddl", 48)]
         public void Can_Translate_ExpectedInits_NegativePreconditions(string domain, string problem, int expected)
         {
             // ARRANGE
@@ -168,6 +168,36 @@ namespace PDDLSharp.Translators.Tests
 
             // ASSERT
             Assert.AreEqual(expected, sas.Init.Count);
+        }
+
+        [TestMethod]
+        [DataRow("benchmarks/pathways/domain_p01.pddl", "benchmarks/pathways/p01.pddl", "choose")]
+        public void Can_Translate_ExpectedInits_AddsNegatedFactsToOperators(string domain, string problem, params string[] ops)
+        {
+            // ARRANGE
+            var listener = new ErrorListener();
+            var parser = new PDDLParser(listener);
+            var decl = parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
+            var translator = new PDDLToSASTranslator();
+
+            // ACT
+            var sas = translator.Translate(decl);
+
+            // ASSERT
+            foreach (var target in ops)
+            {
+                var all = sas.Operators.Where(x => x.Name == target);
+                foreach (var op in all)
+                {
+                    var negs = op.Pre.Where(x => x.Name.StartsWith("$neg-"));
+                    Assert.IsTrue(negs.Count() > 0);
+                    foreach(var neg in negs)
+                    {
+                        if (op.Add.Any(x => x.Name == neg.Name.Replace("$neg-", "")))
+                            Assert.IsTrue(op.Del.Contains(neg));
+                    }
+                }
+            }
         }
 
         [TestMethod]

@@ -30,6 +30,8 @@ namespace PDDLSharp.Translators.Tools
 
         private List<ActionDecl> DeconstructNodeRec(ActionDecl act)
         {
+            if (Aborted)
+                return new List<ActionDecl>();
             var ors = act.Preconditions.FindTypes<OrExp>();
             if (ors.Count <= 0)
                 return new List<ActionDecl> { act };
