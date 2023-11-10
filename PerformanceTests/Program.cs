@@ -95,9 +95,15 @@ namespace PerformanceTests
                                     if (!planner.Aborted)
                                     {
                                         if (validator.Validate(plan, pddlDecl))
+                                        {
+                                            Console.WriteLine($"Plan is valid!");
                                             couldSolve++;
+                                        }
                                         else
+                                        {
+                                            Console.WriteLine($"Plan is not valid!");
                                             couldNotSolve++;
+                                        }
                                     }
                                     else
                                         couldNotSolve++;
