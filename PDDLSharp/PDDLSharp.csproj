@@ -15,7 +15,7 @@
 
 	<PropertyGroup>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<Version>1.3.7</Version>
+		<Version>1.3.8</Version>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -55,7 +55,7 @@
 		<ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Models\Models.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Parsers\Parsers.csproj" PrivateAssets="all" />
-		<ProjectReference Include="..\StateSpaces\StateSpaces.csproj" PrivateAssets="all"/>
+		<ProjectReference Include="..\StateSpaces\StateSpaces.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Toolkit\Toolkit.MacroGenerators\Toolkit.MacroGenerators.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Toolkit\Toolkit.MutexDetector\Toolkit.MutexDetector.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Toolkit\Toolkit.Planners\Toolkit.Planners.csproj" PrivateAssets="all" />
