@@ -12,10 +12,10 @@ namespace PDDLSharp.ASTGenerators.PDDL
 
         public override ASTNode Generate(string text)
         {
+            text = PDDLTextPreprocessing.ReplaceCommentsWithWhiteSpace(text);
             PreCheck(text);
             text = text.ToLower();
             text = PDDLTextPreprocessing.ReplaceSpecialCharacters(text);
-            text = PDDLTextPreprocessing.ReplaceCommentsWithWhiteSpace(text);
             text = PDDLTextPreprocessing.TokenizeSpecials(text);
 
             int end = GetEndIndex(text);
