@@ -1,10 +1,12 @@
 ﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Tools;
 using PDDLSharp.Translators.Grounders;
 using PDDLSharp.Translators.Tools;
+using System;
 using System.Diagnostics;
 using System.Timers;
 
@@ -311,11 +313,28 @@ namespace PDDLSharp.Translators
 
         private void CheckIfValid(PDDLDecl decl)
         {
-            foreach (var action in decl.Domain.Actions)
-            {
-                if (action.FindTypes<ImplyExp>().Count > 0)
-                    throw new Exception("Translator does not support Imply nodes!");
-            }
+            if (decl.Domain.FindTypes<ImplyExp>().Count > 0 || decl.Problem.FindTypes<ImplyExp>().Count > 0)
+                throw new Exception("Translator does not support Imply nodes!");
+            if (decl.Domain.FindTypes<DerivedDecl>().Count > 0 || decl.Problem.FindTypes<DerivedDecl>().Count > 0)
+                throw new Exception("Translator does not support Derived Declaration nodes!");
+            if (decl.Domain.FindTypes<TimedLiteralExp>().Count > 0 || decl.Problem.FindTypes<TimedLiteralExp>().Count > 0)
+                throw new Exception("Translator does not support Timed Literal nodes!");
+            if (decl.Domain.FindTypes<NumericExp>().Count > 0 || decl.Problem.FindTypes<NumericExp>().Count > 0)
+                throw new Exception("Translator does not support Numeric nodes!");
+            if (decl.Domain.FindTypes<LiteralExp>().Count > 0 || decl.Problem.FindTypes<LiteralExp>().Count > 0)
+                throw new Exception("Translator does not support Literal nodes!");
+            if (decl.Domain.FindTypes<MetricDecl>().Count > 0 || decl.Problem.FindTypes<MetricDecl>().Count > 0)
+                throw new Exception("Translator does not support Metric nodes!");
+            if (decl.Domain.FindTypes<SituationDecl>().Count > 0 || decl.Problem.FindTypes<SituationDecl>().Count > 0)
+                throw new Exception("Translator does not support Situation nodes!");
+            if (decl.Domain.FindTypes<AxiomDecl>().Count > 0 || decl.Problem.FindTypes<AxiomDecl>().Count > 0)
+                throw new Exception("Translator does not support Axiom nodes!");
+            if (decl.Domain.FindTypes<DurativeActionDecl>().Count > 0 || decl.Problem.FindTypes<DurativeActionDecl>().Count > 0)
+                throw new Exception("Translator does not support Durative Actions nodes!");
+            if (decl.Domain.FindTypes<ExtendsDecl>().Count > 0 || decl.Problem.FindTypes<ExtendsDecl>().Count > 0)
+                throw new Exception("Translator does not support Extends nodes!");
+            if (decl.Domain.FindTypes<TimelessDecl>().Count > 0 || decl.Problem.FindTypes<TimelessDecl>().Count > 0)
+                throw new Exception("Translator does not support Timeless nodes!");
         }
     }
 }

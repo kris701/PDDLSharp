@@ -17,6 +17,7 @@ using PDDLSharp.Toolkit.MacroGenerators;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
+using PDDLSharp.Tools;
 using PDDLSharp.Translators;
 using System.Diagnostics;
 
@@ -55,67 +56,79 @@ namespace PerformanceTests
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
-                var domain = Path.Combine(subDir.FullName, "domain.pddl");
-                if (File.Exists(domain))
+                FileInfo? domain = null;
+                FileInfo? problem = null;
+                foreach (var file in new DirectoryInfo(subDir.FullName).GetFiles())
                 {
-                    try
+                    if (domain == null && PDDLFileHelper.IsFileDomain(file.FullName))
+                        domain = file;
+                    if (problem == null && PDDLFileHelper.IsFileProblem(file.FullName))
+                        problem = file;
+                    if (domain != null && problem != null)
+                        break;
+                }
+
+                if (domain == null || problem == null)
+                    continue;
+
+                try
+                {
+                    Console.WriteLine($"Domain: {domain.Name}");
+                    Console.WriteLine($"Problem: {problem.Name}");
+
+                    PDDLDecl pddlDecl = new PDDLDecl(
+                        parser.ParseAs<DomainDecl>(domain),
+                        parser.ParseAs<ProblemDecl>(problem));
+
+                    Console.WriteLine($"Translating...");
+                    ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
+                    translator.TimeLimit = TimeSpan.FromSeconds(30);
+                    var decl = translator.Translate(pddlDecl);
+
+                    if (translator.Aborted)
                     {
-                        foreach (var file in new DirectoryInfo(subDir.FullName).GetFiles())
-                        {
-                            if (file.Name != "domain.pddl")
-                            {
-                                Console.WriteLine($"Domain: {subDir.Name}");
-                                Console.WriteLine($"Problem: {file.Name}");
-
-                                PDDLDecl pddlDecl = new PDDLDecl(
-                                    parser.ParseAs<DomainDecl>(new FileInfo(domain)),
-                                    parser.ParseAs<ProblemDecl>(file));
-
-                                Console.WriteLine($"Translating...");
-                                ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
-                                translator.TimeLimit = TimeSpan.FromSeconds(30);
-                                var decl = translator.Translate(pddlDecl);
-
-                                if (translator.Aborted)
-                                {
-                                    couldNotSolve++;
-                                    Console.WriteLine($"Translator timed out...");
-                                    break;
-                                }
-
-                                using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
-                                {
-                                    planner.Log = true;
-                                    planner.SearchLimit = TimeSpan.FromSeconds(60);
-
-                                    var plan = new ActionPlan(new List<GroundedAction>());
-
-                                    plan = planner.Solve();
-
-                                    if (!planner.Aborted)
-                                    {
-                                        if (validator.Validate(plan, pddlDecl))
-                                        {
-                                            Console.WriteLine($"Plan is valid!");
-                                            couldSolve++;
-                                        }
-                                        else
-                                        {
-                                            Console.WriteLine($"Plan is not valid!");
-                                            couldNotSolve++;
-                                        }
-                                    }
-                                    else
-                                        couldNotSolve++;
-                                }
-                                break;
-                            }
-                        }
+                        couldNotSolve++;
+                        Console.WriteLine($"Translator timed out...");
+                        continue;
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Cannot solve for domain: {ex.Message}");
-                    }
+                    else
+                        couldSolve++;
+
+                    Console.WriteLine($"\tVariables: {decl.DomainVariables.Count}");
+                    Console.WriteLine($"\tOperator:  {decl.Operators.Count}");
+                    Console.WriteLine($"\tInits:     {decl.Init.Count}");
+                    Console.WriteLine($"\tGoals:     {decl.Goal.Count}");
+
+                    //using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
+                    //{
+                    //    planner.Log = true;
+                    //    planner.SearchLimit = TimeSpan.FromSeconds(60);
+
+                    //    var plan = new ActionPlan(new List<GroundedAction>());
+
+                    //    plan = planner.Solve();
+
+                    //    if (!planner.Aborted)
+                    //    {
+                    //        if (validator.Validate(plan, pddlDecl))
+                    //        {
+                    //            Console.WriteLine($"Plan is valid!");
+                    //            couldSolve++;
+                    //        }
+                    //        else
+                    //        {
+                    //            Console.WriteLine($"Plan is not valid!");
+                    //            couldNotSolve++;
+                    //        }
+                    //    }
+                    //    else
+                    //        couldNotSolve++;
+                    //}
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
+                    couldNotSolve++;
                 }
             }
             Console.WriteLine($"");
