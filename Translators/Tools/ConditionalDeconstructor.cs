@@ -38,16 +38,17 @@ namespace PDDLSharp.Translators.Tools
             foreach (var permutation in permutations)
             {
                 if (Aborted) return new List<ActionDecl>();
-                var newAct = source.Copy();
+                var newAct = new ActionDecl(source.Name);
+                newAct.Parameters = source.Parameters;
 
                 for (int i = 0; i < permutation.Length; i++)
                 {
                     if (permutation[i])
                     {
                         if (newAct.Preconditions is AndExp preAnd)
-                            preAnd.Add(allWhens[i].Condition.Copy());
+                            preAnd.Add(allWhens[i].Condition);
                         if (newAct.Effects is AndExp effAnd)
-                            effAnd.Add(allWhens[i].Effect.Copy());
+                            effAnd.Add(allWhens[i].Effect);
                     }
                 }
 

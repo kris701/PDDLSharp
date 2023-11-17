@@ -82,7 +82,7 @@ namespace PerformanceTests
 
                     Console.WriteLine($"Translating...");
                     ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
-                    translator.TimeLimit = TimeSpan.FromSeconds(30);
+                    translator.TimeLimit = TimeSpan.FromSeconds(60);
                     var decl = translator.Translate(pddlDecl);
 
                     if (translator.Aborted)
@@ -91,39 +91,37 @@ namespace PerformanceTests
                         Console.WriteLine($"Translator timed out...");
                         continue;
                     }
-                    else
-                        couldSolve++;
 
                     Console.WriteLine($"\tVariables: {decl.DomainVariables.Count}");
-                    Console.WriteLine($"\tOperator:  {decl.Operators.Count}");
+                    Console.WriteLine($"\tOperators: {decl.Operators.Count}");
                     Console.WriteLine($"\tInits:     {decl.Init.Count}");
                     Console.WriteLine($"\tGoals:     {decl.Goal.Count}");
 
-                    //using (var planner = new GreedyBFSUAR(decl, new hFF(decl)))
-                    //{
-                    //    planner.Log = true;
-                    //    planner.SearchLimit = TimeSpan.FromSeconds(60);
+                    using (var planner = new GreedyBFS(decl, new hFF(decl)))
+                    {
+                        planner.Log = true;
+                        planner.SearchLimit = TimeSpan.FromSeconds(60);
 
-                    //    var plan = new ActionPlan(new List<GroundedAction>());
+                        var plan = new ActionPlan(new List<GroundedAction>());
 
-                    //    plan = planner.Solve();
+                        plan = planner.Solve();
 
-                    //    if (!planner.Aborted)
-                    //    {
-                    //        if (validator.Validate(plan, pddlDecl))
-                    //        {
-                    //            Console.WriteLine($"Plan is valid!");
-                    //            couldSolve++;
-                    //        }
-                    //        else
-                    //        {
-                    //            Console.WriteLine($"Plan is not valid!");
-                    //            couldNotSolve++;
-                    //        }
-                    //    }
-                    //    else
-                    //        couldNotSolve++;
-                    //}
+                        if (!planner.Aborted)
+                        {
+                            if (validator.Validate(plan, pddlDecl))
+                            {
+                                Console.WriteLine($"Plan is valid!");
+                                couldSolve++;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Plan is not valid!");
+                                couldNotSolve++;
+                            }
+                        }
+                        else
+                            couldNotSolve++;
+                    }
                 }
                 catch (Exception ex)
                 {
