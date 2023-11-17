@@ -132,13 +132,8 @@ namespace PDDLSharp.Models.PDDL
 
         public override bool Equals(object? obj)
         {
-            if (obj == null)
-                return false;
-            if (obj is not INode)
-                return false;
-            var hash1 = obj.GetHashCode();
-            var hash2 = GetHashCode();
-            return hash1 == hash2;
+            if (obj is BaseNode) return true;
+            return false;
         }
 
         public virtual void RemoveContext()

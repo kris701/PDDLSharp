@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
@@ -36,6 +37,18 @@ namespace PDDLSharp.Models.PDDL.Expressions
             Arguments = new List<NameExp>();
         }
 
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is PredicateExp other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!EqualityHelper.AreListsEqual(Arguments, other.Arguments)) return false;
+                return true;
+            }
+            return false;
+        }
+
         // The order is important!
         // Based on: https://stackoverflow.com/a/30758270
         public override int GetHashCode()
@@ -44,7 +57,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
             const int modifier = 31;
             unchecked
             {
-                return base.GetHashCode() * Arguments.Aggregate(seed, (current, item) =>
+                return base.GetHashCode() + Arguments.Aggregate(seed, (current, item) =>
                     (current * modifier) + item.GetHashCode());
             }
         }

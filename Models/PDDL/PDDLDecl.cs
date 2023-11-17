@@ -24,13 +24,13 @@ namespace PDDLSharp.Models.PDDL
 
         public override bool Equals(object? obj)
         {
-            if (obj == null)
-                return false;
-            if (obj is not PDDLDecl)
-                return false;
-            var hash1 = obj.GetHashCode();
-            var hash2 = GetHashCode();
-            return hash1 == hash2;
+            if (obj is PDDLDecl other)
+            {
+                if (!Domain.Equals(other.Domain)) return false;
+                if (!Problem.Equals(other.Problem)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()
@@ -52,8 +52,8 @@ namespace PDDLSharp.Models.PDDL
         public PDDLDecl Copy()
         {
             return new PDDLDecl(
-                Domain.Copy(null),
-                Problem.Copy(null)
+                Domain.Copy(),
+                Problem.Copy()
                 );
         }
     }

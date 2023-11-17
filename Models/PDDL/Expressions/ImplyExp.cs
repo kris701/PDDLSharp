@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using System.Linq.Expressions;
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
@@ -41,6 +42,18 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             Antecedent = new AndExp(this, new List<IExp>());
             Consequent = new AndExp(this, new List<IExp>());
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is ImplyExp other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Antecedent.Equals(other.Antecedent)) return false;
+                if (!Consequent.Equals(other.Consequent)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
@@ -37,6 +38,28 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public DerivedPredicateExp(ASTNode node, INode? parent, string name, List<NameExp> arguments, List<DerivedDecl> derivedDecls) : base(node, parent, name, arguments)
         {
             _derivedDecls = derivedDecls;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is DerivedPredicateExp other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!EqualityHelper.AreListsEqual(GetDecls(), other.GetDecls())) return false;
+                return true;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            const int seed = 487;
+            const int modifier = 31;
+            unchecked
+            {
+                return base.GetHashCode() + Arguments.Aggregate(seed, (current, item) =>
+                    (current * modifier) + item.GetHashCode());
+            }
         }
 
         public override DerivedPredicateExp Copy(INode? newParent = null)

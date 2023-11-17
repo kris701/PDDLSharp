@@ -30,6 +30,21 @@ namespace PDDLSharp.Tools
             return true;
         }
 
+        public static bool AreListsEqualUnordered<T>(List<T> list1, List<T> list2)
+        {
+            if (list1 == null && list2 == null) return true;
+            if (list1 == null && list2 != null) return false;
+            if (list1 != null && list2 == null) return false;
+            if (list1 != null && list2 != null)
+            {
+                if (list1.Count != list2.Count) return false;
+                foreach(var item in list1)
+                    if (!list2.Contains(item))
+                        return false;
+            }
+            return true;
+        }
+
         public static bool AreListsEqual<T>(HashSet<T> list1, HashSet<T> list2)
         {
             if (list1 == null && list2 == null) return true;
