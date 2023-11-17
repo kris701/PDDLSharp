@@ -14,6 +14,7 @@ using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Parsers.FastDownward.SAS;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Toolkit.MacroGenerators;
+using PDDLSharp.Toolkit.Planners.Aliases;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
@@ -97,7 +98,7 @@ namespace PerformanceTests
                     Console.WriteLine($"\tInits:     {decl.Init.Count}");
                     Console.WriteLine($"\tGoals:     {decl.Goal.Count}");
 
-                    using (var planner = new GreedyBFS(decl, new hFF(decl)))
+                    using (var planner = new GreedyBFS(decl, new SatSimple(decl)))
                     {
                         planner.Log = true;
                         planner.SearchLimit = TimeSpan.FromSeconds(60);
