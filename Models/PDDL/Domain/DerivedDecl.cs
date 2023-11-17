@@ -1,5 +1,7 @@
-﻿using PDDLSharp.Models.AST;
+﻿using Microsoft.VisualBasic;
+using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -42,6 +44,18 @@ namespace PDDLSharp.Models.PDDL.Domain
         {
             Predicate = new PredicateExp(this, "", new List<NameExp>());
             Expression = new AndExp(this, new List<IExp>()); ;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is DerivedDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Predicate.Equals(other.Predicate)) return false;
+                if (!Expression.Equals(other.Expression)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

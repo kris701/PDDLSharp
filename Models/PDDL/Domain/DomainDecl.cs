@@ -1,4 +1,7 @@
 ﻿using PDDLSharp.Models.AST;
+using System.Linq.Expressions;
+using System;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -31,6 +34,36 @@ namespace PDDLSharp.Models.PDDL.Domain
             Axioms = new List<AxiomDecl>();
             DurativeActions = new List<DurativeActionDecl>();
             Deriveds = new List<DerivedDecl>();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is DomainDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (Name == null && other.Name != null) return false;
+                if (Name != null && !Name.Equals(other.Name)) return false;
+                if (Requirements == null && other.Requirements != null) return false;
+                if (Requirements != null && !Requirements.Equals(other.Requirements)) return false;
+                if (Extends == null && other.Extends != null) return false;
+                if (Extends != null && !Extends.Equals(other.Extends)) return false;
+                if (Timeless == null && other.Timeless != null) return false;
+                if (Timeless != null && !Timeless.Equals(other.Timeless)) return false;
+                if (Types == null && other.Types != null) return false;
+                if (Types != null && !Types.Equals(other.Types)) return false;
+                if (Constants == null && other.Constants != null) return false;
+                if (Constants != null && !Constants.Equals(other.Constants)) return false;
+                if (Predicates == null && other.Predicates != null) return false;
+                if (Predicates != null && !Predicates.Equals(other.Predicates)) return false;
+                if (Functions == null && other.Functions != null) return false;
+                if (Functions != null && !Functions.Equals(other.Functions)) return false;
+                if (!EqualityHelper.AreListsEqualUnordered(Actions, other.Actions)) return false;
+                if (!EqualityHelper.AreListsEqualUnordered(DurativeActions, other.DurativeActions)) return false;
+                if (!EqualityHelper.AreListsEqualUnordered(Axioms, other.Axioms)) return false;
+                if (!EqualityHelper.AreListsEqualUnordered(Deriveds, other.Deriveds)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

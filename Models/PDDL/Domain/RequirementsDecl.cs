@@ -1,5 +1,7 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
+using System;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -35,6 +37,17 @@ namespace PDDLSharp.Models.PDDL.Domain
         public RequirementsDecl() : base()
         {
             Requirements = new List<NameExp>();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is RequirementsDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!EqualityHelper.AreListsEqualUnordered(Requirements, other.Requirements)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -35,6 +36,17 @@ namespace PDDLSharp.Models.PDDL.Domain
         public TimelessDecl() : base()
         {
             Items = new List<PredicateExp>();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is TimelessDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!EqualityHelper.AreListsEqualUnordered(Items, other.Items)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

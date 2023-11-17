@@ -1,5 +1,7 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
+using System;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
@@ -42,6 +44,18 @@ namespace PDDLSharp.Models.PDDL.Problem
         {
             MetricType = metricType;
             MetricExp = new AndExp(this, new List<IExp>());
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is MetricDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!MetricType.Equals(other.MetricType)) return false;
+                if (!MetricExp.Equals(other.MetricExp)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

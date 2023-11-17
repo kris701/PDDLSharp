@@ -37,6 +37,17 @@ namespace PDDLSharp.Models.PDDL.Problem
             GoalExp = new AndExp(this, new List<IExp>());
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is GoalDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!GoalExp.Equals(other.GoalExp)) return false;
+                return true;
+            }
+            return false;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode() ^ GoalExp.GetHashCode();

@@ -15,6 +15,30 @@ namespace PDDLSharp.Models.PDDL.Problem
         public ProblemDecl(ASTNode node) : base(node, null) { }
         public ProblemDecl() : base(null) { }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is ProblemDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (Name == null && other.Name != null) return false;
+                if (Name != null && !Name.Equals(other.Name)) return false;
+                if (DomainName == null && other.DomainName != null) return false;
+                if (DomainName != null && !DomainName.Equals(other.DomainName)) return false;
+                if (Situation == null && other.Situation != null) return false;
+                if (Situation != null && !Situation.Equals(other.Situation)) return false;
+                if (Objects == null && other.Objects != null) return false;
+                if (Objects != null && !Objects.Equals(other.Objects)) return false;
+                if (Init == null && other.Init != null) return false;
+                if (Init != null && !Init.Equals(other.Init)) return false;
+                if (Goal == null && other.Goal != null) return false;
+                if (Goal != null && !Goal.Equals(other.Goal)) return false;
+                if (Metric == null && other.Metric != null) return false;
+                if (Metric != null && !Metric.Equals(other.Metric)) return false;
+                return true;
+            }
+            return false;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

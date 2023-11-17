@@ -58,6 +58,20 @@ namespace PDDLSharp.Models.PDDL.Domain
             Duration = new AndExp(this, new List<IExp>());
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is DurativeActionDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Parameters.Equals(other.Parameters)) return false;
+                if (!Condition.Equals(other.Condition)) return false;
+                if (!Effects.Equals(other.Effects)) return false;
+                if (!Duration.Equals(other.Duration)) return false;
+                return true;
+            }
+            return false;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
