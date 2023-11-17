@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
@@ -41,6 +42,18 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             Value = value;
             Literal = new AndExp(this, new List<IExp>());
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is TimedLiteralExp other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Value.Equals(other.Value)) return false;
+                if (!Literal.Equals(other.Literal)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

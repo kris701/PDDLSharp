@@ -1,4 +1,6 @@
-﻿namespace PDDLSharp.Models.PDDL.Expressions
+﻿using PDDLSharp.Tools;
+
+namespace PDDLSharp.Models.PDDL.Expressions
 {
     public class EmptyExp : BaseNode, IExp
     {
@@ -6,6 +8,17 @@
         {
             return new EmptyExp();
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is EmptyExp other)
+            {
+                if (!base.Equals(other)) return false;
+                return true;
+            }
+            return false;
+        }
+
 
         public override int GetHashCode()
         {

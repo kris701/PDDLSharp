@@ -1,4 +1,6 @@
-﻿namespace PDDLSharp.Models.AST
+﻿using PDDLSharp.Tools;
+
+namespace PDDLSharp.Models.AST
 {
     public class ASTNode
     {
@@ -63,6 +65,29 @@
         public override string ToString()
         {
             return OuterContent;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is ASTNode other)
+            {
+                if (Line != other.Line) return false;
+                if (Start != other.Start) return false;
+                if (End != other.End) return false;
+                if (OuterContent != other.OuterContent) return false;
+                if (InnerContent != other.InnerContent) return false;
+                if (!EqualityHelper.AreListsEqual(Children, other.Children)) return false;
+                return true;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = Line ^ Start ^ End ^ OuterContent.GetHashCode() ^ InnerContent.GetHashCode();
+            foreach(var child in Children)
+                hash ^= child.GetHashCode();
+            return hash;
         }
     }
 }

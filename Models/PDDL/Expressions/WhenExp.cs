@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Expressions
 {
@@ -41,6 +42,18 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             Condition = new AndExp(this, new List<IExp>());
             Effect = new AndExp(this, new List<IExp>());
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is WhenExp other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Condition.Equals(other.Condition)) return false;
+                if (!Effect.Equals(other.Effect)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

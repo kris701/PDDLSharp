@@ -36,6 +36,17 @@ namespace PDDLSharp.Models.PDDL.Expressions
             Type = new TypeExp(this, "object");
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is NameExp other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Type.Equals(other.Type)) return false;
+                return true;
+            }
+            return false;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode() ^ Type.GetHashCode();

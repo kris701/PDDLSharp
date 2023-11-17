@@ -36,6 +36,17 @@ namespace PDDLSharp.Models.PDDL.Expressions
             Child = new AndExp(this, new List<IExp>());
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is NotExp other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Child.Equals(other.Child)) return false;
+                return true;
+            }
+            return false;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode() ^ Child.GetHashCode();

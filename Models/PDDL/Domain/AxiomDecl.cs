@@ -51,6 +51,19 @@ namespace PDDLSharp.Models.PDDL.Domain
             Implies = new AndExp(this, new List<IExp>());
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is AxiomDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Parameters.Equals(other.Parameters)) return false;
+                if (!Context.Equals(other.Context)) return false;
+                if (!Implies.Equals(other.Implies)) return false;
+                return true;
+            }
+            return false;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

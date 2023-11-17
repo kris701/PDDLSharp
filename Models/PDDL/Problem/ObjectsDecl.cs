@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
@@ -35,6 +36,17 @@ namespace PDDLSharp.Models.PDDL.Problem
         public ObjectsDecl() : base()
         {
             Objs = new List<NameExp>();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is ObjectsDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!EqualityHelper.AreListsEqualUnordered(Objs, other.Objs)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

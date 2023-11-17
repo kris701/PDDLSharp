@@ -26,7 +26,14 @@
         public override bool Equals(object? obj)
         {
             if (obj is ActionPlan op)
-                return op.GetHashCode() == GetHashCode();
+            {
+                if (Cost != op.Cost) return false;
+                if (Plan.Count != op.Plan.Count) return false;
+                for (int i = 0; i < Plan.Count; i++)
+                    if (!Plan[i].Equals(op.Plan[i]))
+                        return false;
+                return true;
+            }
             return false;
         }
 

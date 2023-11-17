@@ -17,6 +17,16 @@ namespace PDDLSharp.Models.PDDL
         {
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is BaseNamedWalkableNode other)
+            {
+                if (!base.Equals(other)) return false;
+                return true;
+            }
+            return false;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();

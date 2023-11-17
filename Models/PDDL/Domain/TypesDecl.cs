@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -35,6 +36,17 @@ namespace PDDLSharp.Models.PDDL.Domain
         public TypesDecl() : base()
         {
             Types = new List<TypeExp>();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is TypesDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!EqualityHelper.AreListsEqualUnordered(Types, other.Types)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

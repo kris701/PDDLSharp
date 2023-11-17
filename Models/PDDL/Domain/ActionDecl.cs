@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -49,6 +50,19 @@ namespace PDDLSharp.Models.PDDL.Domain
             Parameters = new ParameterExp(this, new List<NameExp>());
             Preconditions = new AndExp(this, new List<IExp>());
             Effects = new AndExp(this, new List<IExp>());
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is ActionDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Parameters.Equals(other.Parameters)) return false;
+                if (!Preconditions.Equals(other.Preconditions)) return false;
+                if (!Effects.Equals(other.Effects)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

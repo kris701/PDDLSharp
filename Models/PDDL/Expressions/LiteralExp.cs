@@ -21,6 +21,17 @@ namespace PDDLSharp.Models.PDDL.Expressions
             Value = value;
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is LiteralExp other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Value.Equals(other.Value)) return false;
+                return true;
+            }
+            return false;
+        }
+
         public override int GetHashCode()
         {
             int hash = base.GetHashCode();

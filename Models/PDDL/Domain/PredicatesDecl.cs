@@ -1,5 +1,7 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Tools;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
@@ -35,6 +37,17 @@ namespace PDDLSharp.Models.PDDL.Domain
         public PredicatesDecl() : base()
         {
             Predicates = new List<PredicateExp>();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is PredicatesDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!EqualityHelper.AreListsEqualUnordered(Predicates, other.Predicates)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

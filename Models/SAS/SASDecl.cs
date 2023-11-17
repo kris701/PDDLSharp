@@ -1,4 +1,7 @@
-﻿namespace PDDLSharp.Models.SAS
+﻿using PDDLSharp.Models.FastDownward.SAS.Sections;
+using PDDLSharp.Tools;
+
+namespace PDDLSharp.Models.SAS
 {
     public class SASDecl
     {
@@ -40,6 +43,33 @@
                 init.Add(i.Copy());
 
             return new SASDecl(domainVariables, operators, goal, init);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is SASDecl other)
+            {
+                if (!EqualityHelper.AreListsEqual(DomainVariables, other.DomainVariables)) return false;
+                if (!EqualityHelper.AreListsEqual(Operators, other.Operators)) return false;
+                if (!EqualityHelper.AreListsEqual(Goal, other.Goal)) return false;
+                if (!EqualityHelper.AreListsEqual(Init, other.Init)) return false;
+                return true;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = 1;
+            foreach (var child in DomainVariables)
+                hash ^= child.GetHashCode();
+            foreach (var child in Operators)
+                hash ^= child.GetHashCode();
+            foreach (var child in Goal)
+                hash ^= child.GetHashCode();
+            foreach (var child in Init)
+                hash ^= child.GetHashCode();
+            return hash;
         }
     }
 }

@@ -43,6 +43,18 @@ namespace PDDLSharp.Models.PDDL.Expressions
             Arg2 = new AndExp(this, new List<IExp>());
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is NumericExp other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Arg1.Equals(other.Arg1)) return false;
+                if (!Arg2.Equals(other.Arg2)) return false;
+                return true;
+            }
+            return false;
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode() ^ Arg1.GetHashCode() ^ Arg2.GetHashCode();

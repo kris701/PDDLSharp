@@ -24,10 +24,10 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
     {
         [TestMethod]
         [DataRow("TestData/gripper-domain.pddl", 4, "TestData/gripper/prob01.plan")]
-        [DataRow("TestData/gripper-domain.pddl", 12, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan")]
-        [DataRow("TestData/gripper-domain.pddl", 20, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan")]
-        [DataRow("TestData/gripper-domain.pddl", 28, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan", "TestData/gripper/prob04.plan")]
-        [DataRow("TestData/gripper-domain.pddl", 36, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan", "TestData/gripper/prob04.plan", "TestData/gripper/prob05.plan")]
+        [DataRow("TestData/gripper-domain.pddl", 17, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan")]
+        [DataRow("TestData/gripper-domain.pddl", 29, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan")]
+        [DataRow("TestData/gripper-domain.pddl", 41, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan", "TestData/gripper/prob04.plan")]
+        [DataRow("TestData/gripper-domain.pddl", 53, "TestData/gripper/prob01.plan", "TestData/gripper/prob02.plan", "TestData/gripper/prob03.plan", "TestData/gripper/prob04.plan", "TestData/gripper/prob05.plan")]
         public void Can_GenerateMacros_MacroCount(string domainFile, int expectedMacros, params string[] planFiles)
         {
             // ARRANGE

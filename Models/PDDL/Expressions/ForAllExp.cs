@@ -43,6 +43,18 @@ namespace PDDLSharp.Models.PDDL.Expressions
             Expression = new AndExp(this, new List<IExp>());
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is ForAllExp other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!Parameters.Equals(other.Parameters)) return false;
+                if (!Expression.Equals(other.Expression)) return false;
+                return true;
+            }
+            return false;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();

@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
@@ -34,6 +35,17 @@ namespace PDDLSharp.Models.PDDL.Problem
         public InitDecl() : base()
         {
             Predicates = new List<IExp>();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is InitDecl other)
+            {
+                if (!base.Equals(other)) return false;
+                if (!EqualityHelper.AreListsEqualUnordered(Predicates, other.Predicates)) return false;
+                return true;
+            }
+            return false;
         }
 
         public override int GetHashCode()

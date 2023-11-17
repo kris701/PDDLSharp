@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.FastDownward.SAS.Sections
 {
@@ -25,6 +26,26 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
         public override string? ToString()
         {
             return $"{VariableName}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is VariableDecl other)
+            {
+                if (VariableName != other.VariableName) return false;
+                if (AxiomLayer != other.AxiomLayer) return false;
+                if (!EqualityHelper.AreListsEqual(SymbolicNames, other.SymbolicNames)) return false;
+                return true;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = VariableName.GetHashCode() ^ AxiomLayer.GetHashCode();
+            foreach (var child in SymbolicNames)
+                hash ^= child.GetHashCode();
+            return hash;
         }
     }
 }

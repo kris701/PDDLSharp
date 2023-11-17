@@ -2,7 +2,7 @@
 
 namespace PDDLSharp.Models.FastDownward.SAS
 {
-    public class BaseSASNode : ISASNode
+    public abstract class BaseSASNode : ISASNode
     {
         public int Start { get; set; }
         public int End { get; set; }
