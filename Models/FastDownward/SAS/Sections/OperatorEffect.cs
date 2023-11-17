@@ -1,4 +1,7 @@
-﻿namespace PDDLSharp.Models.FastDownward.SAS.Sections
+﻿using PDDLSharp.Tools;
+using System.Xml.Linq;
+
+namespace PDDLSharp.Models.FastDownward.SAS.Sections
 {
     public class OperatorEffect
     {
@@ -24,6 +27,27 @@
             retStr += $"{VariablePrecondition} ";
             retStr += $"{VariableEffect}";
             return retStr;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is OperatorEffect other)
+            {
+                if (EffectedVariable != other.EffectedVariable) return false;
+                if (VariablePrecondition != other.VariablePrecondition) return false;
+                if (VariableEffect != other.VariableEffect) return false;
+                if (!EqualityHelper.AreListsEqual(EffectConditions, other.EffectConditions)) return false;
+                return true;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = EffectedVariable.GetHashCode() ^ VariablePrecondition.GetHashCode() ^ VariableEffect.GetHashCode();
+            foreach (var child in EffectConditions)
+                hash ^= child.GetHashCode();
+            return hash;
         }
     }
 }

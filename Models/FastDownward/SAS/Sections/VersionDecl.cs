@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.FastDownward.SAS.Sections
 {
@@ -19,6 +20,21 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
         public override string? ToString()
         {
             return $"{Version}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is VersionDecl other)
+            {
+                if (Version != other.Version) return false;
+                return true;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Version.GetHashCode();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.FastDownward.SAS.Sections
 {
@@ -21,6 +22,22 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
             if (IsUsingMetrics)
                 return "true";
             return "false";
+        }
+
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is MetricDecl other)
+            {
+                if (IsUsingMetrics != other.IsUsingMetrics) return false;
+                return true;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return IsUsingMetrics.GetHashCode();
         }
     }
 }

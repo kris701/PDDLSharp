@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.FastDownward.SAS.Sections
 {
@@ -22,6 +23,24 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
             foreach (var value in Goals)
                 retStr += $"{value}, ";
             return retStr.Trim();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is GoalStateDecl other)
+            {
+                if (!EqualityHelper.AreListsEqual(Goals, other.Goals)) return false;
+                return true;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = 1;
+            foreach (var child in Goals)
+                hash ^= child.GetHashCode();
+            return hash;
         }
     }
 }

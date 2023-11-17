@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace PDDLSharp.Tools
+{
+    public static class EqualityHelper
+    {
+        public static bool AreListsEqual<T>(List<T> list1, List<T> list2)
+        {
+            if (list1 == null && list2 == null) return true;
+            if (list1 == null && list2 != null) return false;
+            if (list1 != null && list2 == null) return false;
+            if (list1 != null && list2 != null)
+            {
+                if (list1.Count != list2.Count) return false;
+                for (int i = 0; i < list1.Count; i++)
+                {
+                    if (list1[i] == null && list2[i] == null) continue;
+                    if (list1[i] == null && list2[i] != null) return false;
+                    if (list1[i] != null && list2[i] == null) return false;
+                    if (list1[i] != null && list2[i] != null)
+                        if (!list1[i].Equals(list2[i]))
+                            return false;
+                }
+            }
+            return true;
+        }
+    }
+}

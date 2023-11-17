@@ -47,7 +47,14 @@ namespace PDDLSharp.Models.FastDownward.Plans
         public override bool Equals(object? obj)
         {
             if (obj is GroundedAction op)
-                return op.GetHashCode() == GetHashCode();
+            {
+                if (ActionName != op.ActionName) return false;
+                if (Arguments.Count != op.Arguments.Count) return false;
+                for (int i = 0; i < Arguments.Count; i++)
+                    if (!Arguments[i].Equals(op.Arguments[i]))
+                        return false;
+                return true;
+            }
             return false;
         }
 
