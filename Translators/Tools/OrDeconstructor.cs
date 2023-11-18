@@ -15,8 +15,6 @@ namespace PDDLSharp.Translators.Tools
         public List<ActionDecl> DeconstructOrs(ActionDecl action)
         {
             var deconstructed = new List<ActionDecl>();
-            if (action.FindTypes<OrExp>().Count == 0)
-                return new List<ActionDecl>() { action };
             deconstructed.AddRange(GeneratePossibleActions(action.Copy()));
             return deconstructed;
         }

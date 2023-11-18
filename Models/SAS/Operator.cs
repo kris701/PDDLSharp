@@ -1,4 +1,6 @@
-﻿namespace PDDLSharp.Models.SAS
+﻿using PDDLSharp.Tools;
+
+namespace PDDLSharp.Models.SAS
 {
     public class Operator
     {
@@ -72,6 +74,23 @@
             {
                 if (ID != o.ID)
                     return false;
+                return true;
+            }
+            return false;
+        }
+
+        public bool ContentEquals(object? obj)
+        {
+            if (obj is Operator o)
+            {
+                if (Name != o.Name) return false;
+                if (!EqualityHelper.AreListsEqual(Arguments, o.Arguments)) return false;
+                if (Pre.Length != o.Pre.Length) return false;
+                if (!Pre.All(x => o.Pre.Contains(x))) return false;
+                if (Add.Length != o.Add.Length) return false;
+                if (!Add.All(x => o.Add.Contains(x))) return false;
+                if (Del.Length != o.Del.Length) return false;
+                if (!Del.All(x => o.Del.Contains(x))) return false;
                 return true;
             }
             return false;

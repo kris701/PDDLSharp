@@ -44,10 +44,16 @@ namespace PDDLSharp.Translators.Tools
 
             // Multiple deconstruction
             var conditionalsDeconstructed = _conditionalDeconstructor.DecontructConditionals(act);
-            var orDeconstructed = new List<ActionDecl>();
-            foreach (var decon in conditionalsDeconstructed)
-                orDeconstructed.AddRange(_orDeconstructor.DeconstructOrs(decon));
-            return orDeconstructed;
+
+            if (act.FindTypes<OrExp>().Count > 0)
+            {
+                var orDeconstructed = new List<ActionDecl>();
+                foreach (var decon in conditionalsDeconstructed)
+                    orDeconstructed.AddRange(_orDeconstructor.DeconstructOrs(decon));
+                return orDeconstructed;
+            }
+
+            return conditionalsDeconstructed;
         }
     }
 }
