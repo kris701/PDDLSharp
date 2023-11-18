@@ -16,6 +16,7 @@ namespace PDDLSharp.Translators.Grounders
         public ParametizedGrounder(PDDLDecl declaration) : base(declaration)
         {
             _statics = SimpleStaticPredicateDetector.FindStaticPredicates(Declaration).ToHashSet();
+            _statics.Add(new PredicateExp("=", new List<NameExp>() { new NameExp("?x"), new NameExp("?y") }));
             _inits = GenerateSimpleInits();
             _staticsViolationPatterns = new Dictionary<int, List<int[]>>();
             _staticsPreconditions = new List<PredicateViolationCheck>();
@@ -40,7 +41,6 @@ namespace PDDLSharp.Translators.Grounders
             return simpleInits;
         }
 
-        public int Skip = 1;
         public override List<IParametized> Ground(IParametized item)
         {
             List<IParametized> groundedActions = new List<IParametized>();
@@ -48,8 +48,8 @@ namespace PDDLSharp.Translators.Grounders
             if (item.Parameters.Values.Count == 0 && item.Copy() is IParametized newItem)
                 return new List<IParametized>() { newItem };
 
-            InitializeViolationPatternDict(item.Parameters.Values.Count);
-            GenerateStaticsPreconditions(item);
+            _staticsViolationPatterns = InitializeViolationPatternDict(item.Parameters.Values.Count);
+            _staticsPreconditions = GenerateStaticsPreconditions(item);
 
             var allPermutations = GenerateParameterPermutations(item.Parameters.Values);
             if (_abort) return new List<IParametized>();
@@ -64,38 +64,29 @@ namespace PDDLSharp.Translators.Grounders
             return groundedActions;
         }
 
-        private void InitializeViolationPatternDict(int argCount)
+        private Dictionary<int, List<int[]>> InitializeViolationPatternDict(int argCount)
         {
-            _staticsViolationPatterns = new Dictionary<int, List<int[]>>();
+            var staticsViolationPatterns = new Dictionary<int, List<int[]>>();
             for (int i = 0; i < argCount; i++)
-                _staticsViolationPatterns.Add(i, new List<int[]>());
+                staticsViolationPatterns.Add(i, new List<int[]>());
+            return staticsViolationPatterns;
         }
 
-        private void GenerateStaticsPreconditions(IParametized item)
+        private List<PredicateViolationCheck> GenerateStaticsPreconditions(IParametized item)
         {
             switch (item)
             {
-                case ActionDecl act:
-                    _staticsPreconditions = GenerateStaticsViolationChecks(act.Parameters, act.Preconditions, _statics);
-                    break;
-                case AxiomDecl axi:
-                    _staticsPreconditions = GenerateStaticsViolationChecks(axi.Parameters, axi.Context, _statics);
-                    break;
-                case DurativeActionDecl dAct:
-                    _staticsPreconditions = GenerateStaticsViolationChecks(dAct.Parameters, dAct.Condition, _statics);
-                    break;
-                case ForAllExp forAll:
-                    _staticsPreconditions = GenerateStaticsViolationChecks(forAll.Parameters, forAll.Expression, _statics);
-                    break;
-                case ExistsExp exists:
-                    _staticsPreconditions = GenerateStaticsViolationChecks(exists.Parameters, exists.Expression, _statics);
-                    break;
+                case ActionDecl act: return GenerateStaticsViolationChecks(act.Parameters, act.Preconditions);
+                case AxiomDecl axi: return GenerateStaticsViolationChecks(axi.Parameters, axi.Context);
+                case DurativeActionDecl dAct: return GenerateStaticsViolationChecks(dAct.Parameters, dAct.Condition);
+                case ForAllExp forAll: return GenerateStaticsViolationChecks(forAll.Parameters, forAll.Expression);
+                case ExistsExp exists: return GenerateStaticsViolationChecks(exists.Parameters, exists.Expression);
                 default:
                     throw new Exception("Invalid object given to grounder!");
             }
         }
 
-        private List<PredicateViolationCheck> GenerateStaticsViolationChecks(ParameterExp param, INode exp, HashSet<PredicateExp> statics)
+        private List<PredicateViolationCheck> GenerateStaticsViolationChecks(ParameterExp param, INode exp)
         {
             var staticsPreconditions = new List<PredicateViolationCheck>();
             var argumentIndexes = new Dictionary<string, int>();
@@ -103,7 +94,7 @@ namespace PDDLSharp.Translators.Grounders
             foreach (var arg in param.Values)
                 argumentIndexes.Add(arg.Name, index++);
             var allPredicates = exp.FindTypes<PredicateExp>();
-            foreach (var stat in statics)
+            foreach (var stat in _statics)
             {
                 var allRefs = allPredicates.Where(x => x.Name == stat.Name);
                 foreach (var refPred in allRefs)
@@ -133,6 +124,7 @@ namespace PDDLSharp.Translators.Grounders
                         staticsPreconditions.Add(new PredicateViolationCheck(stat, argIndexes, constantIndexes));
                 }
             }
+
             return staticsPreconditions;
         }
 
@@ -144,8 +136,12 @@ namespace PDDLSharp.Translators.Grounders
                 var allRefs = copy.FindTypes<PredicateExp>();
                 var allStaticsRef = allRefs.Where(x => x.Name == statics.Name);
                 foreach (var reference in allStaticsRef)
+                {
                     if (reference.Parent is IListable list)
                         list.Remove(reference);
+                    else if (reference.Parent is NotExp not && not.Parent is IListable list2)
+                        list2.Remove(not);
+                }
             }
             if (copy is IParametized param)
                 return param;
@@ -163,7 +159,17 @@ namespace PDDLSharp.Translators.Grounders
                 bool allGood = true;
                 foreach (var staticsPrecon in _staticsPreconditions)
                 {
-                    if (!_inits.Contains(GeneratePredicateFromIndexes(permutation, staticsPrecon)))
+                    bool generatePattern = false;
+
+                    if (staticsPrecon.Predicate.Name == "=")
+                    {
+                        if (permutation[staticsPrecon.ArgIndexes[0]] == permutation[staticsPrecon.ArgIndexes[1]])
+                            generatePattern = true;
+                    }
+                    else
+                        generatePattern = !_inits.Contains(GeneratePredicateFromIndexes(permutation, staticsPrecon));
+
+                    if (generatePattern)
                     {
                         int minIndex = staticsPrecon.ArgIndexes.Min();
                         if (staticsPrecon.ArgIndexes.Max() <= index)

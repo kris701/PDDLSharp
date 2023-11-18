@@ -54,6 +54,8 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
+                //if (subDir.Name != "hiking-opt14-strips")
+                //    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
@@ -117,7 +119,7 @@ namespace PerformanceTests
                             else
                             {
                                 Console.WriteLine($"Plan is not valid!");
-                                couldNotSolve++;
+                                return;
                             }
                         }
                         else
