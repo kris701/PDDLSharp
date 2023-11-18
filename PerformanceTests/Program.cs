@@ -44,9 +44,9 @@ namespace PerformanceTests
 
         private static void RunNTimes6(int number)
         {
-            IErrorListener listener = new ErrorListener();
-            PDDLParser parser = new PDDLParser(listener);
-            IPlanValidator validator = new PlanValidator();
+            var listener = new ErrorListener();
+            var parser = new PDDLParser(listener);
+            var validator = new PlanValidator();
 
             var path = new DirectoryInfo("benchmarks");
             var paths = path.GetDirectories();
@@ -80,6 +80,7 @@ namespace PerformanceTests
                     Console.WriteLine($"Domain: {domain.Name}");
                     Console.WriteLine($"Problem: {problem.Name}");
 
+                    listener.Errors.Clear();
                     PDDLDecl pddlDecl = new PDDLDecl(
                         parser.ParseAs<DomainDecl>(domain),
                         parser.ParseAs<ProblemDecl>(problem));
