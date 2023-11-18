@@ -1,4 +1,6 @@
-﻿namespace PDDLSharp.Models.SAS
+﻿using PDDLSharp.Tools;
+
+namespace PDDLSharp.Models.SAS
 {
     public class Fact
     {
@@ -40,6 +42,17 @@
             {
                 if (ID != f.ID)
                     return false;
+                return true;
+            }
+            return false;
+        }
+
+        public bool ContentEquals(object? obj)
+        {
+            if (obj is Fact f)
+            {
+                if (Name != f.Name) return false;
+                if (!EqualityHelper.AreListsEqual(Arguments, f.Arguments)) return false;
                 return true;
             }
             return false;

@@ -7,6 +7,7 @@ using PDDLSharp.Tools;
 using PDDLSharp.Translators.Grounders;
 using PDDLSharp.Translators.Tools;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
 
@@ -85,14 +86,12 @@ namespace PDDLSharp.Translators
 
             // Init
             if (from.Problem.Init != null)
-                init = ExtractInitFacts(from.Problem.Init.Predicates);
+                init = ExtractInitFacts(from.Problem.Init.Predicates, deconstructor);
             if (Aborted) return new SASDecl();
 
             // Goal
             if (from.Problem.Goal != null)
-                goal = ExtractFactsFromExp(
-                    deconstructor.Deconstruct(from.Problem.Goal.GoalExp),
-                    grounder)[true];
+                goal = ExtractGoalFacts(from.Problem.Goal.GoalExp, grounder, deconstructor);
             if (Aborted) return new SASDecl();
 
             // Operators
@@ -102,60 +101,8 @@ namespace PDDLSharp.Translators
             // Handle negative preconditions, if there where any
             if (_negativeFacts.Count > 0)
             {
-                var negInits = new HashSet<Fact>();
-                // Adds negated facts to all ops
-                foreach (var fact in _negativeFacts) 
-                {
-                    for (int i = 0; i < operators.Count; i++)
-                    {
-                        var negDels = operators[i].Add.Where(x => x.Name == fact.Name).ToList();
-                        var negAdds = operators[i].Del.Where(x => x.Name == fact.Name).ToList();
-
-                        if (negDels.Count == 0 && negAdds.Count == 0)
-                            continue;
-
-                        var adds = operators[i].Add.ToHashSet();
-                        foreach (var nFact in negAdds)
-                        {
-                            var negated = GetNegatedOf(nFact);
-                            negInits.Add(negated);
-                            adds.Add(negated);
-                        }
-                        var dels = operators[i].Del.ToHashSet();
-                        foreach (var nFact in negDels)
-                        {
-                            var negated = GetNegatedOf(nFact);
-                            negInits.Add(negated);
-                            dels.Add(negated);
-                        }
-
-                        if (adds.Count != operators[i].Add.Count() || dels.Count != operators[i].Del.Count())
-                            operators[i] = new Operator(
-                                operators[i].Name,
-                                operators[i].Arguments,
-                                operators[i].Pre,
-                                adds.ToArray(),
-                                dels.ToArray());
-                    }
-                    if (Aborted) return new SASDecl();
-                }
-
-                // Adds negated facts to init
-                foreach (var fact in negInits)
-                {
-                    bool isTrue = false;
-                    foreach(var ini in init)
-                    {
-                        if (ini.Name == fact.Name.Replace(_negatedPrefix, ""))
-                        {
-                            isTrue = true;
-                            break;
-                        }
-                    }
-                    if (!isTrue)
-                        init.Add(fact);
-                    if (Aborted) return new SASDecl();
-                }
+                var negInits = ProcessNegativeFactsInOperators(operators);
+                init = ProcessNegativeFactsInInit(negInits, init);
             }
 
             var result = new SASDecl(domainVariables, operators, goal, init);
@@ -163,6 +110,68 @@ namespace PDDLSharp.Translators
             timer.Stop();
             TranslationTime = watch.Elapsed;
             return result;
+        }
+
+        private HashSet<Fact> ProcessNegativeFactsInOperators(List<Operator> operators)
+        {
+            var negInits = new HashSet<Fact>();
+            // Adds negated facts to all ops
+            foreach (var fact in _negativeFacts)
+            {
+                for (int i = 0; i < operators.Count; i++)
+                {
+                    var negDels = operators[i].Add.Where(x => x.Name == fact.Name).ToList();
+                    var negAdds = operators[i].Del.Where(x => x.Name == fact.Name).ToList();
+
+                    if (negDels.Count == 0 && negAdds.Count == 0)
+                        continue;
+
+                    var adds = operators[i].Add.ToHashSet();
+                    foreach (var nFact in negAdds)
+                    {
+                        var negated = GetNegatedOf(nFact);
+                        negInits.Add(negated);
+                        adds.Add(negated);
+                    }
+                    var dels = operators[i].Del.ToHashSet();
+                    foreach (var nFact in negDels)
+                    {
+                        var negated = GetNegatedOf(nFact);
+                        negInits.Add(negated);
+                        dels.Add(negated);
+                    }
+
+                    if (adds.Count != operators[i].Add.Count() || dels.Count != operators[i].Del.Count())
+                        operators[i] = new Operator(
+                            operators[i].Name,
+                            operators[i].Arguments,
+                            operators[i].Pre,
+                            adds.ToArray(),
+                            dels.ToArray());
+                }
+                if (Aborted) return new HashSet<Fact>();
+            }
+            return negInits;
+        }
+
+        private HashSet<Fact> ProcessNegativeFactsInInit(HashSet<Fact> negInits, HashSet<Fact> init)
+        {
+            foreach (var fact in negInits)
+            {
+                bool isTrue = false;
+                foreach (var ini in init)
+                {
+                    if (ini.Name == fact.Name.Replace(_negatedPrefix, ""))
+                    {
+                        isTrue = true;
+                        break;
+                    }
+                }
+                if (!isTrue)
+                    init.Add(fact);
+                if (Aborted) return new HashSet<Fact>();
+            }
+            return init;
         }
 
         private Dictionary<bool, HashSet<Fact>> ExtractFactsFromExp(IExp exp, IGrounder<IParametized> grounder, bool possitive = true)
@@ -199,15 +208,31 @@ namespace PDDLSharp.Translators
             return resultDict;
         }
 
-        private HashSet<Fact> ExtractInitFacts(List<IExp> inits)
+        private HashSet<Fact> ExtractInitFacts(List<IExp> inits, NodeDeconstructor deconstructor)
         {
             var initFacts = new HashSet<Fact>();
 
-            foreach (var init in inits)
+            var deconstructed = new List<IExp>();
+            foreach (var exp in inits)
+                deconstructed.Add(deconstructor.Deconstruct(exp));
+
+            foreach (var init in deconstructed)
                 if (init is PredicateExp pred)
                     initFacts.Add(GetFactFromPredicate(pred));
 
             return initFacts;
+        }
+
+        private HashSet<Fact> ExtractGoalFacts(IExp goalExp, IGrounder<IParametized> grounder, NodeDeconstructor deconstructor)
+        {
+            var goal = new  HashSet<Fact>();
+            var goals = ExtractFactsFromExp(
+                deconstructor.Deconstruct(goalExp),
+                grounder);
+            goal = goals[true];
+            foreach (var fact in goals[false])
+                goal.Add(GetNegatedOf(fact));
+            return goal;
         }
 
         private List<Operator> GetOperators(PDDLDecl decl, IGrounder<IParametized> grounder, NodeDeconstructor deconstructor)
@@ -284,43 +309,29 @@ namespace PDDLSharp.Translators
             foreach (var arg in pred.Arguments)
                 args.Add(arg.Name);
             var newFact = new Fact(name, args.ToArray());
-            var compound = GetCompound(newFact);
-            var find = _factSet.FirstOrDefault(x => GetCompound(x) == compound);
+            var find = _factSet.FirstOrDefault(x => x.ContentEquals(newFact));
             if (find == null)
             {
                 newFact.ID = _factID++;
                 _factSet.Add(newFact);
             }
             else
-            {
                 newFact.ID = find.ID;
-            }
             return newFact;
         }
 
         private Fact GetNegatedOf(Fact fact)
         {
             var newFact = new Fact($"{_negatedPrefix}{fact.Name}", fact.Arguments);
-            var compound = GetCompound(newFact);
-            var find = _factSet.FirstOrDefault(x => GetCompound(x) == compound);
+            var find = _factSet.FirstOrDefault(x => x.ContentEquals(newFact));
             if (find == null)
             {
                 newFact.ID = _factID++;
                 _factSet.Add(newFact);
             }
             else
-            {
                 newFact.ID = find.ID;
-            }
             return newFact;
-        }
-
-        private string GetCompound(Fact f)
-        {
-            var retStr = f.Name;
-            foreach (var arg in f.Arguments)
-                retStr += arg;
-            return retStr;
         }
 
         private void CheckIfValid(PDDLDecl decl)

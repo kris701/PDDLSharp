@@ -121,7 +121,7 @@ namespace PDDLSharp.Translators.Grounders
                         }
                     }
                     if (valid)
-                        staticsPreconditions.Add(new PredicateViolationCheck(stat, argIndexes, constantIndexes));
+                        staticsPreconditions.Add(new PredicateViolationCheck(stat, argIndexes, constantIndexes, refPred.Parent is not NotExp));
                 }
             }
 
@@ -163,12 +163,25 @@ namespace PDDLSharp.Translators.Grounders
 
                     if (staticsPrecon.Predicate.Name == "=")
                     {
-                        if (permutation[staticsPrecon.ArgIndexes[0]] == permutation[staticsPrecon.ArgIndexes[1]])
-                            generatePattern = true;
+                        if (staticsPrecon.IsTrue) 
+                        {
+                            if (permutation[staticsPrecon.ArgIndexes[0]] != permutation[staticsPrecon.ArgIndexes[1]])
+                                generatePattern = true;
+                        }
+                        else
+                        {
+                            if (permutation[staticsPrecon.ArgIndexes[0]] == permutation[staticsPrecon.ArgIndexes[1]])
+                                generatePattern = true;
+                        }
                     }
                     else
-                        generatePattern = !_inits.Contains(GeneratePredicateFromIndexes(permutation, staticsPrecon));
-
+                    {
+                        if (staticsPrecon.IsTrue)
+                            generatePattern = !_inits.Contains(GeneratePredicateFromIndexes(permutation, staticsPrecon));
+                        else
+                            generatePattern = _inits.Contains(GeneratePredicateFromIndexes(permutation, staticsPrecon));
+                    }
+                        
                     if (generatePattern)
                     {
                         int minIndex = staticsPrecon.ArgIndexes.Min();
