@@ -132,6 +132,11 @@ namespace PerformanceTests
                     Console.WriteLine($"Cannot solve for domain: {ex.Message}");
                     couldNotSolve++;
                 }
+                catch (PDDLSharpException ex)
+                {
+                    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
+                    couldNotSolve++;
+                }
             }
             Console.WriteLine($"");
             Console.WriteLine($"Could solve {couldSolve} and could not solve {couldNotSolve}");
