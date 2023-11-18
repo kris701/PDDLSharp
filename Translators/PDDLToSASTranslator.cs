@@ -215,12 +215,15 @@ namespace PDDLSharp.Translators
             var operators = new List<Operator>();
             foreach (var action in decl.Domain.Actions)
             {
+                if (Aborted) return new List<Operator>();
                 var deconstructedActions = deconstructor.DeconstructAction(action);
                 foreach (var deconstructed in deconstructedActions)
                 {
+                    if (Aborted) return new List<Operator>();
                     var newActs = grounder.Ground(deconstructed).Cast<ActionDecl>();
                     foreach (var act in newActs)
                     {
+                        if (Aborted) return new List<Operator>();
                         var args = new List<string>();
                         foreach (var arg in act.Parameters.Values)
                             args.Add(arg.Name);

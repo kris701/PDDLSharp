@@ -56,7 +56,10 @@ namespace PDDLSharp.Translators.Grounders
             if (RemoveStaticsFromOutput)
                 item = RemoveStaticsFromNode(item);
             foreach (var permutation in allPermutations)
+            {
+                if (_abort) return new List<IParametized>();
                 groundedActions.Add(GenerateInstance(item, permutation));
+            }
 
             return groundedActions;
         }
