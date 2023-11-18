@@ -215,6 +215,8 @@ namespace PDDLSharp.Translators
             var operators = new List<Operator>();
             foreach (var action in decl.Domain.Actions)
             {
+                action.Preconditions = EnsureAnd(action.Preconditions);
+                action.Effects = EnsureAnd(action.Effects);
                 if (Aborted) return new List<Operator>();
                 var deconstructedActions = deconstructor.DeconstructAction(action);
                 foreach (var deconstructed in deconstructedActions)
@@ -266,6 +268,13 @@ namespace PDDLSharp.Translators
 
             }
             return operators;
+        }
+
+        private IExp EnsureAnd(IExp exp)
+        {
+            if (exp is AndExp)
+                return exp;
+            return new AndExp(new List<IExp>() { exp });
         }
 
         private Fact GetFactFromPredicate(PredicateExp pred)

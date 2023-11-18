@@ -54,7 +54,7 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                //if (subDir.Name != "hiking-opt14-strips")
+                //if (subDir.Name != "miconic-simpleadl")
                 //    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");

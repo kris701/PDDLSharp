@@ -20,8 +20,6 @@ namespace PDDLSharp.Translators.Tools
         private List<ActionDecl> GeneratePossibleActions(ActionDecl source)
         {
             List<ActionDecl> newActions = new List<ActionDecl>();
-            source.Preconditions = EnsureAnd(source.Preconditions);
-            source.Effects = EnsureAnd(source.Effects);
             var allWhens = source.Effects.FindTypes<WhenExp>();
 
             if (allWhens.Count == 0)
@@ -40,6 +38,8 @@ namespace PDDLSharp.Translators.Tools
                 if (Aborted) return new List<ActionDecl>();
                 var newAct = new ActionDecl(source.Name);
                 newAct.Parameters = source.Parameters;
+                if (source.Preconditions is AndExp and)
+                    newAct.Preconditions = and.Copy();
 
                 for (int i = 0; i < permutation.Length; i++)
                 {
@@ -65,13 +65,6 @@ namespace PDDLSharp.Translators.Tools
             if (from.Parent == null)
                 throw new ArgumentNullException("Expected a parent");
             return GetMostUsefullParent(from.Parent);
-        }
-
-        private IExp EnsureAnd(IExp exp)
-        {
-            if (exp is AndExp)
-                return exp;
-            return new AndExp(new List<IExp>() { exp });
         }
 
         private Queue<bool[]> GeneratePermutations(int count)
