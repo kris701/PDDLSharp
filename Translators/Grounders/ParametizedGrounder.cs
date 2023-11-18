@@ -163,14 +163,26 @@ namespace PDDLSharp.Translators.Grounders
 
                     if (staticsPrecon.Predicate.Name == "=")
                     {
+                        var arg1 = -1;
+                        if (staticsPrecon.ArgIndexes[0] != int.MaxValue)
+                            arg1 = permutation[staticsPrecon.ArgIndexes[0]];
+                        if (staticsPrecon.ConstantsIndexes[0] != int.MaxValue)
+                            arg1 = staticsPrecon.ConstantsIndexes[0];
+
+                        var arg2 = -1;
+                        if (staticsPrecon.ArgIndexes[1] != int.MaxValue)
+                            arg2 = permutation[staticsPrecon.ArgIndexes[1]];
+                        if (staticsPrecon.ConstantsIndexes[1] != int.MaxValue)
+                            arg2 = staticsPrecon.ConstantsIndexes[1];
+
                         if (staticsPrecon.IsTrue) 
                         {
-                            if (permutation[staticsPrecon.ArgIndexes[0]] != permutation[staticsPrecon.ArgIndexes[1]])
+                            if (arg1 != arg2)
                                 generatePattern = true;
                         }
                         else
                         {
-                            if (permutation[staticsPrecon.ArgIndexes[0]] == permutation[staticsPrecon.ArgIndexes[1]])
+                            if (arg1 == arg2)
                                 generatePattern = true;
                         }
                     }

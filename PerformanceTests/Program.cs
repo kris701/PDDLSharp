@@ -54,7 +54,7 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                //if (subDir.Name != "termes-opt18-strips")
+                //if (subDir.Name != "snake-opt18-strips")
                 //    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
@@ -74,8 +74,8 @@ namespace PerformanceTests
                 if (domain == null || problem == null)
                     continue;
 
-                try
-                {
+                //try
+                //{
                     Console.WriteLine($"Domain: {domain.Name}");
                     Console.WriteLine($"Problem: {problem.Name}");
 
@@ -125,12 +125,12 @@ namespace PerformanceTests
                         else
                             couldNotSolve++;
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
-                    couldNotSolve++;
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
+                //    couldNotSolve++;
+                //}
             }
             Console.WriteLine($"");
             Console.WriteLine($"Could solve {couldSolve} and could not solve {couldNotSolve}");

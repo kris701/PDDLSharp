@@ -158,16 +158,8 @@ namespace PDDLSharp.Translators
         {
             foreach (var fact in negInits)
             {
-                bool isTrue = false;
-                foreach (var ini in init)
-                {
-                    if (ini.Name == fact.Name.Replace(_negatedPrefix, ""))
-                    {
-                        isTrue = true;
-                        break;
-                    }
-                }
-                if (!isTrue)
+                var findTrue = new Fact(fact.Name.Replace(_negatedPrefix, ""), fact.Arguments);
+                if (!init.Any(x => x.ContentEquals(findTrue)))
                     init.Add(fact);
                 if (Aborted) return new HashSet<Fact>();
             }
