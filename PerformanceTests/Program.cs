@@ -74,8 +74,8 @@ namespace PerformanceTests
                 if (domain == null || problem == null)
                     continue;
 
-                //try
-                //{
+                try
+                {
                     Console.WriteLine($"Domain: {domain.Name}");
                     Console.WriteLine($"Problem: {problem.Name}");
 
@@ -125,12 +125,12 @@ namespace PerformanceTests
                         else
                             couldNotSolve++;
                     }
-                //}
-                //catch (Exception ex)
-                //{
-                //    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
-                //    couldNotSolve++;
-                //}
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Cannot solve for domain: {ex.Message}");
+                    couldNotSolve++;
+                }
             }
             Console.WriteLine($"");
             Console.WriteLine($"Could solve {couldSolve} and could not solve {couldNotSolve}");
