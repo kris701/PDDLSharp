@@ -20,6 +20,7 @@ using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.PlanValidator;
 using PDDLSharp.Tools;
 using PDDLSharp.Translators;
+using PDDLSharp.Translators.Exceptions;
 using System.Diagnostics;
 
 namespace PerformanceTests
@@ -126,7 +127,7 @@ namespace PerformanceTests
                             couldNotSolve++;
                     }
                 }
-                catch (Exception ex)
+                catch (TranslatorException ex)
                 {
                     Console.WriteLine($"Cannot solve for domain: {ex.Message}");
                     couldNotSolve++;
