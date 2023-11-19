@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PDDLSharp.Translators.Exceptions;
+using PDDLSharp.Models.PDDL.Domain;
 
 namespace PDDLSharp.Translators.Tools
 {
@@ -22,20 +24,20 @@ namespace PDDLSharp.Translators.Tools
                 if (Aborted) break;
                 if (derived.Parent is IWalkable walk)
                 {
-                    var newNode = new OrExp(derived.Parent);
-                    foreach (var derivedDecl in derived.GetDecls())
-                    {
-                        var declCopy = derivedDecl.Copy();
-                        for (int i = 0; i < derived.Arguments.Count; i++)
-                        {
-                            var allRefs = declCopy.FindNames(derived.Arguments[i].Name);
-                            foreach (var refItem in allRefs)
-                                refItem.Name = derived.Arguments[i].Name;
-                        }
-                        newNode.Options.Add(declCopy.Expression);
-                    }
+                    var derivedDecls = derived.GetDecls();
+                    if (derivedDecls.Count > 1)
+                        throw new TranslatorException("Translator does not support derived predicates with multiple declarations!");
+                    if (derivedDecls.Count == 0)
+                        throw new Exception("Derived predicate did not have any declaration in the domain?");
 
-                    walk.Replace(derived, newNode);
+                    var declCopy = derivedDecls[0].Copy();
+                    for (int i = 0; i < derived.Arguments.Count; i++)
+                    {
+                        var allRefs = declCopy.Expression.FindNames(declCopy.Predicate.Arguments[i].Name);
+                        foreach (var refItem in allRefs)
+                            refItem.Name = derived.Arguments[i].Name;
+                    }
+                    walk.Replace(derived, declCopy.Expression);
                 }
                 else
                     throw new Exception("Parent for derived deconstruction must be a IWalkable!");

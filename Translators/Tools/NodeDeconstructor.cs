@@ -26,14 +26,14 @@ namespace PDDLSharp.Translators.Tools
 
         public T Deconstruct<T>(T item) where T : INode
         {
+            if (item.FindTypes<DerivedPredicateExp>().Count > 0)
+                item = _derivedDeconstructor.DeconstructDeriveds(item);
             if (item.FindTypes<ForAllExp>().Count > 0)
                 item = _forAllDeconstructor.DeconstructForAlls(item);
             if (item.FindTypes<ExistsExp>().Count > 0)
                 item = _existsDeconstructor.DeconstructExists(item);
             if (item.FindTypes<ImplyExp>().Count > 0)
                 item = _implyDeconstructor.DeconstructImplies(item);
-            if (item.FindTypes<DerivedPredicateExp>().Count > 0)
-                item = _derivedDeconstructor.DeconstructDeriveds(item);
             return item;
         }
 
