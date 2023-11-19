@@ -329,8 +329,6 @@ namespace PDDLSharp.Translators
 
         private void CheckIfValid(PDDLDecl decl)
         {
-            if (decl.Domain.FindTypes<ImplyExp>().Count > 0 || decl.Problem.FindTypes<ImplyExp>().Count > 0)
-                throw new TranslatorException("Translator does not support Imply nodes!");
             if (decl.Domain.FindTypes<DerivedDecl>().Count > 0 || decl.Problem.FindTypes<DerivedDecl>().Count > 0)
                 throw new TranslatorException("Translator does not support Derived Declaration nodes!");
             if (decl.Domain.FindTypes<TimedLiteralExp>().Count > 0 || decl.Problem.FindTypes<TimedLiteralExp>().Count > 0)

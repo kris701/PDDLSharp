@@ -10,6 +10,7 @@ namespace PDDLSharp.Translators.Tools
         private OrDeconstructor _orDeconstructor;
         private ForAllDeconstructor _forAllDeconstructor;
         private ExistsDeconstructor _existsDeconstructor;
+        private ImplyDeconstructor _implyDeconstructor;
         private ConditionalDeconstructor _conditionalDeconstructor;
 
         public NodeDeconstructor(IGrounder<IParametized> grounder)
@@ -17,6 +18,7 @@ namespace PDDLSharp.Translators.Tools
             _orDeconstructor = new OrDeconstructor();
             _forAllDeconstructor = new ForAllDeconstructor(grounder);
             _existsDeconstructor = new ExistsDeconstructor(grounder);
+            _implyDeconstructor = new ImplyDeconstructor();
             _conditionalDeconstructor = new ConditionalDeconstructor();
         }
 
@@ -26,6 +28,8 @@ namespace PDDLSharp.Translators.Tools
                 item = _forAllDeconstructor.DeconstructForAlls(item);
             if (item.FindTypes<ExistsExp>().Count > 0)
                 item = _existsDeconstructor.DeconstructExists(item);
+            if (item.FindTypes<ImplyExp>().Count > 0)
+                item = _implyDeconstructor.DeconstructImplies(item);
             return item;
         }
 
@@ -34,6 +38,7 @@ namespace PDDLSharp.Translators.Tools
             _orDeconstructor.Aborted = true;
             _forAllDeconstructor.Aborted = true;
             _existsDeconstructor.Aborted = true;
+            _implyDeconstructor.Aborted = true;
             _conditionalDeconstructor.Aborted = true;
         }
 

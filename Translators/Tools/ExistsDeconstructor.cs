@@ -20,6 +20,7 @@ namespace PDDLSharp.Translators.Tools
             var exists = copy.FindTypes<ExistsExp>();
             foreach (var exist in exists)
             {
+                if (Aborted) break;
                 if (exist.Parent is IWalkable walk)
                 {
                     var newNode = new OrExp(exist.Parent);

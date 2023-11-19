@@ -20,6 +20,7 @@ namespace PDDLSharp.Translators.Tools
             var forAlls = copy.FindTypes<ForAllExp>();
             foreach (var forAll in forAlls)
             {
+                if (Aborted) break;
                 if (forAll.Parent is IWalkable walk)
                 {
                     var newNode = new AndExp(forAll.Parent);
