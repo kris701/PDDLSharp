@@ -1,4 +1,6 @@
-﻿using PDDLSharp.Models.PDDL;
+﻿using PDDLSharp.Contextualisers.PDDL;
+using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
@@ -53,6 +55,13 @@ namespace PDDLSharp.Translators
 
         public SASDecl Translate(PDDLDecl from)
         {
+            if (!from.IsContextualised)
+            {
+                var listener = new ErrorListener();
+                var contextualiser = new PDDLContextualiser(listener);
+                contextualiser.Contexturalise(from);
+            }
+
             Aborted = true;
             CheckIfValid(from);
             Aborted = false;
@@ -329,8 +338,6 @@ namespace PDDLSharp.Translators
 
         private void CheckIfValid(PDDLDecl decl)
         {
-            if (decl.Domain.FindTypes<DerivedDecl>().Count > 0 || decl.Problem.FindTypes<DerivedDecl>().Count > 0)
-                throw new TranslatorException("Translator does not support Derived Declaration nodes!");
             if (decl.Domain.FindTypes<TimedLiteralExp>().Count > 0 || decl.Problem.FindTypes<TimedLiteralExp>().Count > 0)
                 throw new TranslatorException("Translator does not support Timed Literal nodes!");
             if (decl.Domain.FindTypes<NumericExp>().Count > 0 || decl.Problem.FindTypes<NumericExp>().Count > 0)
