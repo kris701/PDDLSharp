@@ -55,8 +55,8 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                if (subDir.Name != "psr-middle")
-                    continue;
+                //if (subDir.Name != "psr-middle")
+                //    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
@@ -96,11 +96,6 @@ namespace PerformanceTests
                         Console.WriteLine($"Translator timed out...");
                         continue;
                     }
-
-                    Console.WriteLine($"\tVariables: {decl.DomainVariables.Count}");
-                    Console.WriteLine($"\tOperators: {decl.Operators.Count}");
-                    Console.WriteLine($"\tInits:     {decl.Init.Count}");
-                    Console.WriteLine($"\tGoals:     {decl.Goal.Count}");
 
                     using (var planner = new GreedyBFS(decl, new SatSimple(decl)))
                     {

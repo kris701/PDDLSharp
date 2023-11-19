@@ -228,7 +228,7 @@ namespace PDDLSharp.Translators
         private HashSet<Fact> ExtractGoalFacts(IExp goalExp, IGrounder<IParametized> grounder, NodeDeconstructor deconstructor)
         {
             var goal = new  HashSet<Fact>();
-            var deconstructed = deconstructor.Deconstruct(goalExp);
+            var deconstructed = deconstructor.Deconstruct(EnsureAnd(goalExp));
             if (deconstructed.FindTypes<OrExp>().Count > 0)
                 throw new TranslatorException("Translator does not support or expressions in goal declaration!");
             var goals = ExtractFactsFromExp(

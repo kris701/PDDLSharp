@@ -37,6 +37,7 @@ namespace PDDLSharp.Translators.Tools
             var retList = new List<ActionDecl>();
             foreach(var opt in ors[0].Options)
             {
+                if (Aborted) return new List<ActionDecl>();
                 var copy = act.Copy();
                 var or = copy.Preconditions.FindTypes<OrExp>();
                 if (or[0].Parent is IWalkable walk)
