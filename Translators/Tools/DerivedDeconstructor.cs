@@ -30,7 +30,7 @@ namespace PDDLSharp.Translators.Tools
                     if (derivedDecls.Count == 0)
                         throw new Exception("Derived predicate did not have any declaration in the domain?");
 
-                    var declCopy = derivedDecls[0].Copy();
+                    var declCopy = derivedDecls[0].Copy(derived.Parent);
                     for (int i = 0; i < derived.Arguments.Count; i++)
                     {
                         var allRefs = declCopy.Expression.FindNames(declCopy.Predicate.Arguments[i].Name);
