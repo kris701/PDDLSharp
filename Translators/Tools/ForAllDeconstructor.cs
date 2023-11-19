@@ -16,23 +16,24 @@ namespace PDDLSharp.Translators.Tools
 
         public T DeconstructForAlls<T>(T node) where T : INode
         {
-            var copy = node.Copy();
+            var copy = node.Copy(node.Parent);
             var forAlls = copy.FindTypes<ForAllExp>();
-            foreach (var forAll in forAlls)
+            while(forAlls.Count > 0)
             {
                 if (Aborted) break;
-                if (forAll.Parent is IWalkable walk)
+                if (forAlls[0].Parent is IWalkable walk)
                 {
-                    var newNode = new AndExp(forAll.Parent);
+                    var newNode = new AndExp(forAlls[0].Parent);
 
-                    var result = Grounder.Ground(forAll).Cast<ForAllExp>();
+                    var result = Grounder.Ground(forAlls[0]).Cast<ForAllExp>().ToList();
                     foreach (var item in result)
                         newNode.Add(item.Expression);
 
-                    walk.Replace(forAll, newNode);
+                    walk.Replace(forAlls[0], newNode);
                 }
                 else
                     throw new Exception("Parent for forall deconstruction must be a IWalkable!");
+                forAlls = copy.FindTypes<ForAllExp>();
             }
 
             return (T)copy;

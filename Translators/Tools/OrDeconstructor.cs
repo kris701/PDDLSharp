@@ -35,7 +35,7 @@ namespace PDDLSharp.Translators.Tools
                 return new List<ActionDecl> { act };
 
             var retList = new List<ActionDecl>();
-            foreach(var opt in ors[0].Options)
+            foreach (var opt in ors[0].Options)
             {
                 if (Aborted) return new List<ActionDecl>();
                 var copy = act.Copy();

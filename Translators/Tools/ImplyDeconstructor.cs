@@ -14,24 +14,25 @@ namespace PDDLSharp.Translators.Tools
 
         public T DeconstructImplies<T>(T node) where T : INode
         {
-            var copy = node.Copy();
+            var copy = node.Copy(node.Parent);
             var implies = copy.FindTypes<ImplyExp>();
-            foreach (var imply in implies)
+            while(implies.Count > 0)
             {
                 if (Aborted) break;
-                if (imply.Parent is IWalkable walk)
+                if (implies[0].Parent is IWalkable walk)
                 {
-                    var newNode = new OrExp(imply.Parent);
-                    newNode.Options.Add(new NotExp(newNode, imply.Antecedent));
+                    var newNode = new OrExp(implies[0].Parent);
+                    newNode.Options.Add(new NotExp(newNode, implies[0].Antecedent));
                     newNode.Options.Add(new AndExp(newNode, new List<IExp>() {
-                        imply.Antecedent,
-                        imply.Consequent
+                        implies[0].Antecedent,
+                        implies[0].Consequent
                     }));
 
-                    walk.Replace(imply, newNode);
+                    walk.Replace(implies[0], newNode);
                 }
                 else
                     throw new Exception("Parent for imply deconstruction must be a IWalkable!");
+                implies = copy.FindTypes<ImplyExp>();
             }
 
             return (T)copy;

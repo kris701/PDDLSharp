@@ -16,23 +16,24 @@ namespace PDDLSharp.Translators.Tools
 
         public T DeconstructExists<T>(T node) where T : INode
         {
-            var copy = node.Copy();
+            var copy = node.Copy(node.Parent);
             var exists = copy.FindTypes<ExistsExp>();
-            foreach (var exist in exists)
+            while(exists.Count > 0)
             {
                 if (Aborted) break;
-                if (exist.Parent is IWalkable walk)
+                if (exists[0].Parent is IWalkable walk)
                 {
-                    var newNode = new OrExp(exist.Parent);
+                    var newNode = new OrExp(exists[0].Parent);
 
-                    var result = Grounder.Ground(exist).Cast<ExistsExp>();
+                    var result = Grounder.Ground(exists[0]).Cast<ExistsExp>();
                     foreach (var item in result)
                         newNode.Add(item.Expression);
 
-                    walk.Replace(exist, newNode);
+                    walk.Replace(exists[0], newNode);
                 }
                 else
                     throw new Exception("Parent for exists deconstruction must be a IWalkable!");
+                exists = copy.FindTypes<ExistsExp>();
             }
 
             return (T)copy;
