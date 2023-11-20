@@ -132,6 +132,7 @@ namespace PDDLSharp.Translators
                 {
                     var negDels = operators[i].Add.Where(x => x.Name == fact.Name).ToList();
                     var negAdds = operators[i].Del.Where(x => x.Name == fact.Name).ToList();
+                    negInits.AddRange(operators[i].Pre.Where(x => x.Name.Contains(_negatedPrefix) && x.Name.Replace(_negatedPrefix, "") == fact.Name).ToHashSet());
 
                     if (negDels.Count == 0 && negAdds.Count == 0)
                         continue;
