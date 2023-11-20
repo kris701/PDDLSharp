@@ -135,11 +135,12 @@ namespace PDDLSharp.Translators.Grounders
             {
                 var allRefs = copy.FindTypes<PredicateExp>();
                 var allStaticsRef = allRefs.Where(x => x.Name == statics.Name);
+                bool removeAll = statics.Name == "=";
                 foreach (var reference in allStaticsRef)
                 {
                     if (reference.Parent is IListable list)
                         list.Remove(reference);
-                    else if (reference.Parent is NotExp not && not.Parent is IListable list2)
+                    else if (removeAll && reference.Parent is NotExp not && not.Parent is IListable list2)
                         list2.Remove(not);
                 }
             }

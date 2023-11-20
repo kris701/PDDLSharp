@@ -26,6 +26,8 @@ namespace PDDLSharp.Translators.Tools
             source.Effects = EnsureAnd(source.Effects);
             var returnList = new List<ActionDecl>();
             DeconstructNodeRec(source, returnList);
+            if (Aborted) return new List<ActionDecl>();
+            returnList = returnList.Distinct().ToList();
             return returnList;
         }
 

@@ -350,6 +350,10 @@ namespace PDDLSharp.Translators
 
         private void CheckIfValid(PDDLDecl decl)
         {
+            if (decl.Domain.FindTypes<DerivedPredicateExp>().Count > 0 || decl.Problem.FindTypes<DerivedPredicateExp>().Count > 0)
+                throw new TranslatorException("Translator does not support derived predicate nodes!");
+            if (decl.Domain.FindTypes<DerivedDecl>().Count > 0 || decl.Problem.FindTypes<DerivedDecl>().Count > 0)
+                throw new TranslatorException("Translator does not support derived decl nodes!");
             if (decl.Domain.FindTypes<TimedLiteralExp>().Count > 0 || decl.Problem.FindTypes<TimedLiteralExp>().Count > 0)
                 throw new TranslatorException("Translator does not support Timed Literal nodes!");
             if (decl.Domain.FindTypes<NumericExp>().Count > 0 || decl.Problem.FindTypes<NumericExp>().Count > 0)
