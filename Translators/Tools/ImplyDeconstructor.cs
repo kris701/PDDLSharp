@@ -1,5 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.SAS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +18,24 @@ namespace PDDLSharp.Translators.Tools
         {
             var copy = node.Copy(node.Parent);
             var implies = copy.FindTypes<ImplyExp>();
-            while(implies.Count > 0)
+
+            while (implies.Count > 0)
             {
                 if (Aborted) break;
                 if (implies[0].Parent is IWalkable walk)
                 {
                     var newNode = new OrExp(implies[0].Parent);
-                    newNode.Options.Add(new NotExp(newNode, implies[0].Antecedent));
-                    newNode.Options.Add(new AndExp(newNode, new List<IExp>() {
-                        implies[0].Antecedent,
-                        implies[0].Consequent
-                    }));
+                    var notOption = new NotExp(newNode, new EmptyExp());
+                    if (implies[0].Antecedent.Copy(notOption) is IExp nExp)
+                        notOption.Child = nExp;
+                    newNode.Options.Add(notOption);
+
+                    var andOption = new AndExp(newNode, new List<IExp>());
+                    if (implies[0].Antecedent.Copy(andOption) is IExp exp1)
+                        andOption.Children.Add(exp1);
+                    if (implies[0].Consequent.Copy(andOption) is IExp exp2)
+                        andOption.Children.Add(exp2);
+                    newNode.Options.Add(andOption);
 
                     walk.Replace(implies[0], newNode);
                 }

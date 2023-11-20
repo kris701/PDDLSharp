@@ -55,7 +55,7 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                if (subDir.Name != "miconic-fulladl")
+                if (subDir.Name != "assembly")
                     continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
@@ -87,7 +87,7 @@ namespace PerformanceTests
 
                     Console.WriteLine($"Translating...");
                     ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
-                    translator.TimeLimit = TimeSpan.FromSeconds(60);
+                    translator.TimeLimit = TimeSpan.FromSeconds(240);
                     var decl = translator.Translate(pddlDecl);
 
                     if (translator.Aborted)

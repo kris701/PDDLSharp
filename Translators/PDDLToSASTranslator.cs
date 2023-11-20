@@ -101,7 +101,7 @@ namespace PDDLSharp.Translators
 
             // Goal
             if (from.Problem.Goal != null)
-                goal = ExtractGoalFacts(from.Problem.Goal.GoalExp, grounder, deconstructor);
+                goal = ExtractGoalFacts(from.Problem.Goal.GoalExp, deconstructor);
             if (Aborted) return new SASDecl();
 
             // Operators
@@ -152,12 +152,16 @@ namespace PDDLSharp.Translators
                     }
 
                     if (adds.Count != operators[i].Add.Count() || dels.Count != operators[i].Del.Count())
+                    {
+                        var id = operators[i].ID;
                         operators[i] = new Operator(
                             operators[i].Name,
                             operators[i].Arguments,
                             operators[i].Pre,
                             adds.ToArray(),
                             dels.ToArray());
+                        operators[i].ID = id;
+                    }
                 }
                 if (Aborted) return new HashSet<Fact>();
             }
@@ -176,7 +180,7 @@ namespace PDDLSharp.Translators
             return init;
         }
 
-        private Dictionary<bool, HashSet<Fact>> ExtractFactsFromExp(IExp exp, IGrounder<IParametized> grounder, bool possitive = true)
+        private Dictionary<bool, HashSet<Fact>> ExtractFactsFromExp(IExp exp, bool possitive = true)
         {
             var facts = new Dictionary<bool, HashSet<Fact>>();
             facts.Add(true, new HashSet<Fact>());
@@ -184,13 +188,12 @@ namespace PDDLSharp.Translators
 
             switch (exp)
             {
-                case NumericExp: break;
                 case EmptyExp: break;
                 case PredicateExp pred: facts[possitive].Add(GetFactFromPredicate(pred)); break;
-                case NotExp not: facts = MergeDictionaries(facts, ExtractFactsFromExp(not.Child, grounder, !possitive)); break;
+                case NotExp not: facts = MergeDictionaries(facts, ExtractFactsFromExp(not.Child, !possitive)); break;
                 case AndExp and:
                     foreach (var child in and.Children)
-                        facts = MergeDictionaries(facts, ExtractFactsFromExp(child, grounder, possitive));
+                        facts = MergeDictionaries(facts, ExtractFactsFromExp(child, possitive));
                     break;
                 default:
                     throw new ArgumentException($"Cannot translate node type '{exp.GetType().Name}'");
@@ -225,15 +228,14 @@ namespace PDDLSharp.Translators
             return initFacts;
         }
 
-        private HashSet<Fact> ExtractGoalFacts(IExp goalExp, IGrounder<IParametized> grounder, NodeDeconstructor deconstructor)
+        private HashSet<Fact> ExtractGoalFacts(IExp goalExp, NodeDeconstructor deconstructor)
         {
             var goal = new  HashSet<Fact>();
             var deconstructed = deconstructor.Deconstruct(EnsureAnd(goalExp));
             if (deconstructed.FindTypes<OrExp>().Count > 0)
                 throw new TranslatorException("Translator does not support or expressions in goal declaration!");
             var goals = ExtractFactsFromExp(
-                deconstructed,
-                grounder);
+                deconstructed);
             goal = goals[true];
             foreach (var fact in goals[false])
                 goal.Add(GetNegatedOf(fact));
@@ -256,16 +258,16 @@ namespace PDDLSharp.Translators
                     foreach (var act in newActs)
                     {
                         if (Aborted) return new List<Operator>();
-                        var args = new List<string>();
-                        foreach (var arg in act.Parameters.Values)
-                            args.Add(arg.Name);
 
-                        var effFacts = ExtractFactsFromExp(act.Effects, grounder);
+                        var preFacts = ExtractFactsFromExp(act.Preconditions);
+                        if (preFacts[true].Intersect(preFacts[false]).Count() > 0)
+                            continue;
+                        var pre = preFacts[true];
+
+                        var effFacts = ExtractFactsFromExp(act.Effects);
                         var add = effFacts[true];
                         var del = effFacts[false];
 
-                        var preFacts = ExtractFactsFromExp(act.Preconditions, grounder);
-                        var pre = preFacts[true];
                         if (preFacts[false].Count > 0)
                         {
                             foreach (var fact in preFacts[false])
@@ -290,9 +292,16 @@ namespace PDDLSharp.Translators
                             }
                         }
 
+                        var args = new List<string>();
+                        foreach (var arg in act.Parameters.Values)
+                            args.Add(arg.Name);
+
                         var newOp = new Operator(act.Name, args.ToArray(), pre.ToArray(), add.ToArray(), del.ToArray());
-                        newOp.ID = _opID++;
-                        operators.Add(newOp);
+                        if (!operators.Any(x => x.ContentEquals(newOp)))
+                        {
+                            newOp.ID = _opID++;
+                            operators.Add(newOp);
+                        }
                     }
                 }
 

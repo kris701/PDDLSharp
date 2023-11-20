@@ -23,13 +23,22 @@ namespace PDDLSharp.Translators.Tools
                 if (Aborted) break;
                 if (forAlls[0].Parent is IWalkable walk)
                 {
-                    var newNode = new AndExp(forAlls[0].Parent);
-
                     var result = Grounder.Ground(forAlls[0]).Cast<ForAllExp>().ToList();
-                    foreach (var item in result)
-                        newNode.Add(item.Expression);
-
-                    walk.Replace(forAlls[0], newNode);
+                    if (result.Count == 1) 
+                    {
+                        result[0].Expression.Parent = forAlls[0].Parent;
+                        walk.Replace(forAlls[0], result[0].Expression);
+                    }
+                    else if (result.Count > 1)
+                    {
+                        var newNode = new AndExp(forAlls[0].Parent);
+                        foreach (var item in result)
+                        {
+                            item.Expression.Parent = newNode;
+                            newNode.Add(item.Expression);
+                        }
+                        walk.Replace(forAlls[0], newNode);
+                    }
                 }
                 else
                     throw new Exception("Parent for forall deconstruction must be a IWalkable!");
