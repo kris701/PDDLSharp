@@ -27,6 +27,8 @@ namespace PDDLSharp.Translators.StaticPredicateDetectors
                     var effects = action.Implies.FindTypes<PredicateExp>();
                     allPredicates.RemoveAll(x => effects.Any(y => y.Name == x.Name));
                 }
+                foreach (var derived in decl.Domain.Deriveds)
+                    allPredicates.RemoveAll(x => x.Name == derived.Predicate.Name);
                 foreach (var pred in allPredicates)
                     statics.Add(pred.Copy());
             }

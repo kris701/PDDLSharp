@@ -85,7 +85,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         {
             if (Antecedent == node && with is IExp exp1)
                 Antecedent = exp1;
-            if (Consequent == node && with is IExp exp2)
+            else if (Consequent == node && with is IExp exp2)
                 Consequent = exp2;
         }
     }

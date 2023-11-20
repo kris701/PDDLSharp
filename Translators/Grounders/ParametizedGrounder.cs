@@ -79,8 +79,8 @@ namespace PDDLSharp.Translators.Grounders
                 case ActionDecl act: return GenerateStaticsViolationChecks(act.Parameters, act.Preconditions);
                 case AxiomDecl axi: return GenerateStaticsViolationChecks(axi.Parameters, axi.Context);
                 case DurativeActionDecl dAct: return GenerateStaticsViolationChecks(dAct.Parameters, dAct.Condition);
-                case ForAllExp forAll: return GenerateStaticsViolationChecks(forAll.Parameters, forAll.Expression);
-                case ExistsExp exists: return GenerateStaticsViolationChecks(exists.Parameters, exists.Expression);
+                case ForAllExp forAll: return new List<PredicateViolationCheck>();
+                case ExistsExp exists: return new List<PredicateViolationCheck>();
                 default:
                     throw new Exception("Invalid object given to grounder!");
             }
@@ -139,7 +139,7 @@ namespace PDDLSharp.Translators.Grounders
                 {
                     if (reference.Parent is IListable list)
                         list.Remove(reference);
-                    else if (reference.Parent is NotExp not && not.Parent is IListable list2)
+                    else if (statics.Name == "=" && reference.Parent is NotExp not && not.Parent is IListable list2)
                         list2.Remove(not);
                 }
             }

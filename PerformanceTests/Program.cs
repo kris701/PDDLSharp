@@ -55,7 +55,7 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                //if (subDir.Name != "snake-opt18-strips")
+                //if (subDir.Name != "termes-opt18-strips")
                 //    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
@@ -87,7 +87,7 @@ namespace PerformanceTests
 
                     Console.WriteLine($"Translating...");
                     ITranslator<PDDLDecl, PDDLSharp.Models.SAS.SASDecl> translator = new PDDLToSASTranslator(true);
-                    translator.TimeLimit = TimeSpan.FromSeconds(60);
+                    translator.TimeLimit = TimeSpan.FromSeconds(2);
                     var decl = translator.Translate(pddlDecl);
 
                     if (translator.Aborted)
@@ -97,15 +97,10 @@ namespace PerformanceTests
                         continue;
                     }
 
-                    Console.WriteLine($"\tVariables: {decl.DomainVariables.Count}");
-                    Console.WriteLine($"\tOperators: {decl.Operators.Count}");
-                    Console.WriteLine($"\tInits:     {decl.Init.Count}");
-                    Console.WriteLine($"\tGoals:     {decl.Goal.Count}");
-
                     using (var planner = new GreedyBFS(decl, new SatSimple(decl)))
                     {
                         planner.Log = true;
-                        planner.SearchLimit = TimeSpan.FromSeconds(60);
+                        planner.SearchLimit = TimeSpan.FromSeconds(10);
 
                         var plan = new ActionPlan(new List<GroundedAction>());
 

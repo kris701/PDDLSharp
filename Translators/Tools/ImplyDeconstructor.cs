@@ -1,5 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.SAS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,24 +16,32 @@ namespace PDDLSharp.Translators.Tools
 
         public T DeconstructImplies<T>(T node) where T : INode
         {
-            var copy = node.Copy();
+            var copy = node.Copy(node.Parent);
             var implies = copy.FindTypes<ImplyExp>();
-            foreach (var imply in implies)
+
+            while (implies.Count > 0)
             {
                 if (Aborted) break;
-                if (imply.Parent is IWalkable walk)
+                if (implies[0].Parent is IWalkable walk)
                 {
-                    var newNode = new OrExp(imply.Parent);
-                    newNode.Options.Add(new NotExp(newNode, imply.Antecedent));
-                    newNode.Options.Add(new AndExp(newNode, new List<IExp>() {
-                        imply.Antecedent,
-                        imply.Consequent
-                    }));
+                    var newNode = new OrExp(implies[0].Parent);
+                    var notOption = new NotExp(newNode, new EmptyExp());
+                    if (implies[0].Antecedent.Copy(notOption) is IExp nExp)
+                        notOption.Child = nExp;
+                    newNode.Options.Add(notOption);
 
-                    walk.Replace(imply, newNode);
+                    var andOption = new AndExp(newNode, new List<IExp>());
+                    if (implies[0].Antecedent.Copy(andOption) is IExp exp1)
+                        andOption.Children.Add(exp1);
+                    if (implies[0].Consequent.Copy(andOption) is IExp exp2)
+                        andOption.Children.Add(exp2);
+                    newNode.Options.Add(andOption);
+
+                    walk.Replace(implies[0], newNode);
                 }
                 else
                     throw new Exception("Parent for imply deconstruction must be a IWalkable!");
+                implies = copy.FindTypes<ImplyExp>();
             }
 
             return (T)copy;
