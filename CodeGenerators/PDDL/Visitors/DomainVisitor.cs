@@ -19,10 +19,10 @@ namespace PDDLSharp.CodeGenerators.Visitors
                 retStr += $"{Visit(node.Requirements, indent + 1)}{Environment.NewLine}";
             if (node.Types != null)
                 retStr += $"{Visit(node.Types, indent + 1)}{Environment.NewLine}";
-            if (node.Predicates != null)
-                retStr += $"{Visit(node.Predicates, indent + 1)}{Environment.NewLine}";
             if (node.Constants != null)
                 retStr += $"{Visit(node.Constants, indent + 1)}{Environment.NewLine}";
+            if (node.Predicates != null)
+                retStr += $"{Visit(node.Predicates, indent + 1)}{Environment.NewLine}";
             if (node.Extends != null)
                 retStr += $"{Visit(node.Extends, indent + 1)}{Environment.NewLine}";
             if (node.Timeless != null)
