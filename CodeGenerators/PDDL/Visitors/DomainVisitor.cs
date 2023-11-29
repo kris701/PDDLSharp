@@ -15,6 +15,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
             string retStr = $"{IndentStr(indent)}(define{Environment.NewLine}";
             if (node.Name != null)
                 retStr += $"{Visit(node.Name, indent + 1)}{Environment.NewLine}";
+            if (node.Extends != null)
+                retStr += $"{Visit(node.Extends, indent + 1)}{Environment.NewLine}";
             if (node.Requirements != null)
                 retStr += $"{Visit(node.Requirements, indent + 1)}{Environment.NewLine}";
             if (node.Types != null)
@@ -23,8 +25,6 @@ namespace PDDLSharp.CodeGenerators.Visitors
                 retStr += $"{Visit(node.Constants, indent + 1)}{Environment.NewLine}";
             if (node.Predicates != null)
                 retStr += $"{Visit(node.Predicates, indent + 1)}{Environment.NewLine}";
-            if (node.Extends != null)
-                retStr += $"{Visit(node.Extends, indent + 1)}{Environment.NewLine}";
             if (node.Timeless != null)
                 retStr += $"{Visit(node.Timeless, indent + 1)}{Environment.NewLine}";
             if (node.Functions != null)
