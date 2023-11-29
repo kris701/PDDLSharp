@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Tools;
+using System.Text.RegularExpressions;
 
 namespace PDDLSharp.ASTGenerators.PDDL
 {
@@ -32,6 +33,7 @@ namespace PDDLSharp.ASTGenerators.PDDL
         {
             text = text.Replace("\n- ", $"\n{PDDLASTTokens.TypeToken}");
             text = text.Replace(" - ", PDDLASTTokens.TypeToken);
+            text = Regex.Replace(text, "([^ (!\\()])(\\?)", "$1 ?");
             return text;
         }
     }

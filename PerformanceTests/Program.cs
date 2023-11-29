@@ -34,12 +34,12 @@ namespace PerformanceTests
             //GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/kris701/PDDLBenchmarkPlans", "benchmarks-plans").Wait();
             Console.WriteLine("Done!");
 
-            //RunNTimes(100);
+            RunNTimes(1);
             //RunNTimes2(2000);
             //RunNTimes3(1);
             //RunNTimes4(100);
             //RunNTimes5(50);
-            RunNTimes6(1);
+            //RunNTimes6(1);
         }
 
         private static void RunNTimes6(int number)
@@ -240,8 +240,8 @@ namespace PerformanceTests
 
         private static void RunNTimes(int number)
         {
-            var targetDomain = "benchmarks/tidybot-opt11-strips/domain.pddl";
-            var targetProblem = "benchmarks/tidybot-opt11-strips/p16.pddl";
+            var targetDomain = "benchmarks/zenotravel/domain.pddl";
+            var targetProblem = "benchmarks/zenotravel/p01.pddl";
             //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
             //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
 
