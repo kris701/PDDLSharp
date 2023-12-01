@@ -31,7 +31,7 @@ namespace PDDLSharp.ASTGenerators.PDDL
 
         public static string TokenizeSpecials(string text)
         {
-            text = text.Replace("  ", " ");
+            text = text.Replace("-  ", "- ");
             text = text.Replace("\n- ", $"\n{PDDLASTTokens.TypeToken}");
             text = text.Replace(" - ", PDDLASTTokens.TypeToken);
             text = Regex.Replace(text, "([^ (!\\()])(\\?)", "$1 ?");
