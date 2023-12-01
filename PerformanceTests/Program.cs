@@ -30,6 +30,7 @@ namespace PerformanceTests
         static void Main(string[] args)
         {
             Console.WriteLine("Fetching benchmarks!");
+            GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/AI-Planning/autoscale-benchmarks", "autoscale-benchmarks").Wait();
             GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks", "benchmarks").Wait();
             //GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/kris701/PDDLBenchmarkPlans", "benchmarks-plans").Wait();
             Console.WriteLine("Done!");
@@ -240,8 +241,8 @@ namespace PerformanceTests
 
         private static void RunNTimes(int number)
         {
-            var targetDomain = "benchmarks/zenotravel/domain.pddl";
-            var targetProblem = "benchmarks/zenotravel/p01.pddl";
+            var targetDomain = "autoscale-benchmarks/21.11-agile-strips/freecell/domain.pddl";
+            var targetProblem = "autoscale-benchmarks/21.11-agile-strips/freecell/p01.pddl";
             //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
             //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
 
