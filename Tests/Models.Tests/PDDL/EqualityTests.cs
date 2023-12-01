@@ -31,8 +31,8 @@ namespace PDDLSharp.Models.Tests.PDDL
             };
             yield return new object[]
             {
-                new NameExp(new ASTNode(1, 10, "(abc)", "abc"), null, "abc"),
-                new NameExp(new ASTNode(1, 10, "(abc)", "abc"), null, "abc"),
+                new NameExp(new ASTNode(1, "(abc)", "abc"), null, "abc"),
+                new NameExp(new ASTNode(1, "(abc)", "abc"), null, "abc"),
                 true
             };
             yield return new object[]

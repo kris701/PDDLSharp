@@ -64,7 +64,7 @@ namespace PDDLSharp.Models.PDDL.Domain
 
         public override TypesDecl Copy(INode? newParent = null)
         {
-            var newNode = new TypesDecl(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new TypesDecl(new ASTNode(Line, "", ""), newParent);
             foreach (var node in Types)
                 newNode.Types.Add(node.Copy(newNode));
             newNode.IsHidden = IsHidden;

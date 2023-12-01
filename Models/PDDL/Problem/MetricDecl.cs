@@ -70,7 +70,7 @@ namespace PDDLSharp.Models.PDDL.Problem
 
         public override MetricDecl Copy(INode? newParent = null)
         {
-            var newNode = new MetricDecl(new ASTNode(Start, End, Line, "", ""), newParent, MetricType);
+            var newNode = new MetricDecl(new ASTNode(Line, "", ""), newParent, MetricType);
             newNode.MetricExp = ((dynamic)MetricExp).Copy(newNode);
             newNode.IsHidden = IsHidden;
             return newNode;

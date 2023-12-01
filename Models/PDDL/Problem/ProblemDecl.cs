@@ -79,7 +79,7 @@ namespace PDDLSharp.Models.PDDL.Problem
 
         public override ProblemDecl Copy(INode? newParent = null)
         {
-            var newNode = new ProblemDecl(new ASTNode(Start, End, Line, "", ""));
+            var newNode = new ProblemDecl(new ASTNode(Line, "", ""));
 
             if (Name != null)
                 newNode.Name = Name.Copy(newNode);

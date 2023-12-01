@@ -64,7 +64,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override DerivedPredicateExp Copy(INode? newParent = null)
         {
-            var newNode = new DerivedPredicateExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, _derivedDecls);
+            var newNode = new DerivedPredicateExp(new ASTNode(Line, "", ""), newParent, Name, _derivedDecls);
             foreach (var node in Arguments)
                 newNode.Arguments.Add(((dynamic)node).Copy(newNode));
             newNode.IsHidden = IsHidden;

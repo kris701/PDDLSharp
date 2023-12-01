@@ -7,8 +7,6 @@ namespace PDDLSharp.Models.PDDL
     public abstract class BaseNode : INode
     {
         public INode? Parent { get; set; }
-        public int Start { get; set; }
-        public int End { get; set; }
         public int Line { get; set; }
         public bool IsHidden { get; set; } = false;
 
@@ -17,23 +15,17 @@ namespace PDDLSharp.Models.PDDL
         public BaseNode(ASTNode node, INode? parent) : this(parent)
         {
             Line = node.Line;
-            Start = node.Start;
-            End = node.End;
         }
 
         public BaseNode(INode? parent)
         {
             Line = -1;
-            Start = -1;
-            End = -1;
             Parent = parent;
         }
 
         public BaseNode()
         {
             Line = -1;
-            Start = -1;
-            End = -1;
             Parent = null;
         }
 
@@ -139,8 +131,6 @@ namespace PDDLSharp.Models.PDDL
         public virtual void RemoveContext()
         {
             Parent = null;
-            Start = -1;
-            End = -1;
             Line = -1;
         }
 

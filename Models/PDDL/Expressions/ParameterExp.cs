@@ -71,7 +71,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override ParameterExp Copy(INode? newParent = null)
         {
-            var newNode = new ParameterExp(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new ParameterExp(new ASTNode(Line, "", ""), newParent);
             foreach (var node in Values)
                 newNode.Values.Add(((dynamic)node).Copy(newNode));
             newNode.IsHidden = IsHidden;

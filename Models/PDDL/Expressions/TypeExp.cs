@@ -117,7 +117,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override TypeExp Copy(INode? newParent = null)
         {
-            var newNode = new TypeExp(new ASTNode(Start, End, Line, "", ""), newParent, Name, SuperType);
+            var newNode = new TypeExp(new ASTNode(Line, "", ""), newParent, Name, SuperType);
             foreach (var superType in SuperTypes)
                 newNode.SuperTypes.Add(superType);
             newNode.IsHidden = IsHidden;

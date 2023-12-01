@@ -29,15 +29,13 @@ namespace PDDLSharp.Parsers.Visitors
                     $"Could not parse node as a '{typeof(T)}', got a 'null'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
-                    node.Line,
-                    node.Start));
+                    node.Line));
             else
                 Listener.AddError(new PDDLSharpError(
                     $"Could not parse node as a '{typeof(T)}', got a '{res.GetType().Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
-                    node.Line,
-                    node.Start));
+                    node.Line));
             return default(T);
         }
 
@@ -105,8 +103,7 @@ namespace PDDLSharp.Parsers.Visitors
                     $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.OuterContent.Replace(targetName, "").Trim()}",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
-                    node.Line,
-                    node.Start));
+                    node.Line));
                 return false;
             }
             return true;
@@ -122,8 +119,7 @@ namespace PDDLSharp.Parsers.Visitors
                         $"'{nodeName}' must not contain any children!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
-                        node.Line,
-                        node.Start));
+                        node.Line));
                     return false;
                 }
             }
@@ -135,8 +131,7 @@ namespace PDDLSharp.Parsers.Visitors
                         $"'{nodeName}' must have exactly {targetChildren} children, but it has '{node.Children.Count}'!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
-                        node.Line,
-                        node.Start));
+                        node.Line));
                     return false;
                 }
             }
@@ -151,8 +146,7 @@ namespace PDDLSharp.Parsers.Visitors
                     $"'{nodeName}' must have more than {targetChildren} children, but it has '{node.Children.Count}'!",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
-                    node.Line,
-                    node.Start));
+                    node.Line));
                 return false;
             }
             return true;
@@ -161,7 +155,6 @@ namespace PDDLSharp.Parsers.Visitors
         internal List<NameExp> ParseAsParameters(ASTNode node, INode parent, string nodeType, string content)
         {
             List<NameExp> objs = new List<NameExp>();
-            int offset = node.End - 1;
             content = PurgeEscapeChars(content);
 
             string currentType = "object";
@@ -180,8 +173,6 @@ namespace PDDLSharp.Parsers.Visitors
                         typedParam = $"{typedParam}{PDDLASTTokens.TypeToken}{currentType}";
 
                     var parsed = VisitAs<NameExp>(new ASTNode(
-                        offset - param.Length,
-                        offset,
                         node.Line,
                         typedParam,
                         typedParam), parent);
@@ -195,8 +186,7 @@ namespace PDDLSharp.Parsers.Visitors
                                 $"Unexpected node type while parsing! Expected '{nameof(NameExp)}' but got null!",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Parsing,
-                                node.Line,
-                                node.Start));
+                                node.Line));
                         }
                         else
                         {
@@ -204,12 +194,10 @@ namespace PDDLSharp.Parsers.Visitors
                                 $"Unexpected node type while parsing! Expected '{nameof(NameExp)}' but got '{parsed.GetType().Name}'!",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Parsing,
-                                parsed.Line,
-                                parsed.Start));
+                                parsed.Line));
                         }
                     }
                 }
-                offset -= param.Length + 1;
             }
             objs.Reverse();
             return objs;
@@ -228,8 +216,7 @@ namespace PDDLSharp.Parsers.Visitors
                         $"Could not parse predicate!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
-                        child.Line,
-                        child.Start));
+                        child.Line));
             }
             return items;
         }
@@ -242,8 +229,7 @@ namespace PDDLSharp.Parsers.Visitors
                     $"'{nodeName}' is malformed! missing '{targetName}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
-                    node.Line,
-                    node.Start));
+                    node.Line));
                 return false;
             }
             return true;
@@ -263,8 +249,7 @@ namespace PDDLSharp.Parsers.Visitors
                     $"'{nodeName}' is malformed! Expected {target} loose children but got {actualCount}.",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
-                    node.Line,
-                    node.Start));
+                    node.Line));
                 return false;
             }
             return true;

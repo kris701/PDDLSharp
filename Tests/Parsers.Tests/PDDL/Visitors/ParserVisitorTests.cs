@@ -26,7 +26,7 @@ namespace PDDLSharp.Parsers.Tests.PDDL.Visitors
             // ARRANGE
             IErrorListener listener = new ErrorListener(ParseErrorType.Error);
             var parser = new ParserVisitor(listener);
-            var node = new ASTNode(0, 0, outerText, innerText);
+            var node = new ASTNode(0, outerText, innerText);
 
             // ACT
             var result = parser.DoesNotContainStrayCharacters(node, targetName);
@@ -45,7 +45,7 @@ namespace PDDLSharp.Parsers.Tests.PDDL.Visitors
             // ARRANGE
             IErrorListener listener = new ErrorListener(ParseErrorType.Error);
             var parser = new ParserVisitor(listener);
-            var node = new ASTNode(0, 0, outerText, innerText);
+            var node = new ASTNode(0, outerText, innerText);
 
             // ACT
             var result = parser.DoesNotContainStrayCharacters(node, targetName);

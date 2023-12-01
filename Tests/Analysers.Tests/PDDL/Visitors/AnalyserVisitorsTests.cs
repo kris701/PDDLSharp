@@ -55,8 +55,7 @@ namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
                     $"Err",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
 
             // ASSERT
             Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));
@@ -93,8 +92,7 @@ namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
                     $"Err",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
 
             // ASSERT
             Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));
@@ -129,8 +127,7 @@ namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
                     $"Err",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
 
             // ASSERT
             Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));
@@ -160,8 +157,7 @@ namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
                     $"Err",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
 
             // ASSERT
             Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));
@@ -201,8 +197,7 @@ namespace PDDLSharp.Analysers.Tests.PDDL.Visitors
                     $"Err",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
 
             // ASSERT
             Assert.AreEqual(expectedErrors, listener.CountErrorsOfTypeOrAbove(ParseErrorType.Warning));

@@ -8,15 +8,13 @@
         public ParseErrorType Type { get; internal set; }
         public ParseErrorLevel Level { get; internal set; }
         public int Line { get; internal set; }
-        public int Character { get; internal set; }
 
-        public PDDLSharpError(string message, ParseErrorType type, ParseErrorLevel level, int line, int character)
+        public PDDLSharpError(string message, ParseErrorType type, ParseErrorLevel level, int line)
         {
             Message = message;
             Type = type;
             Level = level;
             Line = line;
-            Character = character;
         }
 
         public PDDLSharpError(string message, ParseErrorType type, ParseErrorLevel level)
@@ -25,7 +23,6 @@
             Type = type;
             Level = level;
             Line = -1;
-            Character = -1;
         }
 
         public override string ToString()
