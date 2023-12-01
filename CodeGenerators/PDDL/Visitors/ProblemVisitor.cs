@@ -20,6 +20,8 @@ namespace PDDLSharp.CodeGenerators.Visitors
                 retStr += $"{Visit(node.Name, indent + 1)}{Environment.NewLine}";
             if (node.DomainName != null)
                 retStr += $"{Visit(node.DomainName, indent + 1)}{Environment.NewLine}";
+            if (node.Requirements != null)
+                retStr += $"{Visit(node.Requirements, indent + 1)}{Environment.NewLine}";
             if (node.Objects != null)
                 retStr += $"{Visit(node.Objects, indent + 1)}{Environment.NewLine}";
             if (node.Init != null)
