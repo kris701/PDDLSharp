@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Shared;
 
 namespace PDDLSharp.CodeGenerators.Visitors
 {

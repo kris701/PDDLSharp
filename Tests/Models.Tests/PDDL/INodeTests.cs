@@ -8,6 +8,7 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.PDDL.Shared;
 using PDDLSharp.Models.Tests;
 using PDDLSharp.Models.Tests.PDDL;
 using PDDLSharp.Parsers.Visitors;

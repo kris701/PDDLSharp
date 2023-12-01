@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System;
 using PDDLSharp.Tools;
+using PDDLSharp.Models.PDDL.Shared;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {
