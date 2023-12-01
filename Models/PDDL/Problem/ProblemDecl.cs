@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.AST;
+using PDDLSharp.Models.PDDL.Shared;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {
@@ -6,6 +7,7 @@ namespace PDDLSharp.Models.PDDL.Problem
     {
         public ProblemNameDecl? Name { get; set; }
         public DomainNameRefDecl? DomainName { get; set; }
+        public RequirementsDecl? Requirements { get; set; }
         public SituationDecl? Situation { get; set; }
         public ObjectsDecl? Objects { get; set; }
         public InitDecl? Init { get; set; }
@@ -24,6 +26,8 @@ namespace PDDLSharp.Models.PDDL.Problem
                 if (Name != null && !Name.Equals(other.Name)) return false;
                 if (DomainName == null && other.DomainName != null) return false;
                 if (DomainName != null && !DomainName.Equals(other.DomainName)) return false;
+                if (Requirements == null && other.Requirements != null) return false;
+                if (Requirements != null && !Requirements.Equals(other.Requirements)) return false;
                 if (Situation == null && other.Situation != null) return false;
                 if (Situation != null && !Situation.Equals(other.Situation)) return false;
                 if (Objects == null && other.Objects != null) return false;
@@ -46,6 +50,8 @@ namespace PDDLSharp.Models.PDDL.Problem
                 hash *= Name.GetHashCode();
             if (DomainName != null)
                 hash *= DomainName.GetHashCode();
+            if (Requirements != null)
+                hash *= Requirements.GetHashCode();
             if (Situation != null)
                 hash *= Situation.GetHashCode();
             if (Objects != null)
@@ -65,6 +71,7 @@ namespace PDDLSharp.Models.PDDL.Problem
                 yield return Name;
             if (DomainName != null)
                 yield return DomainName;
+            if (Requirements != null) yield return Requirements;
             if (Situation != null)
                 yield return Situation;
             if (Objects != null)
@@ -85,6 +92,8 @@ namespace PDDLSharp.Models.PDDL.Problem
                 newNode.Name = Name.Copy(newNode);
             if (DomainName != null)
                 newNode.DomainName = DomainName.Copy(newNode);
+            if (Requirements != null)
+                newNode.Requirements = Requirements.Copy(newNode);
             if (Situation != null)
                 newNode.Situation = Situation.Copy(newNode);
             if (Objects != null)
@@ -106,6 +115,8 @@ namespace PDDLSharp.Models.PDDL.Problem
                 Name = name;
             if (DomainName == node && with is DomainNameRefDecl domainName)
                 DomainName = domainName;
+            if (Requirements == node && with is RequirementsDecl req)
+                Requirements = req;
             if (Situation == node && with is SituationDecl situ)
                 Situation = situ;
             if (Objects == node && with is ObjectsDecl objs)

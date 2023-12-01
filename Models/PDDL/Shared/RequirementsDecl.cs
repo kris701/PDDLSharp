@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Tools;
 using System;
 
-namespace PDDLSharp.Models.PDDL.Domain
+namespace PDDLSharp.Models.PDDL.Shared
 {
     public class RequirementsDecl : BaseListableNode, IDecl
     {

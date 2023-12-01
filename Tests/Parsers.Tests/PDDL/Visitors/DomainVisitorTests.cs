@@ -6,6 +6,7 @@ using PDDLSharp.Models;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Models.PDDL.Shared;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.Tests;
 using PDDLSharp.Parsers.Tests.PDDL.Visitors;

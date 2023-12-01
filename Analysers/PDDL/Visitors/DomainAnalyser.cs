@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Shared;
 
 namespace PDDLSharp.Analysers.Visitors
 {
