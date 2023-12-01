@@ -162,8 +162,7 @@ namespace PDDLSharp.Contextualisers.Visitors
                             $"Derived declaration expected {node.Predicate.Arguments.Count} but here {pred.Arguments.Count} is given!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Contexturaliser,
-                            pred.Line,
-                            pred.Start
+                            pred.Line
                                 ));
 
                     var copy = pred.Copy(pred.Parent);

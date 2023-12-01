@@ -36,7 +36,7 @@ namespace PDDLSharp.Models.PDDL.Problem
 
         public override DomainNameRefDecl Copy(INode? newParent = null)
         {
-            var newNode = new DomainNameRefDecl(new ASTNode(Start, End, Line, "", ""), newParent, Name);
+            var newNode = new DomainNameRefDecl(new ASTNode(Line, "", ""), newParent, Name);
             newNode.IsHidden = IsHidden;
             return newNode;
         }

@@ -64,7 +64,7 @@ namespace PDDLSharp.Models.PDDL.Domain
 
         public override ConstantsDecl Copy(INode? newParent = null)
         {
-            var newNode = new ConstantsDecl(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new ConstantsDecl(new ASTNode(Line, "", ""), newParent);
             foreach (var node in Constants)
                 newNode.Constants.Add(node.Copy(newNode));
             newNode.IsHidden = IsHidden;

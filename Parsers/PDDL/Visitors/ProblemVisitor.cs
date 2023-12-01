@@ -158,8 +158,7 @@ namespace PDDLSharp.Parsers.Visitors
                         $"Invalid metric node type '{metricType}'. Allowed types are: {MetricNodeTypesStr()}",
                         ParseErrorType.Error,
                         ParseErrorLevel.Analyser,
-                        node.Line,
-                        node.Start));
+                        node.Line));
             }
             return null;
         }

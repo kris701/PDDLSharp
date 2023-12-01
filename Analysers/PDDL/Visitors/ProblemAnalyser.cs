@@ -24,43 +24,37 @@ namespace PDDLSharp.Analysers.Visitors
                     $"Missing domain name reference",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    problem.Line,
-                    problem.Start));
+                    problem.Line));
             if (problem.Objects == null)
                 Listener.AddError(new PDDLSharpError(
                     $"Missing objects declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    problem.Line,
-                    problem.Start));
+                    problem.Line));
             if (problem.Objects != null && problem.Objects.Objs.Count == 0)
                 Listener.AddError(new PDDLSharpError(
                     $"Missing objects",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    problem.Line,
-                    problem.Start));
+                    problem.Line));
             if (problem.Init == null)
                 Listener.AddError(new PDDLSharpError(
                     $"Missing Init declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    problem.Line,
-                    problem.Start));
+                    problem.Line));
             if (problem.Init != null && problem.Init.Predicates.Count == 0)
                 Listener.AddError(new PDDLSharpError(
                     $"No init predicates declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    problem.Line,
-                    problem.Start));
+                    problem.Line));
             if (problem.Goal == null)
                 Listener.AddError(new PDDLSharpError(
                     $"Missing Goal declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    problem.Line,
-                    problem.Start));
+                    problem.Line));
         }
 
         #region ProblemNameDecl
@@ -82,8 +76,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"Domain name referenced in problem file ('{node.Name}') does not match the actual domain name ('{Declaration.Domain.Name.Name}')!",
                     ParseErrorType.Warning,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         #endregion
@@ -105,8 +98,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"No objects declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
 
             CheckForUniqueNames(
                 node,
@@ -114,8 +106,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"An object have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
             CheckForUndeclaredObjects(node);
             CheckForUnusedObjects(node);
             CheckObjectDeclarationTypes(node);
@@ -135,8 +126,7 @@ namespace PDDLSharp.Analysers.Visitors
                             $"Undeclared object detected '{name.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            name.Line,
-                            name.Start));
+                            name.Line));
         }
 
         private void CheckForUnusedObjects(ObjectsDecl node)
@@ -150,8 +140,7 @@ namespace PDDLSharp.Analysers.Visitors
                         $"Unused object detected '{obj.Name}'",
                         ParseErrorType.Message,
                         ParseErrorLevel.Analyser,
-                        obj.Line,
-                        obj.Start));
+                        obj.Line));
                 }
             }
         }
@@ -165,8 +154,7 @@ namespace PDDLSharp.Analysers.Visitors
                             $"Unknown type for object! '{obj.Type.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            obj.Line,
-                            obj.Start));
+                            obj.Line));
             }
             else
             {
@@ -176,8 +164,7 @@ namespace PDDLSharp.Analysers.Visitors
                             $"Unknown type for object! '{obj.Type.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
-                            obj.Line,
-                            obj.Start));
+                            obj.Line));
             }
         }
         #endregion
@@ -191,8 +178,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"No init predicates declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
 
             CheckForUndeclaredPredicates(
                 node,
@@ -200,16 +186,14 @@ namespace PDDLSharp.Analysers.Visitors
                     $"Init declaration contains undeclared predicate '{predicate.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
             CheckForCorrectPredicateTypes(
                 node,
                 (pred, expected, actual) => new PDDLSharpError(
                     $"Init declaration contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         #endregion
@@ -223,8 +207,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"No goal declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
 
             CheckForUndeclaredPredicates(
                 node,
@@ -232,16 +215,14 @@ namespace PDDLSharp.Analysers.Visitors
                     $"Goal declaration contains undeclared predicate '{predicate.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
             CheckForCorrectPredicateTypes(
                 node,
                 (pred, expected, actual) => new PDDLSharpError(
                     $"Goal declaration contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         #endregion
@@ -257,8 +238,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"Metric declaration contains undeclared predicate '{predicate.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         private void IsMetricusingOnlyNumericFluents(MetricDecl node)
@@ -271,8 +251,7 @@ namespace PDDLSharp.Analysers.Visitors
                         $"The metric expression must only contain predicates or numeric fluents! Currently contains a `{exp.GetType().Name}` node",
                         ParseErrorType.Error,
                         ParseErrorLevel.Analyser,
-                        exp.Line,
-                        exp.Start));
+                        exp.Line));
             }
         }
 

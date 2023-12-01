@@ -69,8 +69,6 @@ namespace PDDLSharp.ASTGenerators.PDDL
                 }
                 var outer = $"({innerContent.Trim()})";
                 return new ASTNode(
-                    thisStart,
-                    thisEnd,
                     lineOffset,
                     outer,
                     innerContent.Trim(),
@@ -80,8 +78,6 @@ namespace PDDLSharp.ASTGenerators.PDDL
             {
                 var newText = text.Trim();
                 return new ASTNode(
-                    thisStart,
-                    thisEnd,
                     lineOffset,
                     newText,
                     newText);

@@ -63,7 +63,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override AndExp Copy(INode? newParent = null)
         {
-            var newNode = new AndExp(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new AndExp(new ASTNode(Line, "", ""), newParent);
             foreach (var node in Children)
                 newNode.Children.Add(((dynamic)node).Copy(newNode));
             newNode.IsHidden = IsHidden;

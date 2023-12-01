@@ -71,7 +71,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override ForAllExp Copy(INode? newParent = null)
         {
-            var newNode = new ForAllExp(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new ForAllExp(new ASTNode(Line, "", ""), newParent);
             var newParams = Parameters.Copy(newNode);
             var newExp = ((dynamic)Expression).Copy(newNode);
             newNode.Parameters = newParams;

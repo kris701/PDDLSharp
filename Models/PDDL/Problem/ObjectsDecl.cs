@@ -64,7 +64,7 @@ namespace PDDLSharp.Models.PDDL.Problem
 
         public override ObjectsDecl Copy(INode? newParent = null)
         {
-            var newNode = new ObjectsDecl(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new ObjectsDecl(new ASTNode(Line, "", ""), newParent);
             foreach (var node in Objs)
                 newNode.Objs.Add(node.Copy(newNode));
             newNode.IsHidden = IsHidden;

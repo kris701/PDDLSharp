@@ -16,7 +16,7 @@ namespace PDDLSharp.ASTGenerators.FastDownward.SAS
 
             var lineDict = GenerateLineDict(text, SASASTTokens.BreakToken);
 
-            var returnNode = new ASTNode(0, text.Length, 1, text, text);
+            var returnNode = new ASTNode(1, text, text);
             int offset = 0;
             int lineOffset = 0;
             while (offset != -1)
@@ -42,8 +42,6 @@ namespace PDDLSharp.ASTGenerators.FastDownward.SAS
                 // Generate line number, based on the begin value
                 lineOffset = GetLineNumber(lineDict, begin, lineOffset);
                 returnNode.Children.Add(new ASTNode(
-                    begin + 1,
-                    offset + endLength,
                     lineOffset,
                     outerText,
                     innerText

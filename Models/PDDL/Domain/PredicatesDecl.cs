@@ -65,7 +65,7 @@ namespace PDDLSharp.Models.PDDL.Domain
 
         public override PredicatesDecl Copy(INode? newParent = null)
         {
-            var newNode = new PredicatesDecl(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new PredicatesDecl(new ASTNode(Line, "", ""), newParent);
             foreach (var node in Predicates)
                 newNode.Predicates.Add(node.Copy(newNode));
             newNode.IsHidden = IsHidden;

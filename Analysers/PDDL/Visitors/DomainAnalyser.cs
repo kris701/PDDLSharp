@@ -23,29 +23,25 @@ namespace PDDLSharp.Analysers.Visitors
                     $"Missing predicates declaration.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    domain.Line,
-                    domain.Start));
+                    domain.Line));
             if (domain.Predicates != null && domain.Predicates.Predicates.Count == 0)
                 Listener.AddError(new PDDLSharpError(
                     $"No predicates defined.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    domain.Line,
-                    domain.Start));
+                    domain.Line));
             if (domain.Actions == null)
                 Listener.AddError(new PDDLSharpError(
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    domain.Line,
-                    domain.Start));
+                    domain.Line));
             if (domain.Actions != null && domain.Actions.Count == 0)
                 Listener.AddError(new PDDLSharpError(
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    domain.Line,
-                    domain.Start));
+                    domain.Line));
         }
 
         #region DomainNameDecl
@@ -67,8 +63,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"A requirement have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         #endregion
@@ -92,8 +87,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"A Timeless predicate have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         #endregion
@@ -108,8 +102,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"A type have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
             CheckForUnusedTypes(node);
         }
 
@@ -125,8 +118,7 @@ namespace PDDLSharp.Analysers.Visitors
                         $"Unused type detected '{type.Name}'",
                         ParseErrorType.Message,
                         ParseErrorLevel.Analyser,
-                        type.Line,
-                        type.Start));
+                        type.Line));
             }
         }
 
@@ -142,8 +134,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"A constant have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         #endregion
@@ -158,8 +149,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"A predicate have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
             CheckForUnusedPredicatesInPredicateDecl(node);
         }
 
@@ -175,8 +165,7 @@ namespace PDDLSharp.Analysers.Visitors
                         $"Unused predicate detected '{predicate.Name}'",
                         ParseErrorType.Message,
                         ParseErrorLevel.Analyser,
-                        predicate.Line,
-                        predicate.Start));
+                        predicate.Line));
                 }
             }
         }
@@ -193,8 +182,7 @@ namespace PDDLSharp.Analysers.Visitors
                     $"A function have been declared multiple times: '{node.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         #endregion
@@ -210,24 +198,21 @@ namespace PDDLSharp.Analysers.Visitors
                     $"Action '{node.Name}' contains undeclared parameter '{param.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
             CheckForUnusedParameters(
                 node,
                 (param) => new PDDLSharpError(
                     $"Action '{node.Name}' contains unused parameter '{param.Name}'",
                     ParseErrorType.Warning,
                     ParseErrorLevel.Analyser,
-                    param.Line,
-                    param.Start));
+                    param.Line));
             CheckForCorrectPredicateTypes(
                 node,
                 (pred, expected, actual) => new PDDLSharpError(
                     $"Action '{node.Name}' contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         #endregion
@@ -242,24 +227,21 @@ namespace PDDLSharp.Analysers.Visitors
                     $"Durative action '{node.Name}' contains undeclared parameter '{param.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
             CheckForUnusedParameters(
                 node,
                 (param) => new PDDLSharpError(
                     $"Durative action '{node.Name}' contains unused parameter '{param.Name}'",
                     ParseErrorType.Warning,
                     ParseErrorLevel.Analyser,
-                    param.Line,
-                    param.Start));
+                    param.Line));
             CheckForCorrectPredicateTypes(
                 node,
                 (pred, expected, actual) => new PDDLSharpError(
                     $"Durative action '{node.Name}' contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         #endregion
@@ -274,24 +256,21 @@ namespace PDDLSharp.Analysers.Visitors
                     $"Axiom contains undeclared parameter '{param.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
             CheckForUnusedParameters(
                 node,
                 (param) => new PDDLSharpError(
                     $"Axiom contains unused parameter '{param.Name}'",
                     ParseErrorType.Warning,
                     ParseErrorLevel.Analyser,
-                    param.Line,
-                    param.Start));
+                    param.Line));
             CheckForCorrectPredicateTypes(
                 node,
                 (pred, expected, actual) => new PDDLSharpError(
                     $"Axiom contains predicate '{pred.Name}' with parameter '{expected.Name}' that expected a type '{expected.Type.Name}' but got a '{actual.Type.Name}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Analyser,
-                    node.Line,
-                    node.Start));
+                    node.Line));
         }
 
         #endregion

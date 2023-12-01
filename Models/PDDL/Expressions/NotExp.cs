@@ -59,7 +59,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override NotExp Copy(INode? newParent = null)
         {
-            var newNode = new NotExp(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new NotExp(new ASTNode(Line, "", ""), newParent);
             newNode.Child = ((dynamic)Child).Copy(newNode);
             newNode.IsHidden = IsHidden;
             return newNode;

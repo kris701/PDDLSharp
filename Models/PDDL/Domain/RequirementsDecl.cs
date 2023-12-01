@@ -65,7 +65,7 @@ namespace PDDLSharp.Models.PDDL.Domain
 
         public override RequirementsDecl Copy(INode? newParent = null)
         {
-            var newNode = new RequirementsDecl(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new RequirementsDecl(new ASTNode(Line, "", ""), newParent);
             foreach (var node in Requirements)
                 newNode.Requirements.Add(node.Copy(newNode));
             newNode.IsHidden = IsHidden;

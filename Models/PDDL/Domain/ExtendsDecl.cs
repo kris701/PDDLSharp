@@ -64,7 +64,7 @@ namespace PDDLSharp.Models.PDDL.Domain
 
         public override ExtendsDecl Copy(INode? newParent = null)
         {
-            var newNode = new ExtendsDecl(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new ExtendsDecl(new ASTNode(Line, "", ""), newParent);
             foreach (var node in Extends)
                 newNode.Extends.Add(node.Copy(newNode));
             newNode.IsHidden = IsHidden;

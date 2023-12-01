@@ -72,7 +72,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public override ExistsExp Copy(INode? newParent = null)
         {
-            var newNode = new ExistsExp(new ASTNode(Start, End, Line, "", ""), newParent);
+            var newNode = new ExistsExp(new ASTNode(Line, "", ""), newParent);
             var newParams = Parameters.Copy(newNode);
             var newExp = ((dynamic)Expression).Copy(newNode);
             newNode.Parameters = newParams;

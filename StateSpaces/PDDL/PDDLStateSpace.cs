@@ -82,21 +82,21 @@ namespace PDDLSharp.StateSpaces.PDDL
 
         public bool Add(PredicateExp pred)
         {
-            if (pred.Start == -1)
+            if (pred.Line == -1)
                 return State.Add(pred);
             return State.Add(SimplifyPredicate(pred));
         }
         public bool Add(string pred, params string[] arguments) => Add(SimplifyPredicate(pred, arguments));
         public bool Del(PredicateExp pred)
         {
-            if (pred.Start == -1)
+            if (pred.Line == -1)
                 return State.Remove(pred);
             return State.Remove(SimplifyPredicate(pred));
         }
         public bool Del(string pred, params string[] arguments) => Del(SimplifyPredicate(pred, arguments));
         public bool Contains(PredicateExp pred)
         {
-            if (pred.Start == -1)
+            if (pred.Line == -1)
                 return State.Contains(pred);
             return State.Contains(SimplifyPredicate(pred));
         }

@@ -207,7 +207,7 @@ namespace PDDLSharp.Parsers.Visitors
                         if (arg1 == null)
                             return null;
                         var content = node.InnerContent.Substring(node.InnerContent.IndexOf(numericName) + numericName.Length).Trim();
-                        arg2 = VisitExp(new ASTNode(node.Start, node.End, content, content), newNumericExp);
+                        arg2 = VisitExp(new ASTNode(node.Line, content, content), newNumericExp);
                         if (arg2 == null)
                             return null;
                     }
@@ -248,8 +248,7 @@ namespace PDDLSharp.Parsers.Visitors
                         $"Context indicated the use of a type, but an object name was not given!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
-                        node.Line,
-                        node.Start));
+                        node.Line));
                 }
                 if (right == "")
                 {
@@ -257,15 +256,13 @@ namespace PDDLSharp.Parsers.Visitors
                         $"Context indicated the use of a type, but a type was not given!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
-                        node.Line,
-                        node.Start));
+                        node.Line));
                 }
 
                 var newNameExp = new NameExp(node, parent, left);
                 newNameExp.Type = new TypeExp(
                     new ASTNode(
-                        node.Start + left.Length + 3,
-                        node.Start + left.Length + 3 + right.Length,
+                        node.Line,
                         right,
                         right),
                     newNameExp,
