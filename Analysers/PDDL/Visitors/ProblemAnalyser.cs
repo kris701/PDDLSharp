@@ -2,6 +2,7 @@
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.PDDL.Shared;
 
 namespace PDDLSharp.Analysers.Visitors
 {
@@ -119,7 +120,7 @@ namespace PDDLSharp.Analysers.Visitors
             if (Declaration.Domain.Constants != null)
                 allNames.AddRange(Declaration.Domain.Constants.Constants);
 
-            foreach (var name in Declaration.Problem.FindTypes<NameExp>(new List<Type>() { typeof(ExistsExp), typeof(ForAllExp) }))
+            foreach (var name in Declaration.Problem.FindTypes<NameExp>(new List<Type>() { typeof(ExistsExp), typeof(ForAllExp), typeof(RequirementsDecl) }))
                 if (!allNames.Any(x => x.Name == name.Name))
                     if (name.Parent != node)
                         Listener.AddError(new PDDLSharpError(

@@ -241,8 +241,8 @@ namespace PerformanceTests
 
         private static void RunNTimes(int number)
         {
-            var targetDomain = "autoscale-benchmarks/21.11-agile-strips/freecell/domain.pddl";
-            var targetProblem = "autoscale-benchmarks/21.11-agile-strips/freecell/p01.pddl";
+            var targetDomain = "autoscale-benchmarks/21.11-agile-strips/thoughtful/domain.pddl";
+            var targetProblem = "autoscale-benchmarks/21.11-agile-strips/thoughtful/p01.pddl";
             //var targetDomain = "benchmarks/agricola-opt18-strips/domain.pddl";
             //var targetProblem = "benchmarks/agricola-opt18-strips/p01.pddl";
 

@@ -3,6 +3,7 @@ using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Models.PDDL.Shared;
 
 namespace PDDLSharp.Parsers.Visitors
 {
@@ -13,6 +14,7 @@ namespace PDDLSharp.Parsers.Visitors
             IDecl? returnNode;
             if ((returnNode = TryVisitProblemDeclNode(node)) != null) return returnNode;
             if ((returnNode = TryVisitProblemNameNode(node, parent)) != null) return returnNode;
+            if ((returnNode = TryVisitRequirementsNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitDomainRefNameNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitSituationNode(node, parent)) != null) return returnNode;
             if ((returnNode = TryVisitObjectsNode(node, parent)) != null) return returnNode;
@@ -41,6 +43,7 @@ namespace PDDLSharp.Parsers.Visitors
                     {
                         case ProblemNameDecl d: returnProblem.Name = d; break;
                         case DomainNameRefDecl d: returnProblem.DomainName = d; break;
+                        case RequirementsDecl d: returnProblem.Requirements = d; break;
                         case ObjectsDecl d: returnProblem.Objects = d; break;
                         case InitDecl d: returnProblem.Init = d; break;
                         case GoalDecl d: returnProblem.Goal = d; break;
