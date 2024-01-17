@@ -1,8 +1,8 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
-using PDDLSharp.Toolkit.Planners.Tools;
+using PDDLSharp.Toolkit.Planners.Search;
 
-namespace PDDLSharp.Toolkit.Planners.Classical.Heuristics
+namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
     /// <summary>
     /// Based on the <seealso href="https://www.fast-downward.org/Doc/Evaluator">goal count Evaluator</seealso>

@@ -1,11 +1,10 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
-using PDDLSharp.Toolkit.Planners.Tools;
 using System.Diagnostics;
 using System.Timers;
 
-namespace PDDLSharp.Toolkit.Planners.Classical.Search
+namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
     public abstract class BaseSearch : IPlanner
     {

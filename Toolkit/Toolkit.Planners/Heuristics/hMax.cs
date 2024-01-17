@@ -1,8 +1,9 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
+using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.Planners.Tools;
 
-namespace PDDLSharp.Toolkit.Planners.Classical.Heuristics
+namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
     public class hMax : BaseHeuristic
     {

@@ -1,8 +1,8 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
-using PDDLSharp.Toolkit.Planners.Tools;
+using PDDLSharp.Toolkit.Planners.Search;
 
-namespace PDDLSharp.Toolkit.Planners.Classical.Heuristics
+namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
     /// <summary>
     /// Based on the <seealso href="https://www.fast-downward.org/Doc/Evaluator">weighted Evaluator</seealso>
@@ -21,7 +21,7 @@ namespace PDDLSharp.Toolkit.Planners.Classical.Heuristics
         public override int GetValue(StateMove parent, ISASState state, List<Operator> operators)
         {
             Evaluations++;
-            return (int)(Heuristic.GetValue(parent, state, operators) * Weight);
+            return (int)((double)Heuristic.GetValue(parent, state, operators) * Weight);
         }
 
         public override void Reset()

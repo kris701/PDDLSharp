@@ -1,9 +1,8 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
-using PDDLSharp.Toolkit.Planners.Search;
 
-namespace PDDLSharp.Toolkit.Planners.Classical.Search
+namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
     /// <summary>
     /// Greedy Best First Search with Deferred Heuristic Evaluation

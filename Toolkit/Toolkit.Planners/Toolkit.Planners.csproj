@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BlackBox\" />
+    <Folder Include="Search\BlackBox\" />
   </ItemGroup>
 
 </Project>
