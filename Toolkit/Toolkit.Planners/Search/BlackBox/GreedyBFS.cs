@@ -20,12 +20,12 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
                 foreach (var op in applicables)
                 {
                     if (Aborted) break;
-                    var newMove = new StateMove(GenerateNewState(stateMove.State, op));
+                    var newMove = new StateMove(Simulate(stateMove.State, op));
                     if (newMove.State.IsInGoal())
                         return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) });
                     if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                     {
-                        var value = h.GetValue(stateMove, newMove.State, applicables);
+                        var value = h.GetValue(stateMove, newMove.State, new List<Operator>());
                         newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
                         newMove.hValue = value;
                         _openList.Enqueue(newMove, value);

@@ -36,12 +36,12 @@ namespace PerformanceTests
             //GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/kris701/PDDLBenchmarkPlans", "benchmarks-plans").Wait();
             Console.WriteLine("Done!");
 
-            RunNTimes(1);
+            //RunNTimes(1);
             //RunNTimes2(2000);
             //RunNTimes3(1);
             //RunNTimes4(100);
             //RunNTimes5(50);
-            //RunNTimes6(1);
+            RunNTimes6(1);
         }
 
         private static void RunNTimes6(int number)
@@ -57,8 +57,8 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                //if (subDir.Name != "termes-opt18-strips")
-                //    continue;
+                if (subDir.Name != "gripper")
+                    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
@@ -99,7 +99,7 @@ namespace PerformanceTests
                         continue;
                     }
 
-                    using (var planner = new GreedyBFS(decl, new SatSimple(decl)))
+                    using (var planner = new PDDLSharp.Toolkit.Planners.Search.BlackBox.GreedyBFS(decl, new hGoal()))
                     {
                         planner.Log = true;
                         planner.SearchLimit = TimeSpan.FromSeconds(10);
