@@ -17,6 +17,7 @@ using PDDLSharp.Toolkit.MacroGenerators;
 using PDDLSharp.Toolkit.Planners.Aliases;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
+using PDDLSharp.Toolkit.Planners.Search.Classical;
 using PDDLSharp.Toolkit.PlanValidator;
 using PDDLSharp.Tools;
 using PDDLSharp.Translators;

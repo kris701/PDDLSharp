@@ -1,8 +1,15 @@
-﻿using PDDLSharp.Models.FastDownward.Plans;
+﻿using PDDLSharp;
+using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Toolkit;
+using PDDLSharp.Toolkit.Planners;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search;
+using PDDLSharp.Toolkit.Planners.Search.Classical;
+using PDDLSharp.Toolkit.Planners.Tests;
+using PDDLSharp.Toolkit.Planners.Tests.Search;
+using PDDLSharp.Toolkit.Planners.Tests.Search.Classical;
 using PDDLSharp.Toolkit.PlanValidator;
 using System;
 using System.Collections.Generic;
@@ -10,7 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Toolkit.Planners.Tests.Search
+namespace PDDLSharp.Toolkit.Planners.Tests.Search.Classical
 {
     [TestClass]
     public class GreedyBFSTests : BasePlannerTests
