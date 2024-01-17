@@ -2,14 +2,14 @@
 using PDDLSharp.StateSpaces.SAS;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
-using PDDLSharp.Toolkit.Planners.Search;
+using PDDLSharp.Toolkit.Planners.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Toolkit.Planners.Aliases
+namespace PDDLSharp.Toolkit.Planners.Classical.Aliases
 {
     public class SatSimple : IHeuristic
     {

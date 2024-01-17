@@ -1,8 +1,8 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
-using PDDLSharp.Toolkit.Planners.Search;
+using PDDLSharp.Toolkit.Planners.Tools;
 
-namespace PDDLSharp.Toolkit.Planners.HeuristicsCollections
+namespace PDDLSharp.Toolkit.Planners.Classical.HeuristicsCollections
 {
     public abstract class BaseHeuristicCollection : IHeuristicCollection
     {

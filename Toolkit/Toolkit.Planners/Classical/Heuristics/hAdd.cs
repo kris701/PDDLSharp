@@ -1,9 +1,8 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
-using PDDLSharp.Toolkit.Planners.Search;
 using PDDLSharp.Toolkit.Planners.Tools;
 
-namespace PDDLSharp.Toolkit.Planners.Heuristics
+namespace PDDLSharp.Toolkit.Planners.Classical.Heuristics
 {
     public class hAdd : BaseHeuristic
     {

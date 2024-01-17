@@ -3,7 +3,7 @@ using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
 using PDDLSharp.Toolkit.Planners.Tools;
 
-namespace PDDLSharp.Toolkit.Planners.Search.Classical
+namespace PDDLSharp.Toolkit.Planners.Classical.Search
 {
     // Greedy Search with Under-Approximation Refinement
     public class GreedyBFSUAR : BaseSearch

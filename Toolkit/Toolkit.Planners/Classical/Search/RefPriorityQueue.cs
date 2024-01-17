@@ -1,4 +1,6 @@
-﻿namespace PDDLSharp.Toolkit.Planners.Search.Classical
+﻿using PDDLSharp.Toolkit.Planners.Tools;
+
+namespace PDDLSharp.Toolkit.Planners.Classical.Search
 {
     public class RefPriorityQueue
     {
