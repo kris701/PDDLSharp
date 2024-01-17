@@ -143,7 +143,7 @@ namespace PDDLSharp.CodeGenerators.Visitors
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}(when{Environment.NewLine}";
+            string retStr = $"{IndentStr(indent)}(or{Environment.NewLine}";
             foreach (var option in node.Options)
                 retStr += $"{Visit((dynamic)option, indent + 1)}{Environment.NewLine}";
             retStr += $"{IndentStr(indent)}){Environment.NewLine}";
