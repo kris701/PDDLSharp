@@ -1,14 +1,15 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
+using PDDLSharp.Toolkit.Planners.Tools;
 
-namespace PDDLSharp.Toolkit.Planners.Search
+namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
     /// <summary>
     /// Greedy Best First Search with Deferred Heuristic Evaluation
     /// (<seealso href="https://ai.dmi.unibas.ch/papers/helmert-jair06.pdf">Helmert 2006</seealso>)
     /// </summary>
-    public class GreedyBFSDHE : BaseSearch
+    public class GreedyBFSDHE : BaseClassicalSearch
     {
         public GreedyBFSDHE(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {

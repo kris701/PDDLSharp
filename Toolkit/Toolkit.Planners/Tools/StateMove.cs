@@ -2,7 +2,7 @@
 using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
 
-namespace PDDLSharp.Toolkit.Planners.Search
+namespace PDDLSharp.Toolkit.Planners.Tools
 {
     public class StateMove
     {

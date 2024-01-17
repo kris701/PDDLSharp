@@ -3,14 +3,14 @@ using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.StateSpaces.SAS;
 
-namespace PDDLSharp.Toolkit.Planners.Search
+namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
     /// <summary>
     /// Greedy Best First Search with Preferred Operators
     /// (<seealso href="https://ai.dmi.unibas.ch/papers/helmert-jair06.pdf">Helmert 2006</seealso>).
     /// The preferred operators are extracted from a relaxed plan of the problem
     /// </summary>
-    public class GreedyBFSPO : BaseSearch
+    public class GreedyBFSPO : BaseClassicalSearch
     {
         private OperatorRPG _graphGenerator;
         public GreedyBFSPO(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)

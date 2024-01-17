@@ -1,10 +1,11 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
+using PDDLSharp.Toolkit.Planners.Tools;
 
-namespace PDDLSharp.Toolkit.Planners.Search
+namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
-    public class GreedyBFS : BaseSearch
+    public class GreedyBFS : BaseClassicalSearch
     {
         public GreedyBFS(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
