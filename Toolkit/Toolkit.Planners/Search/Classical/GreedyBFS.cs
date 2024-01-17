@@ -4,7 +4,7 @@ using PDDLSharp.StateSpaces.SAS;
 
 namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
-    public class GreedyBFS : BaseSearch
+    public class GreedyBFS : BaseClassicalSearch
     {
         public GreedyBFS(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {

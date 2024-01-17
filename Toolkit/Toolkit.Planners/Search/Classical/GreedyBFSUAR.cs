@@ -6,7 +6,7 @@ using PDDLSharp.Toolkit.Planners.Tools;
 namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
     // Greedy Search with Under-Approximation Refinement
-    public class GreedyBFSUAR : BaseSearch
+    public class GreedyBFSUAR : BaseClassicalSearch
     {
         public int OperatorsUsed { get; set; }
 

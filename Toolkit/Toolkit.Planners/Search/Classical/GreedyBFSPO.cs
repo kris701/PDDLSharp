@@ -10,7 +10,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
     /// (<seealso href="https://ai.dmi.unibas.ch/papers/helmert-jair06.pdf">Helmert 2006</seealso>).
     /// The preferred operators are extracted from a relaxed plan of the problem
     /// </summary>
-    public class GreedyBFSPO : BaseSearch
+    public class GreedyBFSPO : BaseClassicalSearch
     {
         private OperatorRPG _graphGenerator;
         public GreedyBFSPO(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)

@@ -1,12 +1,13 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
+using PDDLSharp.Toolkit.Planners.Tools;
 using System.Diagnostics;
 using System.Timers;
 
 namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
-    public abstract class BaseSearch : IPlanner
+    public abstract class BaseClassicalSearch : IPlanner
     {
         public bool Log { get; set; } = false;
         public SASDecl Declaration { get; }
@@ -35,7 +36,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
             return Math.Round(amount / (elapsed.TotalMilliseconds / 1000), 1);
         }
 
-        public BaseSearch(SASDecl decl, IHeuristic heuristic)
+        public BaseClassicalSearch(SASDecl decl, IHeuristic heuristic)
         {
             Declaration = decl;
             Heuristic = heuristic;
