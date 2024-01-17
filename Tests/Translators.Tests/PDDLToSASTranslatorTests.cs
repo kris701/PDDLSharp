@@ -21,7 +21,7 @@ namespace PDDLSharp.Translators.Tests
         [ClassInitialize]
         public static async Task InitialiseAsync(TestContext context)
         {
-            await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks", "benchmarks");
+            await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks/tree/48d6a00d482de2384a9e751f9343df58bf5582be", "benchmarks");
         }
 
         [TestMethod]
