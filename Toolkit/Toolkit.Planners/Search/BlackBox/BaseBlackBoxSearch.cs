@@ -12,6 +12,12 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
     {
         public BaseBlackBoxSearch(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
+            switch (heuristic.GetType().Name)
+            {
+                case "hGoal": break;
+                default:
+                    throw new Exception("Invalid heuristic for black box planner!");
+            }
         }
 
         public List<int> GetApplicables(ISASState state)

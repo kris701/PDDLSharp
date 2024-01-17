@@ -57,8 +57,8 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                if (subDir.Name != "gripper")
-                    continue;
+                //if (subDir.Name != "gripper")
+                //    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
