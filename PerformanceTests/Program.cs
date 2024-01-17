@@ -31,7 +31,7 @@ namespace PerformanceTests
         {
             Console.WriteLine("Fetching benchmarks!");
             GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/AI-Planning/autoscale-benchmarks", "autoscale-benchmarks").Wait();
-            GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks", "benchmarks").Wait();
+            GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks/tree/48d6a00d482de2384a9e751f9343df58bf5582be", "benchmarks").Wait();
             //GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/kris701/PDDLBenchmarkPlans", "benchmarks-plans").Wait();
             Console.WriteLine("Done!");
 
