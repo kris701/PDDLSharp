@@ -4,7 +4,7 @@ using PDDLSharp.StateSpaces.SAS;
 using System.Diagnostics;
 using System.Timers;
 
-namespace PDDLSharp.Toolkit.Planners.Search
+namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
     public abstract class BaseSearch : IPlanner
     {
@@ -163,7 +163,7 @@ namespace PDDLSharp.Toolkit.Planners.Search
 
         public virtual void LogStarted()
         {
-            Console.WriteLine($"Planner {this.GetType().Name} started with heuristic {Heuristic.GetType().Name}");
+            Console.WriteLine($"Planner {GetType().Name} started with heuristic {Heuristic.GetType().Name}");
             Console.WriteLine($"Task has: {Declaration.DomainVariables.Count} domain variables");
             Console.WriteLine($"          {Declaration.Operators.Count} operators");
             Console.WriteLine($"          {Declaration.Init.Count} initial facts");

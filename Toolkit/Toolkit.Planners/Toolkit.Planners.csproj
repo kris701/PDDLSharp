@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Toolkit.StateSpace\Toolkit.Simulators.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Search\BlackBox\" />
+  </ItemGroup>
+
 </Project>

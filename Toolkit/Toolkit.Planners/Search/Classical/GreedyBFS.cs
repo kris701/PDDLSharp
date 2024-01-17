@@ -2,7 +2,7 @@
 using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
 
-namespace PDDLSharp.Toolkit.Planners.Search
+namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
     public class GreedyBFS : BaseSearch
     {

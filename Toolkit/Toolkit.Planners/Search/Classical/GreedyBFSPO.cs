@@ -3,7 +3,7 @@ using PDDLSharp.Models.SAS;
 using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.StateSpaces.SAS;
 
-namespace PDDLSharp.Toolkit.Planners.Search
+namespace PDDLSharp.Toolkit.Planners.Search.Classical
 {
     /// <summary>
     /// Greedy Best First Search with Preferred Operators
