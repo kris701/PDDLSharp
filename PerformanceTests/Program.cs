@@ -57,8 +57,8 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                //if (subDir.Name != "gripper")
-                //    continue;
+                if (subDir.Name != "gripper")
+                    continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
                 Console.WriteLine("");
@@ -68,6 +68,8 @@ namespace PerformanceTests
                 {
                     if (domain == null && PDDLFileHelper.IsFileDomain(file.FullName))
                         domain = file;
+                    if (file.Name != "prob20.pddl")
+                        continue;
                     if (problem == null && PDDLFileHelper.IsFileProblem(file.FullName))
                         problem = file;
                     if (domain != null && problem != null)
@@ -99,10 +101,38 @@ namespace PerformanceTests
                         continue;
                     }
 
+                    using (var planner = new PDDLSharp.Toolkit.Planners.Search.BlackBox.GreedyBFSFocused(decl, new hGoal()))
+                    {
+                        planner.Log = true;
+                        planner.SearchLimit = TimeSpan.FromSeconds(3000);
+
+                        var plan = new ActionPlan(new List<GroundedAction>());
+
+                        plan = planner.Solve();
+
+                        //if (!planner.Aborted)
+                        //{
+                        //    if (validator.Validate(plan, pddlDecl))
+                        //    {
+                        //        Console.WriteLine($"Plan is valid!");
+                        //        couldSolve++;
+                        //    }
+                        //    else
+                        //    {
+                        //        Console.WriteLine($"Plan is not valid!");
+                        //        return;
+                        //    }
+                        //}
+                        //else
+                        //    couldNotSolve++;
+                    }
+
+                    decl = translator.Translate(pddlDecl);
+
                     using (var planner = new PDDLSharp.Toolkit.Planners.Search.BlackBox.GreedyBFS(decl, new hGoal()))
                     {
                         planner.Log = true;
-                        planner.SearchLimit = TimeSpan.FromSeconds(10);
+                        planner.SearchLimit = TimeSpan.FromSeconds(30);
 
                         var plan = new ActionPlan(new List<GroundedAction>());
 

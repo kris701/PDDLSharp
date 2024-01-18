@@ -37,11 +37,11 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
                         {
                             var newMove = new StateMove(GenerateNewState(stateMove.State, op));
                             if (newMove.State.IsInGoal())
-                                return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) });
+                                return new ActionPlan(GeneratePlanChain(stateMove.Steps, op));
                             if (!_closedList.Contains(newMove) && !preferredQueue.Contains(newMove))
                             {
                                 var value = h.GetValue(stateMove, newMove.State, Declaration.Operators);
-                                newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
+                                newMove.Steps = new List<Operator>(stateMove.Steps) { op };
                                 newMove.hValue = value;
                                 preferredQueue.Enqueue(newMove, value);
                             }
@@ -52,7 +52,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
                 {
                     var stateMove = ExpandBestState();
                     if (stateMove.State.IsInGoal())
-                        return new ActionPlan(stateMove.Steps);
+                        return new ActionPlan(GeneratePlanChain(stateMove.Steps));
 
                     foreach (var op in Declaration.Operators)
                     {
@@ -61,11 +61,11 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
                         {
                             var newMove = new StateMove(GenerateNewState(stateMove.State, op));
                             if (newMove.State.IsInGoal())
-                                return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) });
+                                return new ActionPlan(GeneratePlanChain(stateMove.Steps, op));
                             if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                             {
                                 var value = h.GetValue(stateMove, newMove.State, Declaration.Operators);
-                                newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
+                                newMove.Steps = new List<Operator>(stateMove.Steps) { op };
                                 newMove.hValue = value;
                                 preferredQueue.Enqueue(newMove, value);
                                 _openList.Enqueue(newMove, value);

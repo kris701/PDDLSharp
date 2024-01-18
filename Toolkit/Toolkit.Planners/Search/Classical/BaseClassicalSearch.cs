@@ -139,6 +139,26 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
             return stateMove;
         }
 
+        internal List<GroundedAction> GeneratePlanChain(List<Operator> steps, Operator newOp)
+        {
+            var chain = new List<GroundedAction>();
+
+            chain.AddRange(GeneratePlanChain(steps));
+            chain.Add(GenerateFromOp(newOp));
+
+            return chain;
+        }
+
+        internal List<GroundedAction> GeneratePlanChain(List<Operator> steps)
+        {
+            var chain = new List<GroundedAction>();
+
+            foreach (var step in steps)
+                chain.Add(GenerateFromOp(step));
+
+            return chain;
+        }
+
         internal GroundedAction GenerateFromOp(Operator op) => new GroundedAction(op.Name, op.Arguments);
 
         internal abstract ActionPlan? Solve(IHeuristic h, ISASState state);
