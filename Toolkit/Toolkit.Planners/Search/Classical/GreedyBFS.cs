@@ -23,11 +23,11 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
                     {
                         var newMove = new StateMove(GenerateNewState(stateMove.State, op));
                         if (newMove.State.IsInGoal())
-                            return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) });
+                            return new ActionPlan(GeneratePlanChain(stateMove.Steps, op));
                         if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
                             var value = h.GetValue(stateMove, newMove.State, Declaration.Operators);
-                            newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
+                            newMove.Steps = new List<Operator>(stateMove.Steps) { op };
                             newMove.hValue = value;
                             _openList.Enqueue(newMove, value);
                         }

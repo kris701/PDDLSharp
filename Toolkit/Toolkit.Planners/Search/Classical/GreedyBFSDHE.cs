@@ -31,12 +31,12 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
                     {
                         var newMove = new StateMove(GenerateNewState(stateMove.State, op));
                         if (newMove.State.IsInGoal())
-                            return new ActionPlan(new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) });
+                            return new ActionPlan(GeneratePlanChain(stateMove.Steps, op));
                         if (!_closedList.Contains(newMove) && !_openList.Contains(newMove))
                         {
                             if (lowerFound)
                             {
-                                newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
+                                newMove.Steps = new List<Operator>(stateMove.Steps) { op };
                                 newMove.hValue = stateMove.hValue;
                                 newMove.Evaluated = false;
                                 _openList.Enqueue(newMove, stateMove.hValue);
@@ -46,7 +46,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
                                 var value = h.GetValue(stateMove, newMove.State, Declaration.Operators);
                                 if (value < stateMove.hValue)
                                     lowerFound = true;
-                                newMove.Steps = new List<GroundedAction>(stateMove.Steps) { GenerateFromOp(op) };
+                                newMove.Steps = new List<Operator>(stateMove.Steps) { op };
                                 newMove.hValue = value;
                                 _openList.Enqueue(newMove, value);
                             }

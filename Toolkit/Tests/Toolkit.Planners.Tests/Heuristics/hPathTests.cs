@@ -25,7 +25,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Heuristics
             IHeuristic h = new hPath();
             var parent = new StateMove();
             for (int i = 0; i < inValue; i++)
-                parent.Steps.Add(new GroundedAction(""));
+                parent.Steps.Add(new Operator());
 
             // ACT
             var newValue = h.GetValue(parent, null, new List<Operator>());
