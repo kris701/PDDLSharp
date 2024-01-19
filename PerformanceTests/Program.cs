@@ -68,7 +68,7 @@ namespace PerformanceTests
                 {
                     if (domain == null && PDDLFileHelper.IsFileDomain(file.FullName))
                         domain = file;
-                    if (file.Name != "s12-0.pddl")
+                    if (file.Name != "s5-0.pddl")
                         continue;
                     if (problem == null && PDDLFileHelper.IsFileProblem(file.FullName))
                         problem = file;

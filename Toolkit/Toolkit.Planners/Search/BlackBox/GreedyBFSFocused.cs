@@ -6,6 +6,7 @@ using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search.Classical;
 using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
 using PDDLSharp.Tools;
+using PDDLSharp.Toolkit.MacroGenerators;
 
 namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
 {
@@ -18,7 +19,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
     {
         public int NumberOfMacros { get; set; } = 8;
         public int NumberOfRepetitions { get; set; } = 1;
-        public int SearchBudget { get; set; } = 3;
+        public int SearchBudget { get; set; } = 1;
 
         public GreedyBFSFocused(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
@@ -56,10 +57,12 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
             return null;
         }
 
+        // Based on Algorithm 1 from the paper
         private List<Operator> LearnFocusedMacros(int nMacros, int nRepetitions, int budget)
         {
             var newDecl = Declaration.Copy();
             var returnMacros = new List<Operator>();
+            var operatorCombiner = new SimpleOperatorCombiner();
 
             for(int i = 0; i < nRepetitions; i++)
             {
@@ -68,7 +71,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
                 var h = new EffectHeuristic(new SASStateSpace(newDecl));
                 var g = new hPath();
 
-                using (var search = new Classical.GreedyBFS(newDecl, new hColSum(new List<IHeuristic>() { h, g })))
+                using (var search = new Classical.GreedyBFS(newDecl, new hColSum(new List<IHeuristic>() { g, h })))
                 {
                     search.SearchLimit = TimeSpan.FromSeconds(budget / nRepetitions);
                     search.Solve();
@@ -77,7 +80,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
                         if (Aborted) return new List<Operator>();
                         if (state.Steps.Count > 0)
                             queue.Enqueue(
-                                GenerateMacroOperator(state.Steps), 
+                                operatorCombiner.Combine(state.Steps), 
                                 h.GetValue(new StateMove(), state.State, new List<Operator>()));
                     }
                 }
@@ -102,40 +105,6 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
             return returnMacros;
         }
 
-        private Operator GenerateMacroOperator(List<Operator> operators)
-        {
-            var pre = new HashSet<Fact>();
-            var add = new HashSet<Fact>();
-            var del = new HashSet<Fact>();
-
-            pre.AddRange(operators[0].Pre.ToHashSet());
-            add.AddRange(operators[0].Add.ToHashSet());
-            del.AddRange(operators[0].Del.ToHashSet());
-
-            foreach (var op in operators.Skip(1))
-            {
-                foreach(var precon in op.Pre)
-                    if (!add.Contains(precon))
-                        pre.Add(precon);
-
-                foreach (var delete in op.Del)
-                {
-                    if (add.Contains(delete))
-                        add.Remove(delete);
-                    del.Add(delete);
-                }
-
-                foreach (var adding in op.Add)
-                {
-                    if (del.Contains(adding))
-                        del.Remove(adding);
-                    add.Add(adding);
-                }
-            }
-
-            return new Operator("macro", new string[0], pre.ToArray(), add.ToArray(), del.ToArray());
-        }
-
         private class EffectHeuristic : BaseHeuristic
         {
             private ISASState _initial;
@@ -147,7 +116,13 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
             public override int GetValue(StateMove parent, ISASState state, List<Operator> operators)
             {
                 Evaluations++;
-                var changed = Math.Abs(state.Count - _initial.Count);
+                var changed = 0;
+                foreach (var item in _initial.State)
+                    if (!state.Contains(item))
+                        changed++;
+                foreach (var item in state.State)
+                    if (!_initial.Contains(item))
+                        changed++;
                 if (changed > 0)
                     return changed;
                 return int.MaxValue;

@@ -30,15 +30,15 @@ namespace PDDLSharp.Toolkit.Planners.Tools
 
         public void Enqueue(T value, int key)
         {
-            if (Count >= Size)
+            int insertIndex = GetInsertIndex(key);
+            _keys.Insert(insertIndex, key);
+            _values.Insert(insertIndex, value);
+
+            if (Count > Size)
             {
                 _keys.RemoveAt(0);
                 _values.RemoveAt(0);
             }
-
-            int insertIndex = GetInsertIndex(key);
-            _keys.Insert(insertIndex, key);
-            _values.Insert(insertIndex, value);
         }
 
         private int GetInsertIndex(int key)
@@ -46,7 +46,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             for (int i = 0; i < Count; i++)
                 if (key > _keys[i])
                     return i;
-            return 0;
+            return Count;
         }
 
         public T Dequeue()
