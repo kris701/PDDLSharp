@@ -19,7 +19,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
     {
         public int NumberOfMacros { get; set; } = 8;
         public int NumberOfRepetitions { get; set; } = 1;
-        public int SearchBudget { get; set; } = 1;
+        public int SearchBudget { get; set; } = 3;
 
         public GreedyBFSFocused(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
@@ -71,6 +71,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
                 var h = new EffectHeuristic(new SASStateSpace(newDecl));
                 var g = new hPath();
 
+                // Explore state space
                 using (var search = new Classical.GreedyBFS(newDecl, new hColSum(new List<IHeuristic>() { g, h })))
                 {
                     search.SearchLimit = TimeSpan.FromSeconds(budget / nRepetitions);
@@ -85,24 +86,69 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
                     }
                 }
 
-                var newMacros = new List<Operator>();
-                while (newMacros.Count < nMacros && queue.Count > 0)
+                // Add unique macros
+                int added = 0;
+                while (added < nMacros && queue.Count > 0)
                 {
                     if (Aborted) return new List<Operator>();
                     var newMacro = queue.Dequeue();
-                    if (!newMacros.Any(x => x.ContentEquals(newMacro)))
-                        newMacros.Add(newMacro);
+                    if (!returnMacros.Any(x => x.ContentEquals(newMacro)))
+                    {
+                        returnMacros.Add(newMacro);
+                        added++;
+                    }
                 }
-                returnMacros.AddRange(newMacros);
 
+                // Repeat if needed
                 if (i != nRepetitions - 1)
                 {
                     newDecl = Declaration.Copy();
-                    // Select random state
+                    var newInit = GetNewRandomInitState(returnMacros);
+                    if (newInit == null)
+                        break;
+                    newDecl.Init = newInit;
                 }
             }
 
             return returnMacros;
+        }
+
+        // Footnote 3 noted that finding a random state is very difficult
+        // However it seemed that random walking until we find a state where no macros can run, is sufficient.
+        private HashSet<Fact>? GetNewRandomInitState(List<Operator> macros)
+        {
+            var tempDecl = Declaration.Copy();
+
+            var h = new hGoal();
+            var state = new SASStateSpace(tempDecl);
+            var openList = InitializeQueue(h, state, tempDecl.Operators);
+            var closedList = new HashSet<StateMove>();
+            while (!Aborted && openList.Count > 0)
+            {
+                var stateMove = openList.Dequeue();
+                closedList.Add(stateMove);
+                foreach (var op in tempDecl.Operators)
+                {
+                    if (Aborted) break;
+                    if (stateMove.State.IsNodeTrue(op))
+                    {
+                        if (macros.All(x => !stateMove.State.IsNodeTrue(x)))
+                            return stateMove.State.State;
+
+                        var newState = stateMove.State.Copy();
+                        newState.ExecuteNode(op);
+                        var newMove = new StateMove(newState);
+                        if (!closedList.Contains(newMove) && !openList.Contains(newMove))
+                        {
+                            var value = h.GetValue(stateMove, newMove.State, tempDecl.Operators);
+                            newMove.Steps = new List<Operator>(stateMove.Steps) { op };
+                            newMove.hValue = value;
+                            openList.Enqueue(newMove, value);
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         private class EffectHeuristic : BaseHeuristic
