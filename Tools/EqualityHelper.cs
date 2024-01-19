@@ -23,8 +23,10 @@ namespace PDDLSharp.Tools
                     if (list1[i] == null && list2[i] != null) return false;
                     if (list1[i] != null && list2[i] == null) return false;
                     if (list1[i] != null && list2[i] != null)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                         if (!list1[i].Equals(list2[i]))
                             return false;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 }
             }
             return true;
@@ -44,8 +46,10 @@ namespace PDDLSharp.Tools
                     if (list1[i] == null && list2[i] != null) return false;
                     if (list1[i] != null && list2[i] == null) return false;
                     if (list1[i] != null && list2[i] != null)
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
                         if (!list1[i].Equals(list2[i]))
                             return false;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 }
             }
             return true;
