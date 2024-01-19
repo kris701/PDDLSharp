@@ -56,38 +56,53 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
             return null;
         }
 
-        private HashSet<Operator> LearnFocusedMacros(int nMacros, int nRepetitions, int budget)
+        private List<Operator> LearnFocusedMacros(int nMacros, int nRepetitions, int budget)
         {
-            var queue = new PriorityQueue<Operator, int>();
+            var newDecl = Declaration.Copy();
+            var returnMacros = new List<Operator>();
 
             for(int i = 0; i < nRepetitions; i++)
             {
-                if (Aborted) return new HashSet<Operator>();
-                using (var search = new Classical.GreedyBFS(Declaration, new hColSum(new List<IHeuristic>()
-                {
-                    new EffectHeuristic(new SASStateSpace(Declaration)),
-                    new hPath()
-                })))
+                if (Aborted) return new List<Operator>();
+                var queue = new FixedPriorityQueue<Operator>(nMacros / nRepetitions);
+                var h = new EffectHeuristic(new SASStateSpace(newDecl));
+                var g = new hPath();
+
+                using (var search = new Classical.GreedyBFS(newDecl, new hColSum(new List<IHeuristic>() { h, g })))
                 {
                     search.SearchLimit = TimeSpan.FromSeconds(budget / nRepetitions);
                     search.Solve();
                     foreach (var state in search._closedList)
                     {
-                        if (Aborted) return new HashSet<Operator>();
-                        if (state.Steps.Count > 1)
-                            queue.Enqueue(GetOperatorFromGroundedActions(state.Steps), state.hValue);
+                        if (Aborted) return new List<Operator>();
+                        if (state.Steps.Count > 0)
+                            queue.Enqueue(
+                                GenerateMacroOperator(state.Steps), 
+                                h.GetValue(new StateMove(), state.State, new List<Operator>()));
                     }
                 }
-            }
 
-            var returnMacros = new HashSet<Operator>();
-            while(returnMacros.Count < nMacros && queue.Count > 0)
-                returnMacros.Add(queue.Dequeue());
+                var newMacros = new List<Operator>();
+                while (newMacros.Count < nMacros && queue.Count > 0)
+                {
+                    if (Aborted) return new List<Operator>();
+                    var newMacro = queue.Dequeue();
+                    if (!newMacros.Any(x => x.ContentEquals(newMacro)))
+                        newMacros.Add(newMacro);
+                }
+                returnMacros.AddRange(newMacros);
+
+                if (i != nRepetitions - 1)
+                {
+                    newDecl = Declaration.Copy();
+                    // Select random state
+                }
+            }
 
             return returnMacros;
         }
 
-        private Operator GetOperatorFromGroundedActions(List<Operator> operators)
+        private Operator GenerateMacroOperator(List<Operator> operators)
         {
             var pre = new HashSet<Fact>();
             var add = new HashSet<Fact>();
