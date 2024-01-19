@@ -57,7 +57,7 @@ namespace PerformanceTests
             int counter = 1;
             foreach (var subDir in paths)
             {
-                if (subDir.Name != "gripper")
+                if (subDir.Name != "miconic")
                     continue;
                 Console.WriteLine("");
                 Console.WriteLine($"Trying folder '{subDir.Name}' ({counter++} out of {paths.Length})");
@@ -68,7 +68,7 @@ namespace PerformanceTests
                 {
                     if (domain == null && PDDLFileHelper.IsFileDomain(file.FullName))
                         domain = file;
-                    if (file.Name != "prob20.pddl")
+                    if (file.Name != "s12-0.pddl")
                         continue;
                     if (problem == null && PDDLFileHelper.IsFileProblem(file.FullName))
                         problem = file;
