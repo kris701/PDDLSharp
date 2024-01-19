@@ -64,7 +64,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
             for(int i = 0; i < nRepetitions; i++)
             {
                 if (Aborted) return new List<Operator>();
-                var queue = new FixedPriorityQueue<Operator>(nMacros / nRepetitions);
+                var queue = new FixedMaxPriorityQueue<Operator>(nMacros / nRepetitions);
                 var h = new EffectHeuristic(new SASStateSpace(newDecl));
                 var g = new hPath();
 
