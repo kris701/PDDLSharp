@@ -22,7 +22,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
     public class GreedyBFSFocused : BaseBlackBoxSearch
     {
         public int NumberOfMacros { get; set; } = 8;
-        public int SearchBudget { get; set; } = 3;
+        public int SearchBudget { get; set; } = 1;
 
         private PDDLDecl _pddlDecl;
 
