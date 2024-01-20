@@ -68,7 +68,7 @@ namespace PerformanceTests
                 {
                     if (domain == null && PDDLFileHelper.IsFileDomain(file.FullName))
                         domain = file;
-                    if (file.Name != "s5-0.pddl")
+                    if (file.Name != "s15-4.pddl")
                         continue;
                     if (problem == null && PDDLFileHelper.IsFileProblem(file.FullName))
                         problem = file;
@@ -101,7 +101,7 @@ namespace PerformanceTests
                         continue;
                     }
 
-                    using (var planner = new PDDLSharp.Toolkit.Planners.Search.BlackBox.GreedyBFSFocused(decl, new hGoal()))
+                    using (var planner = new PDDLSharp.Toolkit.Planners.Search.BlackBox.GreedyBFSFocused(pddlDecl, decl, new hGoal()))
                     {
                         planner.Log = true;
                         planner.SearchLimit = TimeSpan.FromSeconds(3000);
@@ -109,22 +109,6 @@ namespace PerformanceTests
                         var plan = new ActionPlan(new List<GroundedAction>());
 
                         plan = planner.Solve();
-
-                        //if (!planner.Aborted)
-                        //{
-                        //    if (validator.Validate(plan, pddlDecl))
-                        //    {
-                        //        Console.WriteLine($"Plan is valid!");
-                        //        couldSolve++;
-                        //    }
-                        //    else
-                        //    {
-                        //        Console.WriteLine($"Plan is not valid!");
-                        //        return;
-                        //    }
-                        //}
-                        //else
-                        //    couldNotSolve++;
                     }
 
                     decl = translator.Translate(pddlDecl);

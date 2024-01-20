@@ -10,7 +10,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
     public abstract class BaseClassicalSearch : IPlanner
     {
         public bool Log { get; set; } = false;
-        public SASDecl Declaration { get; }
+        public SASDecl Declaration { get; internal set; }
         public int Generated { get; internal set; }
         public double GeneratedPrSecond => GetItemPrSecond(Generated, _logWatch.Elapsed);
         public int Expanded { get; internal set; }

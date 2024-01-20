@@ -58,5 +58,7 @@ namespace PDDLSharp.Toolkit.Planners.Tools
             _keys.RemoveAt(0);
             return returnValue;
         }
+
+        public bool Contains(T value) => _values.Contains(value);
     }
 }
