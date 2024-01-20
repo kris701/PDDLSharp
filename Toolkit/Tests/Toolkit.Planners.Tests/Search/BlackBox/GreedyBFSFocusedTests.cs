@@ -31,9 +31,10 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search.BlackBox
         {
             // ARRANGE
             var decl = GetSASDecl(domain, problem);
+            var pddlDecl = GetPDDLDecl(domain, problem);
             decl.Goal.Clear();
             decl.Goal.Add(new Models.SAS.Fact("non-existent"));
-            var planner = new GreedyBFSFocused(decl, new hGoal());
+            var planner = new GreedyBFSFocused(pddlDecl, decl, new hGoal());
             planner.SearchBudget = 1;
 
             // ACT

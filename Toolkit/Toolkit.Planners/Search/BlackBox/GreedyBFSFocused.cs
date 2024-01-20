@@ -7,6 +7,10 @@ using PDDLSharp.Toolkit.Planners.Search.Classical;
 using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
 using PDDLSharp.Tools;
 using PDDLSharp.Toolkit.MacroGenerators;
+using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
+using PDDLSharp.Translators.Grounders;
+using PDDLSharp.Translators;
 
 namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
 {
@@ -18,21 +22,28 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
     public class GreedyBFSFocused : BaseBlackBoxSearch
     {
         public int NumberOfMacros { get; set; } = 8;
-        public int NumberOfRepetitions { get; set; } = 1;
-        public int SearchBudget { get; set; } = 3;
+        public int SearchBudget { get; set; } = 1;
 
-        public GreedyBFSFocused(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
+        private PDDLDecl _pddlDecl;
+
+        public GreedyBFSFocused(PDDLDecl pddlDecl, SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
             if (heuristic.GetType() != typeof(hGoal))
                 throw new Exception("Heuristic must be hGoal!");
+            _pddlDecl = pddlDecl.Copy();
         }
 
         internal override ActionPlan? Solve(IHeuristic h, ISASState state)
         {
             Console.WriteLine($"[{GetPassedTime()}s] Learning Macros...");
-            var learnedMacros = LearnFocusedMacros(NumberOfMacros, NumberOfRepetitions, SearchBudget);
+            var learnedMacros = LearnFocusedMacros(NumberOfMacros, SearchBudget);
             Console.WriteLine($"[{GetPassedTime()}s] Found {learnedMacros.Count} macros");
-            Declaration.Operators.AddRange(learnedMacros);
+            _pddlDecl.Domain.Actions.AddRange(learnedMacros);
+            Console.WriteLine($"[{GetPassedTime()}s] Re-translating...");
+            var translator = new PDDLToSASTranslator(true);
+            translator.TimeLimit = TimeSpan.FromSeconds(1000);
+            Declaration = translator.Translate(_pddlDecl);
+            state = new SASStateSpace(Declaration);
             Console.WriteLine($"[{GetPassedTime()}s] Searching...");
 
             while (!Aborted && _openList.Count > 0)
@@ -58,97 +69,83 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
         }
 
         // Based on Algorithm 1 from the paper
-        private List<Operator> LearnFocusedMacros(int nMacros, int nRepetitions, int budget)
+        // Note, the repetition step is left out, since it seemed unnessesary and complicated to make with this system (have to constantly retranslate)
+        private List<ActionDecl> LearnFocusedMacros(int nMacros, int budget)
         {
             var newDecl = Declaration.Copy();
-            var returnMacros = new List<Operator>();
-            var operatorCombiner = new SimpleOperatorCombiner();
+            var returnMacros = new List<ActionDecl>();
+            var actionCombiner = new SimpleActionCombiner();
 
-            for(int i = 0; i < nRepetitions; i++)
+            if (Aborted) return new List<ActionDecl>();
+            var queue = new FixedMaxPriorityQueue<ActionDecl>(nMacros);
+            var h = new EffectHeuristic(new SASStateSpace(newDecl));
+            var g = new hPath();
+
+            // Explore state space
+            using (var search = new Classical.GreedyBFS(newDecl, new hColSum(new List<IHeuristic>() { g, h })))
             {
-                if (Aborted) return new List<Operator>();
-                var queue = new FixedMaxPriorityQueue<Operator>(nMacros / nRepetitions);
-                var h = new EffectHeuristic(new SASStateSpace(newDecl));
-                var g = new hPath();
-
-                // Explore state space
-                using (var search = new Classical.GreedyBFS(newDecl, new hColSum(new List<IHeuristic>() { g, h })))
+                search.SearchLimit = TimeSpan.FromSeconds(budget);
+                search.Solve();
+                foreach (var state in search._closedList)
                 {
-                    search.SearchLimit = TimeSpan.FromSeconds(budget / nRepetitions);
-                    search.Solve();
-                    foreach (var state in search._closedList)
-                    {
-                        if (Aborted) return new List<Operator>();
-                        if (state.Steps.Count > 0)
-                            queue.Enqueue(
-                                operatorCombiner.Combine(state.Steps), 
-                                h.GetValue(new StateMove(), state.State, new List<Operator>()));
-                    }
+                    if (Aborted) return new List<ActionDecl>();
+                    if (state.Steps.Count > 0)
+                        queue.Enqueue(
+                            GenerateMacroFromOperatorSteps(state.Steps),
+                            h.GetValue(new StateMove(), state.State, new List<Operator>()));
                 }
+            }
 
-                // Add unique macros
-                int added = 0;
-                while (added < nMacros && queue.Count > 0)
+            // Add unique macros
+            int added = 0;
+            while (added < nMacros && queue.Count > 0)
+            {
+                if (Aborted) return new List<ActionDecl>();
+                var newMacro = queue.Dequeue();
+                if (!returnMacros.Contains(newMacro))
                 {
-                    if (Aborted) return new List<Operator>();
-                    var newMacro = queue.Dequeue();
-                    if (!returnMacros.Any(x => x.ContentEquals(newMacro)))
-                    {
-                        returnMacros.Add(newMacro);
-                        added++;
-                    }
-                }
-
-                // Repeat if needed
-                if (i != nRepetitions - 1)
-                {
-                    newDecl = Declaration.Copy();
-                    var newInit = GetNewRandomInitState(returnMacros);
-                    if (newInit == null)
-                        break;
-                    newDecl.Init = newInit;
+                    returnMacros.Add(newMacro);
+                    added++;
                 }
             }
 
             return returnMacros;
         }
 
-        // Footnote 3 noted that finding a random state is very difficult
-        // However it seemed that random walking until we find a state where no macros can run, is sufficient.
-        private HashSet<Fact>? GetNewRandomInitState(List<Operator> macros)
+        // This section is mostly based on Algorithm 2 from appendix
+        // Its quite slow, but this search algorithm is mostly to show the possibilities of reducing generated states, not search time.
+        private ActionDecl GenerateMacroFromOperatorSteps(List<Operator> steps)
         {
-            var tempDecl = Declaration.Copy();
+            var actionCombiner = new SimpleActionCombiner();
 
-            var h = new hGoal();
-            var state = new SASStateSpace(tempDecl);
-            var openList = InitializeQueue(h, state, tempDecl.Operators);
-            var closedList = new HashSet<StateMove>();
-            while (!Aborted && openList.Count > 0)
+            var actionChain = new List<ActionDecl>();
+            // Convert operator steps into pddl actions
+            foreach (var step in steps)
             {
-                var stateMove = openList.Dequeue();
-                closedList.Add(stateMove);
-                foreach (var op in tempDecl.Operators)
+                var newAct = _pddlDecl.Domain.Actions.First(x => x.Name == step.Name).Copy();
+                for (int j = 0; j < newAct.Parameters.Values.Count; j++)
                 {
-                    if (Aborted) break;
-                    if (stateMove.State.IsNodeTrue(op))
-                    {
-                        if (macros.All(x => !stateMove.State.IsNodeTrue(x)))
-                            return stateMove.State.State;
-
-                        var newState = stateMove.State.Copy();
-                        newState.ExecuteNode(op);
-                        var newMove = new StateMove(newState);
-                        if (!closedList.Contains(newMove) && !openList.Contains(newMove))
-                        {
-                            var value = h.GetValue(stateMove, newMove.State, tempDecl.Operators);
-                            newMove.Steps = new List<Operator>(stateMove.Steps) { op };
-                            newMove.hValue = value;
-                            openList.Enqueue(newMove, value);
-                        }
-                    }
+                    var allRefs = newAct.FindNames(newAct.Parameters.Values[j].Name);
+                    foreach (var refName in allRefs)
+                        refName.Name = $"?{step.Arguments[j]}";
                 }
+                actionChain.Add(newAct);
             }
-            return null;
+            // Generate macro from action chain
+            var macro = actionCombiner.Combine(actionChain);
+            // Anonymize the parameters of the macro
+            AnonymizeActionDecl(macro);
+            return macro;
+        }
+
+        private void AnonymizeActionDecl(ActionDecl action)
+        {
+            for (int j = 0; j < action.Parameters.Values.Count; j++)
+            {
+                var allRefs = action.FindNames(action.Parameters.Values[j].Name);
+                foreach (var refName in allRefs)
+                    refName.Name = $"?{j}";
+            }
         }
 
         private class EffectHeuristic : BaseHeuristic
