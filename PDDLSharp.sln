@@ -67,8 +67,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Tests.System", "Toolkit\Tests\Toolkit.Tests.System\Toolkit.Tests.System.csproj", "{0454F1F2-BF9C-4E18-B40B-146E9DC192D0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3E9E1F41-BF75-4D07-8FD1-3FED670863D7}"
+	ProjectSection(SolutionItems) = preProject
+		Tests\readme.md = Tests\readme.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A1F7B33E-DC44-4954-965F-09A549BA0813}"
+	ProjectSection(SolutionItems) = preProject
+		Toolkit\Tests\readme.md = Toolkit\Tests\readme.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.MacroGenerators", "Toolkit\Toolkit.MacroGenerators\Toolkit.MacroGenerators.csproj", "{BA544147-EC18-4F2D-B60B-D385C07E3FA8}"
 EndProject

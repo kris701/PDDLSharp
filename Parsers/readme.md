@@ -90,7 +90,7 @@ ActionPlan plan = parser.Parse(new FileInfo("planFile.plan"));
 There is also a SAS parser that can parse [Fast Downward](https://www.fast-downward.org/) intermediate output SAS format.
 This format is a sort of fully grounded version of the lifted PDDL format.
 
-An example of this format is the [INode](../Models/FastDownward/SAS/Sections/VersionDecl.cs) section in the translator format:
+An example of this format is the [VersionDecl](../Models/FastDownward/SAS/Sections/VersionDecl.cs) section in the translator format:
 ```SAS
 ...
 begin_version
