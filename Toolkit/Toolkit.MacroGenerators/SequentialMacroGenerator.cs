@@ -2,6 +2,8 @@
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Toolkit.MacroGenerators.Models;
+using PDDLSharp.Toolkit.MacroGenerators.Tools;
 
 namespace PDDLSharp.Toolkit.MacroGenerators
 {
