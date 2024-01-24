@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Toolkit.PlanValidator.Tests
+namespace PDDLSharp.Toolkit.PlanValidators.Tests
 {
     [TestClass]
     public class PlanValidatorTests

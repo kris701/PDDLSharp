@@ -2,7 +2,7 @@
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Toolkit.Simulators.PDDL;
 
-namespace PDDLSharp.Toolkit.PlanValidator
+namespace PDDLSharp.Toolkit.PlanValidators
 {
     public class PlanValidator : IPlanValidator
     {
