@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Parsers\Parsers.csproj" />
-    <ProjectReference Include="..\..\Toolkit.MutexDetector\Toolkit.MutexDetector.csproj" />
+    <ProjectReference Include="..\..\Toolkit.MutexDetector\Toolkit.MutexDetectors.csproj" />
   </ItemGroup>
 
   <ItemGroup>
