@@ -73,7 +73,7 @@ namespace PDDLSharp.Models.AST
         public override int GetHashCode()
         {
             var hash = Line ^ OuterContent.GetHashCode() ^ InnerContent.GetHashCode();
-            foreach(var child in Children)
+            foreach (var child in Children)
                 hash ^= child.GetHashCode();
             return hash;
         }

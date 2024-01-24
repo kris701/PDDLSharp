@@ -1,7 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Tools;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {

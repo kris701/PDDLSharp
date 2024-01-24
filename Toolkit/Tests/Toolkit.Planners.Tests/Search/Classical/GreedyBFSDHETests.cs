@@ -10,7 +10,7 @@ using PDDLSharp.Toolkit.Planners.Search.Classical;
 using PDDLSharp.Toolkit.Planners.Tests;
 using PDDLSharp.Toolkit.Planners.Tests.Search;
 using PDDLSharp.Toolkit.Planners.Tests.Search.Classical;
-using PDDLSharp.Toolkit.PlanValidator;
+using PDDLSharp.Toolkit.PlanValidators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +33,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search.Classical
             // ARRANGE
             var decl = GetSASDecl(domain, problem);
             var planner = new GreedyBFSDHE(decl, new hDepth());
-            var validator = new PlanValidator.PlanValidator();
+            var validator = new PlanValidators.PlanValidator();
 
             // ACT
             var result = planner.Solve();
@@ -52,7 +52,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search.Classical
             // ARRANGE
             var decl = GetSASDecl(domain, problem);
             var planner = new GreedyBFSDHE(decl, new hFF(decl));
-            var validator = new PlanValidator.PlanValidator();
+            var validator = new PlanValidators.PlanValidator();
 
             // ACT
             var result = planner.Solve();

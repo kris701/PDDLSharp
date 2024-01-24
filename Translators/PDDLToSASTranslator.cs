@@ -9,8 +9,6 @@ using PDDLSharp.Tools;
 using PDDLSharp.Translators.Exceptions;
 using PDDLSharp.Translators.Grounders;
 using PDDLSharp.Translators.Tools;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
 
@@ -231,7 +229,7 @@ namespace PDDLSharp.Translators
 
         private HashSet<Fact> ExtractGoalFacts(IExp goalExp, NodeDeconstructor deconstructor)
         {
-            var goal = new  HashSet<Fact>();
+            var goal = new HashSet<Fact>();
             var deconstructed = deconstructor.Deconstruct(EnsureAnd(goalExp));
             if (deconstructed.FindTypes<OrExp>().Count > 0)
                 throw new TranslatorException("Translator does not support or expressions in goal declaration!");

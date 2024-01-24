@@ -1,8 +1,6 @@
 ﻿using PDDLSharp.Models.AST;
-using System.Linq.Expressions;
-using System;
-using PDDLSharp.Tools;
 using PDDLSharp.Models.PDDL.Shared;
+using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Domain
 {

@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL;
 
-namespace PDDLSharp.Toolkit.PlanValidator
+namespace PDDLSharp.Toolkit.PlanValidators
 {
     public interface IPlanValidator
     {

@@ -1,6 +1,6 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
 
-namespace PDDLSharp.Toolkit.MacroGenerators
+namespace PDDLSharp.Toolkit.MacroGenerators.Models
 {
     public class ActionSequence
     {
@@ -27,7 +27,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators
             unchecked
             {
                 return Actions.Aggregate(seed, (current, item) =>
-                    (current * modifier) + item.ActionName.GetHashCode());
+                    current * modifier + item.ActionName.GetHashCode());
             }
         }
     }

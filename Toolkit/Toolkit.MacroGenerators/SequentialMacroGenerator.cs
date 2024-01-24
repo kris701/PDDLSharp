@@ -2,6 +2,8 @@
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Toolkit.MacroGenerators.Models;
+using PDDLSharp.Toolkit.MacroGenerators.Tools;
 
 namespace PDDLSharp.Toolkit.MacroGenerators
 {
@@ -143,7 +145,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators
         private List<ActionDecl> CombineBlocks(List<List<ActionDecl>> instances)
         {
             List<ActionDecl> macros = new List<ActionDecl>();
-            SimpleActionCombiner combiner = new SimpleActionCombiner();
+            ActionDeclCombiner combiner = new ActionDeclCombiner();
             foreach (var instance in instances)
                 macros.Add(combiner.Combine(instance));
             return macros;

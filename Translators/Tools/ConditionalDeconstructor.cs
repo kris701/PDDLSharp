@@ -1,7 +1,6 @@
 ﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Models.SAS;
 
 namespace PDDLSharp.Translators.Tools
 {

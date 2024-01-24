@@ -10,7 +10,6 @@ using PDDLSharp.Toolkit.Planners.Search.BlackBox;
 using PDDLSharp.Toolkit.Planners.Tests;
 using PDDLSharp.Toolkit.Planners.Tests.Search;
 using PDDLSharp.Toolkit.Planners.Tests.Search.BlackBox;
-using PDDLSharp.Toolkit.PlanValidator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +32,7 @@ namespace PDDLSharp.Toolkit.Planners.Tests.Search.BlackBox
             // ARRANGE
             var decl = GetSASDecl(domain, problem);
             var planner = new GreedyBFS(decl, new hGoal());
-            var validator = new PlanValidator.PlanValidator();
+            var validator = new PlanValidators.PlanValidator();
 
             // ACT
             var result = planner.Solve();

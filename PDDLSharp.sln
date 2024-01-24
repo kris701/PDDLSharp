@@ -46,19 +46,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceTests", "Perform
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorListeners.Tests", "Tests\ErrorListeners.Tests\ErrorListeners.Tests.csproj", "{0D8146BF-4BA1-421D-A4FE-A1BC190343DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Simulators", "Toolkit\Toolkit.StateSpace\Toolkit.Simulators.csproj", "{741E5650-7C79-43E0-9034-1F353A04954F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Simulators", "Toolkit\Toolkit.Simulators\Toolkit.Simulators.csproj", "{741E5650-7C79-43E0-9034-1F353A04954F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Simulators.Tests", "Toolkit\Tests\Toolkit.StateSpace.Tests\Toolkit.Simulators.Tests.csproj", "{EB2AB0A3-14F6-48C2-A667-51AB24FD6EA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.Simulators.Tests", "Toolkit\Tests\Toolkit.Simulators.Tests\Toolkit.Simulators.Tests.csproj", "{EB2AB0A3-14F6-48C2-A667-51AB24FD6EA3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Analysers.Tests", "Tests\Analysers.Tests\Analysers.Tests.csproj", "{16492AC2-BC0C-43A3-A723-54A1B6587A56}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tools.Tests", "Tests\Tools.Tests\Tools.Tests.csproj", "{4BE6578D-89E9-470C-8F8E-B802D5B788FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.PlanValidator", "Toolkit\Toolkit.PlanValidator\Toolkit.PlanValidator.csproj", "{EFAC1297-DD56-4F5C-AD3C-53E0B059C20A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.PlanValidators", "Toolkit\Toolkit.PlanValidators\Toolkit.PlanValidators.csproj", "{EFAC1297-DD56-4F5C-AD3C-53E0B059C20A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.PlanValidator.Tests", "Toolkit\Tests\Toolkit.PlanValidator.Tests\Toolkit.PlanValidator.Tests.csproj", "{A7D9465D-560F-44FB-A21C-9A2EF689CC17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.PlanValidators.Tests", "Toolkit\Tests\Toolkit.PlanValidators.Tests\Toolkit.PlanValidators.Tests.csproj", "{A7D9465D-560F-44FB-A21C-9A2EF689CC17}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.MutexDetector", "Toolkit\Toolkit.MutexDetector\Toolkit.MutexDetector.csproj", "{9A993269-4878-449E-A92B-A1571520463D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.MutexDetectors", "Toolkit\Toolkit.MutexDetectors\Toolkit.MutexDetectors.csproj", "{9A993269-4878-449E-A92B-A1571520463D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Toolkit.MutexDetectors.Tests", "Toolkit\Tests\Toolkit.MutexDetectors.Tests\Toolkit.MutexDetectors.Tests.csproj", "{71CACD47-007E-4F40-A89E-681EEF68495F}"
 EndProject
@@ -82,9 +82,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Translators", "Translators\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Translators.Tests", "Tests\Translators.Tests\Translators.Tests.csproj", "{C86D57D8-0BF0-4569-B236-BEBD74665F06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateSpaces", "StateSpaces\StateSpaces.csproj", "{96373672-0235-4809-BFA1-71DD33E55933}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateSpaces", "StateSpaces\StateSpaces.csproj", "{96373672-0235-4809-BFA1-71DD33E55933}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateSpaces.Tests", "Tests\StateSpaces.Tests\StateSpaces.Tests.csproj", "{E6A451B3-E965-4167-B12C-0E0D47DFF1B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateSpaces.Tests", "Tests\StateSpaces.Tests\StateSpaces.Tests.csproj", "{E6A451B3-E965-4167-B12C-0E0D47DFF1B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

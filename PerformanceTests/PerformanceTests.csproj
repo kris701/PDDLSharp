@@ -12,7 +12,7 @@
     <ProjectReference Include="..\Parsers\Parsers.csproj" />
     <ProjectReference Include="..\Toolkit\Toolkit.MacroGenerators\Toolkit.MacroGenerators.csproj" />
     <ProjectReference Include="..\Toolkit\Toolkit.Planners\Toolkit.Planners.csproj" />
-    <ProjectReference Include="..\Toolkit\Toolkit.PlanValidator\Toolkit.PlanValidator.csproj" />
+    <ProjectReference Include="..\Toolkit\Toolkit.PlanValidators\Toolkit.PlanValidators.csproj" />
     <ProjectReference Include="..\Translators\Translators.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Expressions;
 
-namespace PDDLSharp.Toolkit.MutexDetector
+namespace PDDLSharp.Toolkit.MutexDetectors
 {
     public class EffectBalanceMutexes : IMutexDetectors
     {

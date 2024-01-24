@@ -6,7 +6,7 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.FastDownward.Plans;
-using PDDLSharp.Toolkit.PlanValidator;
+using PDDLSharp.Toolkit.PlanValidators;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

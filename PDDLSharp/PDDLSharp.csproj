@@ -15,7 +15,7 @@
 
 	<PropertyGroup>
 		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-		<Version>1.4.4</Version>
+		<Version>1.4.5</Version>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -57,10 +57,10 @@
 		<ProjectReference Include="..\Parsers\Parsers.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\StateSpaces\StateSpaces.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Toolkit\Toolkit.MacroGenerators\Toolkit.MacroGenerators.csproj" PrivateAssets="all" />
-		<ProjectReference Include="..\Toolkit\Toolkit.MutexDetector\Toolkit.MutexDetector.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\Toolkit\Toolkit.MutexDetectors\Toolkit.MutexDetectors.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Toolkit\Toolkit.Planners\Toolkit.Planners.csproj" PrivateAssets="all" />
-		<ProjectReference Include="..\Toolkit\Toolkit.PlanValidator\Toolkit.PlanValidator.csproj" PrivateAssets="all" />
-		<ProjectReference Include="..\Toolkit\Toolkit.StateSpace\Toolkit.Simulators.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\Toolkit\Toolkit.PlanValidators\Toolkit.PlanValidators.csproj" PrivateAssets="all" />
+		<ProjectReference Include="..\Toolkit\Toolkit.Simulators\Toolkit.Simulators.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Tools\Tools.csproj" PrivateAssets="all" />
 		<ProjectReference Include="..\Translators\Translators.csproj" PrivateAssets="all" />
   </ItemGroup>
