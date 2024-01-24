@@ -62,7 +62,7 @@ namespace PDDLSharp.Models.FastDownward.SAS
             var hash = 1;
             if (Version != null) hash ^= Version.GetHashCode();
             if (Metric != null) hash ^= Metric.GetHashCode();
-            foreach(var variable in Variables)
+            foreach (var variable in Variables)
                 hash ^= variable.GetHashCode();
             foreach (var mutex in Mutexes)
                 hash ^= mutex.GetHashCode();

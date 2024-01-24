@@ -1,6 +1,4 @@
-﻿using PDDLSharp.Tools;
-
-namespace PDDLSharp.Models.FastDownward.SAS.Sections
+﻿namespace PDDLSharp.Models.FastDownward.SAS.Sections
 {
     public class ValuePair
     {

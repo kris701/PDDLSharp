@@ -18,13 +18,13 @@ namespace PDDLSharp.Translators.Tools
         {
             var copy = node.Copy(node.Parent);
             var forAlls = copy.FindTypes<ForAllExp>();
-            while(forAlls.Count > 0)
+            while (forAlls.Count > 0)
             {
                 if (Aborted) break;
                 if (forAlls[0].Parent is IWalkable walk)
                 {
                     var result = Grounder.Ground(forAlls[0]).Cast<ForAllExp>().ToList();
-                    if (result.Count == 1) 
+                    if (result.Count == 1)
                     {
                         result[0].Expression.Parent = forAlls[0].Parent;
                         walk.Replace(forAlls[0], result[0].Expression);

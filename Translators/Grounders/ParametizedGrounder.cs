@@ -175,7 +175,7 @@ namespace PDDLSharp.Translators.Grounders
                         if (staticsPrecon.ConstantsIndexes[1] != int.MaxValue)
                             arg2 = staticsPrecon.ConstantsIndexes[1];
 
-                        if (staticsPrecon.IsTrue) 
+                        if (staticsPrecon.IsTrue)
                         {
                             if (arg1 != arg2)
                                 generatePattern = true;
@@ -193,7 +193,7 @@ namespace PDDLSharp.Translators.Grounders
                         else
                             generatePattern = _inits.Contains(GeneratePredicateFromIndexes(permutation, staticsPrecon));
                     }
-                        
+
                     if (generatePattern)
                     {
                         int minIndex = staticsPrecon.ArgIndexes.Min();

@@ -24,7 +24,7 @@ namespace PDDLSharp.Models.Tests.SAS
             // ASSERT
             Assert.AreEqual(pre.Count, op.Pre.Length);
             Assert.AreEqual(pre.Count, op.PreRef.Count);
-            foreach(var item in pre)
+            foreach (var item in pre)
             {
                 Assert.IsTrue(op.PreRef.Contains(item.ID));
                 Assert.IsTrue(op.Pre.Contains(item));

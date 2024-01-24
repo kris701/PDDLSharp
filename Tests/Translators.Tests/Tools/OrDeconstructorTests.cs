@@ -1,7 +1,7 @@
-﻿using PDDLSharp.Models.PDDL.Domain;
+﻿using PDDLSharp.Models.PDDL;
+using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Translators.Grounders;
 using PDDLSharp.Translators.Tools;
 using System;

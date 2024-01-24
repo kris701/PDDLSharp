@@ -142,7 +142,7 @@ namespace PDDLSharp.Analysers.Tests.SAS
             var analyser = new SASAnalyser(listener);
 
             var decl = new SASDecl();
-            decl.Operators = new List<Operator>() { 
+            decl.Operators = new List<Operator>() {
                 new Operator("op1", new string[0], new Fact[1] { new Fact("b") }, new Fact[0], new Fact[0]),
                 new Operator("op2", new string[0], new Fact[1] { new Fact("q") }, new Fact[0], new Fact[0])
         };
@@ -203,7 +203,7 @@ namespace PDDLSharp.Analysers.Tests.SAS
             var analyser = new SASAnalyser(listener);
 
             var decl = new SASDecl();
-            decl.Operators = new List<Operator>() { 
+            decl.Operators = new List<Operator>() {
                 new Operator("op", new string[0], new Fact[0], new Fact[1] { new Fact("b") }, new Fact[0]),
                 new Operator("op", new string[0], new Fact[0], new Fact[1] { new Fact("q") }, new Fact[0])
             };

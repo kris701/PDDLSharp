@@ -18,7 +18,7 @@ namespace PDDLSharp.Translators.Tools
         {
             var copy = node.Copy(node.Parent);
             var exists = copy.FindTypes<ExistsExp>();
-            while(exists.Count > 0)
+            while (exists.Count > 0)
             {
                 if (Aborted) break;
                 if (exists[0].Parent is IWalkable walk)

@@ -1,6 +1,4 @@
-﻿using PDDLSharp.Tools;
-
-namespace PDDLSharp.Models.PDDL.Expressions
+﻿namespace PDDLSharp.Models.PDDL.Expressions
 {
     public class EmptyExp : BaseNode, IExp
     {

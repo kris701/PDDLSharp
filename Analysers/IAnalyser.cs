@@ -1,5 +1,4 @@
 ﻿using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL;
 
 namespace PDDLSharp.Analysers
 {

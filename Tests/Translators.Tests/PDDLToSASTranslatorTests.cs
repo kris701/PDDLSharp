@@ -191,7 +191,7 @@ namespace PDDLSharp.Translators.Tests
                 {
                     var negs = op.Pre.Where(x => x.Name.StartsWith("$neg-"));
                     Assert.IsTrue(negs.Count() > 0);
-                    foreach(var neg in negs)
+                    foreach (var neg in negs)
                     {
                         if (op.Add.Any(x => x.Name == neg.Name.Replace("$neg-", "")))
                             Assert.IsTrue(op.Del.Contains(neg));

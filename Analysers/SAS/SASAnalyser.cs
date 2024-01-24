@@ -1,15 +1,5 @@
-﻿using PDDLSharp.Analysers.Visitors;
-using PDDLSharp.Contextualisers.PDDL;
-using PDDLSharp.Contextualisers;
-using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.SAS;
-using System.Xml.Linq;
 using PDDLSharp.StateSpaces.SAS;
 
 namespace PDDLSharp.Analysers.SAS
@@ -59,7 +49,7 @@ namespace PDDLSharp.Analysers.SAS
 
         public void InitReachabilityCheck(SASDecl decl)
         {
-            foreach(var op in decl.Operators)
+            foreach (var op in decl.Operators)
             {
                 bool valid = true;
                 foreach (var fact in op.Pre)
@@ -81,10 +71,10 @@ namespace PDDLSharp.Analysers.SAS
 
         public void GoalReachabilityCheck(SASDecl decl)
         {
-            foreach(var goal in decl.Goal)
+            foreach (var goal in decl.Goal)
             {
                 bool isValid = false;
-                foreach(var op in decl.Operators)
+                foreach (var op in decl.Operators)
                 {
                     if (op.Add.Contains(goal))
                     {

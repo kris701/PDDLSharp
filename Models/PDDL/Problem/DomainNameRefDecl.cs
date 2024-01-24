@@ -1,6 +1,4 @@
 ﻿using PDDLSharp.Models.AST;
-using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Tools;
 
 namespace PDDLSharp.Models.PDDL.Problem
 {

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace PDDLSharp.Tools
+﻿namespace PDDLSharp.Tools
 {
     public static class EqualityHelper
     {
@@ -63,7 +56,7 @@ namespace PDDLSharp.Tools
             if (list1 != null && list2 != null)
             {
                 if (list1.Count != list2.Count) return false;
-                foreach(var item in list1)
+                foreach (var item in list1)
                     if (!list2.Contains(item))
                         return false;
             }

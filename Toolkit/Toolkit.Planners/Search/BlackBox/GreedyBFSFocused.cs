@@ -1,15 +1,12 @@
 ﻿using PDDLSharp.Models.FastDownward.Plans;
-using PDDLSharp.Models.SAS;
-using PDDLSharp.StateSpaces.SAS;
-using PDDLSharp.Toolkit.Planners.Tools;
-using PDDLSharp.Toolkit.Planners.Heuristics;
-using PDDLSharp.Toolkit.Planners.Search.Classical;
-using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
-using PDDLSharp.Tools;
-using PDDLSharp.Toolkit.MacroGenerators;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Translators.Grounders;
+using PDDLSharp.Models.SAS;
+using PDDLSharp.StateSpaces.SAS;
+using PDDLSharp.Toolkit.MacroGenerators;
+using PDDLSharp.Toolkit.Planners.Heuristics;
+using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
+using PDDLSharp.Toolkit.Planners.Tools;
 using PDDLSharp.Translators;
 
 namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
