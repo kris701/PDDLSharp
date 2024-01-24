@@ -2,7 +2,7 @@
 ![Static Badge](https://img.shields.io/badge/Namespace-PDDLSharp.PDDLSharp.Toolkit.MutexDetector-orange)
 
 There is a simple predicate mutex detector included in PDDLSharp.
-It is capable of finding "balanced" predicates in a domain, and assumes they are mutexes.
+It is capable of finding "balanced" predicates in a [PDDLDecl](../../Models/PDDL/PDDLDecl.cs), and assumes they are mutexes.
 The general process is:
 1. Let C be a new list of candidate mutexes
 2. Foreach action
