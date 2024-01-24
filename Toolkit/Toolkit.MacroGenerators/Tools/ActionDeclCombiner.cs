@@ -5,7 +5,7 @@ using PDDLSharp.Tools;
 
 namespace PDDLSharp.Toolkit.MacroGenerators.Tools
 {
-    public class SimpleActionCombiner
+    public class ActionDeclCombiner
     {
         public ActionDecl Combine(List<ActionDecl> actions)
         {

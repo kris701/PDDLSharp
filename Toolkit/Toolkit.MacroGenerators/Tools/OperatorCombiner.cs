@@ -3,7 +3,7 @@ using PDDLSharp.Tools;
 
 namespace PDDLSharp.Toolkit.MacroGenerators.Tools
 {
-    public class SimpleOperatorCombiner
+    public class OperatorCombiner
     {
         public Operator Combine(List<Operator> operators)
         {
