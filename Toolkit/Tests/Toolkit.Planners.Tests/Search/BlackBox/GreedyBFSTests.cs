@@ -10,7 +10,6 @@ using PDDLSharp.Toolkit.Planners.Search.BlackBox;
 using PDDLSharp.Toolkit.Planners.Tests;
 using PDDLSharp.Toolkit.Planners.Tests.Search;
 using PDDLSharp.Toolkit.Planners.Tests.Search.BlackBox;
-using PDDLSharp.Toolkit.PlanValidator;
 using System;
 using System.Collections.Generic;
 using System.Linq;

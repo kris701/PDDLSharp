@@ -2,6 +2,7 @@
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Toolkit.MacroGenerators.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -123,7 +124,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
         public void Can_Combine_EffectsAndPreconditionCount(List<ActionDecl> actions, int expectedPreCount, int expectedEffCount)
         {
             // ARRANGE
-            var combiner = new SimpleActionCombiner();
+            var combiner = new ActionDeclCombiner();
 
             // ACT
             var result = combiner.Combine(actions);
@@ -262,7 +263,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
         public void Can_Combine_ParameterCount(List<ActionDecl> actions, int expectedParameterCount)
         {
             // ARRANGE
-            var combiner = new SimpleActionCombiner();
+            var combiner = new ActionDeclCombiner();
 
             // ACT
             var result = combiner.Combine(actions);
@@ -393,7 +394,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
         public void Can_Combine_ParameterTypes(List<ActionDecl> actions, params string[] expectedTypes)
         {
             // ARRANGE
-            var combiner = new SimpleActionCombiner();
+            var combiner = new ActionDeclCombiner();
 
             // ACT
             var result = combiner.Combine(actions);
@@ -409,7 +410,7 @@ namespace PDDLSharp.Toolkit.MacroGenerators.Tests
         public void Cant_Combine_IfNoActions()
         {
             // ARRANGE
-            var combiner = new SimpleActionCombiner();
+            var combiner = new ActionDeclCombiner();
 
             // ACT
             var result = combiner.Combine(new List<ActionDecl>());

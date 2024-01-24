@@ -4,6 +4,7 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
 using PDDLSharp.Toolkit.MacroGenerators;
+using PDDLSharp.Toolkit.MacroGenerators.Tools;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
 using PDDLSharp.Toolkit.Planners.Tools;
@@ -71,7 +72,6 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
         {
             var newDecl = Declaration.Copy();
             var returnMacros = new List<ActionDecl>();
-            var actionCombiner = new SimpleActionCombiner();
 
             if (Aborted) return new List<ActionDecl>();
             var queue = new FixedMaxPriorityQueue<ActionDecl>(nMacros);
@@ -113,7 +113,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
         // Its quite slow, but this search algorithm is mostly to show the possibilities of reducing generated states, not search time.
         private ActionDecl GenerateMacroFromOperatorSteps(List<Operator> steps)
         {
-            var actionCombiner = new SimpleActionCombiner();
+            var actionCombiner = new ActionDeclCombiner();
 
             var actionChain = new List<ActionDecl>();
             // Convert operator steps into pddl actions

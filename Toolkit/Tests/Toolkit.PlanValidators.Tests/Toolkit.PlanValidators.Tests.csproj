@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Parsers\Parsers.csproj" />
-    <ProjectReference Include="..\..\Toolkit.PlanValidator\Toolkit.PlanValidator.csproj" />
+    <ProjectReference Include="..\..\Toolkit.PlanValidators\Toolkit.PlanValidators.csproj" />
   </ItemGroup>
 
   <ItemGroup>
