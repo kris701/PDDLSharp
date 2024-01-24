@@ -3,7 +3,6 @@ using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.StateSpaces.SAS;
-using PDDLSharp.Toolkit.MacroGenerators;
 using PDDLSharp.Toolkit.MacroGenerators.Tools;
 using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.HeuristicsCollections;
