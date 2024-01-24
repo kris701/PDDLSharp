@@ -7,7 +7,7 @@ For each action the simulator is executing it:
 1. Verifies if the precondition for the action is true
 2. Executes the effects
 If there are invalid arguments or type issues, the simulator will throw an exception.
-This simulator also supports some of the more exotic node types, such as `DerivedPredicateExp`, `ExistsExp`, `ImpliesExp` etc.
+This simulator also supports some of the more exotic node types, such as [DerivedPredicateExp](../../Models/PDDL/Expressions/DerivedPredicateExp.cs), [ExistsExp](../../Models/PDDL/Expressions/ExistsExp.cs), [ImplyExp](../../Models/PDDL/Expressions/ImplyExp.cs) etc.
 
 #### Examples
 Example of how to execute a grounded action with no arguments:

@@ -1,7 +1,7 @@
 # Sequential Macro Generator
 ![Static Badge](https://img.shields.io/badge/Namespace-PDDLSharp.PDDLSharp.Toolkit.MacroGenerators-orange)
 
-PDDLSharp also have a simple sequential macro generator. It can generate lifted macros based on reoccuring sequences in `ActionPlan`s.
+PDDLSharp also have a simple sequential macro generator. It can generate lifted macros based on reoccuring sequences in [ActionPlan](../../Models/FastDownward/Plans/ActionPlan.cs)s.
 It works as follows
 1. Find all the possible sequence combinations possible across all the given plans.
 2. Sort all sequences by occurence.
