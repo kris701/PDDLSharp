@@ -42,10 +42,9 @@ namespace PerformanceChecker
             var sb = new StringBuilder();
             sb.AppendLine(_header);
             sb.AppendLine("These benchmarks made on the domains from [Fast Downward](https://github.com/aibasel/downward-benchmarks/):");
-            foreach (var domain in TargetDomains)
-                sb.AppendLine($"* {domain}");
+            sb.AppendLine(TargetDomains.ToMarkdownList());
             sb.AppendLine("# PDDL");
-            sb.AppendLine((await PDDLPerformance(benchmarks)).ToMarkdown(new List<string>() { "*", "*", "Total Size (MB)", "Total Time (s)", "Throughput (MB/s)" }));
+            sb.AppendLine((await PDDLPerformance(benchmarks)).ToMarkdownTable(new List<string>() { "*", "*", "Total Size (MB)", "Total Time (s)", "Throughput (MB/s)" }));
             sb.AppendLine();
 
 
