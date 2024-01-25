@@ -11,9 +11,12 @@ namespace PerformanceChecker
     {
         public string Name { get; }
         public int Iterations { get; }
-        public int TotalFiles { get; set; }
-        public long TotalSizeBytes { get; set; }
-        public long TimeMs { get; private set; }
+        internal int TotalFiles { get; set; }
+        internal long TotalSizeB { get; set; }
+        public double TotalSizeMB => Math.Round((double)TotalSizeB / 1000000, 2);
+        internal long TimeMs { get; private set; }
+        public double TimeS => Math.Round((double)TimeMs / 1000, 2);
+        public double Throughput => Math.Round(TotalSizeMB / TimeS, 2);
         private Stopwatch _watch = new Stopwatch();
 
         public PerformanceResult(string name, int iterations)
@@ -21,7 +24,7 @@ namespace PerformanceChecker
             Name = name;
             Iterations = iterations;
             TotalFiles = 0;
-            TotalSizeBytes = 0;
+            TotalSizeB = 0;
             TimeMs = 0;
         }
 
@@ -41,9 +44,9 @@ namespace PerformanceChecker
             Console.WriteLine($"\tName:       {Name}");
             Console.WriteLine($"\tFiles:      {TotalFiles}");
             Console.WriteLine($"\tIterations: {Iterations}");
-            Console.WriteLine($"\tSize:       {Math.Round((double)TotalSizeBytes / 1000000, 2)}MB");
-            Console.WriteLine($"\tTime:       {Math.Round((double)TimeMs / 1000, 2)} s");
-            Console.WriteLine($"\tThroughput: {Math.Round(((double)TotalSizeBytes / 1000000) / ((double)TimeMs / 1000), 2)}MB/s");
+            Console.WriteLine($"\tSize:       {TotalSizeMB}MB");
+            Console.WriteLine($"\tTime:       {TimeS} s");
+            Console.WriteLine($"\tThroughput: {Throughput}MB/s");
         }
     }
 }

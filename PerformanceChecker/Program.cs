@@ -9,12 +9,16 @@ using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Tools;
 using System;
 using System.Diagnostics;
+using System.Text;
+using ToMarkdown.Tables;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PerformanceChecker
 {
     internal class Program
     {
+        public static string _header = "# PDDLSharp Performance\r\nHere are some general statistics about how good the PDDLSharp system performs.\r\n\r\n";
+
         public static List<string> TargetDomains = new List<string>()
         {
             "gripper",
@@ -26,8 +30,8 @@ namespace PerformanceChecker
             "trucks",
             "zenotravel"
         };
-        private static int _iterations = 10;
-        private static int _firstNProblems = 10;
+        private static int _iterations = 1;
+        private static int _firstNProblems = 1;
 
         static async Task Main(string[] args)
         {
@@ -35,11 +39,23 @@ namespace PerformanceChecker
             var benchmarks = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks/", "benchmarks");
             var benchmarkPlans = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/kris701/PDDLBenchmarkPlans", "benchmarks-plans");
 
-            await PDDLPerformance(benchmarks);
+            var sb = new StringBuilder();
+            sb.AppendLine(_header);
+            sb.AppendLine("These benchmarks made on the domains from [Fast Downward](https://github.com/aibasel/downward-benchmarks/):");
+            foreach (var domain in TargetDomains)
+                sb.AppendLine($"* {domain}");
+            sb.AppendLine("# PDDL");
+            sb.AppendLine((await PDDLPerformance(benchmarks)).ToMarkdown(new List<string>() { "*", "*", "Total Size (MB)", "Total Time (s)", "Throughput (MB/s)" }));
+            sb.AppendLine();
 
+
+            var targetFile = "../../../readme.md";
+            if (File.Exists(targetFile))
+                File.Delete(targetFile);
+            File.WriteAllText(targetFile, sb.ToString());
         }   
         
-        static async Task PDDLPerformance(string benchmarks)
+        static async Task<List<PerformanceResult>> PDDLPerformance(string benchmarks)
         {
             var tasks = new List<Task<PerformanceResult>>();
 
@@ -60,7 +76,7 @@ namespace PerformanceChecker
                         var domainFile = Path.Combine(domainPath, "domain.pddl");
                         if (File.Exists(domainFile))
                         {
-                            run.TotalSizeBytes += new FileInfo(domainFile).Length * _iterations;
+                            run.TotalSizeB += new FileInfo(domainFile).Length * _iterations;
                             run.TotalFiles++;
                             var data = File.ReadAllText(domainFile);
                             run.Start();
@@ -93,7 +109,7 @@ namespace PerformanceChecker
                             if (PDDLFileHelper.IsFileProblem(file))
                             {
                                 count++;
-                                run.TotalSizeBytes += new FileInfo(file).Length * _iterations;
+                                run.TotalSizeB += new FileInfo(file).Length * _iterations;
                                 run.TotalFiles++;
                                 var data = File.ReadAllText(file);
                                 run.Start();
@@ -133,7 +149,7 @@ namespace PerformanceChecker
                                 if (PDDLFileHelper.IsFileProblem(file))
                                 {
                                     count++;
-                                    run.TotalSizeBytes += (new FileInfo(domainFile).Length + new FileInfo(file).Length) * _iterations;
+                                    run.TotalSizeB += (new FileInfo(domainFile).Length + new FileInfo(file).Length) * _iterations;
                                     run.TotalFiles += 2;
                                     var decl = pddlParser.ParseDecl(new FileInfo(domainFile), new FileInfo(file));
                                     for (int i = 0; i < _iterations; i++)
@@ -177,7 +193,7 @@ namespace PerformanceChecker
                                 if (PDDLFileHelper.IsFileProblem(file))
                                 {
                                     count++;
-                                    run.TotalSizeBytes += (new FileInfo(domainFile).Length + new FileInfo(file).Length) * _iterations;
+                                    run.TotalSizeB += (new FileInfo(domainFile).Length + new FileInfo(file).Length) * _iterations;
                                     run.TotalFiles += 2;
                                     for (int i = 0; i < _iterations; i++)
                                     {
@@ -219,7 +235,7 @@ namespace PerformanceChecker
                             for (int i = 0; i < _iterations; i++)
                             {
                                 var file = codeGenerators.Generate(domain);
-                                run.TotalSizeBytes += file.Length;
+                                run.TotalSizeB += file.Length;
                                 run.TotalFiles++;
                             }
                             run.Stop();
@@ -255,7 +271,7 @@ namespace PerformanceChecker
                                 for (int i = 0; i < _iterations; i++)
                                 {
                                     var fileData = codeGenerators.Generate(problem);
-                                    run.TotalSizeBytes += fileData.Length;
+                                    run.TotalSizeB += fileData.Length;
                                     run.TotalFiles++;
                                 }
                                 run.Stop();
@@ -274,11 +290,14 @@ namespace PerformanceChecker
 
             await Task.WhenAll(tasks);
 
-            foreach(var result in tasks)
+            var results = new List<PerformanceResult>();
+            foreach(var task in tasks)
             {
-                result.Result.Report();
+                results.Add(task.Result);
+                task.Result.Report();
                 Console.WriteLine();
             }
+            return results;
         }
     }
 }
