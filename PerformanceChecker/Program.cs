@@ -32,8 +32,15 @@ namespace PerformanceChecker
             "trucks",
             "zenotravel"
         };
+#if DEBUG
         private static int _iterations = 1;
+        private static int _firstNProblems = 1;
+        private static int _searchTimeLimit = 1;
+#else
+        private static int _iterations = 3;
         private static int _firstNProblems = 5;
+        private static int _searchTimeLimit = 30;
+#endif
 
         static async Task Main(string[] args)
         {
@@ -46,27 +53,37 @@ namespace PerformanceChecker
             sb.AppendLine("# RESULTS ARE IN DEBUG MODE");
 #endif
             sb.AppendLine(_header);
-            sb.AppendLine("These benchmarks made on the domains from [Fast Downward](https://github.com/aibasel/downward-benchmarks/):");
+            sb.AppendLine("These benchmarks made on the following domains from [Fast Downward](https://github.com/aibasel/downward-benchmarks/):");
             sb.AppendLine(TargetDomains.ToMarkdownList());
             sb.AppendLine($"For each of these domains, the first {_firstNProblems} problems are selected.");
             sb.AppendLine($"Each component is executed {_iterations} times to get a better average.");
             sb.AppendLine("# Core Components");
             sb.AppendLine("## PDDL");
-            sb.AppendLine((await PDDLPerformance(benchmarks)).ToMarkdownTable(new List<string>() { "*", "*", "Total Size (MB)", "Total Time (s)", "Throughput (MB/s)" }));
+            sb.AppendLine((await PDDLPerformance(benchmarks)).ToMarkdownTable(
+                new List<string>() { "*", "*", "Total Size (MB)", "Throughput (MB/s)", "Total Time (s)" }
+                ));
             sb.AppendLine();
             sb.AppendLine("## Fast Downward SAS");
-            sb.AppendLine((await FastDownwardSAS(benchmarkPlans)).ToMarkdownTable(new List<string>() { "*", "*", "Total Size (MB)", "Total Time (s)", "Throughput (MB/s)" }));
+            sb.AppendLine((await FastDownwardSAS(benchmarkPlans)).ToMarkdownTable(
+                new List<string>() { "*", "*", "Total Size (MB)", "Throughput (MB/s)", "Total Time (s)" }
+                ));
             sb.AppendLine();
             sb.AppendLine("## Fast Downward Plans");
-            sb.AppendLine((await FastDownwardPlans(benchmarkPlans)).ToMarkdownTable(new List<string>() { "*", "*", "Total Size (MB)", "Total Time (s)", "Throughput (MB/s)" }));
+            sb.AppendLine((await FastDownwardPlans(benchmarkPlans)).ToMarkdownTable(
+                new List<string>() { "*", "*", "Total Size (MB)", "Throughput (MB/s)", "Total Time (s)" }
+                ));
             sb.AppendLine();
             sb.AppendLine("## Translation");
-            sb.AppendLine((await TranslatorPerformance(benchmarks)).ToMarkdownTable(new List<string>() { "*", "*", "*", "Total Operators", "Operators / second", "Total Time (s)" }));
+            sb.AppendLine((await TranslatorPerformance(benchmarks)).ToMarkdownTable(
+                new List<string>() { "*", "*", "*", "Total Operators", "Operators / second", "Total Time (s)" }
+                ));
             sb.AppendLine();
 
             sb.AppendLine("# Toolkit Components");
-            sb.AppendLine("## Planner (Classical, 30s time limit)");
-            sb.AppendLine((await PlannerPerformance(benchmarks)).ToMarkdownTable(new List<string>() { "*", "*", "*", "*", "Generated / s", "Expansions / s", "Evaluations / s", "Solved (%)", "Total Time (s)" }));
+            sb.AppendLine($"## Planner (Classical, {_searchTimeLimit}s time limit)");
+            sb.AppendLine((await PlannerPerformance(benchmarks)).ToMarkdownTable(
+                new List<string>() { "*", "*", "*", "*", "Generated / s", "Expansions / s", "Evaluations / s", "Solved (%)", "Total Time (s)" }
+                ));
             sb.AppendLine();
 
             var targetFile = "../../../readme.md";
@@ -503,16 +520,16 @@ namespace PerformanceChecker
                             if (PDDLFileHelper.IsFileProblem(file))
                             {
                                 count++;
-                                run.Problems++;
                                 var problem = pddlParser.ParseAs<ProblemDecl>(new FileInfo(file));
                                 var decl = new PDDLDecl(domain, problem);
                                 var sasDecl = translator.Translate(decl);
                                 run.Start();
                                 for (int i = 0; i < _iterations; i++)
                                 {
+                                    run.Problems++;
                                     using (var planner = new GreedyBFS(sasDecl, new hGoal()))
                                     {
-                                        planner.SearchLimit = TimeSpan.FromSeconds(30);
+                                        planner.SearchLimit = TimeSpan.FromSeconds(_searchTimeLimit);
                                         var result = planner.Solve();
                                         if (!planner.Aborted)
                                             run.Solved++;
@@ -543,16 +560,16 @@ namespace PerformanceChecker
                             if (PDDLFileHelper.IsFileProblem(file))
                             {
                                 count++;
-                                run.Problems++;
                                 var problem = pddlParser.ParseAs<ProblemDecl>(new FileInfo(file));
                                 var decl = new PDDLDecl(domain, problem);
                                 var sasDecl = translator.Translate(decl);
                                 run.Start();
                                 for (int i = 0; i < _iterations; i++)
                                 {
+                                    run.Problems++;
                                     using (var planner = new GreedyBFS(sasDecl, new hFF(sasDecl)))
                                     {
-                                        planner.SearchLimit = TimeSpan.FromSeconds(30);
+                                        planner.SearchLimit = TimeSpan.FromSeconds(_searchTimeLimit);
                                         var result = planner.Solve();
                                         if (!planner.Aborted)
                                             run.Solved++;
@@ -569,47 +586,6 @@ namespace PerformanceChecker
                         Console.WriteLine($"{run.Domain}\t Done!");
                         return run;
                     }));
-                    tasks.Add(new Task<PlannerPerformanceResult>(() =>
-                    {
-                        var run = new PlannerPerformanceResult(domainName, "Greedy Best First (hMax)", _iterations);
-                        Console.WriteLine($"{run.Domain}\t Started...");
-                        var errorListener = new ErrorListener(ParseErrorType.Error);
-                        var pddlParser = new PDDLParser(errorListener);
-                        var translator = new PDDLToSASTranslator(true);
-                        var domain = pddlParser.ParseAs<DomainDecl>(new FileInfo(domainFile));
-                        int count = 0;
-                        foreach (var file in Directory.GetFiles(domainPath))
-                        {
-                            if (PDDLFileHelper.IsFileProblem(file))
-                            {
-                                count++;
-                                run.Problems++;
-                                var problem = pddlParser.ParseAs<ProblemDecl>(new FileInfo(file));
-                                var decl = new PDDLDecl(domain, problem);
-                                var sasDecl = translator.Translate(decl);
-                                run.Start();
-                                for (int i = 0; i < _iterations; i++)
-                                {
-                                    using (var planner = new GreedyBFS(sasDecl, new hMax()))
-                                    {
-                                        planner.SearchLimit = TimeSpan.FromSeconds(30);
-                                        var result = planner.Solve();
-                                        if (!planner.Aborted)
-                                            run.Solved++;
-                                        run.Generated += planner.Generated;
-                                        run.Expanded += planner.Expanded;
-                                        run.Evaluations += planner.Evaluations;
-                                    }
-                                }
-                                run.Stop();
-                            }
-                            if (count > _firstNProblems)
-                                break;
-                        }
-                        Console.WriteLine($"{run.Domain}\t Done!");
-                        return run;
-                    }));
-
                 }
             }
 
