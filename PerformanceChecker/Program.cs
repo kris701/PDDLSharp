@@ -40,6 +40,9 @@ namespace PerformanceChecker
             var benchmarkPlans = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/kris701/PDDLBenchmarkPlans", "benchmarks-plans");
 
             var sb = new StringBuilder();
+#if DEBUG
+            sb.AppendLine("# RESULTS ARE IN DEBUG MODE");
+#endif
             sb.AppendLine(_header);
             sb.AppendLine("These benchmarks made on the domains from [Fast Downward](https://github.com/aibasel/downward-benchmarks/):");
             sb.AppendLine(TargetDomains.ToMarkdownList());
@@ -54,14 +57,14 @@ namespace PerformanceChecker
             File.WriteAllText(targetFile, sb.ToString());
         }   
         
-        static async Task<List<PerformanceResult>> PDDLPerformance(string benchmarks)
+        static async Task<List<PDDLPerformanceResult>> PDDLPerformance(string benchmarks)
         {
-            var tasks = new List<Task<PerformanceResult>>();
+            var tasks = new List<Task<PDDLPerformanceResult>>();
 
             Console.WriteLine("PDDL Domain Parsing");
-            tasks.Add(new Task<PerformanceResult>(() =>
+            tasks.Add(new Task<PDDLPerformanceResult>(() =>
             {
-                var run = new PerformanceResult("PDDL Domain Parsing", _iterations);
+                var run = new PDDLPerformanceResult("PDDL Domain Parsing", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -89,9 +92,9 @@ namespace PerformanceChecker
                 return run;
             }));
             Console.WriteLine("PDDL Problem Parsing");
-            tasks.Add(new Task<PerformanceResult>(() =>
+            tasks.Add(new Task<PDDLPerformanceResult>(() =>
             {
-                var run = new PerformanceResult("PDDL Problem Parsing", _iterations);
+                var run = new PDDLPerformanceResult("PDDL Problem Parsing", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -125,9 +128,9 @@ namespace PerformanceChecker
                 return run;
             }));
             Console.WriteLine("PDDL Contextualization");
-            tasks.Add(new Task<PerformanceResult>(() =>
+            tasks.Add(new Task<PDDLPerformanceResult>(() =>
             {
-                var run = new PerformanceResult("PDDL Contextualization", _iterations);
+                var run = new PDDLPerformanceResult("PDDL Contextualization", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -169,9 +172,9 @@ namespace PerformanceChecker
                 return run;
             }));
             Console.WriteLine("PDDL Analysing");
-            tasks.Add(new Task<PerformanceResult>(() =>
+            tasks.Add(new Task<PDDLPerformanceResult>(() =>
             {
-                var run = new PerformanceResult("PDDL Analysing", _iterations);
+                var run = new PDDLPerformanceResult("PDDL Analysing", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -212,9 +215,9 @@ namespace PerformanceChecker
                 return run;
             }));
             Console.WriteLine("PDDL Domain Code Generation");
-            tasks.Add(new Task<PerformanceResult>(() =>
+            tasks.Add(new Task<PDDLPerformanceResult>(() =>
             {
-                var run = new PerformanceResult("PDDL Domain Code Generation", _iterations);
+                var run = new PDDLPerformanceResult("PDDL Domain Code Generation", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -245,9 +248,9 @@ namespace PerformanceChecker
                 return run;
             }));
             Console.WriteLine("PDDL Problem Code Generation");
-            tasks.Add(new Task<PerformanceResult>(() =>
+            tasks.Add(new Task<PDDLPerformanceResult>(() =>
             {
-                var run = new PerformanceResult("PDDL Problem Code Generation", _iterations);
+                var run = new PDDLPerformanceResult("PDDL Problem Code Generation", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -289,7 +292,7 @@ namespace PerformanceChecker
 
             await Task.WhenAll(tasks);
 
-            var results = new List<PerformanceResult>();
+            var results = new List<PDDLPerformanceResult>();
             foreach(var task in tasks)
             {
                 results.Add(task.Result);

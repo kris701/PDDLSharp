@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PerformanceChecker
 {
-    internal class PerformanceResult
+    internal class PDDLPerformanceResult
     {
         public string Name { get; }
         public int Iterations { get; }
@@ -19,7 +19,7 @@ namespace PerformanceChecker
         public double Throughput => Math.Round(TotalSizeMB / TimeS, 2);
         private Stopwatch _watch = new Stopwatch();
 
-        public PerformanceResult(string name, int iterations)
+        public PDDLPerformanceResult(string name, int iterations)
         {
             Name = name;
             Iterations = iterations;
