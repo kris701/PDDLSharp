@@ -5,8 +5,10 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
+using PDDLSharp.Parsers.FastDownward.SAS;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Tools;
+using PDDLSharp.Translators;
 using System;
 using System.Diagnostics;
 using System.Text;
@@ -24,7 +26,7 @@ namespace PerformanceChecker
             "gripper",
             "blocks",
             "depot",
-            "logistics98",
+            //"logistics98",
             "miconic",
             "rovers",
             "trucks",
@@ -49,7 +51,15 @@ namespace PerformanceChecker
             sb.AppendLine("# PDDL");
             sb.AppendLine((await PDDLPerformance(benchmarks)).ToMarkdownTable(new List<string>() { "*", "*", "Total Size (MB)", "Total Time (s)", "Throughput (MB/s)" }));
             sb.AppendLine();
-
+            sb.AppendLine("# Fast Downward SAS");
+            sb.AppendLine((await FastDownwardSAS(benchmarkPlans)).ToMarkdownTable(new List<string>() { "*", "*", "Total Size (MB)", "Total Time (s)", "Throughput (MB/s)" }));
+            sb.AppendLine();
+            sb.AppendLine("# Fast Downward Plans");
+            sb.AppendLine((await FastDownwardPlans(benchmarkPlans)).ToMarkdownTable(new List<string>() { "*", "*", "Total Size (MB)", "Total Time (s)", "Throughput (MB/s)" }));
+            sb.AppendLine();
+            sb.AppendLine("# Translation");
+            sb.AppendLine((await TranslatorPerformance(benchmarks)).ToMarkdownTable(new List<string>() { "*", "*", "*", "Total Operators", "Operators / second", "Total Time (s)" }));
+            sb.AppendLine();
 
             var targetFile = "../../../readme.md";
             if (File.Exists(targetFile))
@@ -57,14 +67,14 @@ namespace PerformanceChecker
             File.WriteAllText(targetFile, sb.ToString());
         }   
         
-        static async Task<List<PDDLPerformanceResult>> PDDLPerformance(string benchmarks)
+        static async Task<List<FilePerformanceResult>> PDDLPerformance(string benchmarks)
         {
-            var tasks = new List<Task<PDDLPerformanceResult>>();
+            var tasks = new List<Task<FilePerformanceResult>>();
 
             Console.WriteLine("PDDL Domain Parsing");
-            tasks.Add(new Task<PDDLPerformanceResult>(() =>
+            tasks.Add(new Task<FilePerformanceResult>(() =>
             {
-                var run = new PDDLPerformanceResult("PDDL Domain Parsing", _iterations);
+                var run = new FilePerformanceResult("PDDL Domain Parsing", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -92,9 +102,9 @@ namespace PerformanceChecker
                 return run;
             }));
             Console.WriteLine("PDDL Problem Parsing");
-            tasks.Add(new Task<PDDLPerformanceResult>(() =>
+            tasks.Add(new Task<FilePerformanceResult>(() =>
             {
-                var run = new PDDLPerformanceResult("PDDL Problem Parsing", _iterations);
+                var run = new FilePerformanceResult("PDDL Problem Parsing", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -128,9 +138,9 @@ namespace PerformanceChecker
                 return run;
             }));
             Console.WriteLine("PDDL Contextualization");
-            tasks.Add(new Task<PDDLPerformanceResult>(() =>
+            tasks.Add(new Task<FilePerformanceResult>(() =>
             {
-                var run = new PDDLPerformanceResult("PDDL Contextualization", _iterations);
+                var run = new FilePerformanceResult("PDDL Contextualization", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -172,9 +182,9 @@ namespace PerformanceChecker
                 return run;
             }));
             Console.WriteLine("PDDL Analysing");
-            tasks.Add(new Task<PDDLPerformanceResult>(() =>
+            tasks.Add(new Task<FilePerformanceResult>(() =>
             {
-                var run = new PDDLPerformanceResult("PDDL Analysing", _iterations);
+                var run = new FilePerformanceResult("PDDL Analysing", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -215,9 +225,9 @@ namespace PerformanceChecker
                 return run;
             }));
             Console.WriteLine("PDDL Domain Code Generation");
-            tasks.Add(new Task<PDDLPerformanceResult>(() =>
+            tasks.Add(new Task<FilePerformanceResult>(() =>
             {
-                var run = new PDDLPerformanceResult("PDDL Domain Code Generation", _iterations);
+                var run = new FilePerformanceResult("PDDL Domain Code Generation", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -248,9 +258,9 @@ namespace PerformanceChecker
                 return run;
             }));
             Console.WriteLine("PDDL Problem Code Generation");
-            tasks.Add(new Task<PDDLPerformanceResult>(() =>
+            tasks.Add(new Task<FilePerformanceResult>(() =>
             {
-                var run = new PDDLPerformanceResult("PDDL Problem Code Generation", _iterations);
+                var run = new FilePerformanceResult("PDDL Problem Code Generation", _iterations);
                 Console.WriteLine($"{run.Name}\t Started...");
                 var errorListener = new ErrorListener(ParseErrorType.Error);
                 var pddlParser = new PDDLParser(errorListener);
@@ -292,12 +302,170 @@ namespace PerformanceChecker
 
             await Task.WhenAll(tasks);
 
-            var results = new List<PDDLPerformanceResult>();
+            var results = new List<FilePerformanceResult>();
             foreach(var task in tasks)
-            {
                 results.Add(task.Result);
-                task.Result.Report();
-                Console.WriteLine();
+            return results;
+        }
+
+        static async Task<List<FilePerformanceResult>> FastDownwardSAS(string benchmarkPlans)
+        {
+            var tasks = new List<Task<FilePerformanceResult>>();
+
+            tasks.Add(new Task<FilePerformanceResult>(() =>
+            {
+                var run = new FilePerformanceResult("Fast Downward SAS Parsing", _iterations);
+                Console.WriteLine($"{run.Name}\t Started...");
+                var errorListener = new ErrorListener(ParseErrorType.Error);
+                var sasParser = new FDSASParser(errorListener);
+                var domains = Directory.GetDirectories(Path.Combine(benchmarkPlans, "lama-first"));
+                int domainCounter = 0;
+                foreach (var domainPath in domains)
+                {
+                    if (TargetDomains.Contains(new DirectoryInfo(domainPath).Name))
+                    {
+                        Console.WriteLine($"{run.Name}\t {domainCounter++}/{TargetDomains.Count}");
+                        int count = 0;
+                        foreach (var file in Directory.GetFiles(domainPath))
+                        {
+                            if (new FileInfo(file).Extension == ".sas")
+                            {
+                                count++;
+                                run.TotalSizeB += new FileInfo(file).Length * _iterations;
+                                run.TotalFiles++;
+                                var data = File.ReadAllText(file);
+                                run.Start();
+                                for (int i = 0; i < _iterations; i++)
+                                    sasParser.Parse(data);
+                                run.Stop();
+                            }
+                            if (count > _firstNProblems)
+                                break;
+                        }
+                    }
+                }
+                Console.WriteLine($"{run.Name}\t Done!");
+                return run;
+            }));
+
+            foreach (var task in tasks)
+                task.Start();
+
+            await Task.WhenAll(tasks);
+
+            var results = new List<FilePerformanceResult>();
+            foreach (var task in tasks)
+                results.Add(task.Result);
+            return results;
+        }
+
+        static async Task<List<FilePerformanceResult>> FastDownwardPlans(string benchmarkPlans)
+        {
+            var tasks = new List<Task<FilePerformanceResult>>();
+
+            tasks.Add(new Task<FilePerformanceResult>(() =>
+            {
+                var run = new FilePerformanceResult("Fast Downward Plan Parsing", _iterations);
+                Console.WriteLine($"{run.Name}\t Started...");
+                var errorListener = new ErrorListener(ParseErrorType.Error);
+                var sasParser = new FDSASParser(errorListener);
+                var domains = Directory.GetDirectories(Path.Combine(benchmarkPlans, "lama-first"));
+                int domainCounter = 0;
+                foreach (var domainPath in domains)
+                {
+                    if (TargetDomains.Contains(new DirectoryInfo(domainPath).Name))
+                    {
+                        Console.WriteLine($"{run.Name}\t {domainCounter++}/{TargetDomains.Count}");
+                        int count = 0;
+                        foreach (var file in Directory.GetFiles(domainPath))
+                        {
+                            if (new FileInfo(file).Extension == ".plan")
+                            {
+                                count++;
+                                run.TotalSizeB += new FileInfo(file).Length * _iterations;
+                                run.TotalFiles++;
+                                var data = File.ReadAllText(file);
+                                run.Start();
+                                for (int i = 0; i < _iterations; i++)
+                                    sasParser.Parse(data);
+                                run.Stop();
+                            }
+                            if (count > _firstNProblems)
+                                break;
+                        }
+                    }
+                }
+                Console.WriteLine($"{run.Name}\t Done!");
+                return run;
+            }));
+
+            foreach (var task in tasks)
+                task.Start();
+
+            await Task.WhenAll(tasks);
+
+            var results = new List<FilePerformanceResult>();
+            foreach (var task in tasks)
+                results.Add(task.Result);
+            return results;
+        }
+
+
+        static async Task<List<TranslatorPerformanceResult>> TranslatorPerformance(string benchmarks)
+        {
+            var tasks = new List<Task<TranslatorPerformanceResult>>();
+
+            var domains = Directory.GetDirectories(benchmarks);
+            foreach (var domainPath in domains)
+            {
+                if (TargetDomains.Contains(new DirectoryInfo(domainPath).Name))
+                {
+                    var domainName = new DirectoryInfo(domainPath).Name;
+                    var domainFile = Path.Combine(domainPath, "domain.pddl");
+                    tasks.Add(new Task<TranslatorPerformanceResult>(() =>
+                    {
+                        var run = new TranslatorPerformanceResult(domainName, _iterations);
+                        Console.WriteLine($"{run.Domain}\t Started...");
+                        var errorListener = new ErrorListener(ParseErrorType.Error);
+                        var pddlParser = new PDDLParser(errorListener);
+                        var translator = new PDDLToSASTranslator(true);
+                        var domain = pddlParser.ParseAs<DomainDecl>(new FileInfo(domainFile));
+                        int count = 0;
+                        foreach (var file in Directory.GetFiles(domainPath))
+                        {
+                            if (PDDLFileHelper.IsFileProblem(file))
+                            {
+                                count++;
+                                run.Problems++;
+                                var problem = pddlParser.ParseAs<ProblemDecl>(new FileInfo(file));
+                                var decl = new PDDLDecl(domain, problem);
+                                run.Start();
+                                for (int i = 0; i < _iterations; i++)
+                                {
+                                    var sasDecl = translator.Translate(decl);
+                                    run.TotalOperators += sasDecl.Operators.Count;
+                                }
+                                run.Stop();
+                            }
+                            if (count > _firstNProblems)
+                                break;
+                        }
+                        Console.WriteLine($"{run.Domain}\t Done!");
+                        return run;
+                    }));
+                }
+            }
+
+            foreach (var task in tasks)
+                task.Start();
+
+            await Task.WhenAll(tasks);
+
+            var results = new List<TranslatorPerformanceResult>();
+            foreach (var task in tasks)
+            {
+                var result = task.Result;
+                results.Add(result);
             }
             return results;
         }
