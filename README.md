@@ -20,6 +20,7 @@ If you encounter any problems, please make sure you have read through the wiki f
 * General (This file)
 * [Node Structure](./Models/readme.md)
 * [Parsers](./Parsers/readme.md)
+    * [AST Generators](./ASTGenerators/readme.md)
 * [Contextualisers](./Contextualisers/readme.md)
 * [Analysers](./Analysers/readme.md)
 * [Code Generators](./CodeGenerators/readme.md)
@@ -32,7 +33,9 @@ If you encounter any problems, please make sure you have read through the wiki f
     * [PlanValidators](./Toolkit/Toolkit.PlanValidators/readme.md)
     * [Simulators](./Toolkit/Toolkit.Simulators/readme.md)
 * Miscellaneous
+    * [Error Listeners](./ErrorListeners/readme.md)
     * [Tests](./Tests/readme.md)
+    * [Performance](./PerformanceChecker/readme.md)
 
 # What is PDDL?
 PDDL is a standardised format that is extensively used in planning. The general idea of it is to have a set of initial facts (predicates), a set of goal facts we want to each and a set of actions that modify facts. The PDDL format is split into two parts; a domain and a problem. The domain contains the definitions of the actions, as well as what predicates can be used. An example of a domain can be the well known domain Gripper. Gripper is a domain where the goal is to move balls to other rooms by means of a robot hand. It usually consists of 3 actions, `pick`, `move` and `drop`. An example of a [gripper domain](https://github.com/aibasel/downward-benchmarks/blob/master/gripper/domain.pddl) could be:
