@@ -17,14 +17,16 @@ jobs:
         run: cd Dependencies
 
       - name: Clone Benchmarks (1 of 2)
-        uses: actions/checkout@master
+        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
         with:
-            repository: aibasel/downward-benchmarks
+            owner: 'aibasel'
+            repository: 'downward-benchmarks'
 
       - name: Clone Benchmarks (2 of 2)
-        uses: actions/checkout@master
+        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
         with:
-            repository: kris701/PDDLBenchmarkPlans
+            owner: 'kris701'
+            repository: 'PDDLBenchmarkPlans'
 
       - name: Move to root
         run: cd ..
