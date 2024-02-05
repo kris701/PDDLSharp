@@ -14,7 +14,7 @@ using System;
 namespace PDDLSharp.CodeGenerators.Tests.PDDL
 {
     [TestClass]
-    public class SimplePDDLVisitTests
+    public class SimplePDDLCodeGeneratorTests
     {
         public static IEnumerable<object[]> GetTestData()
         {

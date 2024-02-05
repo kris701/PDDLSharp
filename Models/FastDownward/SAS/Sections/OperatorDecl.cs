@@ -53,5 +53,16 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
                 hash ^= child.GetHashCode();
             return hash;
         }
+
+        public OperatorDecl Copy()
+        {
+            var prevailConditions = new List<ValuePair>();
+            foreach (var prevail in PrevailConditions)
+                prevailConditions.Add(prevail.Copy());
+            var effects = new List<OperatorEffect>();
+            foreach (var eff in Effects)
+                effects.Add(eff.Copy());
+            return new OperatorDecl(Name, prevailConditions, effects, Cost);
+        }
     }
 }

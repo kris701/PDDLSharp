@@ -38,5 +38,7 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
         {
             return IsUsingMetrics.GetHashCode();
         }
+
+        public MetricDecl Copy() => new MetricDecl(IsUsingMetrics);
     }
 }

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace PDDLSharp.Toolkit.PlanValidators.Tests
 {
     [TestClass]
-    public class PlanValidatorTests
+    public class SimplePlanValidatorTests
     {
         private PDDLDecl GetDecl(string domain, string problem)
         {

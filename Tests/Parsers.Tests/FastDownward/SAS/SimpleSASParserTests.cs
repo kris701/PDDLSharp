@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace PDDLSharp.Parsers.Tests.FastDownward.SAS
 {
     [TestClass]
-    public class SectionVisitorTests
+    public class SimpleSASParserTests
     {
         private ASTNode GetParsed(string toParse)
         {

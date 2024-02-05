@@ -50,5 +50,12 @@
             }
         }
 
+        public ActionPlan Copy()
+        {
+            var actions = new List<GroundedAction>();
+            foreach (var act in Plan)
+                actions.Add(act.Copy());
+            return new ActionPlan(actions, Cost);
+        }
     }
 }

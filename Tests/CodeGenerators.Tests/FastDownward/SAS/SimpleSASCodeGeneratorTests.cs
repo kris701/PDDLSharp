@@ -14,7 +14,7 @@ using System;
 namespace PDDLSharp.CodeGenerators.Tests.FastDownward.SAS
 {
     [TestClass]
-    public class SimpleSASVisitTests
+    public class SimpleSASCodeGeneratorTests
     {
         public static IEnumerable<object[]> GetTestData()
         {

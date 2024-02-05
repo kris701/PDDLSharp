@@ -65,5 +65,13 @@ namespace PDDLSharp.Models.FastDownward.Plans
                 hash ^= arg.Name.GetHashCode();
             return hash;
         }
+
+        public GroundedAction Copy()
+        {
+            var args = new List<NameExp>();
+            foreach (var arg in Arguments)
+                args.Add(arg.Copy());
+            return new GroundedAction(ActionName, args);
+        }
     }
 }

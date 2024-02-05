@@ -46,5 +46,13 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
                 hash ^= child.GetHashCode();
             return hash;
         }
+
+        public AxiomDecl Copy()
+        {
+            var conditions = new List<ValuePair>();
+            foreach (var con in Conditions)
+                conditions.Add(con.Copy());
+            return new AxiomDecl(conditions, EffectedVariable, VariablePrecondition, NewVariableValue);
+        }
     }
 }

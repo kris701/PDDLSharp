@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace PDDLSharp.Parsers.Tests.FastDownward.Plans
 {
     [TestClass]
-    public class FDPlanParserTests
+    public class SimpleFDPlanParserTests
     {
         [TestMethod]
         [DataRow("PlanTestData/plan1.plan", 0)]

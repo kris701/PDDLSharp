@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\CodeGenerators\CodeGenerators.csproj" />
     <ProjectReference Include="..\..\Models\Models.csproj" />
+    <ProjectReference Include="..\TestTools\TestTools.csproj" />
   </ItemGroup>
 
 </Project>

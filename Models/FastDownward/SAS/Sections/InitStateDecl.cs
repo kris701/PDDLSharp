@@ -42,5 +42,13 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
                 hash ^= child.GetHashCode();
             return hash;
         }
+
+        public InitStateDecl Copy()
+        {
+            var inits = new List<int>();
+            foreach (var init in Inits)
+                inits.Add(init);
+            return new InitStateDecl(inits);
+        }
     }
 }
