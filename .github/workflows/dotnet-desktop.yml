@@ -13,23 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@master
 
-      - name: Move to dependencies
-        run: cd Dependencies
-
       - name: Clone Benchmarks (1 of 2)
-        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
-        with:
-            owner: 'aibasel'
-            repository: 'downward-benchmarks'
+        run: git clone https://github.com/aibasel/downward-benchmarks/ Dependencies/downward-benchmarks
 
       - name: Clone Benchmarks (2 of 2)
-        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
-        with:
-            owner: 'kris701'
-            repository: 'PDDLBenchmarkPlans'
-
-      - name: Move to root
-        run: cd ..
+        run: git clone https://github.com/kris701/PDDLBenchmarkPlans/ Dependencies/PDDLBenchmarkPlans
 
       - name: Install dependencies
         run: dotnet restore
