@@ -90,7 +90,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateSpaces", "StateSpaces\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StateSpaces.Tests", "Tests\StateSpaces.Tests\StateSpaces.Tests.csproj", "{E6A451B3-E965-4167-B12C-0E0D47DFF1B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerformanceChecker", "PerformanceChecker\PerformanceChecker.csproj", "{81E5FAFB-87A5-4353-A268-5E4CCD8F9280}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceChecker", "PerformanceChecker\PerformanceChecker.csproj", "{81E5FAFB-87A5-4353-A268-5E4CCD8F9280}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{CBB3B5BA-D318-497F-9461-F451222CFE05}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies\readme.md = Dependencies\readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
