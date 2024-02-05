@@ -14,6 +14,8 @@ namespace TestTools
 {
     public abstract class BenchmarkBuilder
     {
+        public static string DataPath = "../../../../../Dependencies/";
+
         private static long MaxPDDLFileSize = 10000;
         private static long MaxProblemsPrDomain = 5;
 
@@ -27,7 +29,7 @@ namespace TestTools
         public static bool _isPDDLSetup = false;
         public static void SetupPDDL()
         {
-            var targetPath = "../../../../../../Dependencies/downward-benchmarks";
+            var targetPath = $"{DataPath}/downward-benchmarks";
             if (!Directory.Exists(targetPath))
                 throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
 
@@ -56,7 +58,7 @@ namespace TestTools
         public static bool _isPlansSetup = false;
         public static void SetupPlans()
         {
-            var targetPath = "../../../../../../Dependencies/PDDLBenchmarkPlans/lama-first";
+            var targetPath = $"{DataPath}/PDDLBenchmarkPlans/lama-first";
             if (!Directory.Exists(targetPath))
                 throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
 
@@ -82,25 +84,22 @@ namespace TestTools
         public static bool _isSASSetup = false;
         public static void SetupSAS()
         {
-            var targetPath = "../../../../../../Dependencies/PDDLBenchmarkPlans/lama-first";
+            var targetPath = $"{DataPath}/PDDLBenchmarkPlans/lama-first";
             if (!Directory.Exists(targetPath))
                 throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
 
             foreach (var domainPath in Directory.GetDirectories(targetPath))
             {
-                var domainFile = Path.Combine(domainPath, "domain.pddl");
-                if (File.Exists(domainFile) && CompatabilityHelper.IsPDDLDomainSpported(new FileInfo(domainFile)))
+                var domainName = new DirectoryInfo(domainPath).Name;
+                if (!_sasFiles.ContainsKey(domainName))
                 {
-                    if (!_sasFiles.ContainsKey(domainFile))
+                    _sasFiles.Add(domainName, new List<string>());
+                    foreach (var sasFile in Directory.GetFiles(domainPath))
                     {
-                        _sasFiles.Add(domainFile, new List<string>());
-                        foreach (var problem in Directory.GetFiles(domainPath))
-                        {
-                            if (problem != domainFile && problem.EndsWith(".sas") && new FileInfo(problem).Length < MaxSASFileSize && PDDLFileHelper.IsFileProblem(problem))
-                                _sasFiles[domainFile].Add(problem);
-                            if (_sasFiles[domainFile].Count >= MaxSASPrDomain)
-                                break;
-                        }
+                        if (sasFile.EndsWith(".sas") && new FileInfo(sasFile).Length < MaxSASFileSize)
+                            _sasFiles[domainName].Add(sasFile);
+                        if (_sasFiles[domainName].Count >= MaxSASPrDomain)
+                            break;
                     }
                 }
             }
@@ -111,56 +110,62 @@ namespace TestTools
         {
             if (!_isPDDLSetup)
                 SetupPDDL();
-            foreach (var key in _pddlFiles.Keys)
-                yield return new object[] { key };
+            foreach (var domainFile in _pddlFiles.Keys)
+                yield return new object[] { domainFile };
         }
 
         public static IEnumerable<object[]> GetProblems()
         {
             if (!_isPDDLSetup)
                 SetupPDDL();
-            foreach (var key in _pddlFiles.Keys)
-                yield return new object[] { _pddlFiles[key] };
+            foreach (var domainFile in _pddlFiles.Keys)
+                foreach(var problemFile in _pddlFiles[domainFile])
+                    yield return new object[] { problemFile };
         }
 
         public static IEnumerable<object[]> GetDomainsAndProblems()
         {
             if (!_isPDDLSetup)
                 SetupPDDL();
-            foreach (var key in _pddlFiles.Keys)
-                yield return new object[] { key, _pddlFiles[key] };
+            foreach (var doaminFile in _pddlFiles.Keys)
+                foreach(var problemFile in _pddlFiles[doaminFile])
+                    yield return new object[] { doaminFile, problemFile };
         }
 
         public static IEnumerable<object[]> GetPlans()
         {
             if (!_isPlansSetup)
                 SetupPlans();
-            foreach (var key in _planFiles.Keys)
-                yield return new object[] { _planFiles[key] };
+            foreach (var domainName in _planFiles.Keys)
+                foreach(var planFile in _planFiles[domainName])
+                    yield return new object[] { planFile };
         }
 
         public static IEnumerable<object[]> GetDomainsAndPlans()
         {
             if (!_isPlansSetup)
                 SetupPlans();
-            foreach (var key in _planFiles.Keys)
-                yield return new object[] { key, _planFiles[key] };
+            foreach (var domainName in _planFiles.Keys)
+                foreach(var planFile in _planFiles[domainName])
+                    yield return new object[] { domainName, planFile };
         }
 
         public static IEnumerable<object[]> GetSASs()
         {
             if (!_isSASSetup)
                 SetupSAS();
-            foreach (var key in _sasFiles.Keys)
-                yield return new object[] { _sasFiles[key] };
+            foreach (var domainName in _sasFiles.Keys)
+                foreach(var sasFile in _sasFiles[domainName])
+                    yield return new object[] { sasFile };
         }
 
         public static IEnumerable<object[]> GetDomainsAndSASs()
         {
             if (!_isSASSetup)
                 SetupSAS();
-            foreach (var key in _sasFiles.Keys)
-                yield return new object[] { key, _sasFiles[key] };
+            foreach (var domainName in _sasFiles.Keys)
+                foreach(var sasFile in _sasFiles[domainName])
+                    yield return new object[] { domainName, sasFile };
         }
 
         private static Dictionary<string, PDDLDecl> _declCache = new Dictionary<string, PDDLDecl>();

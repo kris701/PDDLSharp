@@ -25,7 +25,10 @@ namespace PDDLSharp.Toolkit.PlanValidators.Tests
         public static IEnumerable<object[]> GetPlanValidationData()
         {
             if (!_isPDDLSetup)
+            {
+                DataPath = "../../../../../../Dependencies/";
                 SetupPDDL();
+            }
             if (!_isPlansSetup)
                 SetupPlans();
             foreach (var domainFile in _pddlFiles.Keys)

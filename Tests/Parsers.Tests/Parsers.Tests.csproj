@@ -31,6 +31,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Models\Models.csproj" />
     <ProjectReference Include="..\..\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\TestTools\TestTools.csproj" />
   </ItemGroup>
 
   <ItemGroup>
