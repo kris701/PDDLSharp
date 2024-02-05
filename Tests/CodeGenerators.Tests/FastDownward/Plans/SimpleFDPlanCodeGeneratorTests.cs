@@ -12,7 +12,7 @@ using System;
 namespace PDDLSharp.CodeGenerators.Tests.FastDownward.Plans
 {
     [TestClass]
-    public class SimplePlanVisitTests
+    public class SimpleFDPlanCodeGeneratorTests
     {
         public static IEnumerable<object[]> GetTestData()
         {
