@@ -49,8 +49,8 @@ namespace PerformanceChecker
             _contextualiser1 = new PDDLContextualiser(_listener3);
             _contextDecl = new PDDLDecl(_parser3.ParseAs<DomainDecl>(_domain), _parser3.ParseAs<ProblemDecl>(_problem));
             _analyser1 = new PDDLAnalyser(_listener4);
-            _codeGenerator1 = new PDDLCodeGenerator(_listener4);
-            _codeGenerator2 = new PDDLCodeGenerator(_listener5);
+            _codeGenerator1 = new PDDLCodeGenerator(_listener5);
+            _codeGenerator2 = new PDDLCodeGenerator(_listener6);
         }
 
         [Benchmark]
@@ -69,6 +69,6 @@ namespace PerformanceChecker
         public string DomainCodeGeneration() => _codeGenerator1.Generate(_contextDecl.Domain);
 
         [Benchmark]
-        public string ProblemCodeGeneration() => _codeGenerator1.Generate(_contextDecl.Problem);
+        public string ProblemCodeGeneration() => _codeGenerator2.Generate(_contextDecl.Problem);
     }
 }
