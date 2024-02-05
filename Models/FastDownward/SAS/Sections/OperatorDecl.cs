@@ -60,7 +60,7 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
             foreach (var prevail in PrevailConditions)
                 prevailConditions.Add(prevail.Copy());
             var effects = new List<OperatorEffect>();
-            foreach(var eff in Effects)
+            foreach (var eff in Effects)
                 effects.Add(eff.Copy());
             return new OperatorDecl(Name, prevailConditions, effects, Cost);
         }

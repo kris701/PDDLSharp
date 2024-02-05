@@ -51,7 +51,7 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
         public VariableDecl Copy()
         {
             var symNames = new List<string>();
-            foreach(var sym in SymbolicNames)
+            foreach (var sym in SymbolicNames)
                 symNames.Add($"{sym}");
             return new VariableDecl(VariableName, AxiomLayer, symNames);
         }

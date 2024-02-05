@@ -4,7 +4,6 @@ using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Parsers.FastDownward.SAS;
 using PDDLSharp.Parsers.PDDL;
@@ -119,7 +118,7 @@ namespace TestTools
             if (!_isPDDLSetup)
                 SetupPDDL();
             foreach (var domainFile in _pddlFiles.Keys)
-                foreach(var problemFile in _pddlFiles[domainFile])
+                foreach (var problemFile in _pddlFiles[domainFile])
                     yield return new object[] { problemFile };
         }
 
@@ -128,7 +127,7 @@ namespace TestTools
             if (!_isPDDLSetup)
                 SetupPDDL();
             foreach (var doaminFile in _pddlFiles.Keys)
-                foreach(var problemFile in _pddlFiles[doaminFile])
+                foreach (var problemFile in _pddlFiles[doaminFile])
                     yield return new object[] { doaminFile, problemFile };
         }
 
@@ -137,7 +136,7 @@ namespace TestTools
             if (!_isPlansSetup)
                 SetupPlans();
             foreach (var domainName in _planFiles.Keys)
-                foreach(var planFile in _planFiles[domainName])
+                foreach (var planFile in _planFiles[domainName])
                     yield return new object[] { planFile };
         }
 
@@ -146,7 +145,7 @@ namespace TestTools
             if (!_isPlansSetup)
                 SetupPlans();
             foreach (var domainName in _planFiles.Keys)
-                foreach(var planFile in _planFiles[domainName])
+                foreach (var planFile in _planFiles[domainName])
                     yield return new object[] { domainName, planFile };
         }
 
@@ -155,7 +154,7 @@ namespace TestTools
             if (!_isSASSetup)
                 SetupSAS();
             foreach (var domainName in _sasFiles.Keys)
-                foreach(var sasFile in _sasFiles[domainName])
+                foreach (var sasFile in _sasFiles[domainName])
                     yield return new object[] { sasFile };
         }
 
@@ -164,7 +163,7 @@ namespace TestTools
             if (!_isSASSetup)
                 SetupSAS();
             foreach (var domainName in _sasFiles.Keys)
-                foreach(var sasFile in _sasFiles[domainName])
+                foreach (var sasFile in _sasFiles[domainName])
                     yield return new object[] { domainName, sasFile };
         }
 

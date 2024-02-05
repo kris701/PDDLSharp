@@ -11,8 +11,6 @@ using PDDLSharp.Toolkit.Planners.Heuristics;
 using PDDLSharp.Toolkit.Planners.Search.Classical;
 using PDDLSharp.Tools;
 using PDDLSharp.Translators;
-using System;
-using System.Diagnostics;
 using System.Text;
 using ToMarkdown.Tables;
 
@@ -94,8 +92,8 @@ namespace PerformanceChecker
             if (File.Exists(targetFile))
                 File.Delete(targetFile);
             File.WriteAllText(targetFile, sb.ToString());
-        }   
-        
+        }
+
         static async Task<List<FilePerformanceResult>> PDDLPerformance(string benchmarks)
         {
             var tasks = new List<Task<FilePerformanceResult>>();
@@ -332,7 +330,7 @@ namespace PerformanceChecker
             await Task.WhenAll(tasks);
 
             var results = new List<FilePerformanceResult>();
-            foreach(var task in tasks)
+            foreach (var task in tasks)
                 results.Add(task.Result);
             return results;
         }

@@ -1,10 +1,10 @@
-﻿using PDDLSharp.ASTGenerators.PDDL;
-using PDDLSharp.ASTGenerators;
+﻿using PDDLSharp.ASTGenerators;
+using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.Contextualisers.PDDL;
 using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.PDDL;
 using PDDLSharp.Parsers.Visitors;
 using System;
 using System.Collections.Generic;
