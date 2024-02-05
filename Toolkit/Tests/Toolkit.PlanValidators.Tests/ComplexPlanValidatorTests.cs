@@ -17,10 +17,10 @@ using System.Threading.Tasks;
 using TestTools;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace PDDLSharp.Toolit.Tests.System
+namespace PDDLSharp.Toolkit.PlanValidators.Tests
 {
     [TestClass]
-    public class PlanValidatorTests : BenchmarkBuilder
+    public class ComplexPlanValidatorTests : BenchmarkBuilder
     {
         public static IEnumerable<object[]> GetPlanValidationData()
         {
