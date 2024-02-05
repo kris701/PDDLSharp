@@ -2,25 +2,32 @@
 Here are some general statistics about how good the PDDLSharp system performs.
 
 
-These benchmarks made on the following domains from [Fast Downward](https://github.com/aibasel/downward-benchmarks/):
-* gripper
-* blocks
-* depot
-* miconic
-* rovers
-* trucks
-* zenotravel
-
-For each of these domains, the first 5 problems are selected.
-Each component is executed 3 times to get a better average.
+These benchmarks are based on a single gripper domain
+[BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) is used to generated the time results.
 # Core Components
 ## PDDL
 | Name | Time | Size | Throughput (MB/s) |
 | - | - | - | - |
-| DomainParsing | 33.2 μs | 448 B | 13.493975903614457 |
-| ProblemParsing | 39.9 μs | 448 B | 11.228070175438596 |
-| Contextualization | 63.7 μs | 448 B | 7.032967032967033 |
-| Analyse | 142.8 μs | 448 B | 3.1372549019607843 |
-| DomainCodeGeneration | 3.6 μs | 448 B | 124.44444444444444 |
-| ProblemCodeGeneration | 6 μs | 448 B | 74.66666666666666 |
+| Domain Parsing | 118.4 μs | 932 B | 7.87 |
+| Problem Parsing | 146.9 μs | 1401 B | 9.54 |
+| Contextualization | 205.3 μs | 2333 B | 11.36 |
+| Analyzation | 527.3 μs | 2333 B | 4.42 |
+| Domain Code Generation | 16.3 μs | 932 B | 57.18 |
+| Problem Code Generation | 24 μs | 1401 B | 58.37 |
+
+
+## Fast Downward
+| Name | Time | Size | Throughput (MB/s) |
+| - | - | - | - |
+| SAS Parsing | 682.6 μs | 11634 B | 17.04 |
+| Plan Parsing | 27.8 μs | 863 B | 31.04 |
+
+
+## Translation and Planners
+| Name | Time | Size | Throughput (MB/s) |
+| - | - | - | - |
+| Translation | 5542.6 μs | 2333 B | 0.42 |
+| Solve hGoal | 983.9 μs | 2333 B | 2.37 |
+| Solve hFF | 10237.6 μs | 2333 B | 0.23 |
+
 

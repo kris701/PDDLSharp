@@ -24,8 +24,8 @@ namespace PerformanceChecker
     [SimpleJob(RuntimeMoniker.HostProcess)]
     public class PDDLBenchmarks
     {
-        public static string _domain = "(define (domain d1)\r\n        (:requirements :typing)\r\n        (:types\r\n            type1 type2 - object\r\n        )\r\n        (:predicates\r\n            (pred1 ?obj - type1)\r\n            (pred2 ?obj1 - type1 ?obj2 - type2)\r\n        )\r\n        (:action action1\r\n            :parameters (?p1 - type1 ?p2 - type2)\r\n    :precondition (and)            :effect \r\n                (and\r\n                    (pred2 ?p1 ?p2)\r\n                )\r\n        )\r\n    )";
-        public static string _problem = "(define (problem p1)\r\n        (:domain d1)\r\n        (:objects \r\n            obj1 obj2 obj3 - type1\r\n            obj4 obj5 obj6 - type2\r\n        )\r\n        (:init\r\n               (pred1 obj1) (pred1 obj2) (pred1 obj3)\r\n               (pred2 obj1 obj4) (pred2 obj2 obj5) \r\n        )\r\n        (:goal \r\n            (and \r\n                (pred2 obj1 obj5) \r\n                (pred2 obj2 obj6) \r\n                (pred2 obj3 obj4)\r\n            )\r\n        )\r\n    )";
+        public static string _domain = File.ReadAllText("domain.pddl");
+        public static string _problem = File.ReadAllText("prob05.pddl");
         private IErrorListener _listener1 = new ErrorListener();
         private IParser<INode> _parser1;
         private IErrorListener _listener2 = new ErrorListener();

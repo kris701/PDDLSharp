@@ -12,7 +12,7 @@ namespace PerformanceChecker
         public string MeanTime => $"{_meanTime.TotalMicroseconds} μs";
         private TimeSpan _meanTime;
         public string Size => $"{_lengthBytes} B";
-        public double Throughput => ((double)_lengthBytes / 1000000) / _meanTime.TotalSeconds;
+        public double Throughput => Math.Round(((double)_lengthBytes / 1000000) / _meanTime.TotalSeconds, 2);
         private int _lengthBytes;
 
         public ThroughputResult(string name, TimeSpan meanTime, int lengthBytes)
