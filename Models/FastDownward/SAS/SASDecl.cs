@@ -75,5 +75,29 @@ namespace PDDLSharp.Models.FastDownward.SAS
 
             return hash;
         }
+
+        public SASDecl Copy()
+        {
+            var newDecl = new SASDecl();
+
+            if (Version != null)
+                newDecl.Version = Version.Copy();
+            if (Metric != null)
+                newDecl.Metric = Metric.Copy();
+            foreach (var variable in Variables)
+                newDecl.Variables.Add(variable.Copy());
+            foreach (var mutex in Mutexes)
+                newDecl.Mutexes.Add(mutex.Copy());
+            if (InitState != null)
+                newDecl.InitState = InitState.Copy();
+            if (GoalState != null)
+                newDecl.GoalState = GoalState.Copy();
+            foreach (var op in Operators)
+                newDecl.Operators.Add(op.Copy());
+            foreach (var ax in Axioms)
+                newDecl.Axioms.Add(ax.Copy());
+
+            return newDecl;
+        }
     }
 }

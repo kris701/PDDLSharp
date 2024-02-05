@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Models\Models.csproj" />
     <ProjectReference Include="..\..\..\Parsers\Parsers.csproj" />
+    <ProjectReference Include="..\..\..\Tests\TestTools\TestTools.csproj" />
     <ProjectReference Include="..\..\Toolkit.MacroGenerators\Toolkit.MacroGenerators.csproj" />
     <ProjectReference Include="..\..\Toolkit.PlanValidators\Toolkit.PlanValidators.csproj" />
   </ItemGroup>

@@ -35,5 +35,7 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
         {
             return Version.GetHashCode();
         }
+
+        public VersionDecl Copy() => new VersionDecl(Version);
     }
 }

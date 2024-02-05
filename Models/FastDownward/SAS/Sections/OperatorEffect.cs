@@ -48,5 +48,13 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
                 hash ^= child.GetHashCode();
             return hash;
         }
+
+        public OperatorEffect Copy()
+        {
+            var effectConditions = new List<ValuePair>();
+            foreach (var effCon in EffectConditions)
+                effectConditions.Add(effCon.Copy());
+            return new OperatorEffect(effectConditions, EffectedVariable, VariablePrecondition, VariableEffect);
+        }
     }
 }

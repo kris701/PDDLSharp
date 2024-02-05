@@ -19,13 +19,13 @@ namespace PDDLSharp.PDDLSharp.Tests.System
     {
         public static List<string> ExcludedDomains = new List<string>()
         {
-            // It has a malformed domain
-            "zenotravel",
-            // It have some malformed parameters
-            "tpp",
-            // Both have a missmatch of ( and )
-            "airport-adl",
-            "freecell"
+            //// It has a malformed domain
+            //"zenotravel",
+            //// It have some malformed parameters
+            //"tpp",
+            //// Both have a missmatch of ( and )
+            //"airport-adl",
+            //"freecell"
         };
 
         public static long MaxFileSize = 10000;

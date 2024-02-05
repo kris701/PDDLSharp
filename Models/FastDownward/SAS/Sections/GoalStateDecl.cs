@@ -42,5 +42,13 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
                 hash ^= child.GetHashCode();
             return hash;
         }
+
+        public GoalStateDecl Copy()
+        {
+            var goals = new List<ValuePair>();
+            foreach (var goal in Goals)
+                goals.Add(goal.Copy());
+            return new GoalStateDecl(goals);
+        }
     }
 }

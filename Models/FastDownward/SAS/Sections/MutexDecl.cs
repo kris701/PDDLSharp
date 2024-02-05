@@ -34,5 +34,13 @@ namespace PDDLSharp.Models.FastDownward.SAS.Sections
                 hash ^= child.GetHashCode();
             return hash;
         }
+
+        public MutexDecl Copy()
+        {
+            var group = new List<ValuePair>();
+            foreach (var gr in Group)
+                group.Add(gr.Copy());
+            return new MutexDecl(group);
+        }
     }
 }

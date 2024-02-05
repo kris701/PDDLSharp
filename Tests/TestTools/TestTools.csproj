@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ErrorListeners\ErrorListeners.csproj" />
+    <ProjectReference Include="..\..\Models\Models.csproj" />
+    <ProjectReference Include="..\..\Parsers\Parsers.csproj" />
+  </ItemGroup>
+
+</Project>

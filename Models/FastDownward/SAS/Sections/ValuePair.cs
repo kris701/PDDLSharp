@@ -31,5 +31,7 @@
         {
             return Left.GetHashCode() ^ Right.GetHashCode();
         }
+
+        public ValuePair Copy() => new ValuePair(Left, Right);
     }
 }
