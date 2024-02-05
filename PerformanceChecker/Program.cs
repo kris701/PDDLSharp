@@ -1,4 +1,6 @@
-﻿using PDDLSharp.Analysers.PDDL;
+﻿using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Running;
+using PDDLSharp.Analysers.PDDL;
 using PDDLSharp.CodeGenerators.PDDL;
 using PDDLSharp.Contextualisers.PDDL;
 using PDDLSharp.ErrorListeners;
@@ -12,6 +14,7 @@ using PDDLSharp.Toolkit.Planners.Search.Classical;
 using PDDLSharp.Tools;
 using PDDLSharp.Translators;
 using System.Text;
+using ToMarkdown;
 using ToMarkdown.Tables;
 
 namespace PerformanceChecker
@@ -40,299 +43,76 @@ namespace PerformanceChecker
         private static int _searchTimeLimit = 30;
 #endif
 
+        private static List<ThroughputResult> PDDL()
+        {
+            var result = new List<ThroughputResult>();
+#if DEBUG
+            var summary = BenchmarkRunner.Run<PDDLBenchmarks>(new DebugInProcessConfig());
+#else
+    var summary = BenchmarkRunner.Run<PDDLBenchmarks>();
+#endif
+            var targetHeader = summary.Table.Columns.First(x => x.Header.ToUpper() == "MEAN").Index;
+            for(int i = 0; i < summary.Table.Columns[0].Content.Length; i++)
+            {
+                result.Add(new ThroughputResult(
+                    summary.Table.Columns[0].Content[i],
+                    TimeSpan.FromMicroseconds(Convert.ToDouble(summary.Table.Columns[targetHeader].Content[i].Replace("μs", ""))),
+                    PDDLBenchmarks._domain.Length));
+            }
+            return result;
+        }
+
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Fetching Benchmarks");
-            var benchmarks = "../../../../Dependencies/downward-benchmarks";
-            if (!Directory.Exists(benchmarks))
-                throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
-            var benchmarkPlans = "../../../../Dependencies/PDDLBenchmarkPlans";
-            if (!Directory.Exists(benchmarkPlans))
-                throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
+            //Console.WriteLine("Fetching Benchmarks");
+            //var benchmarks = "../../../../Dependencies/downward-benchmarks";
+            //if (!Directory.Exists(benchmarks))
+            //    throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
+            //var benchmarkPlans = "../../../../Dependencies/PDDLBenchmarkPlans";
+            //if (!Directory.Exists(benchmarkPlans))
+            //    throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
 
             var sb = new StringBuilder();
 #if DEBUG
             sb.AppendLine("# RESULTS ARE IN DEBUG MODE");
 #endif
             sb.AppendLine(_header);
-            sb.AppendLine("These benchmarks made on the following domains from [Fast Downward](https://github.com/aibasel/downward-benchmarks/):");
-            sb.AppendLine(TargetDomains.ToMarkdownList());
-            sb.AppendLine($"For each of these domains, the first {_firstNProblems} problems are selected.");
-            sb.AppendLine($"Each component is executed {_iterations} times to get a better average.");
+            sb.AppendLine("These benchmarks are based on a single gripper domain");
+            sb.Append("BenchmarkDotNet".ToMarkdownLink("https://github.com/dotnet/BenchmarkDotNet"));
+            sb.AppendLine(" is used to generated the time results.");
             sb.AppendLine("# Core Components");
             sb.AppendLine("## PDDL");
-            sb.AppendLine((await PDDLPerformance(benchmarks)).ToMarkdownTable(
-                new List<string>() { "*", "*", "Total Size (MB)", "Throughput (MB/s)", "Total Time (s)" }
+            sb.AppendLine(PDDL().ToMarkdownTable(
+                new List<string>() { "*", "Time", "Size", "Throughput (MB/s)" }
                 ));
-            sb.AppendLine();
-            sb.AppendLine("## Fast Downward SAS");
-            sb.AppendLine((await FastDownwardSAS(benchmarkPlans)).ToMarkdownTable(
-                new List<string>() { "*", "*", "Total Size (MB)", "Throughput (MB/s)", "Total Time (s)" }
-                ));
-            sb.AppendLine();
-            sb.AppendLine("## Fast Downward Plans");
-            sb.AppendLine((await FastDownwardPlans(benchmarkPlans)).ToMarkdownTable(
-                new List<string>() { "*", "*", "Total Size (MB)", "Throughput (MB/s)", "Total Time (s)" }
-                ));
-            sb.AppendLine();
-            sb.AppendLine("## Translation");
-            sb.AppendLine((await TranslatorPerformance(benchmarks)).ToMarkdownTable(
-                new List<string>() { "*", "*", "*", "Total Operators", "Operators / second", "Total Time (s)" }
-                ));
-            sb.AppendLine();
+            //sb.AppendLine();
+            //sb.AppendLine("## Fast Downward SAS");
+            //sb.AppendLine((await FastDownwardSAS(benchmarkPlans)).ToMarkdownTable(
+            //    new List<string>() { "*", "*", "Total Size (MB)", "Throughput (MB/s)", "Total Time (s)" }
+            //    ));
+            //sb.AppendLine();
+            //sb.AppendLine("## Fast Downward Plans");
+            //sb.AppendLine((await FastDownwardPlans(benchmarkPlans)).ToMarkdownTable(
+            //    new List<string>() { "*", "*", "Total Size (MB)", "Throughput (MB/s)", "Total Time (s)" }
+            //    ));
+            //sb.AppendLine();
+            //sb.AppendLine("## Translation");
+            //sb.AppendLine((await TranslatorPerformance(benchmarks)).ToMarkdownTable(
+            //    new List<string>() { "*", "*", "*", "Total Operators", "Operators / second", "Total Time (s)" }
+            //    ));
+            //sb.AppendLine();
 
-            sb.AppendLine("# Toolkit Components");
-            sb.AppendLine($"## Planner (Classical, {_searchTimeLimit}s time limit)");
-            sb.AppendLine((await PlannerPerformance(benchmarks)).ToMarkdownTable(
-                new List<string>() { "*", "*", "*", "*", "Generated / s", "Expansions / s", "Evaluations / s", "Solved (%)", "Total Time (s)" }
-                ));
-            sb.AppendLine();
+            //sb.AppendLine("# Toolkit Components");
+            //sb.AppendLine($"## Planner (Classical, {_searchTimeLimit}s time limit)");
+            //sb.AppendLine((await PlannerPerformance(benchmarks)).ToMarkdownTable(
+            //    new List<string>() { "*", "*", "*", "*", "Generated / s", "Expansions / s", "Evaluations / s", "Solved (%)", "Total Time (s)" }
+            //    ));
+            //sb.AppendLine();
 
             var targetFile = "../../../readme.md";
             if (File.Exists(targetFile))
                 File.Delete(targetFile);
             File.WriteAllText(targetFile, sb.ToString());
-        }
-
-        static async Task<List<FilePerformanceResult>> PDDLPerformance(string benchmarks)
-        {
-            var tasks = new List<Task<FilePerformanceResult>>();
-
-            Console.WriteLine("PDDL Domain Parsing");
-            tasks.Add(new Task<FilePerformanceResult>(() =>
-            {
-                var run = new FilePerformanceResult("PDDL Domain Parsing", _iterations);
-                Console.WriteLine($"{run.Name}\t Started...");
-                var errorListener = new ErrorListener(ParseErrorType.Error);
-                var pddlParser = new PDDLParser(errorListener);
-                var domains = Directory.GetDirectories(benchmarks);
-                int domainCounter = 0;
-                foreach (var domainPath in domains)
-                {
-                    if (TargetDomains.Contains(new DirectoryInfo(domainPath).Name))
-                    {
-                        Console.WriteLine($"{run.Name}\t {domainCounter++}/{TargetDomains.Count}");
-                        var domainFile = Path.Combine(domainPath, "domain.pddl");
-                        if (File.Exists(domainFile))
-                        {
-                            run.TotalSizeB += new FileInfo(domainFile).Length * _iterations;
-                            run.TotalFiles++;
-                            var data = File.ReadAllText(domainFile);
-                            run.Start();
-                            for (int i = 0; i < _iterations; i++)
-                                pddlParser.ParseAs<DomainDecl>(data);
-                            run.Stop();
-                        }
-                    }
-                }
-                Console.WriteLine($"{run.Name}\t Done!");
-                return run;
-            }));
-            Console.WriteLine("PDDL Problem Parsing");
-            tasks.Add(new Task<FilePerformanceResult>(() =>
-            {
-                var run = new FilePerformanceResult("PDDL Problem Parsing", _iterations);
-                Console.WriteLine($"{run.Name}\t Started...");
-                var errorListener = new ErrorListener(ParseErrorType.Error);
-                var pddlParser = new PDDLParser(errorListener);
-                var domains = Directory.GetDirectories(benchmarks);
-                int domainCounter = 0;
-                foreach (var domainPath in domains)
-                {
-                    if (TargetDomains.Contains(new DirectoryInfo(domainPath).Name))
-                    {
-                        Console.WriteLine($"{run.Name}\t {domainCounter++}/{TargetDomains.Count}");
-                        int count = 0;
-                        foreach (var file in Directory.GetFiles(domainPath))
-                        {
-                            if (PDDLFileHelper.IsFileProblem(file))
-                            {
-                                count++;
-                                run.TotalSizeB += new FileInfo(file).Length * _iterations;
-                                run.TotalFiles++;
-                                var data = File.ReadAllText(file);
-                                run.Start();
-                                for (int i = 0; i < _iterations; i++)
-                                    pddlParser.ParseAs<ProblemDecl>(data);
-                                run.Stop();
-                            }
-                            if (count > _firstNProblems)
-                                break;
-                        }
-                    }
-                }
-                Console.WriteLine($"{run.Name}\t Done!");
-                return run;
-            }));
-            Console.WriteLine("PDDL Contextualization");
-            tasks.Add(new Task<FilePerformanceResult>(() =>
-            {
-                var run = new FilePerformanceResult("PDDL Contextualization", _iterations);
-                Console.WriteLine($"{run.Name}\t Started...");
-                var errorListener = new ErrorListener(ParseErrorType.Error);
-                var pddlParser = new PDDLParser(errorListener);
-                var contextualizer = new PDDLContextualiser(errorListener);
-                var domains = Directory.GetDirectories(benchmarks);
-                int domainCounter = 0;
-                foreach (var domainPath in domains)
-                {
-                    if (TargetDomains.Contains(new DirectoryInfo(domainPath).Name))
-                    {
-                        Console.WriteLine($"{run.Name}\t {domainCounter++}/{TargetDomains.Count}");
-                        var domainFile = Path.Combine(domainPath, "domain.pddl");
-                        int count = 0;
-                        if (File.Exists(domainFile))
-                        {
-                            foreach (var file in Directory.GetFiles(domainPath))
-                            {
-                                if (PDDLFileHelper.IsFileProblem(file))
-                                {
-                                    count++;
-                                    run.TotalSizeB += (new FileInfo(domainFile).Length + new FileInfo(file).Length) * _iterations;
-                                    run.TotalFiles += 2;
-                                    var decl = pddlParser.ParseDecl(new FileInfo(domainFile), new FileInfo(file));
-                                    for (int i = 0; i < _iterations; i++)
-                                    {
-                                        var checkDecl = decl.Copy();
-                                        run.Start();
-                                        contextualizer.Contexturalise(checkDecl);
-                                        run.Stop();
-                                    }
-                                    if (count > _firstNProblems)
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine($"{run.Name}\t Done!");
-                return run;
-            }));
-            Console.WriteLine("PDDL Analysing");
-            tasks.Add(new Task<FilePerformanceResult>(() =>
-            {
-                var run = new FilePerformanceResult("PDDL Analysing", _iterations);
-                Console.WriteLine($"{run.Name}\t Started...");
-                var errorListener = new ErrorListener(ParseErrorType.Error);
-                var pddlParser = new PDDLParser(errorListener);
-                var analyser = new PDDLAnalyser(errorListener);
-                var domains = Directory.GetDirectories(benchmarks);
-                int domainCounter = 0;
-                foreach (var domainPath in domains)
-                {
-                    if (TargetDomains.Contains(new DirectoryInfo(domainPath).Name))
-                    {
-                        Console.WriteLine($"{run.Name}\t {domainCounter++}/{TargetDomains.Count}");
-                        var domainFile = Path.Combine(domainPath, "domain.pddl");
-                        var count = 0;
-                        if (File.Exists(domainFile))
-                        {
-                            foreach (var file in Directory.GetFiles(domainPath))
-                            {
-                                if (PDDLFileHelper.IsFileProblem(file))
-                                {
-                                    count++;
-                                    run.TotalSizeB += (new FileInfo(domainFile).Length + new FileInfo(file).Length) * _iterations;
-                                    run.TotalFiles += 2;
-                                    for (int i = 0; i < _iterations; i++)
-                                    {
-                                        var decl = pddlParser.ParseDecl(new FileInfo(domainFile), new FileInfo(file));
-                                        run.Start();
-                                        analyser.Analyse(decl);
-                                        run.Stop();
-                                    }
-                                    if (count > _firstNProblems)
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine($"{run.Name}\t Done!");
-                return run;
-            }));
-            Console.WriteLine("PDDL Domain Code Generation");
-            tasks.Add(new Task<FilePerformanceResult>(() =>
-            {
-                var run = new FilePerformanceResult("PDDL Domain Code Generation", _iterations);
-                Console.WriteLine($"{run.Name}\t Started...");
-                var errorListener = new ErrorListener(ParseErrorType.Error);
-                var pddlParser = new PDDLParser(errorListener);
-                var codeGenerators = new PDDLCodeGenerator(errorListener);
-                var domains = Directory.GetDirectories(benchmarks);
-                int domainCounter = 0;
-                foreach (var domainPath in domains)
-                {
-                    if (TargetDomains.Contains(new DirectoryInfo(domainPath).Name))
-                    {
-                        Console.WriteLine($"{run.Name}\t {domainCounter++}/{TargetDomains.Count}");
-                        var domainFile = Path.Combine(domainPath, "domain.pddl");
-                        if (File.Exists(domainFile))
-                        {
-                            var domain = pddlParser.ParseAs<DomainDecl>(File.ReadAllText(domainFile));
-                            run.Start();
-                            for (int i = 0; i < _iterations; i++)
-                            {
-                                var file = codeGenerators.Generate(domain);
-                                run.TotalSizeB += file.Length;
-                                run.TotalFiles++;
-                            }
-                            run.Stop();
-                        }
-                    }
-                }
-                Console.WriteLine($"{run.Name}\t Done!");
-                return run;
-            }));
-            Console.WriteLine("PDDL Problem Code Generation");
-            tasks.Add(new Task<FilePerformanceResult>(() =>
-            {
-                var run = new FilePerformanceResult("PDDL Problem Code Generation", _iterations);
-                Console.WriteLine($"{run.Name}\t Started...");
-                var errorListener = new ErrorListener(ParseErrorType.Error);
-                var pddlParser = new PDDLParser(errorListener);
-                var codeGenerators = new PDDLCodeGenerator(errorListener);
-                var domains = Directory.GetDirectories(benchmarks);
-                int domainCounter = 0;
-                foreach (var domainPath in domains)
-                {
-                    if (TargetDomains.Contains(new DirectoryInfo(domainPath).Name))
-                    {
-                        Console.WriteLine($"{run.Name}\t {domainCounter++}/{TargetDomains.Count}");
-                        int count = 0;
-                        foreach (var file in Directory.GetFiles(domainPath))
-                        {
-                            if (PDDLFileHelper.IsFileProblem(file))
-                            {
-                                count++;
-                                var problem = pddlParser.ParseAs<ProblemDecl>(File.ReadAllText(file));
-                                run.Start();
-                                for (int i = 0; i < _iterations; i++)
-                                {
-                                    var fileData = codeGenerators.Generate(problem);
-                                    run.TotalSizeB += fileData.Length;
-                                    run.TotalFiles++;
-                                }
-                                run.Stop();
-                            }
-                            if (count > _firstNProblems)
-                                break;
-                        }
-                    }
-                }
-                Console.WriteLine($"{run.Name}\t Done!");
-                return run;
-            }));
-
-            foreach (var task in tasks)
-                task.Start();
-
-            await Task.WhenAll(tasks);
-
-            var results = new List<FilePerformanceResult>();
-            foreach (var task in tasks)
-                results.Add(task.Result);
-            return results;
         }
 
         static async Task<List<FilePerformanceResult>> FastDownwardSAS(string benchmarkPlans)
