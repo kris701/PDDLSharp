@@ -34,7 +34,9 @@ namespace PDDLSharp.Toolit.Tests.System
 
         public static async Task Setup()
         {
-            var targetPath = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks/", "benchmarks");
+            var targetPath = "../../../../../../Dependencies/downward-benchmarks";
+            if (!Directory.Exists(targetPath))
+                throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
             foreach (var domainPath in Directory.GetDirectories(targetPath))
             {
                 if (!ExcludedDomains.Contains(new DirectoryInfo(domainPath).Name))

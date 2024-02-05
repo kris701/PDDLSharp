@@ -45,8 +45,12 @@ namespace PerformanceChecker
         static async Task Main(string[] args)
         {
             Console.WriteLine("Fetching Benchmarks");
-            var benchmarks = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks/", "benchmarks");
-            var benchmarkPlans = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/kris701/PDDLBenchmarkPlans", "benchmarks-plans");
+            var benchmarks = "../../../../Dependencies/downward-benchmarks";
+            if (!Directory.Exists(benchmarks))
+                throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
+            var benchmarkPlans = "../../../../Dependencies/PDDLBenchmarkPlans";
+            if (!Directory.Exists(benchmarkPlans))
+                throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
 
             var sb = new StringBuilder();
 #if DEBUG

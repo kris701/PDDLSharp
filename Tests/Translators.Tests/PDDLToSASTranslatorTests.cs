@@ -21,15 +21,17 @@ namespace PDDLSharp.Translators.Tests
         [ClassInitialize]
         public static async Task InitialiseAsync(TestContext context)
         {
-            await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks/", "benchmarks");
+            var targetPath = "../../../../../Dependencies/downward-benchmarks";
+            if (!Directory.Exists(targetPath))
+                throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
         }
 
         [TestMethod]
-        [DataRow("benchmarks/gripper/domain.pddl", "benchmarks/gripper/prob01.pddl")]
-        [DataRow("benchmarks/logistics98/domain.pddl", "benchmarks/logistics98/prob01.pddl")]
-        [DataRow("benchmarks/satellite/domain.pddl", "benchmarks/satellite/p01-pfile1.pddl")]
-        [DataRow("benchmarks/depot/domain.pddl", "benchmarks/depot/p01.pddl")]
-        [DataRow("benchmarks/miconic/domain.pddl", "benchmarks/miconic/s1-0.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/gripper/domain.pddl", "../../../../../Dependencies/downward-benchmarks/gripper/prob01.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/logistics98/domain.pddl", "../../../../../Dependencies/downward-benchmarks/logistics98/prob01.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/satellite/domain.pddl", "../../../../../Dependencies/downward-benchmarks/satellite/p01-pfile1.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/depot/domain.pddl", "../../../../../Dependencies/downward-benchmarks/depot/p01.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/miconic/domain.pddl", "../../../../../Dependencies/downward-benchmarks/miconic/s1-0.pddl")]
         public void Can_Translate_ExpectedDomainVars(string domain, string problem)
         {
             // ARRANGE
@@ -51,11 +53,11 @@ namespace PDDLSharp.Translators.Tests
         }
 
         [TestMethod]
-        [DataRow("benchmarks/gripper/domain.pddl", "benchmarks/gripper/prob01.pddl", 36)]
-        [DataRow("benchmarks/logistics98/domain.pddl", "benchmarks/logistics98/prob01.pddl", 1368)]
-        [DataRow("benchmarks/satellite/domain.pddl", "benchmarks/satellite/p01-pfile1.pddl", 59)]
-        [DataRow("benchmarks/depot/domain.pddl", "benchmarks/depot/p01.pddl", 270)]
-        [DataRow("benchmarks/miconic/domain.pddl", "benchmarks/miconic/s1-0.pddl", 4)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/gripper/domain.pddl", "../../../../../Dependencies/downward-benchmarks/gripper/prob01.pddl", 36)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/logistics98/domain.pddl", "../../../../../Dependencies/downward-benchmarks/logistics98/prob01.pddl", 1368)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/satellite/domain.pddl", "../../../../../Dependencies/downward-benchmarks/satellite/p01-pfile1.pddl", 59)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/depot/domain.pddl", "../../../../../Dependencies/downward-benchmarks/depot/p01.pddl", 270)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/miconic/domain.pddl", "../../../../../Dependencies/downward-benchmarks/miconic/s1-0.pddl", 4)]
         public void Can_Translate_ExpectedOperators(string domain, string problem, int expected)
         {
             // ARRANGE
@@ -72,11 +74,11 @@ namespace PDDLSharp.Translators.Tests
         }
 
         [TestMethod]
-        [DataRow("benchmarks/gripper/domain.pddl", "benchmarks/gripper/prob01.pddl")]
-        [DataRow("benchmarks/logistics98/domain.pddl", "benchmarks/logistics98/prob01.pddl")]
-        [DataRow("benchmarks/satellite/domain.pddl", "benchmarks/satellite/p01-pfile1.pddl")]
-        [DataRow("benchmarks/depot/domain.pddl", "benchmarks/depot/p01.pddl")]
-        [DataRow("benchmarks/miconic/domain.pddl", "benchmarks/miconic/s1-0.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/gripper/domain.pddl", "../../../../../Dependencies/downward-benchmarks/gripper/prob01.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/logistics98/domain.pddl", "../../../../../Dependencies/downward-benchmarks/logistics98/prob01.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/satellite/domain.pddl", "../../../../../Dependencies/downward-benchmarks/satellite/p01-pfile1.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/depot/domain.pddl", "../../../../../Dependencies/downward-benchmarks/depot/p01.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/miconic/domain.pddl", "../../../../../Dependencies/downward-benchmarks/miconic/s1-0.pddl")]
         public void Can_Translate_ExpectedOperators_NoStatics(string domain, string problem)
         {
             // ARRANGE
@@ -112,11 +114,11 @@ namespace PDDLSharp.Translators.Tests
         }
 
         [TestMethod]
-        [DataRow("benchmarks/gripper/domain.pddl", "benchmarks/gripper/prob01.pddl", 4)]
-        [DataRow("benchmarks/logistics98/domain.pddl", "benchmarks/logistics98/prob01.pddl", 6)]
-        [DataRow("benchmarks/satellite/domain.pddl", "benchmarks/satellite/p01-pfile1.pddl", 3)]
-        [DataRow("benchmarks/depot/domain.pddl", "benchmarks/depot/p01.pddl", 2)]
-        [DataRow("benchmarks/miconic/domain.pddl", "benchmarks/miconic/s1-0.pddl", 1)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/gripper/domain.pddl", "../../../../../Dependencies/downward-benchmarks/gripper/prob01.pddl", 4)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/logistics98/domain.pddl", "../../../../../Dependencies/downward-benchmarks/logistics98/prob01.pddl", 6)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/satellite/domain.pddl", "../../../../../Dependencies/downward-benchmarks/satellite/p01-pfile1.pddl", 3)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/depot/domain.pddl", "../../../../../Dependencies/downward-benchmarks/depot/p01.pddl", 2)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/miconic/domain.pddl", "../../../../../Dependencies/downward-benchmarks/miconic/s1-0.pddl", 1)]
         public void Can_Translate_ExpectedGoals(string domain, string problem, int expected)
         {
             // ARRANGE
@@ -133,11 +135,11 @@ namespace PDDLSharp.Translators.Tests
         }
 
         [TestMethod]
-        [DataRow("benchmarks/gripper/domain.pddl", "benchmarks/gripper/prob01.pddl", 15)]
-        [DataRow("benchmarks/logistics98/domain.pddl", "benchmarks/logistics98/prob01.pddl", 64)]
-        [DataRow("benchmarks/satellite/domain.pddl", "benchmarks/satellite/p01-pfile1.pddl", 17)]
-        [DataRow("benchmarks/depot/domain.pddl", "benchmarks/depot/p01.pddl", 36)]
-        [DataRow("benchmarks/miconic/domain.pddl", "benchmarks/miconic/s1-0.pddl", 7)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/gripper/domain.pddl", "../../../../../Dependencies/downward-benchmarks/gripper/prob01.pddl", 15)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/logistics98/domain.pddl", "../../../../../Dependencies/downward-benchmarks/logistics98/prob01.pddl", 64)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/satellite/domain.pddl", "../../../../../Dependencies/downward-benchmarks/satellite/p01-pfile1.pddl", 17)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/depot/domain.pddl", "../../../../../Dependencies/downward-benchmarks/depot/p01.pddl", 36)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/miconic/domain.pddl", "../../../../../Dependencies/downward-benchmarks/miconic/s1-0.pddl", 7)]
         public void Can_Translate_ExpectedInits(string domain, string problem, int expected)
         {
             // ARRANGE
@@ -154,7 +156,7 @@ namespace PDDLSharp.Translators.Tests
         }
 
         [TestMethod]
-        [DataRow("benchmarks/pathways/domain_p01.pddl", "benchmarks/pathways/p01.pddl", 48)]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/pathways/domain_p01.pddl", "../../../../../Dependencies/downward-benchmarks/pathways/p01.pddl", 48)]
         public void Can_Translate_ExpectedInits_NegativePreconditions(string domain, string problem, int expected)
         {
             // ARRANGE
@@ -171,7 +173,7 @@ namespace PDDLSharp.Translators.Tests
         }
 
         [TestMethod]
-        [DataRow("benchmarks/pathways/domain_p01.pddl", "benchmarks/pathways/p01.pddl", "choose")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/pathways/domain_p01.pddl", "../../../../../Dependencies/downward-benchmarks/pathways/p01.pddl", "choose")]
         public void Can_Translate_ExpectedInits_AddsNegatedFactsToOperators(string domain, string problem, params string[] ops)
         {
             // ARRANGE
@@ -201,8 +203,8 @@ namespace PDDLSharp.Translators.Tests
         }
 
         [TestMethod]
-        [DataRow("benchmarks/gripper/domain.pddl", "benchmarks/gripper/prob20.pddl")]
-        [DataRow("benchmarks/logistics98/domain.pddl", "benchmarks/logistics98/prob20.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/gripper/domain.pddl", "../../../../../Dependencies/downward-benchmarks/gripper/prob20.pddl")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/logistics98/domain.pddl", "../../../../../Dependencies/downward-benchmarks/logistics98/prob20.pddl")]
         public void Cant_Translate_IfTimedOut(string domain, string problem)
         {
             // ARRANGE

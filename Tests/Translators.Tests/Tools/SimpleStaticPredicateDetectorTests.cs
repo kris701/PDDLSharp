@@ -21,12 +21,14 @@ namespace PDDLSharp.Translators.Tests.Tools
         [ClassInitialize]
         public static async Task InitialiseAsync(TestContext context)
         {
-            await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/aibasel/downward-benchmarks/", "benchmarks");
+            var targetPath = "../../../../../Dependencies/downward-benchmarks";
+            if (!Directory.Exists(targetPath))
+                throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
         }
 
         [TestMethod]
-        [DataRow("benchmarks/gripper/domain.pddl", "room", "ball", "gripper")]
-        [DataRow("benchmarks/satellite/domain.pddl", "on_board", "supports", "calibration_target", "satellite", "direction", "instrument", "mode")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/gripper/domain.pddl", "room", "ball", "gripper")]
+        [DataRow("../../../../../Dependencies/downward-benchmarks/satellite/domain.pddl", "on_board", "supports", "calibration_target", "satellite", "direction", "instrument", "mode")]
         public void Can_Detect(string domain, params string[] expectedStatics)
         {
             // ARRANGE

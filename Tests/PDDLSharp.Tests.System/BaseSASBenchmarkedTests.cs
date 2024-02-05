@@ -22,7 +22,9 @@ namespace PDDLSharp.PDDLSharp.Tests.System
         public static async Task Setup()
         {
             await BaseBenchmarkedTests.Setup();
-            var targetPath = await GitFetcher.CheckAndDownloadBenchmarksAsync("https://github.com/kris701/PDDLBenchmarkPlans", "benchmarks-plans");
+            var targetPath = "../../../../../Dependencies/PDDLBenchmarkPlans";
+            if (!Directory.Exists(targetPath))
+                throw new DirectoryNotFoundException("Benchmarks not found! Please read the readme in the Dependencies folder!");
             foreach (var domainPath in Directory.GetDirectories(Path.Join(targetPath, "lama-first")))
             {
                 if (!ExcludedDomains.Contains(new DirectoryInfo(domainPath).Name))
