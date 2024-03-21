@@ -10,7 +10,7 @@
 ![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/kris701/PDDLSharp)
 ![Static Badge](https://img.shields.io/badge/Platform-Windows-blue)
 ![Static Badge](https://img.shields.io/badge/Platform-Linux-blue)
-![Static Badge](https://img.shields.io/badge/Framework-dotnet--7.0-green)
+![Static Badge](https://img.shields.io/badge/Framework-dotnet--8.0-green)
 
 Welcome to PDDLSharp!
 This wiki serves to document how to use different parts of PDDLSharp.
