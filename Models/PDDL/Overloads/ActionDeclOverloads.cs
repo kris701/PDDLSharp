@@ -13,7 +13,7 @@ namespace PDDLSharp.Models.PDDL.Overloads
                 self.Effects = new AndExp(self, new List<IExp>() { self.Effects });
         }
 
-        private static ActionDecl Annonymise(this ActionDecl action)
+        public static ActionDecl Annonymise(this ActionDecl action)
         {
             int argIndex = 0;
             var copy = action.Copy();
