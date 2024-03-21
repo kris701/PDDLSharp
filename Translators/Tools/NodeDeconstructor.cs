@@ -7,11 +7,11 @@ namespace PDDLSharp.Translators.Tools
 {
     public class NodeDeconstructor
     {
-        private OrDeconstructor _orDeconstructor;
-        private ForAllDeconstructor _forAllDeconstructor;
-        private ExistsDeconstructor _existsDeconstructor;
-        private ImplyDeconstructor _implyDeconstructor;
-        private ConditionalDeconstructor _conditionalDeconstructor;
+        private readonly OrDeconstructor _orDeconstructor;
+        private readonly ForAllDeconstructor _forAllDeconstructor;
+        private readonly ExistsDeconstructor _existsDeconstructor;
+        private readonly ImplyDeconstructor _implyDeconstructor;
+        private readonly ConditionalDeconstructor _conditionalDeconstructor;
 
         public NodeDeconstructor(IGrounder<IParametized> grounder)
         {

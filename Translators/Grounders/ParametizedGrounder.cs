@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Translators.StaticPredicateDetectors;
+using PDDLSharp.Translators.Tools;
 
 namespace PDDLSharp.Translators.Grounders
 {
@@ -9,8 +9,8 @@ namespace PDDLSharp.Translators.Grounders
     {
         public bool RemoveStaticsFromOutput { get; set; } = false;
 
-        private HashSet<PredicateExp> _statics;
-        private HashSet<PredicateExp> _inits;
+        private readonly HashSet<PredicateExp> _statics;
+        private readonly HashSet<PredicateExp> _inits;
         private Dictionary<int, List<int[]>> _staticsViolationPatterns;
         private List<PredicateViolationCheck> _staticsPreconditions;
         public ParametizedGrounder(PDDLDecl declaration) : base(declaration)

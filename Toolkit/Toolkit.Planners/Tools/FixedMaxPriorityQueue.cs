@@ -10,8 +10,8 @@
         public int Count => _keys.Count;
         public int Size { get; }
 
-        private List<int> _keys;
-        private List<T> _values;
+        private readonly List<int> _keys;
+        private readonly List<T> _values;
 
         public FixedMaxPriorityQueue(int size)
         {

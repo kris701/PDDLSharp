@@ -6,7 +6,7 @@ namespace PDDLSharp.Toolkit.Planners.Heuristics
 {
     public class hFF : BaseHeuristic
     {
-        private SASDecl _declaration;
+        private readonly SASDecl _declaration;
         private OperatorRPG _graphGenerator;
 
         public hFF(SASDecl declaration)

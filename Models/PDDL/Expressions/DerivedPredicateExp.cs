@@ -6,7 +6,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
 {
     public class DerivedPredicateExp : PredicateExp
     {
-        private List<DerivedDecl> _derivedDecls;
+        private readonly List<DerivedDecl> _derivedDecls;
         public List<DerivedDecl> GetDecls() => _derivedDecls;
         public void AddDecl(DerivedDecl decl) => _derivedDecls.Add(decl);
 

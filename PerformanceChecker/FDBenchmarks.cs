@@ -1,26 +1,11 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Jobs;
-using PDDLSharp.Analysers.PDDL;
-using PDDLSharp.Analysers;
-using PDDLSharp.CodeGenerators.PDDL;
-using PDDLSharp.CodeGenerators;
-using PDDLSharp.Contextualisers.PDDL;
-using PDDLSharp.Contextualisers;
 using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Models.PDDL;
-using PDDLSharp.Parsers.PDDL;
-using PDDLSharp.Parsers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PDDLSharp.Parsers.FastDownward.SAS;
-using PDDLSharp.Parsers.FastDownward.Plans;
 using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.FastDownward.SAS;
+using PDDLSharp.Parsers;
+using PDDLSharp.Parsers.FastDownward.Plans;
+using PDDLSharp.Parsers.FastDownward.SAS;
 
 namespace PerformanceChecker
 {
@@ -29,10 +14,10 @@ namespace PerformanceChecker
     {
         public static string _plan = File.ReadAllText("prob05.plan");
         public static string _sas = File.ReadAllText("prob05.sas");
-        private IErrorListener _listener1 = new ErrorListener();
-        private IParser<ActionPlan> _parser1;
-        private IErrorListener _listener2 = new ErrorListener();
-        private IParser<ISASNode> _parser2;
+        private readonly IErrorListener _listener1 = new ErrorListener();
+        private readonly IParser<ActionPlan> _parser1;
+        private readonly IErrorListener _listener2 = new ErrorListener();
+        private readonly IParser<ISASNode> _parser2;
 
         public FDBenchmarks()
         {

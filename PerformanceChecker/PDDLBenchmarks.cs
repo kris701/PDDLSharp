@@ -12,12 +12,6 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PerformanceChecker
 {
@@ -26,20 +20,20 @@ namespace PerformanceChecker
     {
         public static string _domain = File.ReadAllText("domain.pddl");
         public static string _problem = File.ReadAllText("prob05.pddl");
-        private IErrorListener _listener1 = new ErrorListener();
-        private IParser<INode> _parser1;
-        private IErrorListener _listener2 = new ErrorListener();
-        private IParser<INode> _parser2;
-        private IErrorListener _listener3 = new ErrorListener();
-        private IParser<INode> _parser3;
-        private IContextualiser _contextualiser1;
-        private PDDLDecl _contextDecl;
-        private IErrorListener _listener4 = new ErrorListener();
-        private IAnalyser<PDDLDecl> _analyser1;
-        private IErrorListener _listener5 = new ErrorListener();
-        private ICodeGenerator<INode> _codeGenerator1;
-        private IErrorListener _listener6 = new ErrorListener();
-        private ICodeGenerator<INode> _codeGenerator2;
+        private readonly IErrorListener _listener1 = new ErrorListener();
+        private readonly IParser<INode> _parser1;
+        private readonly IErrorListener _listener2 = new ErrorListener();
+        private readonly IParser<INode> _parser2;
+        private readonly IErrorListener _listener3 = new ErrorListener();
+        private readonly IParser<INode> _parser3;
+        private readonly IContextualiser _contextualiser1;
+        private readonly PDDLDecl _contextDecl;
+        private readonly IErrorListener _listener4 = new ErrorListener();
+        private readonly IAnalyser<PDDLDecl> _analyser1;
+        private readonly IErrorListener _listener5 = new ErrorListener();
+        private readonly ICodeGenerator<INode> _codeGenerator1;
+        private readonly IErrorListener _listener6 = new ErrorListener();
+        private readonly ICodeGenerator<INode> _codeGenerator2;
 
         public PDDLBenchmarks()
         {

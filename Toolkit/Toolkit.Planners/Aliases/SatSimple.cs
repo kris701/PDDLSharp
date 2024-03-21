@@ -9,7 +9,7 @@ namespace PDDLSharp.Toolkit.Planners.Aliases
     public class SatSimple : IHeuristic
     {
         public int Evaluations => _inner.Evaluations;
-        private IHeuristic _inner;
+        private readonly IHeuristic _inner;
 
         public SatSimple(SASDecl decl)
         {

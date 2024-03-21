@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Models.FastDownward.SAS.Sections;
 
-namespace PDDLSharp.CodeGenerators.SAS
+namespace PDDLSharp.CodeGenerators.FastDownward.SAS
 {
     public class SectionVisitor
     {

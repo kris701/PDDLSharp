@@ -15,14 +15,14 @@ namespace TestTools
     {
         public static string DataPath = "../../../../../Dependencies/";
 
-        private static long MaxPDDLFileSize = 10000;
-        private static long MaxProblemsPrDomain = 5;
+        private static readonly long MaxPDDLFileSize = 10000;
+        private static readonly long MaxProblemsPrDomain = 5;
 
-        private static long MaxPlanFileSize = 10000;
-        private static long MaxPlansPrDomain = 5;
+        private static readonly long MaxPlanFileSize = 10000;
+        private static readonly long MaxPlansPrDomain = 5;
 
-        private static long MaxSASFileSize = 10000;
-        private static long MaxSASPrDomain = 5;
+        private static readonly long MaxSASFileSize = 10000;
+        private static readonly long MaxSASPrDomain = 5;
 
         public static Dictionary<string, List<string>> _pddlFiles = new Dictionary<string, List<string>>();
         public static bool _isPDDLSetup = false;
@@ -167,7 +167,7 @@ namespace TestTools
                     yield return new object[] { domainName, sasFile };
         }
 
-        private static Dictionary<string, PDDLDecl> _declCache = new Dictionary<string, PDDLDecl>();
+        private static readonly Dictionary<string, PDDLDecl> _declCache = new Dictionary<string, PDDLDecl>();
         public static PDDLDecl GetPDDLDecl(string domain, string problem = "")
         {
             if (_declCache.ContainsKey(domain + problem))
@@ -189,7 +189,7 @@ namespace TestTools
             return decl;
         }
 
-        private static Dictionary<string, ActionPlan> _planCache = new Dictionary<string, ActionPlan>();
+        private static readonly Dictionary<string, ActionPlan> _planCache = new Dictionary<string, ActionPlan>();
         public static ActionPlan GetActionPlan(string plan)
         {
             if (_planCache.ContainsKey(plan))
@@ -204,7 +204,7 @@ namespace TestTools
             return planDecl;
         }
 
-        private static Dictionary<string, SASDecl> _sasCache = new Dictionary<string, SASDecl>();
+        private static readonly Dictionary<string, SASDecl> _sasCache = new Dictionary<string, SASDecl>();
         public static SASDecl GetSASDecl(string sasFile)
         {
             if (_sasCache.ContainsKey(sasFile))

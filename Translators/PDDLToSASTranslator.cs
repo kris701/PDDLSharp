@@ -3,6 +3,7 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Overloads;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Tools;
@@ -26,7 +27,7 @@ namespace PDDLSharp.Translators
         private int _factID = 0;
         private int _opID = 0;
         private HashSet<Fact> _negativeFacts = new HashSet<Fact>();
-        private string _negatedPrefix = "$neg-";
+        private readonly string _negatedPrefix = "$neg-";
 
         public PDDLToSASTranslator(bool removeStaticsFromOutput = false)
         {
@@ -246,8 +247,7 @@ namespace PDDLSharp.Translators
             var operators = new List<Operator>();
             foreach (var action in decl.Domain.Actions)
             {
-                action.Preconditions = EnsureAnd(action.Preconditions);
-                action.Effects = EnsureAnd(action.Effects);
+                action.EnsureAnd();
                 if (Aborted) return new List<Operator>();
                 var deconstructedActions = deconstructor.DeconstructAction(action);
                 foreach (var deconstructed in deconstructedActions)

@@ -21,7 +21,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
         public int NumberOfMacros { get; set; } = 8;
         public int SearchBudget { get; set; } = 1;
 
-        private PDDLDecl _pddlDecl;
+        private readonly PDDLDecl _pddlDecl;
 
         public GreedyBFSFocused(PDDLDecl pddlDecl, SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
@@ -146,7 +146,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.BlackBox
 
         private class EffectHeuristic : BaseHeuristic
         {
-            private ISASState _initial;
+            private readonly ISASState _initial;
             public EffectHeuristic(ISASState initial)
             {
                 _initial = initial;
