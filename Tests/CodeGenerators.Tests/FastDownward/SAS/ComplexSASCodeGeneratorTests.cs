@@ -1,6 +1,5 @@
 ﻿using PDDLSharp.CodeGenerators;
-using PDDLSharp.CodeGenerators.Plans;
-using PDDLSharp.CodeGenerators.SAS;
+using PDDLSharp.CodeGenerators.FastDownward.SAS;
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.FastDownward.SAS;
 using PDDLSharp.Parsers;
