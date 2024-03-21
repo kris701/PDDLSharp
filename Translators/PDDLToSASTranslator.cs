@@ -3,6 +3,7 @@ using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Overloads;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Tools;
@@ -246,8 +247,7 @@ namespace PDDLSharp.Translators
             var operators = new List<Operator>();
             foreach (var action in decl.Domain.Actions)
             {
-                action.Preconditions = EnsureAnd(action.Preconditions);
-                action.Effects = EnsureAnd(action.Effects);
+                action.EnsureAnd();
                 if (Aborted) return new List<Operator>();
                 var deconstructedActions = deconstructor.DeconstructAction(action);
                 foreach (var deconstructed in deconstructedActions)

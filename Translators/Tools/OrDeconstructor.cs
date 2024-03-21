@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Overloads;
 
 namespace PDDLSharp.Translators.Tools
 {
@@ -16,8 +17,7 @@ namespace PDDLSharp.Translators.Tools
 
         private List<ActionDecl> GeneratePossibleActions(ActionDecl source)
         {
-            source.Preconditions = EnsureAnd(source.Preconditions);
-            source.Effects = EnsureAnd(source.Effects);
+            source.EnsureAnd();
             var returnList = new List<ActionDecl>();
             DeconstructNodeRec(source, returnList);
             if (Aborted) return new List<ActionDecl>();
@@ -76,13 +76,6 @@ namespace PDDLSharp.Translators.Tools
             if (current == until) return 0;
             if (current.Parent == null) return 0;
             return 1 + Depth(current.Parent, until);
-        }
-
-        private IExp EnsureAnd(IExp exp)
-        {
-            if (exp is AndExp)
-                return exp;
-            return new AndExp(new List<IExp>() { exp });
         }
     }
 }
