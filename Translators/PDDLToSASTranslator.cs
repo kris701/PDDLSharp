@@ -27,7 +27,7 @@ namespace PDDLSharp.Translators
         private int _factID = 0;
         private int _opID = 0;
         private HashSet<Fact> _negativeFacts = new HashSet<Fact>();
-        private string _negatedPrefix = "$neg-";
+        private readonly string _negatedPrefix = "$neg-";
 
         public PDDLToSASTranslator(bool removeStaticsFromOutput = false)
         {

@@ -12,7 +12,7 @@ namespace PDDLSharp.Toolkit.Planners.Search.Classical
     /// </summary>
     public class GreedyBFSPO : BaseClassicalSearch
     {
-        private OperatorRPG _graphGenerator;
+        private readonly OperatorRPG _graphGenerator;
         public GreedyBFSPO(SASDecl decl, IHeuristic heuristic) : base(decl, heuristic)
         {
             _graphGenerator = new OperatorRPG(decl);

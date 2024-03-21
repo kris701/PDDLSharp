@@ -7,6 +7,7 @@ using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers.PDDL;
 using PDDLSharp.Tools;
 using PDDLSharp.Translators.StaticPredicateDetectors;
+using PDDLSharp.Translators.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;

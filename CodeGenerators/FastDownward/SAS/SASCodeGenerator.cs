@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.FastDownward.SAS;
 
-namespace PDDLSharp.CodeGenerators.SAS
+namespace PDDLSharp.CodeGenerators.FastDownward.SAS
 {
     public class SASCodeGenerator : ICodeGenerator<ISASNode>
     {

@@ -1,18 +1,5 @@
 ﻿using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
-using PDDLSharp.Analysers.PDDL;
-using PDDLSharp.CodeGenerators.PDDL;
-using PDDLSharp.Contextualisers.PDDL;
-using PDDLSharp.ErrorListeners;
-using PDDLSharp.Models.PDDL;
-using PDDLSharp.Models.PDDL.Domain;
-using PDDLSharp.Models.PDDL.Problem;
-using PDDLSharp.Parsers.FastDownward.SAS;
-using PDDLSharp.Parsers.PDDL;
-using PDDLSharp.Toolkit.Planners.Heuristics;
-using PDDLSharp.Toolkit.Planners.Search.Classical;
-using PDDLSharp.Tools;
-using PDDLSharp.Translators;
 using System.Text;
 using ToMarkdown;
 
@@ -33,9 +20,9 @@ namespace PerformanceChecker
             "zenotravel"
         };
 #if DEBUG
-        private static int _iterations = 1;
-        private static int _firstNProblems = 1;
-        private static int _searchTimeLimit = 1;
+        private static readonly int _iterations = 1;
+        private static readonly int _firstNProblems = 1;
+        private static readonly int _searchTimeLimit = 1;
 #else
         private static int _iterations = 3;
         private static int _firstNProblems = 5;
