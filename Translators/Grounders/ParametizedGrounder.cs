@@ -2,7 +2,6 @@
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Toolkits;
-using PDDLSharp.Translators.Tools;
 
 namespace PDDLSharp.Translators.Grounders
 {

@@ -30,8 +30,6 @@ If you encounter any problems, please make sure you have read through the wiki f
 * Toolkit
     * [Macro Generators](./Toolkit/Toolkit.MacroGenerators/readme.md)
     * [Mutex Detectors](./Toolkit/Toolkit.MutexDetectors/readme.md)
-    * [PlanValidators](./Toolkit/Toolkit.PlanValidators/readme.md)
-    * [Simulators](./Toolkit/Toolkit.Simulators/readme.md)
 * Miscellaneous
     * [Error Listeners](./ErrorListeners/readme.md)
     * [Tests](./Tests/readme.md)
