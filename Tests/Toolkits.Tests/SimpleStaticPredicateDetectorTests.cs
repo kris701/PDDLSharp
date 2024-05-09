@@ -5,16 +5,13 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
-using PDDLSharp.Toolkits;
-using PDDLSharp.Tools;
-using PDDLSharp.Translators.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Translators.Tests.Tools
+namespace PDDLSharp.Toolkits
 {
     [TestClass]
     public class SimpleStaticPredicateDetectorTests

@@ -22,12 +22,3 @@ These benchmarks are based on a single gripper domain
 | SAS Parsing | 682.6 μs | 11634 B | 17.04 |
 | Plan Parsing | 27.8 μs | 863 B | 31.04 |
 
-
-## Translation and Planners
-| Name | Time | Size | Throughput (MB/s) |
-| - | - | - | - |
-| Translation | 5542.6 μs | 2333 B | 0.42 |
-| Solve hGoal | 983.9 μs | 2333 B | 2.37 |
-| Solve hFF | 10237.6 μs | 2333 B | 0.23 |
-
-

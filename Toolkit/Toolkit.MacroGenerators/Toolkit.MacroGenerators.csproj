@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Models\Models.csproj" />
+    <ProjectReference Include="..\..\Toolkits\Toolkits.csproj" />
   </ItemGroup>
 
 </Project>

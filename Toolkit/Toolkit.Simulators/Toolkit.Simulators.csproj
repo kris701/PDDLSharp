@@ -12,7 +12,6 @@
     <ProjectReference Include="..\..\Contextualisers\Contextualisers.csproj" />
     <ProjectReference Include="..\..\Models\Models.csproj" />
     <ProjectReference Include="..\..\StateSpaces\StateSpaces.csproj" />
-    <ProjectReference Include="..\..\Translators\Translators.csproj" />
   </ItemGroup>
 
 </Project>

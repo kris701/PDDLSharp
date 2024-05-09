@@ -2,14 +2,13 @@
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
-using PDDLSharp.Toolkit.MacroGenerators.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLSharp.Toolkit.MacroGenerators.Tests
+namespace PDDLSharp.Toolkits
 {
     [TestClass]
     public class SimpleActionCombinerTests

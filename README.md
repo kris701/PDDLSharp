@@ -26,10 +26,10 @@ If you encounter any problems, please make sure you have read through the wiki f
 * [Code Generators](./CodeGenerators/readme.md)
 * [Translators](./Translators/readme.md)
 * [State Spaces](./StateSpaces/readme.md)
+* [Toolkits](./Toolkits/readme.md)
 * Toolkit
     * [Macro Generators](./Toolkit/Toolkit.MacroGenerators/readme.md)
     * [Mutex Detectors](./Toolkit/Toolkit.MutexDetectors/readme.md)
-    * [Planners](./Toolkit/Toolkit.Planners/readme.md)
     * [PlanValidators](./Toolkit/Toolkit.PlanValidators/readme.md)
     * [Simulators](./Toolkit/Toolkit.Simulators/readme.md)
 * Miscellaneous

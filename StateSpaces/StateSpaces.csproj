@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -9,7 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Contextualisers\Contextualisers.csproj" />
+    <ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Toolkits\Toolkits.csproj" />
     <ProjectReference Include="..\Translators\Translators.csproj" />
   </ItemGroup>
 

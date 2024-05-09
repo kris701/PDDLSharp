@@ -12,6 +12,7 @@
     <ProjectReference Include="..\Contextualisers\Contextualisers.csproj" />
     <ProjectReference Include="..\ErrorListeners\ErrorListeners.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Toolkits\Toolkits.csproj" />
   </ItemGroup>
 
 </Project>

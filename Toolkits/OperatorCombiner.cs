@@ -1,7 +1,7 @@
 ﻿using PDDLSharp.Models.SAS;
 using PDDLSharp.Tools;
 
-namespace PDDLSharp.Toolkit.MacroGenerators.Tools
+namespace PDDLSharp.Toolkits
 {
     public class OperatorCombiner
     {

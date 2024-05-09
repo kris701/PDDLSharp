@@ -85,30 +85,6 @@ namespace PerformanceChecker
             return result;
         }
 
-        private static List<ThroughputResult> PlannerBenchmarks()
-        {
-            var result = new List<ThroughputResult>();
-#if DEBUG
-            var summary = BenchmarkRunner.Run<PlannerBenchmarks>(new DebugInProcessConfig());
-#else
-            var summary = BenchmarkRunner.Run<PlannerBenchmarks>();
-#endif
-            var targetHeader = summary.Table.Columns.First(x => x.Header.ToUpper() == "MEAN").Index;
-            result.Add(new ThroughputResult(
-                summary.Table.Columns[0].Content[0],
-                TimeSpan.FromMicroseconds(Convert.ToDouble(summary.Table.Columns[targetHeader].Content[0].Replace("μs", ""))),
-                PerformanceChecker.PlannerBenchmarks._domain.Length + PerformanceChecker.PlannerBenchmarks._problem.Length));
-            result.Add(new ThroughputResult(
-                summary.Table.Columns[0].Content[1],
-                TimeSpan.FromMicroseconds(Convert.ToDouble(summary.Table.Columns[targetHeader].Content[1].Replace("μs", ""))),
-                PerformanceChecker.PlannerBenchmarks._domain.Length + PerformanceChecker.PlannerBenchmarks._problem.Length));
-            result.Add(new ThroughputResult(
-                summary.Table.Columns[0].Content[2],
-                TimeSpan.FromMicroseconds(Convert.ToDouble(summary.Table.Columns[targetHeader].Content[2].Replace("μs", ""))),
-                PerformanceChecker.PlannerBenchmarks._domain.Length + PerformanceChecker.PlannerBenchmarks._problem.Length));
-            return result;
-        }
-
         static async Task Main(string[] args)
         {
             var sb = new StringBuilder();
@@ -127,11 +103,6 @@ namespace PerformanceChecker
             sb.AppendLine();
             sb.AppendLine("## Fast Downward");
             sb.AppendLine(FDBenchmarks().ToMarkdownTable(
-                new List<string>() { "*", "Time", "Size", "Throughput (MB/s)" }
-                ));
-            sb.AppendLine();
-            sb.AppendLine("## Translation and Planners");
-            sb.AppendLine(PlannerBenchmarks().ToMarkdownTable(
                 new List<string>() { "*", "Time", "Size", "Throughput (MB/s)" }
                 ));
             sb.AppendLine();

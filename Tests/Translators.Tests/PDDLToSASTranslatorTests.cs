@@ -5,6 +5,7 @@ using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers.PDDL;
+using PDDLSharp.Toolkits;
 using PDDLSharp.Tools;
 using PDDLSharp.Translators.Tools;
 using System;

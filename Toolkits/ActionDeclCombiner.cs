@@ -3,7 +3,7 @@ using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
 using PDDLSharp.Tools;
 
-namespace PDDLSharp.Toolkit.MacroGenerators.Tools
+namespace PDDLSharp.Toolkits
 {
     public class ActionDeclCombiner
     {
