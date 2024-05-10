@@ -1,6 +1,5 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.SAS;
-using PDDLSharp.StateSpaces.SAS;
 
 namespace PDDLSharp.Analysers.SAS
 {
@@ -20,7 +19,6 @@ namespace PDDLSharp.Analysers.SAS
             // Reachability Tests
             InitReachabilityCheck(decl);
             GoalReachabilityCheck(decl);
-            RelaxedReachabilityCheck(decl);
         }
 
         public void CheckForBasicSAS(SASDecl decl)
@@ -87,38 +85,6 @@ namespace PDDLSharp.Analysers.SAS
                         $"No operator can make goal fact '{goal}' true!",
                         ParseErrorType.Warning,
                         ParseErrorLevel.Analyser));
-            }
-        }
-
-        public void RelaxedReachabilityCheck(SASDecl decl)
-        {
-            var state = new RelaxedSASStateSpace(decl);
-            while (!state.IsInGoal())
-            {
-                var toExecute = new List<Operator>();
-                foreach (var op in decl.Operators)
-                    if (state.IsNodeTrue(op))
-                        toExecute.Add(op);
-                if (toExecute.Count == 0)
-                {
-                    Listener.AddError(new PDDLSharpError(
-                        $"No relaxed plan could be found for the SAS task! This could indicate that the problem is unsolvable...",
-                        ParseErrorType.Warning,
-                        ParseErrorLevel.Analyser));
-                    break;
-                }
-
-                int preCount = state.Count;
-                foreach (var execute in toExecute)
-                    state.ExecuteNode(execute);
-                if (state.Count == preCount)
-                {
-                    Listener.AddError(new PDDLSharpError(
-                        $"No relaxed plan could be found for the SAS task! This could indicate that the problem is unsolvable...",
-                        ParseErrorType.Warning,
-                        ParseErrorLevel.Analyser));
-                    break;
-                }
             }
         }
     }

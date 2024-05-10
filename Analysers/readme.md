@@ -36,7 +36,6 @@ The SAS Analyser can:
 * Check for valid general SAS structure (e.g. if there are any operators or not)
 * Check if there are any actions that is applicable from the initial state
 * Check if there are any actions that can result in the goal state
-* Check if there is a relaxed plan for the [SASDecl](../Models/SAS/SASDecl.cs)
 
 #### Examples
 Example of taking in a domain/problem pddl file, translating it and then analysing it

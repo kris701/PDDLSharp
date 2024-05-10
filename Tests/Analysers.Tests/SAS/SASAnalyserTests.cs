@@ -2,7 +2,6 @@
 using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.SAS;
 using PDDLSharp.Parsers.PDDL;
-using PDDLSharp.Translators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -278,54 +277,6 @@ namespace PDDLSharp.Analysers.Tests.SAS
 
             // ASSERT
             Assert.AreEqual(0, listener.Errors.Count);
-        }
-
-        #endregion
-
-        #region RelaxedReachabilityCheck
-
-        [TestMethod]
-        [DataRow("SAS/TestFiles/gripper-domain.pddl", "SAS/TestFiles/gripper-prob01.pddl")]
-        [DataRow("SAS/TestFiles/satellite-domain.pddl", "SAS/TestFiles/satellite-prob01.pddl")]
-        public void Can_RelaxedReachabilityCheck_Valid(string domain, string problem)
-        {
-            // ARRANGE
-            IErrorListener listener = new ErrorListener();
-            var parser = new PDDLParser(listener);
-            var pddlDecl = parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
-            var translator = new PDDLToSASTranslator();
-            var decl = translator.Translate(pddlDecl);
-            var analyser = new SASAnalyser(listener);
-            listener.Errors.Clear();
-
-            // ACT
-            analyser.RelaxedReachabilityCheck(decl);
-
-            // ASSERT
-            Assert.AreEqual(0, listener.Errors.Count);
-        }
-
-        [TestMethod]
-        [DataRow("SAS/TestFiles/gripper-domain.pddl", "SAS/TestFiles/gripper-prob01.pddl")]
-        [DataRow("SAS/TestFiles/satellite-domain.pddl", "SAS/TestFiles/satellite-prob01.pddl")]
-        public void Can_RelaxedReachabilityCheck_InValid(string domain, string problem)
-        {
-            // ARRANGE
-            IErrorListener listener = new ErrorListener();
-            var parser = new PDDLParser(listener);
-            var pddlDecl = parser.ParseDecl(new FileInfo(domain), new FileInfo(problem));
-            var translator = new PDDLToSASTranslator();
-            var decl = translator.Translate(pddlDecl);
-            var analyser = new SASAnalyser(listener);
-            listener.Errors.Clear();
-
-            decl.Goal.Add(new Fact("non-existentfact"));
-
-            // ACT
-            analyser.RelaxedReachabilityCheck(decl);
-
-            // ASSERT
-            Assert.AreEqual(1, listener.Errors.Count);
         }
 
         #endregion

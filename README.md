@@ -25,7 +25,6 @@ If you encounter any problems, please make sure you have read through the wiki f
 * [Analysers](./Analysers/readme.md)
 * [Code Generators](./CodeGenerators/readme.md)
 * [Translators](./Translators/readme.md)
-* [State Spaces](./StateSpaces/readme.md)
 * [Toolkits](./Toolkits/readme.md)
 * Toolkit
     * [Macro Generators](./Toolkit/Toolkit.MacroGenerators/readme.md)
