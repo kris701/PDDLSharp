@@ -1,55 +1,5 @@
 Translators are capable of taking in one format, and transform it into another.
 
-# PDDL to SAS Translator
-![Static Badge](https://img.shields.io/badge/Namespace-PDDLSharp.Translators-orange)
-
-This is a translator that can convert a [PDDLDecl](../Models/PDDL/PDDLDecl.cs) into a [SASDecl](../Models/SAS/SASDecl.cs) format.
-
-This is used for the [planners](https://github.com/kris701/PDDLSharp/wiki/8.-Toolkit#planners), since they work a lot better with the more "raw" SAS format.
-
-There are also a few subcomponents in the translator project, that can be used for grounding or static predicate detection.
-
-#### Supported PDDL Requirements
-Here is the set of requirements that the translator supports.
-
-- [x] STRIPS (`:strips`)
-- [x] Typing (`:typing`)
-- [X] Disjunctive Preconditions (`:disjunctive-preconditions`)
-- [X] Equality (`:equality`)
-- [x] Quantified Preconditions (`:quantified-preconditions`)
-    - [x] Existential Preconditions (`:existential-preconditions`)
-    - [x] Universal Preconditions (`:universal-preconditions`)
-- [X] Conditional Effects (`:conditional-effects`)
-- [ ] Domain Axioms (`:domain-axioms`)
-    - [ ] Subgoals Through Axioms (`:subgoals-through-axioms`)
-    - [ ] Expression Evaluation (`:expression-evaluation`)
-- [X] ADL (`:adl`)
-- [ ] Fluents (`:fluents`)
-- [ ] Durative Actions (`:durative-actions`)
-    - [ ] Durative Inequalities (`:durative-inequalities`)
-    - [ ] Continuous Effects (`:continuous-effects`)
-- [X] Negative Preconditions (`:negative-preconditions`)
-- [ ] Derived Predicates (`:derived-predicates`)
-- [ ] Timed Initial Literals (`:timed-initial-literals`)
-- [ ] Action Expansions (`:action-expansions`)
-- [ ] Foreach Expansions (`:forach-expansions`)
-- [ ] DAG Expansions (`:dag-expansions`)
-- [ ] Safety Constraints (`:safety-constraints`)
-- [ ] Open World (`:open-world`)
-- [ ] True Negation (`:true-negation`)
-- [ ] UCPOP (`:ucpop`)
-- [ ] Constraints (`:constraints`)
-- [ ] Preferences (`:preferences`)
-
-#### Examples
-```csharp
-IErrorListener listener = new ErrorListener();
-IParser<INode> parser = new PDDLParser(listener);
-PDDLDecl decl = new PDDLDecl(...)
-ITranslator translator = new PDDLToSASTranslator();
-SASDecl sas = translator.Translate(decl);
-```
-
 ## Grounders
 ![Static Badge](https://img.shields.io/badge/Namespace-PDDLSharp.PDDLSharp.Translators.Grounders-orange)
 
