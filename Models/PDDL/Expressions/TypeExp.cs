@@ -12,58 +12,46 @@ namespace PDDLSharp.Models.PDDL.Expressions
 
         public TypeExp(ASTNode node, INode? parent, string name, string superType, HashSet<string> altTypes) : base(node, parent, name)
         {
-            SuperType = superType;
-            if (SuperType == "")
-                SuperType = "object";
+            SuperType = EnsureObjectType(superType);
             SuperTypes = new HashSet<string>();
             foreach (var type in altTypes)
-                SuperTypes.Add(type);
+                SuperTypes.Add(EnsureObjectType(type));
             SuperTypes.Add(SuperType);
         }
 
         public TypeExp(INode? parent, string name, string superType, HashSet<string> altTypes) : base(parent, name)
         {
-            SuperType = superType;
-            if (SuperType == "")
-                SuperType = "object";
+            SuperType = EnsureObjectType(superType);
             SuperTypes = new HashSet<string>();
             foreach (var type in altTypes)
-                SuperTypes.Add(type);
+                SuperTypes.Add(EnsureObjectType(type));
             SuperTypes.Add(SuperType);
         }
 
         public TypeExp(string name, string superType, HashSet<string> altTypes) : base(name)
         {
-            SuperType = superType;
-            if (SuperType == "")
-                SuperType = "object";
+            SuperType = EnsureObjectType(superType);
             SuperTypes = new HashSet<string>();
             foreach (var type in altTypes)
-                SuperTypes.Add(type);
+                SuperTypes.Add(EnsureObjectType(type));
             SuperTypes.Add(SuperType);
         }
 
         public TypeExp(ASTNode node, INode? parent, string name, string superType) : base(node, parent, name)
         {
-            SuperType = superType;
-            if (SuperType == "")
-                SuperType = "object";
+            SuperType = EnsureObjectType(superType);
             SuperTypes = new HashSet<string>() { SuperType };
         }
 
         public TypeExp(INode? parent, string name, string superType) : base(parent, name)
         {
-            SuperType = superType;
-            if (SuperType == "")
-                SuperType = "object";
+            SuperType = EnsureObjectType(superType);
             SuperTypes = new HashSet<string>() { SuperType };
         }
 
         public TypeExp(string name, string superType) : base(name)
         {
-            SuperType = superType;
-            if (SuperType == "")
-                SuperType = "object";
+            SuperType = EnsureObjectType(superType);
             SuperTypes = new HashSet<string>() { SuperType };
         }
 
@@ -92,6 +80,13 @@ namespace PDDLSharp.Models.PDDL.Expressions
             if (typeName == Name)
                 return true;
             return SuperTypes.Any(x => x == typeName);
+        }
+
+        private string EnsureObjectType(string type)
+        {
+            if (type == "")
+                return "object";
+            return type;
         }
 
         public override bool Equals(object? obj)

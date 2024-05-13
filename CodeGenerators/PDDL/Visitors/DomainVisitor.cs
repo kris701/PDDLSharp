@@ -35,6 +35,9 @@ namespace PDDLSharp.CodeGenerators.Visitors
             if (node.Actions != null)
                 foreach (var act in node.Actions)
                     retStr.AppendLine(Visit(act, indent + 1));
+            if (node.Deriveds != null)
+                foreach (var act in node.Deriveds)
+                    retStr.AppendLine(Visit(act, indent + 1));
             if (node.Axioms != null)
                 foreach (var axi in node.Axioms)
                     retStr.AppendLine(Visit(axi, indent + 1));
@@ -97,7 +100,9 @@ namespace PDDLSharp.CodeGenerators.Visitors
             if (node.IsHidden)
                 return "";
             var retStr = new StringBuilder($"{IndentStr(indent)}(:derived{Environment.NewLine}");
+            PrintTypes(true);
             retStr.AppendLine($"{IndentStr(indent + 1)}{Visit(node.Predicate, indent + 2)}");
+            PrintTypes(false);
             retStr.AppendLine($"{IndentStr(indent + 1)}{Visit((dynamic)node.Expression, indent + 2)}");
             retStr.AppendLine($"{IndentStr(indent)})");
             return retStr.ToString();

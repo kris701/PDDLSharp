@@ -43,6 +43,24 @@ namespace PDDLSharp.CodeGenerators.Tests.PDDL
             var newDomainDecl = parser.ParseAs<DomainDecl>(new FileInfo("temp.pddl"));
 
             // ASSERT
+            Assert.AreEqual(initialDecl.Name, newDomainDecl.Name);
+            Assert.AreEqual(initialDecl.Requirements, newDomainDecl.Requirements);
+            Assert.AreEqual(initialDecl.Types, newDomainDecl.Types);
+            Assert.AreEqual(initialDecl.Predicates, newDomainDecl.Predicates);
+            Assert.AreEqual(initialDecl.Actions.Count, newDomainDecl.Actions.Count);
+            for (int i = 0; i < initialDecl.Actions.Count; i++)
+                Assert.AreEqual(initialDecl.Actions[i], newDomainDecl.Actions[i]);
+            Assert.AreEqual(initialDecl.DurativeActions.Count, newDomainDecl.DurativeActions.Count);
+            for (int i = 0; i < initialDecl.DurativeActions.Count; i++)
+                Assert.AreEqual(initialDecl.DurativeActions[i], newDomainDecl.DurativeActions[i]);
+            Assert.AreEqual(initialDecl.Deriveds.Count, newDomainDecl.Deriveds.Count);
+            for (int i = 0; i < initialDecl.Deriveds.Count; i++)
+                Assert.AreEqual(initialDecl.Deriveds[i], newDomainDecl.Deriveds[i]);
+            Assert.AreEqual(initialDecl.Axioms.Count, newDomainDecl.Axioms.Count);
+            for (int i = 0; i < initialDecl.Axioms.Count; i++)
+                Assert.AreEqual(initialDecl.Axioms[i], newDomainDecl.Axioms[i]);
+
+            Assert.AreEqual(initialDecl, newDomainDecl);
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
         }
 
@@ -58,9 +76,19 @@ namespace PDDLSharp.CodeGenerators.Tests.PDDL
 
             // ACT
             generator.Generate(initialDecl, "temp.pddl");
-            var newDomainDecl = parser.ParseAs<ProblemDecl>(new FileInfo("temp.pddl"));
+            var newProblemDecl = parser.ParseAs<ProblemDecl>(new FileInfo("temp.pddl"));
 
             // ASSERT
+            Assert.AreEqual(initialDecl.Name, newProblemDecl.Name);
+            Assert.AreEqual(initialDecl.DomainName, newProblemDecl.DomainName);
+            Assert.AreEqual(initialDecl.Requirements, newProblemDecl.Requirements);
+            Assert.AreEqual(initialDecl.Situation, newProblemDecl.Situation);
+            Assert.AreEqual(initialDecl.Objects, newProblemDecl.Objects);
+            Assert.AreEqual(initialDecl.Init, newProblemDecl.Init);
+            Assert.AreEqual(initialDecl.Goal, newProblemDecl.Goal);
+            Assert.AreEqual(initialDecl.Metric, newProblemDecl.Metric);
+
+            Assert.AreEqual(initialDecl, newProblemDecl);
             Assert.IsFalse(listener.Errors.Any(x => x.Type == ParseErrorType.Error));
         }
     }

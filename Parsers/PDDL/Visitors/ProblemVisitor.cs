@@ -110,9 +110,7 @@ namespace PDDLSharp.Parsers.Visitors
             {
                 var newInit = new InitDecl(node, parent, new List<IExp>());
                 var preds = ParseAsList<IExp>(node, newInit, false);
-                var nums = ParseAsList<NumericExp>(node, newInit, false);
                 newInit.Predicates.AddRange(preds);
-                newInit.Predicates.AddRange(nums);
                 return newInit;
             }
             return null;
