@@ -71,6 +71,7 @@ namespace PDDLSharp.ASTGenerators.Tests.FastDownward.SAS
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IGenerator parser = new SASASTGenerator(listener);
+            parser.SaveLinePlacements = true;
 
             // ACT
             var res = parser.Generate(toParse);

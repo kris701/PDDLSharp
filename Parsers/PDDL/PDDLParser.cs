@@ -42,6 +42,7 @@ namespace PDDLSharp.Parsers.PDDL
         public override U ParseAs<U>(string text)
         {
             IGenerator astParser = new PDDLASTGenerator(Listener);
+            astParser.SaveLinePlacements = SaveLinePlacements;
             var absAST = astParser.Generate(text);
 
             var visitor = new ParserVisitor(Listener);

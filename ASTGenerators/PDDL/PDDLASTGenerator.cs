@@ -1,6 +1,7 @@
 ﻿using PDDLSharp.ErrorListeners;
 using PDDLSharp.Models.AST;
 using PDDLSharp.Tools;
+using System.Text;
 
 namespace PDDLSharp.ASTGenerators.PDDL
 {
@@ -39,20 +40,23 @@ namespace PDDLSharp.ASTGenerators.PDDL
             {
                 var firstP = text.IndexOf('(');
                 var lastP = text.LastIndexOf(')');
-                var innerContent = StringHelpers.ReplaceRangeWithSpacesFast(text, firstP, firstP + 1);
-                innerContent = StringHelpers.ReplaceRangeWithSpacesFast(innerContent, lastP, lastP + 1);
+                if (lastP == -1)
+                    Listener.AddError(new PDDLSharpError($"Node started with a '(' but didnt end with one!: {text}", ParseErrorType.Error, ParseErrorLevel.PreParsing));
+                var excludeSlices = new List<int>();
 
                 var children = new List<ASTNode>();
-                while (innerContent.Contains('(') && innerContent.Contains(')'))
+                int offset = firstP;
+                var innerLineOffset = lineOffset;
+                while (text.IndexOf('(', offset + 1) != -1)
                 {
                     int currentLevel = 0;
-                    int startP = innerContent.IndexOf('(');
-                    int endP = innerContent.Length;
-                    for (int i = startP + 1; i < innerContent.Length; i++)
+                    int startP = text.IndexOf('(', offset + 1);
+                    int endP = text.Length;
+                    for (int i = startP + 1; i < text.Length; i++)
                     {
-                        if (innerContent[i] == '(')
+                        if (text[i] == '(')
                             currentLevel++;
-                        else if (innerContent[i] == ')')
+                        else if (text[i] == ')')
                         {
                             if (currentLevel == 0)
                             {
@@ -63,15 +67,22 @@ namespace PDDLSharp.ASTGenerators.PDDL
                         }
                     }
 
-                    var newContent = innerContent.Substring(startP, endP - startP);
-                    children.Add(GenerateASTNodeRec(newContent, thisStart + startP, thisStart + endP, lineDict, lineOffset - 1));
-                    innerContent = StringHelpers.ReplaceRangeWithSpacesFast(innerContent, startP, endP);
+                    offset = endP - 1;
+                    excludeSlices.Add(startP);
+                    excludeSlices.Add(endP);
+                    var newContent = text.Substring(startP, endP - startP);
+                    innerLineOffset = GetLineNumber(lineDict, startP, innerLineOffset) - 1;
+                    children.Add(GenerateASTNodeRec(newContent, thisStart + startP, thisStart + endP, lineDict, innerLineOffset - 1));
                 }
-                var outer = $"({innerContent.Trim()})";
+                var newInnerContent = GenerateInnerContent(text, excludeSlices);
+                firstP = newInnerContent.IndexOf('(');
+                lastP = newInnerContent.LastIndexOf(')');
+                newInnerContent = newInnerContent.Substring(firstP + 1, lastP - firstP - 1);
+
                 return new ASTNode(
                     lineOffset,
-                    outer,
-                    innerContent.Trim(),
+                    $"({newInnerContent})",
+                    newInnerContent,
                     children);
             }
             else
@@ -82,6 +93,25 @@ namespace PDDLSharp.ASTGenerators.PDDL
                     newText,
                     newText);
             }
+        }
+
+        private string GenerateInnerContent(string innerContent, List<int> slices)
+        {
+            if (slices.Count == 0)
+                return innerContent;
+            var sb = new StringBuilder();
+
+            slices = slices.Order().ToList();
+
+            var from = 0;
+            for (int i = 0; i < slices.Count; i += 2)
+            {
+                sb.Append(innerContent.Substring(from, slices[i] - from));
+                from = slices[i + 1];
+            }
+            sb.Append(innerContent.Substring(from));
+
+            return sb.ToString();
         }
 
         private void PreCheck(string text)

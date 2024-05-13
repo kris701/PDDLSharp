@@ -14,6 +14,7 @@ namespace PDDLSharp.Parsers.FastDownward.SAS
         public override U ParseAs<U>(string text)
         {
             IGenerator astParser = new SASASTGenerator(Listener);
+            astParser.SaveLinePlacements = SaveLinePlacements;
             var absAST = astParser.Generate(text);
 
             var visitor = new SectionVisitor(Listener);

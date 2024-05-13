@@ -1,5 +1,6 @@
 ﻿using PDDLSharp.ASTGenerators.PDDL;
 using PDDLSharp.ErrorListeners;
+using PDDLSharp.Models.AST;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace PDDLSharp.ASTGenerators.Tests
             IErrorListener listener = new ErrorListener();
 
             // ACT
-            var res = BaseASTGenerator.GenerateLineDict(text, '\n');
+            var res = (new TempImpl(listener)).GenerateLineDict(text, '\n');
 
             // ASSERT
             for (int i = 0; i < expected.Length; i++)
@@ -46,10 +47,11 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_GetLineNumber(string text, int startCharacter, int expected)
         {
             // ARRANGE
-            var dict = BaseASTGenerator.GenerateLineDict(text, '\n');
+            var listener = new ErrorListener();
+            var dict = (new TempImpl(listener)).GenerateLineDict(text, '\n');
 
             // ACT
-            var res = BaseASTGenerator.GetLineNumber(dict, startCharacter, 0);
+            var res = (new TempImpl(listener)).GetLineNumber(dict, startCharacter, 0);
 
             // ASSERT
             Assert.AreEqual(expected, res);
@@ -62,15 +64,26 @@ namespace PDDLSharp.ASTGenerators.Tests
         public void Can_GetLineNumber_WithOffset(string text, int startCharacter, int offset, int expected)
         {
             // ARRANGE
-            var dict = BaseASTGenerator.GenerateLineDict(text, '\n');
+            var listener = new ErrorListener();
+            var dict = (new TempImpl(listener)).GenerateLineDict(text, '\n');
 
             // ACT
-            var res = BaseASTGenerator.GetLineNumber(dict, startCharacter, offset);
+            var res = (new TempImpl(listener)).GetLineNumber(dict, startCharacter, offset);
 
             // ASSERT
             Assert.AreEqual(expected, res);
         }
 
         #endregion
+    }
+
+    internal class TempImpl : BaseASTGenerator
+    {
+        public TempImpl(IErrorListener listener) : base(listener)
+        {
+            SaveLinePlacements = true;
+        }
+
+        public override ASTNode Generate(string text) => new ASTNode();
     }
 }

@@ -8,17 +8,18 @@ These benchmarks are based on a single gripper domain
 ## PDDL
 | Name | Time | Size | Throughput (MB/s) |
 | - | - | - | - |
-| Domain Parsing | 118.4 μs | 932 B | 7.87 |
-| Problem Parsing | 146.9 μs | 1401 B | 9.54 |
-| Contextualization | 205.3 μs | 2333 B | 11.36 |
-| Analyzation | 527.3 μs | 2333 B | 4.42 |
-| Domain Code Generation | 16.3 μs | 932 B | 57.18 |
-| Problem Code Generation | 24 μs | 1401 B | 58.37 |
+| DomainParsing | 81.3 μs | 932 B | 11.46 |
+| ProblemParsing | 101.6 μs | 1401 B | 13.79 |
+| Contextualization | 201.8 μs | 2333 B | 11.56 |
+| Analyse | 466.2 μs | 2333 B | 5 |
+| DomainCodeGeneration | 16.1 μs | 932 B | 57.89 |
+| ProblemCodeGeneration | 21.7 μs | 1401 B | 64.56 |
 
 
 ## Fast Downward
 | Name | Time | Size | Throughput (MB/s) |
 | - | - | - | - |
-| SAS Parsing | 682.6 μs | 11634 B | 17.04 |
-| Plan Parsing | 27.8 μs | 863 B | 31.04 |
+| FDSASParsing | 701.8 μs | 11634 B | 16.58 |
+| SASPlanParsing | 27.7 μs | 863 B | 31.16 |
+
 

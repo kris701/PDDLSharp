@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.PDDL.Problem;
+using System.Text;
 
 namespace PDDLSharp.CodeGenerators.Visitors
 {
@@ -15,27 +16,27 @@ namespace PDDLSharp.CodeGenerators.Visitors
             else if (node.Objects.Objs.All(x => x.Type.Name == "object"))
                 _printTypeOverride = true;
 
-            string retStr = $"{IndentStr(indent)}(define{Environment.NewLine}";
+            var retStr = new StringBuilder($"{IndentStr(indent)}(define{Environment.NewLine}");
             if (node.Name != null)
-                retStr += $"{Visit(node.Name, indent + 1)}{Environment.NewLine}";
+                retStr.AppendLine(Visit(node.Name, indent + 1));
             if (node.DomainName != null)
-                retStr += $"{Visit(node.DomainName, indent + 1)}{Environment.NewLine}";
+                retStr.AppendLine(Visit(node.DomainName, indent + 1));
             if (node.Requirements != null)
-                retStr += $"{Visit(node.Requirements, indent + 1)}{Environment.NewLine}";
+                retStr.AppendLine(Visit(node.Requirements, indent + 1));
             if (node.Objects != null)
-                retStr += $"{Visit(node.Objects, indent + 1)}{Environment.NewLine}";
+                retStr.AppendLine(Visit(node.Objects, indent + 1));
             if (node.Init != null)
-                retStr += $"{Visit(node.Init, indent + 1)}{Environment.NewLine}";
+                retStr.AppendLine(Visit(node.Init, indent + 1));
             if (node.Goal != null)
-                retStr += $"{Visit(node.Goal, indent + 1)}{Environment.NewLine}";
+                retStr.AppendLine(Visit(node.Goal, indent + 1));
             if (node.Metric != null)
-                retStr += $"{Visit(node.Metric, indent + 1)}{Environment.NewLine}";
+                retStr.AppendLine(Visit(node.Metric, indent + 1));
 
-            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
+            retStr.AppendLine($"{IndentStr(indent)})");
 
             _printTypeOverride = false;
 
-            return retStr;
+            return retStr.ToString();
         }
 
         public string Visit(DomainNameRefDecl node, int indent)
@@ -49,45 +50,45 @@ namespace PDDLSharp.CodeGenerators.Visitors
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}(:init{Environment.NewLine}";
+            var retStr = new StringBuilder($"{IndentStr(indent)}(:init{Environment.NewLine}");
             foreach (var predicate in node.Predicates)
-                retStr += $"{Visit((dynamic)predicate, indent + 1)}{Environment.NewLine}";
-            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
-            return retStr;
+                retStr.AppendLine(Visit((dynamic)predicate, indent + 1));
+            retStr.AppendLine($"{IndentStr(indent)})");
+            return retStr.ToString();
         }
 
         public string Visit(GoalDecl node, int indent)
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}(:goal{Environment.NewLine}";
-            retStr += $"{Visit((dynamic)node.GoalExp, indent + 1)}{Environment.NewLine}";
-            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
-            return retStr;
+            var retStr = new StringBuilder($"{IndentStr(indent)}(:goal{Environment.NewLine}");
+            retStr.AppendLine(Visit((dynamic)node.GoalExp, indent + 1));
+            retStr.AppendLine($"{IndentStr(indent)})");
+            return retStr.ToString();
         }
 
         public string Visit(MetricDecl node, int indent)
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}(:metric{Environment.NewLine}";
-            retStr += $"{IndentStr(indent + 1)}{node.MetricType}{Environment.NewLine}";
-            retStr += $"{Visit((dynamic)node.MetricExp, indent + 1)}{Environment.NewLine}";
-            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
-            return retStr;
+            var retStr = new StringBuilder($"{IndentStr(indent)}(:metric{Environment.NewLine}");
+            retStr.AppendLine($"{IndentStr(indent + 1)}{node.MetricType}");
+            retStr.AppendLine(Visit((dynamic)node.MetricExp, indent + 1));
+            retStr.AppendLine($"{IndentStr(indent)})");
+            return retStr.ToString();
         }
 
         public string Visit(ObjectsDecl node, int indent)
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}(:objects{Environment.NewLine}";
+            var retStr = new StringBuilder($"{IndentStr(indent)}(:objects{Environment.NewLine}");
             PrintTypes(true);
             foreach (var obj in node.Objs)
-                retStr += $"{Visit(obj, indent + 1)}{Environment.NewLine}".Replace("(", "").Replace(")", "");
+                retStr.AppendLine(Visit(obj, indent + 1).Replace("(", "").Replace(")", ""));
             PrintTypes(false);
-            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
-            return retStr;
+            retStr.AppendLine($"{IndentStr(indent)})");
+            return retStr.ToString();
         }
 
         public string Visit(ProblemNameDecl node, int indent)

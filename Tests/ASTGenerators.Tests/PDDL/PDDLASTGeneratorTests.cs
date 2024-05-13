@@ -70,15 +70,15 @@ namespace PDDLSharp.ASTGenerators.Tests.PDDL
 
         [TestMethod]
         [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a))))", 0, 1)]
-        [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a))))", 1, 2)]
-        [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a)))\n(pred (not (var ?a))))", 2, 3)]
+        [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a)))\n(pred (not (var ?a))))", 1, 2)]
         [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a)))\n\n\n(pred (not (var ?a))))", 2, 5)]
-        [DataRow("\n\n\n((pred (not (var ?a)))\n(pred (not (var ?a))))\n\n\n(pred (not (var ?a)))", 2, 8)]
+        [DataRow("(\n\n\n(pred (not (var ?a)))\n(pred (not (var ?a)))\n\n\n(pred (not (var ?a))))", 2, 8)]
         public void Can_CanSetCorrectLineNumber(string toParse, int targetChild, int expectedLineNumber)
         {
             // ARRANGE
             IErrorListener listener = new ErrorListener();
             IGenerator parser = new PDDLASTGenerator(listener);
+            parser.SaveLinePlacements = true;
 
             // ACT
             var res = parser.Generate(toParse);

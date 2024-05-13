@@ -5,6 +5,7 @@ namespace PDDLSharp.Parsers
     public interface IParser<T>
     {
         public IErrorListener Listener { get; }
+        public bool SaveLinePlacements { get; set; }
 
         public T Parse(FileInfo file);
         public T Parse(string text);

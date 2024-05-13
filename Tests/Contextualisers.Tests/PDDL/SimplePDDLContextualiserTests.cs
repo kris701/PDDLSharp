@@ -101,9 +101,9 @@ namespace PDDLSharp.Contextualisers.Tests.PDDL
 
         #region Problem
         [TestMethod]
-        [DataRow("(define (:objects a) (:init (pred ?a) (pred2 ?a)) (:goal (not (?a)))", "a", "")]
-        [DataRow("(define (:objects a - type) (:init (pred ?a) (pred2 ?a)) (:goal (not (?a)))", "a", "type")]
-        [DataRow("(define (:objects a - q) (:init (pred ?a) (pred2 ?a)) (:goal (not (?a)))", "a", "q")]
+        [DataRow("(define (:objects a) (:init (pred ?a) (pred2 ?a)) (:goal (not (?a))))", "a", "")]
+        [DataRow("(define (:objects a - type) (:init (pred ?a) (pred2 ?a)) (:goal (not (?a))))", "a", "type")]
+        [DataRow("(define (:objects a - q) (:init (pred ?a) (pred2 ?a)) (:goal (not (?a))))", "a", "q")]
         public void Can_DecorateObjectReferencesWithTypes(string toParse, string argName, string expectedType)
         {
             // ARRANGE

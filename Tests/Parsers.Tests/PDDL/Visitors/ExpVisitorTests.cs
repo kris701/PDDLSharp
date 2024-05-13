@@ -258,8 +258,8 @@ namespace PDDLSharp.Parsers.Tests.PDDL.Visitors
         [TestMethod]
         [DataRow("(forall a (and ()) (and ()))")]
         [DataRow("(forall a (and ())     a (and ()))")]
-        [DataRow("(forall a (and ())     a (and ()))q")]
-        [DataRow("(forall (and ())(and ()))q")]
+        [DataRow("(forall a (and ())     a (and ())q)")]
+        [DataRow("(forall (and ())(and ())q)")]
         public void Cant_ParseForAllNode_IfContainsStrayCharacters(string toParse)
         {
             // ARRANGE
@@ -313,8 +313,8 @@ namespace PDDLSharp.Parsers.Tests.PDDL.Visitors
         [TestMethod]
         [DataRow("(when a (and ()) (and ()))")]
         [DataRow("(when a (and ())     a (and ()))")]
-        [DataRow("(when a (and ())     a (and ()))q")]
-        [DataRow("(when (and ())(and ()))q")]
+        [DataRow("(when a (and ())     a (and ())q)")]
+        [DataRow("(when (and ())(and ())q)")]
         public void Cant_ParseWhenNode_IfContainsStrayCharacters(string toParse)
         {
             // ARRANGE

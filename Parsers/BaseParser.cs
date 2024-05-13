@@ -5,6 +5,7 @@ namespace PDDLSharp.Parsers
     public abstract class BaseParser<T> : IParser<T>
     {
         public IErrorListener Listener { get; }
+        public bool SaveLinePlacements { get; set; } = false;
 
         public BaseParser(IErrorListener listener)
         {

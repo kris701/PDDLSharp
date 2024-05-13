@@ -1,4 +1,5 @@
 ﻿using PDDLSharp.Models.PDDL.Expressions;
+using System.Text;
 
 namespace PDDLSharp.CodeGenerators.Visitors
 {
@@ -23,52 +24,52 @@ namespace PDDLSharp.CodeGenerators.Visitors
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}(and";
+            var retStr = new StringBuilder($"{IndentStr(indent)}(and");
             if (node.Children.Count > 1)
             {
-                retStr += Environment.NewLine;
+                retStr.AppendLine();
                 foreach (var type in node.Children)
-                    retStr += $"{Visit((dynamic)type, indent + 1)}{Environment.NewLine}";
-                retStr += $"{IndentStr(indent)})";
+                    retStr.AppendLine(Visit((dynamic)type, indent + 1));
+                retStr.AppendLine($"{IndentStr(indent)})");
             }
             else if (node.Children.Count == 1)
-                retStr += $" {Visit((dynamic)node.Children[0], 0)}){Environment.NewLine}";
+                retStr.AppendLine($" {Visit((dynamic)node.Children[0], 0)})");
             else if (node.Children.Count == 0)
-                retStr += $"){Environment.NewLine}";
+                retStr.AppendLine(")");
 
-            return retStr;
+            return retStr.ToString();
         }
 
         public string Visit(ImplyExp node, int indent)
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}(imply{Environment.NewLine}";
-            retStr += $"{Visit((dynamic)node.Antecedent, indent + 1)}{Environment.NewLine}";
-            retStr += $"{Visit((dynamic)node.Consequent, indent + 1)}{Environment.NewLine}";
-            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
-            return retStr;
+            var retStr = new StringBuilder($"{IndentStr(indent)}(imply{Environment.NewLine}");
+            retStr.AppendLine(Visit((dynamic)node.Antecedent, indent + 1));
+            retStr.AppendLine(Visit((dynamic)node.Consequent, indent + 1));
+            retStr.AppendLine($"{IndentStr(indent)})");
+            return retStr.ToString();
         }
 
         public string Visit(WhenExp node, int indent)
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}(when{Environment.NewLine}";
-            retStr += $"{Visit((dynamic)node.Condition, indent + 1)}{Environment.NewLine}";
-            retStr += $"{Visit((dynamic)node.Effect, indent + 1)}{Environment.NewLine}";
-            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
-            return retStr;
+            var retStr = new StringBuilder($"{IndentStr(indent)}(when{Environment.NewLine}");
+            retStr.AppendLine(Visit((dynamic)node.Condition, indent + 1));
+            retStr.AppendLine(Visit((dynamic)node.Effect, indent + 1));
+            retStr.AppendLine($"{IndentStr(indent)})");
+            return retStr.ToString();
         }
 
         public string Visit(ParameterExp node, int indent)
         {
             if (node.IsHidden)
                 return "";
-            string retStr = "";
+            var retStr = new StringBuilder();
             foreach (var type in node.Values)
-                retStr += $" {Visit(type, 0)}".Replace("(", "").Replace(")", "");
-            return $"({retStr.Trim()})";
+                retStr.Append($" {Visit(type, 0)}".Replace("(", "").Replace(")", ""));
+            return $"({retStr.ToString().Trim()})";
         }
 
         public string Visit(ForAllExp node, int indent)
@@ -76,11 +77,11 @@ namespace PDDLSharp.CodeGenerators.Visitors
             if (node.IsHidden)
                 return "";
             PrintTypes(true);
-            string retStr = $"{IndentStr(indent)}(forall {Visit((dynamic)node.Parameters, indent + 1)}{Environment.NewLine}";
+            var retStr = new StringBuilder($"{IndentStr(indent)}(forall {Visit((dynamic)node.Parameters, indent + 1)}{Environment.NewLine}");
             PrintTypes(false);
-            retStr += $"{Visit((dynamic)node.Expression, indent + 1)}{Environment.NewLine}";
-            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
-            return retStr;
+            retStr.AppendLine(Visit((dynamic)node.Expression, indent + 1));
+            retStr.AppendLine($"{IndentStr(indent)})");
+            return retStr.ToString();
         }
 
         public string Visit(ExistsExp node, int indent)
@@ -88,29 +89,29 @@ namespace PDDLSharp.CodeGenerators.Visitors
             if (node.IsHidden)
                 return "";
             PrintTypes(true);
-            string retStr = $"{IndentStr(indent)}(exists {Visit((dynamic)node.Parameters, indent + 1)}{Environment.NewLine}";
+            var retStr = new StringBuilder($"{IndentStr(indent)}(exists {Visit((dynamic)node.Parameters, indent + 1)}{Environment.NewLine}");
             PrintTypes(false);
-            retStr += $"{Visit((dynamic)node.Expression, indent + 1)}{Environment.NewLine}";
-            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
-            return retStr;
+            retStr.AppendLine(Visit((dynamic)node.Expression, indent + 1));
+            retStr.AppendLine($"{IndentStr(indent)})");
+            return retStr.ToString();
         }
 
         public string Visit(NotExp node, int indent)
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}(not";
+            var retStr = new StringBuilder($"{IndentStr(indent)}(not");
             if (node.Child is PredicateExp)
             {
-                retStr += $" {Visit((dynamic)node.Child, 0)})";
+                retStr.Append($" {Visit((dynamic)node.Child, 0)})");
             }
             else
             {
-                retStr += Environment.NewLine;
-                retStr += $"{Visit((dynamic)node.Child, indent + 1)}{Environment.NewLine}";
-                retStr += $"{IndentStr(indent)})";
+                retStr.AppendLine();
+                retStr.AppendLine(Visit((dynamic)node.Child, indent + 1));
+                retStr.Append($"{IndentStr(indent)})");
             }
-            return retStr;
+            return retStr.ToString();
         }
 
         public string Visit(NumericExp node, int indent)
@@ -143,25 +144,22 @@ namespace PDDLSharp.CodeGenerators.Visitors
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}(or{Environment.NewLine}";
+            var retStr = new StringBuilder($"{IndentStr(indent)}(or{Environment.NewLine}");
             foreach (var option in node.Options)
-                retStr += $"{Visit((dynamic)option, indent + 1)}{Environment.NewLine}";
-            retStr += $"{IndentStr(indent)}){Environment.NewLine}";
-            return retStr;
+                retStr.AppendLine(Visit((dynamic)option, indent + 1));
+            retStr.AppendLine($"{IndentStr(indent)})");
+            return retStr.ToString();
         }
 
         public string Visit(PredicateExp node, int indent)
         {
             if (node.IsHidden)
                 return "";
-            string retStr = $"{IndentStr(indent)}({node.Name}";
+            var retStr = new StringBuilder($"{IndentStr(indent)}({node.Name}");
             foreach (var arg in node.Arguments)
-            {
-                var argStr = $"{Visit((dynamic)arg, 0)}".Replace("(", "").Replace(")", "");
-                retStr += $" {argStr}";
-            }
-            retStr += ")";
-            return retStr;
+                retStr.Append($" {$"{Visit((dynamic)arg, 0)}".Replace("(", "").Replace(")", "")}");
+            retStr.Append(")");
+            return retStr.ToString();
         }
 
         public string Visit(TypeExp node, int indent)
