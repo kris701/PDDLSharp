@@ -9,20 +9,47 @@ namespace PDDLSharp.Models.SAS
         public HashSet<Fact> Goal { get; set; }
         public HashSet<Fact> Init { get; set; }
 
+        private Dictionary<int, Operator> _operatorDict;
+        private Dictionary<int, Fact> _factDict;
+
         public SASDecl(HashSet<string> domainVariables, List<Operator> operators, HashSet<Fact> goal, HashSet<Fact> init)
         {
             DomainVariables = domainVariables;
             Operators = operators;
             Goal = goal;
             Init = init;
+            _operatorDict = new Dictionary<int, Operator>();
+            _factDict = new Dictionary<int, Fact>();
+
+            foreach(var op in operators)
+            {
+                if (_operatorDict.ContainsKey(op.ID))
+                    continue;
+                _operatorDict.Add(op.ID, op);
+
+                foreach(var pre in op.Pre)
+                {
+                    if (_factDict.ContainsKey(pre.ID))
+                        continue;
+                    _factDict.Add(pre.ID, pre);
+                }
+                foreach (var add in op.Add)
+                {
+                    if (_factDict.ContainsKey(add.ID))
+                        continue;
+                    _factDict.Add(add.ID, add);
+                }
+                foreach (var del in op.Del)
+                {
+                    if (_factDict.ContainsKey(del.ID))
+                        continue;
+                    _factDict.Add(del.ID, del);
+                }
+            }
         }
 
-        public SASDecl()
+        public SASDecl() : this(new HashSet<string>(), new List<Operator>(), new HashSet<Fact>(), new HashSet<Fact>())
         {
-            DomainVariables = new HashSet<string>();
-            Operators = new List<Operator>();
-            Goal = new HashSet<Fact>();
-            Init = new HashSet<Fact>();
         }
 
         public SASDecl Copy()
@@ -70,5 +97,8 @@ namespace PDDLSharp.Models.SAS
                 hash ^= child.GetHashCode();
             return hash;
         }
+
+        public Operator GetOperatorByID(int id) => _operatorDict[id];
+        public Fact GetFactByID(int id) => _factDict[id];
     }
 }
