@@ -54,6 +54,8 @@ namespace PDDLSharp.Toolkits
             basePreAnd.Children = preconditions.ToList();
             baseEffAnd.Children = RemoveUnneededSideEffects(effects, preconditions).ToList();
 
+            baseAction.Preconditions = basePreAnd;
+            baseAction.Effects = baseEffAnd;
             baseAction.Parameters.Values = GetReferencesParameters(baseAction);
 
             return baseAction;
