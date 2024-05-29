@@ -4,9 +4,9 @@ namespace PDDLSharp.Models.SAS
 {
     public class Fact
     {
-        public int ID { get; set; } = -1;
-        public string Name { get; }
-        public string[] Arguments { get; }
+        public int ID = -1;
+        public string Name;
+        public string[] Arguments;
 
         public Fact(string name, params string[] arguments)
         {

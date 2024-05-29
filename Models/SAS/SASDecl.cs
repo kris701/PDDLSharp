@@ -4,10 +4,10 @@ namespace PDDLSharp.Models.SAS
 {
     public class SASDecl
     {
-        public HashSet<string> DomainVariables { get; set; }
-        public List<Operator> Operators { get; set; }
-        public HashSet<Fact> Goal { get; set; }
-        public HashSet<Fact> Init { get; set; }
+        public HashSet<string> DomainVariables;
+        public List<Operator> Operators;
+        public HashSet<Fact> Goal;
+        public HashSet<Fact> Init;
 
         private Dictionary<int, Operator> _operatorDict;
         private Dictionary<int, Fact> _factDict;

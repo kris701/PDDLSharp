@@ -4,15 +4,15 @@ namespace PDDLSharp.Models.SAS
 {
     public class Operator
     {
-        public int ID { get; set; } = -1;
-        public string Name { get; }
-        public string[] Arguments { get; }
-        public Fact[] Pre { get; }
-        public HashSet<int> PreRef { get; }
-        public Fact[] Add { get; }
-        public HashSet<int> AddRef { get; }
-        public Fact[] Del { get; }
-        public HashSet<int> DelRef { get; }
+        public int ID = -1;
+        public string Name;
+        public string[] Arguments;
+        public Fact[] Pre;
+        public HashSet<int> PreRef;
+        public Fact[] Add;
+        public HashSet<int> AddRef;
+        public Fact[] Del;
+        public HashSet<int> DelRef;
 
         public Operator(string name, string[] arguments, Fact[] pre, Fact[] add, Fact[] del)
         {
