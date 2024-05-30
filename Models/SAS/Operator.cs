@@ -9,24 +9,30 @@ namespace PDDLSharp.Models.SAS
         public string[] Arguments;
         public Fact[] Pre;
         public HashSet<int> PreRef;
+        public int PreCount;
         public Fact[] Add;
         public HashSet<int> AddRef;
+        public int AddCount;
         public Fact[] Del;
         public HashSet<int> DelRef;
+        public int DelCount;
 
         public Operator(string name, string[] arguments, Fact[] pre, Fact[] add, Fact[] del)
         {
             Name = name;
             Arguments = arguments;
             Pre = pre;
+            PreCount = pre.Length;
             PreRef = new HashSet<int>();
             foreach (var item in Pre)
                 PreRef.Add(item.ID);
             Add = add;
+            AddCount = add.Length;
             AddRef = new HashSet<int>();
             foreach (var item in Add)
                 AddRef.Add(item.ID);
             Del = del;
+            DelCount = del.Length;
             DelRef = new HashSet<int>();
             foreach (var item in Del)
                 DelRef.Add(item.ID);
@@ -42,6 +48,9 @@ namespace PDDLSharp.Models.SAS
             PreRef = new HashSet<int>();
             AddRef = new HashSet<int>();
             DelRef = new HashSet<int>();
+            PreCount = 0;
+            AddCount = 0;
+            DelCount = 0;
         }
 
         private int _hashCache = -1;
@@ -85,11 +94,11 @@ namespace PDDLSharp.Models.SAS
             {
                 if (Name != o.Name) return false;
                 if (!EqualityHelper.AreListsEqual(Arguments, o.Arguments)) return false;
-                if (Pre.Length != o.Pre.Length) return false;
+                if (PreCount != o.PreCount) return false;
                 if (!Pre.All(x => o.Pre.Contains(x))) return false;
-                if (Add.Length != o.Add.Length) return false;
+                if (AddCount != o.AddCount) return false;
                 if (!Add.All(x => o.Add.Contains(x))) return false;
-                if (Del.Length != o.Del.Length) return false;
+                if (DelCount != o.DelCount) return false;
                 if (!Del.All(x => o.Del.Contains(x))) return false;
                 return true;
             }
@@ -107,17 +116,17 @@ namespace PDDLSharp.Models.SAS
         public Operator Copy()
         {
             var arguments = new string[Arguments.Length];
-            var pre = new Fact[Pre.Length];
-            var add = new Fact[Add.Length];
-            var del = new Fact[Del.Length];
+            var pre = new Fact[PreCount];
+            var add = new Fact[AddCount];
+            var del = new Fact[DelCount];
 
             for (int i = 0; i < Arguments.Length; i++)
                 arguments[i] = Arguments[i];
-            for (int i = 0; i < Pre.Length; i++)
+            for (int i = 0; i < PreCount; i++)
                 pre[i] = Pre[i].Copy();
-            for (int i = 0; i < Add.Length; i++)
+            for (int i = 0; i < AddCount; i++)
                 add[i] = Add[i].Copy();
-            for (int i = 0; i < Del.Length; i++)
+            for (int i = 0; i < DelCount; i++)
                 del[i] = Del[i].Copy();
 
             var newOp = new Operator(Name, arguments, pre, add, del);
