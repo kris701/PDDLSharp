@@ -9,6 +9,8 @@ namespace PDDLSharp.Models.SAS
         public HashSet<Fact> Goal;
         public HashSet<Fact> Init;
 
+        public int Facts;
+
         private Dictionary<int, Operator> _operatorDict;
         private Dictionary<int, Fact> _factDict;
 
@@ -46,6 +48,8 @@ namespace PDDLSharp.Models.SAS
                     _factDict.Add(del.ID, del);
                 }
             }
+
+            Facts = _factDict.Keys.Count;
         }
 
         public SASDecl() : this(new HashSet<string>(), new List<Operator>(), new HashSet<Fact>(), new HashSet<Fact>())
