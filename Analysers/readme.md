@@ -26,28 +26,3 @@ PDDLDecl decl = new PDDLDecl(
 )
 analyser.Analyse(decl);
 ```
-
-# SAS Analyser
-![Static Badge](https://img.shields.io/badge/Namespace-PDDLSharp.Analysers.SAS-orange)
-
-There is an SAS analyser, that can take in a [SASDecl](../Models/SAS/SASDecl.cs) (Usually from the [translator](../Translators/readme.md)) and give out some analysis information.
-
-The SAS Analyser can:
-* Check for valid general SAS structure (e.g. if there are any operators or not)
-* Check if there are any actions that is applicable from the initial state
-* Check if there are any actions that can result in the goal state
-
-#### Examples
-Example of taking in a domain/problem pddl file, translating it and then analysing it
-```csharp
-IErrorListener listener = new ErrorListener();
-IParser<INode> parser = new PDDLParser(listener);
-IAnalyser<SASDecl> analyser = new SASAnalyser(listener);
-ITranslator<PDDLDecl, SASDecl> translator = new PDDLToSASTranslator();
-PDDLDecl pddlDecl = new PDDLDecl(
-    parser.ParseAs<DomainDecl>(new FileInfo("domain.pddl")),
-    parser.ParseAs<ProblemDecl>(new FileInfo("problem.pddl"))
-)
-SASDecl sasDecl = translator.Translate(pddlDecl);
-analyser.Analyse(sasDecl);
-```
