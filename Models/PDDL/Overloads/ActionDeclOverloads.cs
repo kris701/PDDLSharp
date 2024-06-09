@@ -8,9 +8,17 @@ namespace PDDLSharp.Models.PDDL.Overloads
         public static void EnsureAnd(this ActionDecl self)
         {
             if (self.Preconditions is not AndExp)
-                self.Preconditions = new AndExp(self, new List<IExp>() { self.Preconditions });
+            {
+                var and = new AndExp(self, new List<IExp>());
+                self.Preconditions.Parent = and;
+                and.Children.Add(self.Preconditions);
+            }
             if (self.Effects is not AndExp)
-                self.Effects = new AndExp(self, new List<IExp>() { self.Effects });
+            {
+                var and = new AndExp(self, new List<IExp>());
+                self.Effects.Parent = and;
+                and.Children.Add(self.Effects);
+            }
         }
 
         public static ActionDecl Annonymise(this ActionDecl action)

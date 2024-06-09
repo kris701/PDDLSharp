@@ -139,8 +139,10 @@ namespace PDDLSharp.Translators.Grounders
                 {
                     if (reference.Parent is IListable list)
                         list.Remove(reference);
-                    else if (statics.Name == "=" && reference.Parent is NotExp not && not.Parent is IListable list2)
-                        list2.Remove(not);
+                    else if (reference.Parent is NotExp not && not.Parent is IListable list2)
+                        list2.Remove(reference);
+                    else if (statics.Name == "=" && reference.Parent is NotExp not2 && not2.Parent is IListable list3)
+                        list3.Remove(not2);
                 }
             }
             if (copy is IParametized param)
