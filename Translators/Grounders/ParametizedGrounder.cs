@@ -46,7 +46,11 @@ namespace PDDLSharp.Translators.Grounders
             List<IParametized> groundedActions = new List<IParametized>();
 
             if (item.Parameters.Values.Count == 0 && item.Copy() is IParametized newItem)
+            {
+                if (RemoveStaticsFromOutput)
+                    newItem = RemoveStaticsFromNode(newItem);
                 return new List<IParametized>() { newItem };
+            }
 
             _staticsViolationPatterns = InitializeViolationPatternDict(item.Parameters.Values.Count);
             _staticsPreconditions = GenerateStaticsPreconditions(item);

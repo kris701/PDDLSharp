@@ -4,6 +4,7 @@ using PDDLSharp.Models.FastDownward.Plans;
 using PDDLSharp.Models.PDDL;
 using PDDLSharp.Models.PDDL.Domain;
 using PDDLSharp.Models.PDDL.Expressions;
+using PDDLSharp.Models.PDDL.Overloads;
 using PDDLSharp.Models.PDDL.Problem;
 using PDDLSharp.Parsers;
 using PDDLSharp.Parsers.PDDL;
@@ -222,7 +223,10 @@ namespace PDDLSharp.Translators.Tests.Grounders
             // ACT
             var results = new List<ActionDecl>();
             foreach (var act in decl.Domain.Actions)
+            {
+                act.EnsureAnd();
                 results.AddRange(grounder.Ground(act).Cast<ActionDecl>());
+            }
 
             // ASSERT
             Assert.AreEqual(expecteds.Length, results.Count);
