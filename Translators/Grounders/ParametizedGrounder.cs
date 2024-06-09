@@ -197,7 +197,15 @@ namespace PDDLSharp.Translators.Grounders
                     if (generatePattern)
                     {
                         int minIndex = staticsPrecon.ArgIndexes.Min();
-                        if (staticsPrecon.ArgIndexes.Max() <= index)
+                        minIndex = Math.Min(minIndex, staticsPrecon.ConstantsIndexes.Min());
+                        var maxIndex = -1;
+                        for(int i = 0; i < staticsPrecon.ArgIndexes.Length; i++)
+                        {
+                            if (staticsPrecon.ArgIndexes[i] > maxIndex && staticsPrecon.ConstantsIndexes[i] == int.MaxValue)
+                                maxIndex = staticsPrecon.ArgIndexes[i];
+                        }
+
+                        if (maxIndex <= index)
                         {
                             _staticsViolationPatterns[minIndex].Add(GeneratePattern(permutation, index, staticsPrecon));
                             allGood = false;
