@@ -12,12 +12,14 @@ namespace PDDLSharp.Models.PDDL.Overloads
                 var and = new AndExp(self, new List<IExp>());
                 self.Preconditions.Parent = and;
                 and.Children.Add(self.Preconditions);
+                self.Preconditions = and;
             }
             if (self.Effects is not AndExp)
             {
                 var and = new AndExp(self, new List<IExp>());
                 self.Effects.Parent = and;
                 and.Children.Add(self.Effects);
+                self.Effects = and;
             }
         }
 
