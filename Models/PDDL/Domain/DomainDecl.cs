@@ -129,6 +129,7 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override DomainDecl Copy(INode? newParent = null)
         {
             var newNode = new DomainDecl(new ASTNode(Line, "", ""));
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
 
             if (Name != null)
                 newNode.Name = Name.Copy(newNode);

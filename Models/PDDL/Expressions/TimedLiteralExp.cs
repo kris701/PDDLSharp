@@ -71,6 +71,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override TimedLiteralExp Copy(INode? newParent = null)
         {
             var newNode = new TimedLiteralExp(new ASTNode(Line, "", ""), newParent, Value);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             newNode.Literal = ((dynamic)Literal).Copy(newNode);
             newNode.IsHidden = IsHidden;
             return newNode;

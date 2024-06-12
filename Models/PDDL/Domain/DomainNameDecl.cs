@@ -34,6 +34,7 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override DomainNameDecl Copy(INode? newParent = null)
         {
             var newNode = new DomainNameDecl(new ASTNode(Line, "", ""), newParent, Name);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             newNode.IsHidden = IsHidden;
             return newNode;
         }

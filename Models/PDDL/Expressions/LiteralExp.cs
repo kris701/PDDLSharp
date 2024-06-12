@@ -42,6 +42,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override LiteralExp Copy(INode? newParent = null)
         {
             var newNode = new LiteralExp(new ASTNode(Line, "", ""), newParent, Value);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             newNode.IsHidden = IsHidden;
             return newNode;
         }

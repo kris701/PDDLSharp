@@ -69,6 +69,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override NumericExp Copy(INode? newParent = null)
         {
             var newNode = new NumericExp(new ASTNode(Line, "", ""), newParent, Name);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             newNode.Arg1 = ((dynamic)Arg1).Copy(newNode);
             newNode.Arg2 = ((dynamic)Arg2).Copy(newNode);
             newNode.IsHidden = IsHidden;

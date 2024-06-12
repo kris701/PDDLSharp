@@ -92,6 +92,7 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override DurativeActionDecl Copy(INode? newParent = null)
         {
             var newNode = new DurativeActionDecl(new ASTNode(Line, "", ""), newParent, Name);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             var newParams = Parameters.Copy(newNode);
             var newCondition = ((dynamic)Condition).Copy(newNode);
             var newEffects = ((dynamic)Effects).Copy(newNode);

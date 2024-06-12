@@ -61,6 +61,7 @@ namespace PDDLSharp.Models.PDDL.Problem
         public override GoalDecl Copy(INode? newParent = null)
         {
             var newNode = new GoalDecl(new ASTNode(Line, "", ""), newParent);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             newNode.GoalExp = ((dynamic)GoalExp).Copy(newNode);
             newNode.IsHidden = IsHidden;
             return newNode;

@@ -55,6 +55,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override NameExp Copy(INode? newParent = null)
         {
             var newNode = new NameExp(new ASTNode(Line, "", ""), newParent, Name);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             newNode.Type = Type.Copy(newNode);
             newNode.IsHidden = IsHidden;
             return newNode;

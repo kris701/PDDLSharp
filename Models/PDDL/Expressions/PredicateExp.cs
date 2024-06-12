@@ -78,6 +78,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override PredicateExp Copy(INode? newParent = null)
         {
             var newNode = new PredicateExp(new ASTNode(Line, "", ""), newParent, Name);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             foreach (var node in Arguments)
                 newNode.Arguments.Add(((dynamic)node).Copy(newNode));
             newNode.IsHidden = IsHidden;

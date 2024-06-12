@@ -72,6 +72,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override ImplyExp Copy(INode? newParent = null)
         {
             var newNode = new ImplyExp(new ASTNode(Line, "", ""), newParent);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             var newAntecedent = ((dynamic)Antecedent).Copy(newNode);
             var newConsequent = ((dynamic)Consequent).Copy(newNode);
             newNode.Antecedent = newAntecedent;

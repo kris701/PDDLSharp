@@ -72,6 +72,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override WhenExp Copy(INode? newParent = null)
         {
             var newNode = new WhenExp(new ASTNode(Line, "", ""), newParent);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             var newCondition = ((dynamic)Condition).Copy(newNode);
             var newEffect = ((dynamic)Effect).Copy(newNode);
             newNode.Condition = newCondition;

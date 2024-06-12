@@ -10,7 +10,7 @@ namespace PDDLSharp.Models.PDDL
         public int Line { get; set; }
         public bool IsHidden { get; set; } = false;
 
-        private List<PropertyInfo> _metaInfo = new List<PropertyInfo>();
+        internal List<PropertyInfo> _metaInfo = new List<PropertyInfo>();
 
         public BaseNode(ASTNode node, INode? parent) : this(parent)
         {

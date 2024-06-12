@@ -73,6 +73,7 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override DerivedDecl Copy(INode? newParent = null)
         {
             var newNode = new DerivedDecl(new ASTNode(Line, "", ""), newParent);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             newNode.Predicate = Predicate.Copy(newParent);
             newNode.Expression = ((dynamic)Expression).Copy(newParent);
             newNode.IsHidden = IsHidden;

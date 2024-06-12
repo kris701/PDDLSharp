@@ -64,6 +64,7 @@ namespace PDDLSharp.Models.PDDL.Problem
         public override InitDecl Copy(INode? newParent = null)
         {
             var newNode = new InitDecl(new ASTNode(Line, "", ""), newParent);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             foreach (var node in Predicates)
                 newNode.Predicates.Add(((dynamic)node).Copy(newNode));
             newNode.IsHidden = IsHidden;

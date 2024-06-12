@@ -82,6 +82,7 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override ActionDecl Copy(INode? newParent = null)
         {
             var newNode = new ActionDecl(new ASTNode(Line, "", ""), newParent, Name);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             var newParams = Parameters.Copy(newNode);
             var newPreconditions = ((dynamic)Preconditions).Copy(newNode);
             var newEffects = ((dynamic)Effects).Copy(newNode);

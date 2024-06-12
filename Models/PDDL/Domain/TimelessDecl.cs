@@ -65,6 +65,7 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override TimelessDecl Copy(INode? newParent = null)
         {
             var newNode = new TimelessDecl(new ASTNode(Line, "", ""), newParent);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             foreach (var node in Items)
                 newNode.Items.Add(node.Copy(newNode));
             newNode.IsHidden = IsHidden;

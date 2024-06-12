@@ -64,6 +64,7 @@ namespace PDDLSharp.Models.PDDL.Expressions
         public override OrExp Copy(INode? newParent = null)
         {
             var newNode = new OrExp(new ASTNode(Line, "", ""), newParent);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             foreach (var node in Options)
                 newNode.Options.Add(((dynamic)node).Copy(newNode));
             newNode.IsHidden = IsHidden;

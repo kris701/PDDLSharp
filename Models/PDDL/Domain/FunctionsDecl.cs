@@ -65,6 +65,7 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override FunctionsDecl Copy(INode? newParent = null)
         {
             var newNode = new FunctionsDecl(new ASTNode(Line, "", ""), newParent);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             foreach (var node in Functions)
                 newNode.Functions.Add(node.Copy(newNode));
             newNode.IsHidden = IsHidden;

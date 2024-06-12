@@ -35,6 +35,7 @@ namespace PDDLSharp.Models.PDDL.Problem
         public override SituationDecl Copy(INode? newParent = null)
         {
             var newNode = new SituationDecl(new ASTNode(Line, "", ""), newParent, Name);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             newNode.IsHidden = IsHidden;
             return newNode;
         }

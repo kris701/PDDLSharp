@@ -65,6 +65,7 @@ namespace PDDLSharp.Models.PDDL.Shared
         public override RequirementsDecl Copy(INode? newParent = null)
         {
             var newNode = new RequirementsDecl(new ASTNode(Line, "", ""), newParent);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             foreach (var node in Requirements)
                 newNode.Requirements.Add(node.Copy(newNode));
             newNode.IsHidden = IsHidden;

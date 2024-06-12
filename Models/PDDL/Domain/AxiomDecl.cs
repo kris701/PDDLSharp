@@ -83,6 +83,7 @@ namespace PDDLSharp.Models.PDDL.Domain
         public override AxiomDecl Copy(INode? newParent = null)
         {
             var newNode = new AxiomDecl(new ASTNode(Line, "", ""), newParent);
+            newNode._metaInfo = new List<System.Reflection.PropertyInfo>(_metaInfo);
             var newParams = Parameters.Copy(newNode);
             var newContext = ((dynamic)Context).Copy(newNode);
             var newImplies = ((dynamic)Implies).Copy(newNode);
