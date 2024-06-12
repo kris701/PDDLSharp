@@ -14,5 +14,6 @@
         public int GetHashCode();
         public void RemoveContext();
         public void RemoveTypes();
+        public void ClearCache();
     }
 }

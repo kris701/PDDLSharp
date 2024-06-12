@@ -135,5 +135,10 @@ namespace PDDLSharp.Models.PDDL
         }
 
         public virtual void RemoveTypes() { }
+
+        public void ClearCache()
+        {
+            _metaInfo = new List<PropertyInfo>();
+        }
     }
 }

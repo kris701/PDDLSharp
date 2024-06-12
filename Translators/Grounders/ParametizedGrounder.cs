@@ -54,8 +54,10 @@ namespace PDDLSharp.Translators.Grounders
 
             _staticsViolationPatterns = InitializeViolationPatternDict(item.Parameters.Values.Count);
             _staticsPreconditions = GenerateStaticsPreconditions(item);
-
             var allPermutations = GenerateParameterPermutations(item.Parameters.Values);
+            _staticsViolationPatterns = new Dictionary<int, List<int[]>>();
+            _staticsPreconditions = new List<PredicateViolationCheck>();
+
             if (_abort) return new List<IParametized>();
             if (RemoveStaticsFromOutput)
                 item = RemoveStaticsFromNode(item);
@@ -303,6 +305,7 @@ namespace PDDLSharp.Translators.Grounders
             }
             copy.RemoveTypes();
             copy.RemoveContext();
+            copy.ClearCache();
             if (copy is IParametized param)
                 return param;
 
