@@ -52,11 +52,7 @@ namespace PDDLSharp.Translators.Grounders
                 return new List<IParametized>() { newItem };
             }
 
-            _staticsViolationPatterns = InitializeViolationPatternDict(item.Parameters.Values.Count);
-            _staticsPreconditions = GenerateStaticsPreconditions(item);
-            var allPermutations = GenerateParameterPermutations(item.Parameters.Values);
-            _staticsViolationPatterns = new Dictionary<int, List<int[]>>();
-            _staticsPreconditions = new List<PredicateViolationCheck>();
+            var allPermutations = GetPermutations(item);
 
             if (_abort) return new List<IParametized>();
             if (RemoveStaticsFromOutput)
@@ -68,6 +64,19 @@ namespace PDDLSharp.Translators.Grounders
             }
 
             return groundedActions;
+        }
+
+        public Queue<int[]> GetPermutations(IParametized item)
+        {
+            if (item.Parameters.Values.Count == 0)
+                return new Queue<int[]>();
+
+            _staticsViolationPatterns = InitializeViolationPatternDict(item.Parameters.Values.Count);
+            _staticsPreconditions = GenerateStaticsPreconditions(item);
+            var allPermutations = GenerateParameterPermutations(item.Parameters.Values);
+            _staticsViolationPatterns = new Dictionary<int, List<int[]>>();
+            _staticsPreconditions = new List<PredicateViolationCheck>();
+            return allPermutations;
         }
 
         private Dictionary<int, List<int[]>> InitializeViolationPatternDict(int argCount)
